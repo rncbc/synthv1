@@ -34,6 +34,26 @@ weblog:
   http://www.rncbc.org
 
 
+requirements:
+
+  mandatory,
+
+  - Qt4 (core, gui, xml), C++ class library and tools for
+    crossplatform development and internationalization
+    http://qt-project.org/
+
+  optional (opted-in at build time),
+
+  - JACK Audio Connection Kit
+    http://jackaudio.org/
+
+  - ALSA, Advanced Linux Sound Architecture
+    http://www.alsa-project.org/
+
+  - LV2, Audio Plugin Standard, the extensible successor of LADSPA
+    http://lv2plug.in/
+
+
 installation:
 
   - unpack tarball as usual; in the extracted source directory
