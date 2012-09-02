@@ -27,7 +27,7 @@
 #include "lv2.h"
 #include "lv2/lv2plug.in/ns/ext/event/event.h"
 
-#define SYNTHV1_LV2_URI "https://www.rncbc.org/svn/test/synthv1"
+#define SYNTHV1_LV2_URI "http://synthv1.sourceforge.net/lv2"
 #define SYNTHV1_LV2_PREFIX SYNTHV1_LV2_URI "#"
 
 

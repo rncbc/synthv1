@@ -10,20 +10,28 @@ features:
     and ALSA MIDI input support;
 
   - LV2 instrument plugin.
+    URI: http://synthv1.sourceforge.net/lv2
 
 license:
 
   synthv1 is free, open-source software, distributed under the terms of
   the GNU General Public License (GPL) version 2 or later.
 
+website:
 
-source tarball:
+  http://synthv1.sourceforge.net
 
-  http://www.rncbc.org/snapshots/#synthv1
+project page:
 
-svn trunk (aka. LV2 URI):
+  http://sourceforge.net/projects/synthv1
 
-  https://www.rncbc.org/svn/test/synthv1
+svn trunk:
+
+  http://svn.code.sf.net/p/synthv1/code/trunk
+
+weblog:
+
+  http://www.rncbc.org
 
 
 installation:
