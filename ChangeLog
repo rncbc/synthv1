@@ -1,0 +1,25 @@
+synthv1
+-------
+
+  an old-school 4-oscillator subtractive polyphonic synthesizer
+  with stereo fx.
+
+
+ChangeLog
+
+
+0.0.9  2012-08-27  Post-vacation relax.
+
+- Main widget now a plain basic QWidget, instead of QDialog.
+
+- Preset salvage query check on main widget close (GUI).
+
+- Voice list alloc/free optimization--doubled polyphony.
+
+
+0.0.8  2012-07-15  Second coming consolidation.
+
+- Proto-Icon, Desktop file and Help About menus added.
+
+
+0.0.7  2012-07-07  Initial change-log entry.

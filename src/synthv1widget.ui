@@ -1,0 +1,1819 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>rncbc aka Rui Nuno Capela</author>
+ <comment>synthv1 - An almost virtual-analog polyphonic synthesizer
+
+  Copyright (C) 2012, rncbc aka Rui Nuno Capela. All rights reserved.
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program; if not, write to the Free Software Foundation, Inc.,
+  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+ </comment>
+ <class>synthv1widget</class>
+ <widget class="QWidget" name="synthv1widget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>580</height>
+   </rect>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>1024</width>
+    <height>580</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>synthv1</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset resource="synthv1.qrc" >:/images/synthv1.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>8</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout">
+     <item>
+      <widget class="synthv1widget_preset" name="Preset" />
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint">
+        <size>
+         <width>8</width>
+         <height>8</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+	 <item>
+	  <widget class="QMenuBar" name="MenuBar">
+	   <property name="sizePolicy">
+		<sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+		 <horstretch>0</horstretch>
+		 <verstretch>0</verstretch>
+		</sizepolicy>
+	   </property>
+	   <property name="nativeMenuBar">
+		<bool>false</bool>
+	   </property>
+	   <widget class="QMenu" name="helpMenu">
+		<property name="title">
+		 <string>&amp;Help</string>
+		</property>
+		<addaction name="helpAboutAction"/>
+		<addaction name="helpAboutQtAction"/>
+	   </widget>
+	   <addaction name="helpMenu"/>
+	  </widget>
+	 </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QToolBox" name="ToolBox">
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="Synth1Page">
+      <attribute name="label">
+       <string>Synth 1</string>
+      </attribute>
+      <layout class="QGridLayout">
+       <item row="0" column="0" colspan="12">
+        <widget class="QGroupBox" name="Dco1GroupBox">
+         <property name="title">
+          <string>DCO1</string>
+         </property>
+         <layout class="QHBoxLayout">
+          <item>
+           <widget class="synthv1widget_wave" name="Dco1Wave1">
+            <property name="toolTip">
+             <string>DCO1 Wave 1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_combo" name="Dco1Shape1Knob">
+            <property name="toolTip">
+             <string>DCO1 Wave Shape 1</string>
+            </property>
+            <property name="text">
+             <string>Shape 1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco1Width1Knob">
+            <property name="toolTip">
+             <string>DCO1 Wave Width 1</string>
+            </property>
+            <property name="text">
+             <string>Width 1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_wave" name="Dco1Wave2">
+            <property name="toolTip">
+             <string>DCO1 Wave 2</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_combo" name="Dco1Shape2Knob">
+            <property name="toolTip">
+             <string>DCO1 Wave Shape 2</string>
+            </property>
+            <property name="text">
+             <string>Shape 2</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco1Width2Knob">
+            <property name="toolTip">
+             <string>DCO1 Wave Width 2</string>
+            </property>
+            <property name="text">
+             <string>Width 2</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco1BalanceKnob">
+            <property name="toolTip">
+             <string>DCO1 Balance</string>
+            </property>
+            <property name="text">
+             <string>Balance</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco1DetuneKnob">
+            <property name="toolTip">
+             <string>DCO1 Detune</string>
+            </property>
+            <property name="text">
+             <string>Detune</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco1PhaseKnob">
+            <property name="toolTip">
+             <string>DCO1 Phase</string>
+            </property>
+            <property name="text">
+             <string>Phase</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco1OctaveKnob">
+            <property name="toolTip">
+             <string>DCO1 Octave</string>
+            </property>
+            <property name="text">
+             <string>Octave</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco1TuningKnob">
+            <property name="toolTip">
+             <string>DCO1 Tuning</string>
+            </property>
+            <property name="text">
+             <string>Tuning</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco1GlideKnob">
+            <property name="toolTip">
+             <string>DCO1 Glide</string>
+            </property>
+            <property name="text">
+             <string>Glide</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0" rowspan="2" colspan="5">
+        <widget class="QGroupBox" name="Dcf1GroupBox">
+         <property name="title">
+          <string>DCF1</string>
+         </property>
+         <layout class="QVBoxLayout">
+          <item>
+           <layout class="QHBoxLayout">
+            <item>
+             <widget class="synthv1widget_filt" name="Dcf1Filt">
+              <property name="toolTip">
+               <string>DCF1</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Dcf1CutoffKnob">
+              <property name="toolTip">
+               <string>DCF1 Cutoff</string>
+              </property>
+              <property name="text">
+               <string>Cutoff</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Dcf1ResoKnob">
+              <property name="toolTip">
+               <string>DCF1 Resonance</string>
+              </property>
+              <property name="text">
+               <string>Reso</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_combo" name="Dcf1TypeKnob">
+              <property name="toolTip">
+               <string>DCF1 Type</string>
+              </property>
+              <property name="text">
+               <string>Type</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_combo" name="Dcf1SlopeKnob">
+              <property name="toolTip">
+               <string>DCF1 Slope</string>
+              </property>
+              <property name="text">
+               <string>Slope</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout">
+            <item>
+             <widget class="synthv1widget_spin" name="Dcf1EnvelopeKnob">
+              <property name="toolTip">
+               <string>DCF1 Envelope</string>
+              </property>
+              <property name="text">
+               <string>Envelope</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_env" name="Dcf1Env">
+              <property name="toolTip">
+               <string>DCF1 Envelope</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Dcf1AttackKnob">
+              <property name="toolTip">
+               <string>DCF1 Attack</string>
+              </property>
+              <property name="text">
+               <string>Attack</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Dcf1DecayKnob">
+              <property name="toolTip">
+               <string>DCF1 Decay</string>
+              </property>
+              <property name="text">
+               <string>Decay</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Dcf1SustainKnob">
+              <property name="toolTip">
+               <string>DCF1 Sustain</string>
+              </property>
+              <property name="text">
+               <string>Sustain</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Dcf1ReleaseKnob">
+              <property name="toolTip">
+               <string>DCF1 Release</string>
+              </property>
+              <property name="text">
+               <string>Release</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="5" rowspan="2" colspan="7">
+        <widget class="QGroupBox" name="Lfo1GroupBox">
+         <property name="title">
+          <string>LFO1</string>
+         </property>
+         <layout class="QVBoxLayout">
+          <item>
+           <layout class="QHBoxLayout">
+            <item>
+             <widget class="synthv1widget_wave" name="Lfo1Wave">
+              <property name="toolTip">
+               <string>LFO1 Wave</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_combo" name="Lfo1ShapeKnob">
+              <property name="toolTip">
+               <string>LFO1 Wave Shape</string>
+              </property>
+              <property name="text">
+               <string>Shape</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo1WidthKnob">
+              <property name="toolTip">
+               <string>LFO1 Wave Width</string>
+              </property>
+              <property name="text">
+               <string>Width</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_env" name="Lfo1Env">
+              <property name="toolTip">
+               <string>LFO1 Envelope</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo1AttackKnob">
+              <property name="toolTip">
+               <string>LFO1 Attack</string>
+              </property>
+              <property name="text">
+               <string>Attack</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo1DecayKnob">
+              <property name="toolTip">
+               <string>LFO1 Decay</string>
+              </property>
+              <property name="text">
+               <string>Decay</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo1SustainKnob">
+              <property name="toolTip">
+               <string>LFO1 Sustain</string>
+              </property>
+              <property name="text">
+               <string>Sustain</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo1ReleaseKnob">
+              <property name="toolTip">
+               <string>LFO1 Release</string>
+              </property>
+              <property name="text">
+               <string>Release</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout">
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo1RateKnob">
+              <property name="toolTip">
+               <string>LFO1 Rate</string>
+              </property>
+              <property name="text">
+               <string>Rate</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint">
+               <size>
+                <width>8</width>
+                <height>8</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo1SweepKnob">
+              <property name="toolTip">
+               <string>LFO1 Sweep</string>
+              </property>
+              <property name="text">
+               <string>Sweep</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo1PitchKnob">
+              <property name="toolTip">
+               <string>LFO1 Pitch</string>
+              </property>
+              <property name="text">
+               <string>Pitch</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint">
+               <size>
+                <width>8</width>
+                <height>8</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo1CutoffKnob">
+              <property name="toolTip">
+               <string>LFO1 Cutoff</string>
+              </property>
+              <property name="text">
+               <string>Cutoff</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo1ResoKnob">
+              <property name="toolTip">
+               <string>LFO1 Resonance</string>
+              </property>
+              <property name="text">
+               <string>Reso</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint">
+               <size>
+                <width>8</width>
+                <height>8</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo1PanningKnob">
+              <property name="toolTip">
+               <string>LFO1 Panning</string>
+              </property>
+              <property name="text">
+               <string>Panning</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo1VolumeKnob">
+              <property name="toolTip">
+               <string>LFO1 Volume</string>
+              </property>
+              <property name="text">
+               <string>Volume</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="5">
+        <widget class="QGroupBox" name="Dca1GroupBox">
+         <property name="title">
+          <string>DCA1</string>
+         </property>
+         <layout class="QHBoxLayout">
+          <item>
+           <widget class="synthv1widget_spin" name="Dca1VolumeKnob">
+            <property name="toolTip">
+             <string>DCA1 Volume</string>
+            </property>
+            <property name="text">
+             <string>Volume</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_env" name="Dca1Env">
+            <property name="toolTip">
+             <string>DCA1 Envelope</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dca1AttackKnob">
+            <property name="toolTip">
+             <string>DCA1 Attack</string>
+            </property>
+            <property name="text">
+             <string>Attack</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dca1DecayKnob">
+            <property name="toolTip">
+             <string>DCA1 Decay</string>
+            </property>
+            <property name="text">
+             <string>Decay</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dca1SustainKnob">
+            <property name="toolTip">
+             <string>DCA1 Sustain</string>
+            </property>
+            <property name="text">
+             <string>Sustain</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dca1ReleaseKnob">
+            <property name="toolTip">
+             <string>DCA1 Release</string>
+            </property>
+            <property name="text">
+             <string>Release</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="5" colspan="4">
+        <widget class="QGroupBox" name="Def1GroupBox">
+         <property name="title">
+          <string>DEF1</string>
+         </property>
+         <layout class="QHBoxLayout">
+          <item>
+           <widget class="synthv1widget_spin" name="Def1PitchbendKnob">
+            <property name="toolTip">
+             <string>DEF1 Pitchbend</string>
+            </property>
+            <property name="text">
+             <string>Pitchbend</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Def1ModwheelKnob">
+             <property name="toolTip">
+             <string>DEF1 Modwheel</string>
+            </property>
+            <property name="text">
+             <string>Modwheel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Def1PressureKnob">
+            <property name="toolTip">
+             <string>DEF1 Pressure</string>
+            </property>
+            <property name="text">
+             <string>Pressure</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="9" colspan="3">
+        <widget class="QGroupBox" name="Out1GroupBox">
+         <property name="title">
+          <string>OUT1</string>
+         </property>
+         <layout class="QHBoxLayout">
+          <item>
+           <widget class="synthv1widget_spin" name="Out1WidthKnob">
+            <property name="toolTip">
+             <string>OUT1 Stereo Width</string>
+            </property>
+            <property name="text">
+             <string>Width</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Out1PanningKnob">
+             <property name="toolTip">
+             <string>OUT1 Panning</string>
+            </property>
+            <property name="text">
+             <string>Panning</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Out1VolumeKnob">
+            <property name="toolTip">
+             <string>OUT1 Volume</string>
+            </property>
+            <property name="text">
+             <string>Volume</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="12">
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint">
+          <size>
+           <width>8</width>
+           <height>8</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="Synth2Page">
+      <attribute name="label">
+       <string>Synth 2</string>
+      </attribute>
+      <layout class="QGridLayout">
+       <item row="0" column="0" colspan="12">
+        <widget class="QGroupBox" name="Dco2GroupBox">
+         <property name="title">
+          <string>DCO2</string>
+         </property>
+         <layout class="QHBoxLayout">
+          <item>
+           <widget class="synthv1widget_wave" name="Dco2Wave1">
+            <property name="toolTip">
+             <string>DCO2 Wave 1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_combo" name="Dco2Shape1Knob">
+            <property name="toolTip">
+             <string>DCO2 Wave Shape 1</string>
+            </property>
+            <property name="text">
+             <string>Shape 1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco2Width1Knob">
+            <property name="toolTip">
+             <string>DCO2 Wave Width 1</string>
+            </property>
+            <property name="text">
+             <string>Width 1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_wave" name="Dco2Wave2">
+            <property name="toolTip">
+             <string>DCO2 Wave 2</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_combo" name="Dco2Shape2Knob">
+            <property name="toolTip">
+             <string>DCO2 Wave Shape 2</string>
+            </property>
+            <property name="text">
+             <string>Shape 2</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco2Width2Knob">
+            <property name="toolTip">
+             <string>DCO2 Wave Width 2</string>
+            </property>
+            <property name="text">
+             <string>Width 2</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco2BalanceKnob">
+            <property name="toolTip">
+             <string>DCO2 Balance</string>
+            </property>
+            <property name="text">
+             <string>Balance</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco2DetuneKnob">
+            <property name="toolTip">
+             <string>DCO2 Detune</string>
+            </property>
+            <property name="text">
+             <string>Detune</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco2PhaseKnob">
+            <property name="toolTip">
+             <string>DCO2 Phase</string>
+            </property>
+            <property name="text">
+             <string>Phase</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco2OctaveKnob">
+            <property name="toolTip">
+             <string>DCO2 Octave</string>
+            </property>
+            <property name="text">
+             <string>Octave</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco2TuningKnob">
+            <property name="toolTip">
+             <string>DCO2 Tuning</string>
+            </property>
+            <property name="text">
+             <string>Tuning</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco2GlideKnob">
+            <property name="toolTip">
+             <string>DCO2 Glide</string>
+            </property>
+            <property name="text">
+             <string>Glide</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0" rowspan="2" colspan="5">
+        <widget class="QGroupBox" name="Dcf2GroupBox">
+         <property name="title">
+          <string>DCF2</string>
+         </property>
+         <layout class="QVBoxLayout">
+          <item>
+           <layout class="QHBoxLayout">
+            <item>
+             <widget class="synthv1widget_filt" name="Dcf2Filt">
+              <property name="toolTip">
+               <string>DCF2</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Dcf2CutoffKnob">
+              <property name="toolTip">
+               <string>DCF2 Cutoff</string>
+              </property>
+              <property name="text">
+               <string>Cutoff</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Dcf2ResoKnob">
+              <property name="toolTip">
+               <string>DCF2 Resonance</string>
+              </property>
+              <property name="text">
+               <string>Reso</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_combo" name="Dcf2TypeKnob">
+              <property name="toolTip">
+               <string>DCF2 Type</string>
+              </property>
+              <property name="text">
+               <string>Type</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_combo" name="Dcf2SlopeKnob">
+              <property name="toolTip">
+               <string>DCF2 Slope</string>
+              </property>
+              <property name="text">
+               <string>Slope</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout">
+            <item>
+             <widget class="synthv1widget_spin" name="Dcf2EnvelopeKnob">
+              <property name="toolTip">
+               <string>DCF2 Envelope</string>
+              </property>
+              <property name="text">
+               <string>Envelope</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_env" name="Dcf2Env">
+              <property name="toolTip">
+               <string>DCF2 Envelope</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Dcf2AttackKnob">
+              <property name="toolTip">
+               <string>DCF2 Attack</string>
+              </property>
+              <property name="text">
+               <string>Attack</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Dcf2DecayKnob">
+              <property name="toolTip">
+               <string>DCF2 Decay</string>
+              </property>
+              <property name="text">
+               <string>Decay</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Dcf2SustainKnob">
+              <property name="toolTip">
+               <string>DCF2 Sustain</string>
+              </property>
+              <property name="text">
+               <string>Sustain</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Dcf2ReleaseKnob">
+              <property name="toolTip">
+               <string>DCF2 Release</string>
+              </property>
+              <property name="text">
+               <string>Release</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="5" rowspan="2" colspan="7">
+        <widget class="QGroupBox" name="Lfo2GroupBox">
+         <property name="title">
+          <string>LFO2</string>
+         </property>
+         <layout class="QVBoxLayout">
+          <item>
+           <layout class="QHBoxLayout">
+            <item>
+             <widget class="synthv1widget_wave" name="Lfo2Wave">
+              <property name="toolTip">
+               <string>LFO2 Wave</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_combo" name="Lfo2ShapeKnob">
+              <property name="toolTip">
+               <string>LFO2 Wave Shape</string>
+              </property>
+              <property name="text">
+               <string>Shape</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo2WidthKnob">
+              <property name="toolTip">
+               <string>LFO2 Wave Width</string>
+              </property>
+              <property name="text">
+               <string>Width</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_env" name="Lfo2Env">
+              <property name="toolTip">
+               <string>LFO2 Envelope</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo2AttackKnob">
+              <property name="toolTip">
+               <string>LFO2 Attack</string>
+              </property>
+              <property name="text">
+               <string>Attack</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo2DecayKnob">
+              <property name="toolTip">
+               <string>LFO2 Decay</string>
+              </property>
+              <property name="text">
+               <string>Decay</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo2SustainKnob">
+              <property name="toolTip">
+               <string>LFO2 Sustain</string>
+              </property>
+              <property name="text">
+               <string>Sustain</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo2ReleaseKnob">
+              <property name="toolTip">
+               <string>LFO2 Release</string>
+              </property>
+              <property name="text">
+               <string>Release</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout">
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo2RateKnob">
+              <property name="toolTip">
+               <string>LFO2 Rate</string>
+              </property>
+              <property name="text">
+               <string>Rate</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint">
+               <size>
+                <width>8</width>
+                <height>8</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo2SweepKnob">
+              <property name="toolTip">
+               <string>LFO2 Sweep</string>
+              </property>
+              <property name="text">
+               <string>Sweep</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo2PitchKnob">
+              <property name="toolTip">
+               <string>LFO2 Pitch</string>
+              </property>
+              <property name="text">
+               <string>Pitch</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint">
+               <size>
+                <width>8</width>
+                <height>8</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo2CutoffKnob">
+              <property name="toolTip">
+               <string>LFO2 Cutoff</string>
+              </property>
+              <property name="text">
+               <string>Cutoff</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo2ResoKnob">
+              <property name="toolTip">
+               <string>LFO2 Resonance</string>
+              </property>
+              <property name="text">
+               <string>Reso</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint">
+               <size>
+                <width>8</width>
+                <height>8</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo2PanningKnob">
+              <property name="toolTip">
+               <string>LFO2 Panning</string>
+              </property>
+              <property name="text">
+               <string>Panning</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo2VolumeKnob">
+              <property name="toolTip">
+               <string>LFO2 Volume</string>
+              </property>
+              <property name="text">
+               <string>Volume</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="5">
+        <widget class="QGroupBox" name="Dca2GroupBox">
+         <property name="title">
+          <string>DCA2</string>
+         </property>
+         <layout class="QHBoxLayout">
+          <item>
+           <widget class="synthv1widget_spin" name="Dca2VolumeKnob">
+            <property name="toolTip">
+             <string>DCA2 Volume</string>
+            </property>
+            <property name="text">
+             <string>Volume</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_env" name="Dca2Env">
+            <property name="toolTip">
+             <string>DCA2 Envelope</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dca2AttackKnob">
+            <property name="toolTip">
+             <string>DCA2 Attack</string>
+            </property>
+            <property name="text">
+             <string>Attack</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dca2DecayKnob">
+            <property name="toolTip">
+             <string>DCA2 Decay</string>
+            </property>
+            <property name="text">
+             <string>Decay</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dca2SustainKnob">
+            <property name="toolTip">
+             <string>DCA2 Sustain</string>
+            </property>
+            <property name="text">
+             <string>Sustain</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dca2ReleaseKnob">
+            <property name="toolTip">
+             <string>DCA2 Release</string>
+            </property>
+            <property name="text">
+             <string>Release</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="5" colspan="4">
+        <widget class="QGroupBox" name="Def2GroupBox">
+         <property name="title">
+          <string>DEF2</string>
+         </property>
+         <layout class="QHBoxLayout">
+          <item>
+           <widget class="synthv1widget_spin" name="Def2PitchbendKnob">
+            <property name="toolTip">
+             <string>DEF2 Pitchbend</string>
+            </property>
+            <property name="text">
+             <string>Pitchbend</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Def2ModwheelKnob">
+             <property name="toolTip">
+             <string>DEF2 Modwheel</string>
+            </property>
+            <property name="text">
+             <string>Modwheel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Def2PressureKnob">
+            <property name="toolTip">
+             <string>DEF2 Pressure</string>
+            </property>
+            <property name="text">
+             <string>Pressure</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="9" colspan="3">
+        <widget class="QGroupBox" name="Out2GroupBox">
+         <property name="title">
+          <string>OUT2</string>
+         </property>
+         <layout class="QHBoxLayout">
+          <item>
+           <widget class="synthv1widget_spin" name="Out2WidthKnob">
+            <property name="toolTip">
+             <string>OUT2 Stereo Width</string>
+            </property>
+            <property name="text">
+             <string>Width</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Out2PanningKnob">
+             <property name="toolTip">
+             <string>OUT2 Panning</string>
+            </property>
+            <property name="text">
+             <string>Panning</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Out2VolumeKnob">
+            <property name="toolTip">
+             <string>OUT2 Volume</string>
+            </property>
+            <property name="text">
+             <string>Volume</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="12">
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint">
+          <size>
+           <width>8</width>
+           <height>8</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="EffectsPage">
+      <attribute name="label">
+       <string>Effects</string>
+      </attribute>
+      <layout class="QGridLayout">
+       <item row="0" column="0" colspan="5">
+        <widget class="QGroupBox" name="Cho1GroupBox">
+         <property name="title">
+          <string>Chorus</string>
+         </property>
+         <layout class="QHBoxLayout">
+          <item>
+           <widget class="synthv1widget_spin" name="Cho1WetKnob">
+            <property name="toolTip">
+             <string>Chorus Wet</string>
+            </property>
+            <property name="text">
+             <string>Wet</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Cho1DelayKnob">
+             <property name="toolTip">
+             <string>Chorus Delay</string>
+            </property>
+            <property name="text">
+             <string>Delay</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Cho1FeedbKnob">
+            <property name="toolTip">
+             <string>Chorus Feedback</string>
+            </property>
+            <property name="text">
+             <string>Feedback</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Cho1RateKnob">
+            <property name="toolTip">
+             <string>Chorus Rate</string>
+            </property>
+            <property name="text">
+             <string>Rate</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Cho1ModKnob">
+            <property name="toolTip">
+             <string>Chorus Modulation</string>
+            </property>
+            <property name="text">
+             <string>Modulation</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="5" colspan="4">
+        <widget class="QGroupBox" name="Fla1GroupBox">
+         <property name="title">
+          <string>Flanger</string>
+         </property>
+         <layout class="QHBoxLayout">
+          <item>
+           <widget class="synthv1widget_spin" name="Fla1WetKnob">
+            <property name="toolTip">
+             <string>Flanger Wet</string>
+            </property>
+            <property name="text">
+             <string>Wet</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Fla1DelayKnob">
+             <property name="toolTip">
+             <string>Flanger Delay</string>
+            </property>
+            <property name="text">
+             <string>Delay</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Fla1FeedbKnob">
+            <property name="toolTip">
+             <string>Flanger Feedback</string>
+            </property>
+            <property name="text">
+             <string>Feedback</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Fla1DaftKnob">
+            <property name="toolTip">
+             <string>Flanger Daft</string>
+            </property>
+            <property name="text">
+             <string>Daft</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="5">
+        <widget class="QGroupBox" name="Pha1GroupBox">
+         <property name="title">
+          <string>Phaser</string>
+         </property>
+         <layout class="QHBoxLayout">
+          <item>
+           <widget class="synthv1widget_spin" name="Pha1WetKnob">
+            <property name="toolTip">
+             <string>Phaser Wet</string>
+            </property>
+            <property name="text">
+             <string>Wet</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Pha1RateKnob">
+             <property name="toolTip">
+             <string>Phaser Rate</string>
+            </property>
+            <property name="text">
+             <string>Rate</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Pha1FeedbKnob">
+            <property name="toolTip">
+             <string>Phaser Feedback</string>
+            </property>
+            <property name="text">
+             <string>Feedback</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Pha1DepthKnob">
+            <property name="toolTip">
+             <string>Phaser Depth</string>
+            </property>
+            <property name="text">
+             <string>Depth</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Pha1DaftKnob">
+            <property name="toolTip">
+             <string>Phaser Daft</string>
+            </property>
+            <property name="text">
+             <string>Daft</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="5" colspan="4">
+        <widget class="QGroupBox" name="Del1GroupBox">
+         <property name="title">
+          <string>Delay</string>
+         </property>
+         <layout class="QHBoxLayout">
+          <item>
+           <widget class="synthv1widget_spin" name="Del1WetKnob">
+            <property name="toolTip">
+             <string>Delay Wet</string>
+            </property>
+            <property name="text">
+             <string>Wet</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Del1DelayKnob">
+             <property name="toolTip">
+             <string>Delay Delay</string>
+            </property>
+            <property name="text">
+             <string>Delay</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Del1FeedbKnob">
+            <property name="toolTip">
+             <string>Delay Feedback</string>
+            </property>
+            <property name="text">
+             <string>Feedback</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Del1BpmKnob">
+            <property name="toolTip">
+             <string>Delay BPM</string>
+            </property>
+            <property name="text">
+             <string>BPM</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="9" rowspan="2">
+        <widget class="QGroupBox" name="Dyn1GroupBox">
+         <property name="title">
+          <string>Dynamic</string>
+         </property>
+         <layout class="QVBoxLayout">
+          <item>
+           <widget class="synthv1widget_combo" name="Dyn1CompressKnob">
+            <property name="toolTip">
+             <string>Dynamic Compressor</string>
+            </property>
+            <property name="text">
+             <string>Compress</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="synthv1widget_combo" name="Dyn1LimiterKnob">
+             <property name="toolTip">
+             <string>Dynamic Limiter</string>
+            </property>
+            <property name="text">
+             <string>Limiter</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="12">
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint">
+           <size>
+           <width>8</width>
+           <height>8</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+  <action name="helpAboutAction" >
+   <property name="text" >
+	<string>&amp;About...</string>
+   </property>
+   <property name="iconText" >
+	<string>About</string>
+   </property>
+   <property name="statusTip" >
+	<string>Show information about this application program</string>
+   </property>
+   <property name="shortcut" >
+	<string/>
+   </property>
+  </action>
+  <action name="helpAboutQtAction" >
+   <property name="text" >
+	<string>About &amp;Qt...</string>
+   </property>
+   <property name="iconText" >
+	<string>About Qt</string>
+   </property>
+   <property name="statusTip" >
+	<string>Show information about the Qt toolkit</string>
+   </property>
+   <property name="shortcut" >
+	<string/>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>synthv1widget_preset</class>
+   <extends>QComboBox</extends>
+   <header>synthv1widget_preset.h</header>
+  </customwidget>
+  <customwidget>
+   <class>synthv1widget_spin</class>
+   <extends>QDial</extends>
+   <header>synthv1widget_knob.h</header>
+  </customwidget>
+  <customwidget>
+   <class>synthv1widget_combo</class>
+   <extends>QDial</extends>
+   <header>synthv1widget_knob.h</header>
+  </customwidget>
+  <customwidget>
+   <class>synthv1widget_env</class>
+   <extends>QFrame</extends>
+   <header>synthv1widget_env.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>synthv1widget_filt</class>
+   <extends>QFrame</extends>
+   <header>synthv1widget_filt.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>synthv1widget_wave</class>
+   <extends>QFrame</extends>
+   <header>synthv1widget_wave.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="synthv1.qrc" />
+ </resources>
+ <connections/>
+</ui>

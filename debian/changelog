@@ -1,0 +1,18 @@
+synthv1 (0.0.9-3) unstable; urgency=low
+
+  * Post-vacation relax: improved polyphony, preset salvage.
+
+ -- Rui Nuno Capela <rncbc@rncbc.org>  Mon, 27 Aug 2012 18:00:00 +0000
+
+synthv1 (0.0.8-2) unstable; urgency=low
+
+  * Proto-Icon, Desktop file and Help About menus added.
+
+ -- Rui Nuno Capela <rncbc@rncbc.org>  Sun, 15 Jul 2012 00:00:00 +0000
+
+synthv1 (0.0.7-1) unstable; urgency=low
+
+  * Initial debianization
+
+ -- Rui Nuno Capela <rncbc@rncbc.org>  Sun,  8 Jul 2012 12:00:00 +0000
+

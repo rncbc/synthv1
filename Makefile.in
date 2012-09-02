@@ -1,0 +1,103 @@
+qmake = @ac_qmake@
+
+name = synthv1
+
+name_lv2  = $(name)_lv2
+name_jack = $(name)_jack
+
+headers = \
+	src/config.h \
+	src/$(name).h \
+	src/$(name)_fx.h \
+	src/$(name)_ramp.h \
+	src/$(name)_wave.h \
+	src/$(name)widget.h \
+	src/$(name)widget_config.h \
+	src/$(name)widget_env.h \
+	src/$(name)widget_filt.h \
+	src/$(name)widget_knob.h \
+	src/$(name)widget_preset.h
+
+sources = \
+	src/$(name).cpp \
+	src/$(name)widget.cpp \
+	src/$(name)widget_config.cpp \
+	src/$(name)widget_env.cpp \
+	src/$(name)widget_filt.cpp \
+	src/$(name)widget_knob.cpp \
+	src/$(name)widget_preset.cpp
+
+forms = \
+	src/$(name)widget.ui
+
+resources = \
+	src/$(name).qrc
+
+
+headers_lv2 = \
+	$(headers) \
+	src/$(name)_lv2.h \
+	src/$(name)widget_lv2.h
+
+sources_lv2 = \
+	$(sources) \
+	src/$(name)_lv2.cpp \
+	src/$(name)widget_lv2.cpp
+
+
+headers_jack = \
+	$(headers) \
+	src/$(name)_jack.h \
+	src/$(name)widget_jack.h
+
+sources_jack = \
+	$(sources) \
+	src/$(name)_jack.cpp \
+	src/$(name)widget_jack.cpp
+
+
+all:	lv2 jack
+
+
+lv2:	$(name_lv2).mak $(resources) ${forms} $(sources_lv2) $(headers_lv2)
+	@$(MAKE) -f $(name_lv2).mak
+
+jack:	$(name_jack).mak $(resources) ${forms} $(sources_jack) $(headers_jack)
+	@$(MAKE) -f $(name_jack).mak
+
+
+$(name_lv2).mak:	$(name_lv2).pro
+	@$(qmake) -o $(name_lv2).mak $(name_lv2).pro
+
+$(name_jack).mak:	$(name_jack).pro
+	@$(qmake) -o $(name_jack).mak $(name_jack).pro
+
+
+install_lv2:	lv2
+	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_lv2).mak install
+
+install_jack:	jack
+	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_jack).mak install
+
+
+uninstall_lv2:	lv2
+	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_lv2).mak uninstall
+
+uninstall_jack:	jack
+	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_jack).mak uninstall
+
+
+clean_lv2:	$(name_lv2).mak
+	@$(MAKE) -f $(name_lv2).mak distclean
+	@rm -f $(name_lv2).mak
+
+clean_jack:	$(name_jack).mak
+	@$(MAKE) -f $(name_jack).mak distclean
+	@rm -f $(name_jack).mak
+
+
+install:	install_lv2 install_jack
+
+uninstall:	uninstall_lv2 uninstall_jack
+
+clean:	clean_lv2 clean_jack

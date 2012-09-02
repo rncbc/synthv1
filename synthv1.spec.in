@@ -1,0 +1,64 @@
+%define name    @PACKAGE_TARNAME@
+%define version @PACKAGE_VERSION@
+%define release 3
+
+%define _prefix	@ac_prefix@
+
+Summary:	an old-school polyphonic synthesizer
+Name:		%{name}
+Version:	%{version}
+Release:	%{release}
+License:	GPL
+Group:		Productivity/Multimedia/Sound/Midi
+Source0:	%{name}-%{version}.tar.gz
+URL:		https://www.rncbc.org/svn/test/synthv1
+Packager:	rncbc.org
+
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+
+BuildRequires:	libqt4-devel >= 4.4
+BuildRequires:	libjack-devel >= 0.109.2
+BuildRequires:	alsa-devel
+BuildRequires:	lv2-devel
+
+%description
+  an old-school all-digital 4-oscillator subtractive polyphonic
+  synthesizer with stereo fx.
+
+%prep
+%setup
+[ -f Makefile.svn ] && %__make -f Makefile.svn
+
+%build
+%configure
+%__make
+
+%install
+%__make DESTDIR=%{buildroot} install
+
+%clean
+[ -d %{buildroot} -a "%{buildroot}" != "" ] && %__rm -rf %{buildroot}
+
+%files
+%defattr(-,root,root)
+%doc AUTHORS COPYING ChangeLog README TODO
+%dir %{_libdir}/lv2
+%dir %{_libdir}/lv2/%{name}.lv2
+%{_libdir}/lv2/%{name}.lv2/manifest.ttl
+%{_libdir}/lv2/%{name}.lv2/%{name}.ttl
+%{_libdir}/lv2/%{name}.lv2/%{name}.so
+#dir {_datadir}/applications
+%dir %{_datadir}/icons/hicolor
+%dir %{_datadir}/icons/hicolor/32x32
+%dir %{_datadir}/icons/hicolor/32x32/apps
+%{_datadir}/icons/hicolor/32x32/apps/%{name}.png
+%{_datadir}/applications/%{name}.desktop
+%{_bindir}/%{name}_jack
+
+%changelog
+* Mon Aug 27 2012 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.0.9-3
+- Post-vacation relax: improved polyphony, preset salvage.
+* Sun Jul 15 2012 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.0.8-2
+- Proto-Icon, Desktop file and Help About menus added.
+* Sun Jul  8 2012 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.0.7-1
+- Created initial synthv1.spec

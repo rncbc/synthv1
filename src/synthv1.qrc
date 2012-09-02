@@ -1,0 +1,9 @@
+<RCC version="1.0">
+	<qresource>
+		<file>images/presetNew.png</file>
+		<file>images/presetOpen.png</file>
+		<file>images/presetSave.png</file>
+		<file>images/presetDelete.png</file>
+		<file>images/synthv1.png</file>
+	</qresource>
+</RCC>
