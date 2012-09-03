@@ -2,6 +2,6 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 <http://synthv1.sourceforge.net/lv2>
-	a lv2:Plugin ;
+	a lv2:Plugin, lv2:InstrumentPlugin ;
 	lv2:binary <synthv1.so> ;
 	rdfs:seeAlso <synthv1.ttl> .
