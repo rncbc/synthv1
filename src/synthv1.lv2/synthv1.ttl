@@ -16,7 +16,7 @@
 	] ;
 	lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
 	lv2:optionalFeature lv2:hardRTCapable ;
-	lv2ui:ui <http://samplv1.sourceforge.net/lv2#ui> ;
+	lv2ui:ui <http://synthv1.sourceforge.net/lv2#ui> ;
 	lv2:port [
 		a lv2:InputPort, lv2ev:EventPort ;
 		lv2ev:supportsEvent <http://lv2plug.in/ns/ext/midi#MidiEvent> ;
