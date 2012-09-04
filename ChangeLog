@@ -1,15 +1,11 @@
-synthv1
--------
-
-  an old-school 4-oscillator subtractive polyphonic synthesizer
-  with stereo fx.
-
+synthv1 - an old-school polyphonic synthesizer
+----------------------------------------------
 
 ChangeLog
 
 SVN TRUNK
 
-- Started migration to sourceforge.net ...
+- Migrated to sourceforge.net.
 
 
 0.0.9  2012-08-27  Post-vacation relax.
