@@ -371,6 +371,7 @@ void synthv1widget_preset::refreshPreset (void)
 	if (pConfig) {
 		pConfig->beginGroup(presetGroup());
 		m_pComboBox->insertItems(0, pConfig->childKeys());
+		m_pComboBox->model()->sort(0);
 		pConfig->endGroup();
 	}
 
