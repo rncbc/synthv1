@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 3
+%define release 4
 
 %define _prefix	@ac_prefix@
 
@@ -56,6 +56,8 @@ BuildRequires:	lv2-devel
 %{_bindir}/%{name}_jack
 
 %changelog
+* Mon Sep 10 2012 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.1.0-4
+- First true official release.
 * Mon Aug 27 2012 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.0.9-3
 - Post-vacation relax: improved polyphony, preset salvage.
 * Sun Jul 15 2012 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.0.8-2

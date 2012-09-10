@@ -1,3 +1,9 @@
+synthv1 (0.1.0-4) unstable; urgency=low
+
+  * First true official release.
+
+ -- Rui Nuno Capela <rncbc@rncbc.org>  Mon, 10 Sep 2012 12:00:00 +0000
+
 synthv1 (0.0.9-3) unstable; urgency=low
 
   * Post-vacation relax: improved polyphony, preset salvage.
