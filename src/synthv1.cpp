@@ -587,94 +587,14 @@ protected:
 
 // a forward decl.
 
-struct synthv1_voice;
-
-
-// polyphonic synth implementation
-
-class synthv1_impl
-{
-public:
-
-	synthv1_impl(uint16_t iChannels, uint32_t iSampleRate);
-
-	~synthv1_impl();
-
-	void setChannels(uint16_t iChannels);
-	uint16_t channels() const;
-
-	void setSampleRate(uint32_t iSampleRate);
-	uint32_t sampleRate() const;
-
-	void setParamPort(synthv1::ParamIndex index, float *pfParam = 0);
-	float *paramPort(synthv1::ParamIndex index);
-
-	void process_midi(uint8_t *data, uint32_t size);
-	void process(float **ins, float **outs, uint32_t nframes);
-
-	void reset();
-
-	synthv1_wave dco1_wave1, dco1_wave2;
-	synthv1_wave dco2_wave1, dco2_wave2;
-
-	synthv1_wave lfo1_wave,  lfo2_wave;
-
-protected:
-
-	void allSoundOff();
-	void allControllersOff();
-	void allNotesOff();
-
-private:
-
-	uint16_t m_iChannels;
-	uint32_t m_iSampleRate;
-
-	synthv1_ctl m_ctl;
-
-	synthv1_dco m_dco1, m_dco2;
-	synthv1_dcf m_dcf1, m_dcf2;
-	synthv1_lfo m_lfo1, m_lfo2;
-	synthv1_dca m_dca1, m_dca2;
-	synthv1_out m_out1, m_out2;
-
-	synthv1_def m_def1, m_def2;
-
-	synthv1_cho m_cho;
-	synthv1_fla m_fla;
-	synthv1_pha m_pha;
-	synthv1_del m_del;
-	synthv1_dyn m_dyn;
-
-	synthv1_voice **m_voices;
-	synthv1_voice  *m_notes[MAX_NOTES];
-
-	synthv1_aux   m_aux1, m_aux2;
-
-	synthv1_ramp1 m_wid1, m_wid2;
-	synthv1_pan   m_pan1, m_pan2;
-	synthv1_ramp4 m_vol1, m_vol2;
-
-	synthv1_ramp2 m_pre1, m_pre2;
-
-	synthv1_fx_chorus   m_chorus;
-	synthv1_fx_flanger *m_flanger;
-	synthv1_fx_phaser  *m_phaser;
-	synthv1_fx_delay   *m_delay;
-	synthv1_fx_comp    *m_comp;
-};
+class synthv1_impl;
 
 
 // voice
 
 struct synthv1_voice
 {
-	synthv1_voice(const synthv1_impl& impl) :
-		dco1_osc1(impl.dco1_wave1), dco1_osc2(impl.dco1_wave2),
-		dco2_osc1(impl.dco2_wave1), dco2_osc2(impl.dco2_wave2),
-		lfo1_osc(impl.lfo1_wave), lfo2_osc(impl.lfo2_wave),
-		dco1_glide1(dco1_last1), dco1_glide2(dco1_last2),
-		dco2_glide1(dco2_last1), dco2_glide2(dco2_last2) {}
+	synthv1_voice(synthv1_impl *pImpl);
 
 	synthv1_oscillator dco1_osc1, dco1_osc2;
 	synthv1_oscillator dco2_osc1, dco2_osc2;
@@ -702,9 +622,6 @@ struct synthv1_voice
 
 	synthv1_glide dco1_glide1, dco1_glide2;	// glides (portamento)
 	synthv1_glide dco2_glide1, dco2_glide2;
-
-	static float dco1_last1, dco1_last2;
-	static float dco2_last1, dco2_last2;
 
 	struct list_node
 	{
@@ -740,49 +657,140 @@ struct synthv1_voice
 		synthv1_voice *next;
 
 	} node;
+};
 
-	static
-	synthv1_voice *alloc ()
+
+// polyphonic synth implementation
+
+class synthv1_impl
+{
+public:
+
+	synthv1_impl(uint16_t iChannels, uint32_t iSampleRate);
+
+	~synthv1_impl();
+
+	void setChannels(uint16_t iChannels);
+	uint16_t channels() const;
+
+	void setSampleRate(uint32_t iSampleRate);
+	uint32_t sampleRate() const;
+
+	void setParamPort(synthv1::ParamIndex index, float *pfParam = 0);
+	float *paramPort(synthv1::ParamIndex index);
+
+	void process_midi(uint8_t *data, uint32_t size);
+	void process(float **ins, float **outs, uint32_t nframes);
+
+	void reset();
+
+	synthv1_wave dco1_wave1, dco1_wave2;
+	synthv1_wave dco2_wave1, dco2_wave2;
+
+	synthv1_wave lfo1_wave,  lfo2_wave;
+
+	float dco1_last1;
+	float dco1_last2;
+	float dco2_last1;
+	float dco2_last2;
+
+protected:
+
+	void allSoundOff();
+	void allControllersOff();
+	void allNotesOff();
+
+	synthv1_voice *alloc_voice ()
 	{
-		synthv1_voice *pv = free_list.next;
+		synthv1_voice *pv = m_free_list.next;
 		if (pv) {
-			free_list.remove(pv);
-			play_list.append(pv);
+			m_free_list.remove(pv);
+			m_play_list.append(pv);
 		}
 		return pv;
 	}
 
-	static
-	void free ( synthv1_voice *pv )
+	void free_voice ( synthv1_voice *pv )
 	{
-		play_list.remove(pv);
-		free_list.append(pv);
+		m_play_list.remove(pv);
+		m_free_list.append(pv);
 	}
 
-	static list_node free_list;
-	static list_node play_list;
+private:
+
+	uint16_t m_iChannels;
+	uint32_t m_iSampleRate;
+
+	synthv1_ctl m_ctl;
+
+	synthv1_dco m_dco1, m_dco2;
+	synthv1_dcf m_dcf1, m_dcf2;
+	synthv1_lfo m_lfo1, m_lfo2;
+	synthv1_dca m_dca1, m_dca2;
+	synthv1_out m_out1, m_out2;
+
+	synthv1_def m_def1, m_def2;
+
+	synthv1_cho m_cho;
+	synthv1_fla m_fla;
+	synthv1_pha m_pha;
+	synthv1_del m_del;
+	synthv1_dyn m_dyn;
+
+	synthv1_voice **m_voices;
+	synthv1_voice  *m_notes[MAX_NOTES];
+
+	synthv1_voice::list_node m_free_list;
+	synthv1_voice::list_node m_play_list;
+
+	synthv1_aux   m_aux1, m_aux2;
+
+	synthv1_ramp1 m_wid1, m_wid2;
+	synthv1_pan   m_pan1, m_pan2;
+	synthv1_ramp4 m_vol1, m_vol2;
+
+	synthv1_ramp2 m_pre1, m_pre2;
+
+	synthv1_fx_chorus   m_chorus;
+	synthv1_fx_flanger *m_flanger;
+	synthv1_fx_phaser  *m_phaser;
+	synthv1_fx_delay   *m_delay;
+	synthv1_fx_comp    *m_comp;
 };
 
-synthv1_voice::list_node synthv1_voice::free_list;
-synthv1_voice::list_node synthv1_voice::play_list;
 
+// voice constructor
 
-float synthv1_voice::dco1_last1 = 0.0f;
-float synthv1_voice::dco1_last2 = 0.0f;
-float synthv1_voice::dco2_last1 = 0.0f;
-float synthv1_voice::dco2_last2 = 0.0f;
-
+synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
+	dco1_osc1(pImpl->dco1_wave1),
+	dco1_osc2(pImpl->dco1_wave2),
+	dco2_osc1(pImpl->dco2_wave1),
+	dco2_osc2(pImpl->dco2_wave2),
+	lfo1_osc(pImpl->lfo1_wave),
+	lfo2_osc(pImpl->lfo2_wave),
+	dco1_glide1(pImpl->dco1_last1),
+	dco1_glide2(pImpl->dco1_last2),
+	dco2_glide1(pImpl->dco2_last1),
+	dco2_glide2(pImpl->dco2_last2)
+{
+}
 
 // constructor
 
 synthv1_impl::synthv1_impl ( uint16_t iChannels, uint32_t iSampleRate )
 {
+	// glide notes
+	dco1_last1 = 0.0f;
+	dco1_last2 = 0.0f;
+	dco2_last1 = 0.0f;
+	dco2_last2 = 0.0f;
+
 	// allocate voice pool.
 	m_voices = new synthv1_voice * [MAX_VOICES];
 
 	for (int i = 0; i < MAX_VOICES; ++i) {
-		m_voices[i] = new synthv1_voice(*this);
-		synthv1_voice::free_list.append(m_voices[i]);
+		m_voices[i] = new synthv1_voice(this);
+		m_free_list.append(m_voices[i]);
 	}
 
 	for (int note = 0; note < MAX_NOTES; ++note)
@@ -1196,7 +1204,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 			m_notes[key] = 0;
 		}
 		// find free voice
-		pv = synthv1_voice::alloc();
+		pv = alloc_voice();
 		if (pv) {
 			// waveform
 			pv->note = key;
@@ -1344,18 +1352,18 @@ void synthv1_impl::allSoundOff (void)
 
 void synthv1_impl::allNotesOff (void)
 {
-	synthv1_voice *pv = synthv1_voice::play_list.next;
+	synthv1_voice *pv = m_play_list.next;
 	while (pv) {
 		if (pv->note >= 0)
 			m_notes[pv->note] = 0;
-		synthv1_voice::free(pv);
-		pv = synthv1_voice::play_list.next;
+		free_voice(pv);
+		pv = m_play_list.next;
 	}
 
-	synthv1_voice::dco1_last1 = 0.0f;
-	synthv1_voice::dco1_last2 = 0.0f;
-	synthv1_voice::dco2_last1 = 0.0f;
-	synthv1_voice::dco2_last2 = 0.0f;
+	dco1_last1 = 0.0f;
+	dco1_last2 = 0.0f;
+	dco2_last1 = 0.0f;
+	dco2_last2 = 0.0f;
 
 	m_aux1.reset();
 	m_aux2.reset();
@@ -1453,7 +1461,7 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 
 	// per voice
 
-	synthv1_voice *pv = synthv1_voice::play_list.next;
+	synthv1_voice *pv = m_play_list.next;
 
 	while (pv) {
 
@@ -1621,7 +1629,7 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				pv->dca2_env.stage == synthv1_env::Done) {
 				if (pv->note >= 0)
 					m_notes[pv->note] = 0;
-				synthv1_voice::free(pv);
+				free_voice(pv);
 				nblock = 0;
 			} else {
 				if (pv->dcf1_env.running) {
