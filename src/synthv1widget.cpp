@@ -27,8 +27,6 @@
 
 #include <QMessageBox>
 
-#include <QCloseEvent>
-
 
 //-------------------------------------------------------------------------
 // default state (params)
@@ -926,6 +924,13 @@ void synthv1widget::savePreset ( const QString& sFilename )
 }
 
 
+// Dirty close prompt,
+bool synthv1widget::queryClose (void)
+{
+	return m_ui.Preset->queryPreset();
+}
+
+
 // Menu actions.
 void synthv1widget::helpAbout (void)
 {
@@ -979,19 +984,6 @@ void synthv1widget::helpAboutQt (void)
 {
 	// About Qt...
 	QMessageBox::aboutQt(this);
-}
-
-
-// Application close.
-void synthv1widget::closeEvent ( QCloseEvent *pCloseEvent )
-{
-	// Let's be sure about that...
-	if (m_ui.Preset->queryPreset()) {
-		pCloseEvent->accept();
-	//	QApplication::quit();
-	} else {
-		pCloseEvent->ignore();
-	}
 }
 
 

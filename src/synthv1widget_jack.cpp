@@ -27,6 +27,8 @@
 #include <QFileInfo>
 #include <QDir>
 
+#include <QCloseEvent>
+
 
 #ifdef CONFIG_JACK_SESSION
 
@@ -137,6 +139,19 @@ void synthv1widget_jack::updateParam (
 	float *pParamPort = m_pSynth->paramPort(index);
 	if (pParamPort)
 		*pParamPort = fValue;
+}
+
+
+// Application close.
+void synthv1widget_jack::closeEvent ( QCloseEvent *pCloseEvent )
+{
+	// Let's be sure about that...
+	if (queryClose()) {
+		pCloseEvent->accept();
+	//	QApplication::quit();
+	} else {
+		pCloseEvent->ignore();
+	}
 }
 
 

@@ -67,6 +67,9 @@ protected:
 	// Param methods.
 	void updateParam(synthv1::ParamIndex index, float fValue) const;
 
+	// Application close.
+	void closeEvent(QCloseEvent *pCloseEvent);
+
 private:
 
 	// Instance variables.

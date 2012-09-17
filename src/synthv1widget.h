@@ -52,6 +52,9 @@ public:
 	void setParamKnob(synthv1::ParamIndex index, synthv1widget_knob *pKnob);
 	synthv1widget_knob *paramKnob(synthv1::ParamIndex index) const;
 
+	// Dirty close prompt,
+	bool queryClose();
+
 public slots:
 
 	// Preset file I/O.
@@ -71,9 +74,6 @@ protected slots:
 	void helpAboutQt();
 
 protected:
-
-	// Application close.
-	void closeEvent(QCloseEvent *pCloseEvent);
 
 	// Preset init.
 	void initPreset();
