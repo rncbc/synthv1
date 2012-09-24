@@ -1,3 +1,9 @@
+synthv1 (0.1.1-5) unstable; urgency=low
+
+  * One first bug-fix release.
+
+ -- Rui Nuno Capela <rncbc@rncbc.org>  Mon, 24 Sep 2012 12:00:00 +0000
+
 synthv1 (0.1.0-4) unstable; urgency=low
 
   * First true official release.
