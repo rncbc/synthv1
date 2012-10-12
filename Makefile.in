@@ -11,6 +11,7 @@ headers = \
 	src/$(name)_fx.h \
 	src/$(name)_ramp.h \
 	src/$(name)_wave.h \
+	src/$(name)_list.h \
 	src/$(name)widget.h \
 	src/$(name)widget_config.h \
 	src/$(name)widget_env.h \

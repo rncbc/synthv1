@@ -13,6 +13,7 @@ HEADERS = \
 	synthv1_jack.h \
 	synthv1_wave.h \
 	synthv1_ramp.h \
+	synthv1_list.h \
 	synthv1_fx.h \
 	synthv1widget.h \
 	synthv1widget_env.h \

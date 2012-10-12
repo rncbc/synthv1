@@ -21,8 +21,12 @@
 
 #include "synthv1.h"
 
+#include "synthv1_list.h"
+
 #include "synthv1_wave.h"
 #include "synthv1_ramp.h"
+
+#include "synthv1_list.h"
 
 #include "synthv1_fx.h"
 
@@ -592,7 +596,7 @@ class synthv1_impl;
 
 // voice
 
-struct synthv1_voice
+struct synthv1_voice : public synthv1_list<synthv1_voice>
 {
 	synthv1_voice(synthv1_impl *pImpl);
 
@@ -622,41 +626,6 @@ struct synthv1_voice
 
 	synthv1_glide dco1_glide1, dco1_glide2;	// glides (portamento)
 	synthv1_glide dco2_glide1, dco2_glide2;
-
-	struct list_node
-	{
-		list_node() : prev(0), next(0) {}
-
-		void append(synthv1_voice *pv)
-		{
-			pv->node.prev = prev;
-			pv->node.next = 0;
-
-			if (prev)
-				prev->node.next = pv;
-			else
-				next = pv;
-
-			prev = pv;
-		}
-
-		void remove(synthv1_voice *pv)
-		{
-			if (pv->node.prev)
-				pv->node.prev->node.next = pv->node.next;
-			else
-				next = pv->node.next;
-
-			if (pv->node.next)
-				pv->node.next->node.prev = pv->node.prev;
-			else
-				prev = pv->node.prev;
-		}
-
-		synthv1_voice *prev;
-		synthv1_voice *next;
-
-	} node;
 };
 
 
@@ -702,7 +671,7 @@ protected:
 
 	synthv1_voice *alloc_voice ()
 	{
-		synthv1_voice *pv = m_free_list.next;
+		synthv1_voice *pv = m_free_list.next();
 		if (pv) {
 			m_free_list.remove(pv);
 			m_play_list.append(pv);
@@ -740,8 +709,8 @@ private:
 	synthv1_voice **m_voices;
 	synthv1_voice  *m_notes[MAX_NOTES];
 
-	synthv1_voice::list_node m_free_list;
-	synthv1_voice::list_node m_play_list;
+	synthv1_list<synthv1_voice> m_free_list;
+	synthv1_list<synthv1_voice> m_play_list;
 
 	synthv1_aux   m_aux1, m_aux2;
 
@@ -1352,12 +1321,12 @@ void synthv1_impl::allSoundOff (void)
 
 void synthv1_impl::allNotesOff (void)
 {
-	synthv1_voice *pv = m_play_list.next;
+	synthv1_voice *pv = m_play_list.next();
 	while (pv) {
 		if (pv->note >= 0)
 			m_notes[pv->note] = 0;
 		free_voice(pv);
-		pv = m_play_list.next;
+		pv = m_play_list.next();
 	}
 
 	dco1_last1 = 0.0f;
@@ -1461,11 +1430,11 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 
 	// per voice
 
-	synthv1_voice *pv = m_play_list.next;
+	synthv1_voice *pv = m_play_list.next();
 
 	while (pv) {
 
-		synthv1_voice *pv_next = pv->node.next;
+		synthv1_voice *pv_next = pv->next();
 
 		// output buffers
 

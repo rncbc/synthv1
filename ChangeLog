@@ -3,6 +3,11 @@ synthv1 - an old-school polyphonic synthesizer
 
 ChangeLog
 
+SVN TRUNK
+
+- Detached generic double-linked list class into its own header.
+
+
 0.1.1  2012-09-24  One first bug-fix release.
 
 - Fixed a crash bug on LV2 main widget close (GUI) due to some
