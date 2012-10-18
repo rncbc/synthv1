@@ -323,4 +323,13 @@ void synthv1widget_combo::comboBoxValueChanged ( int iComboValue )
 }
 
 
+// Reimplemented mouse-wheel stepping.
+void synthv1widget_combo::wheelEvent ( QWheelEvent *pWheelEvent )
+{
+	int delta = (pWheelEvent->delta() / 60);
+	if (delta)
+		setValue(value() + float(delta));
+}
+
+
 // end of synthv1widget_knob.cpp

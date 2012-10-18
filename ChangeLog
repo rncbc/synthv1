@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+- Reimplemented mouse-wheel stepping on combo-dial knob widgets.
+
 - Detached generic double-linked list class into its own header.
 
 

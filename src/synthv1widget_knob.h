@@ -154,6 +154,11 @@ protected slots:
 	// Change slot.
 	void comboBoxValueChanged(int);
 
+protected:
+
+	// Reimplemented mouse-wheel stepping.
+	void wheelEvent(QWheelEvent *pWheelEvent);
+
 private:
 
 	// Widget members.
