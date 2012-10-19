@@ -123,18 +123,19 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 {
 	QPainter painter(this);
 
-	int h  = height();
-	int w  = width();
+	const QRect& rect = QWidget::rect();
+	const int h  = rect.height();
+	const int w  = rect.width();
 
-	int h2 = h >> 1;
-	int h4 = h >> 2;
-	int w4 = w >> 2;
-	int w8 = w >> 3;
+	const int h2 = h >> 1;
+	const int h4 = h >> 2;
+	const int w4 = w >> 2;
+	const int w8 = w >> 3;
+
+	const int ws = w8 - (w8 >> 1) * int(m_fSlope);
 
 	int x = w8 + int(m_fCutoff * float(w - w4));
 	int y = h2 - int(m_fReso * float(h + h4));
-
-	int ws = w8 - (w8 >> 1) * int(m_fSlope);
 
 	QPolygon poly(6);
 	QPainterPath path;
@@ -158,7 +159,7 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 	}
 	// Band
 	if (iType == 1) {
-		int y2 = (y + h4) >> 1;
+		const int y2 = (y + h4) >> 1;
 		poly.putPoints(0, 6,
 			0, h,
 			x - w8 - ws, h,
@@ -190,9 +191,10 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 
 	const QPalette& pal = palette();
 	const bool bDark = (pal.window().color().value() < 0x7f);
-	const QColor& rgbLite = (bDark ? Qt::darkYellow : Qt::yellow);
+	const QColor& rgbLite = (isEnabled()
+		? (bDark ? Qt::darkYellow : Qt::yellow) : pal.mid().color());
 
-	painter.fillRect(0, 0, w, h, pal.dark().color());
+	painter.fillRect(rect, pal.dark().color());
 
 	painter.setPen(bDark ? Qt::gray : Qt::darkGray);
 

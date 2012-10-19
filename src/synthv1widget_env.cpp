@@ -124,17 +124,18 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 {
 	QPainter painter(this);
 
-	int h  = height();
-	int w  = width();
+	const QRect& rect = QWidget::rect();
+	const int h  = rect.height();
+	const int w  = rect.width();
 
-	int w4 = (w - 12) >> 2;
+	const int w4 = (w - 12) >> 2;
 
-	int x1 = int(m_fAttack  * float(w4)) + 6;
-	int x2 = int(m_fDecay   * float(w4)) + x1;
-	int x3 = x2 + w4;
-	int x4 = int(m_fRelease * float(w4)) + x3;
+	const int x1 = int(m_fAttack  * float(w4)) + 6;
+	const int x2 = int(m_fDecay   * float(w4)) + x1;
+	const int x3 = x2 + w4;
+	const int x4 = int(m_fRelease * float(w4)) + x3;
 
-	int y3 = h - int(m_fSustain * float(h - 12)) - 6;
+	const int y3 = h - int(m_fSustain * float(h - 12)) - 6;
 
 	m_poly.putPoints(0, 7,
 		0,  h,
@@ -150,9 +151,10 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 
 	const QPalette& pal = palette();
 	const bool bDark = (pal.window().color().value() < 0x7f);
-	const QColor& rgbLite = (bDark ? Qt::darkYellow : Qt::yellow);
+	const QColor& rgbLite = (isEnabled()
+		? (bDark ? Qt::darkYellow : Qt::yellow) : pal.mid().color());
 
-	painter.fillRect(0, 0, w, h, pal.dark().color());
+	painter.fillRect(rect, pal.dark().color());
 
 	painter.setPen(bDark ? Qt::gray : Qt::darkGray);
 

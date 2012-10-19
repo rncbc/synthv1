@@ -5,6 +5,12 @@ ChangeLog
 
 SVN TRUNK
 
+- Added some command line options to the stand-alone JACK client
+  program (--help and --version information).
+
+- Added some command line options to the stand-alone JACK client
+  program (--help and --version information).
+
 - Reimplemented mouse-wheel stepping on combo-dial knob widgets.
 
 - Detached generic double-linked list class into its own header.

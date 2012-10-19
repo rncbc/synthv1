@@ -103,11 +103,12 @@ void synthv1widget_wave::paintEvent ( QPaintEvent *pPaintEvent )
 {
 	QPainter painter(this);
 
-	int h  = height();
-	int w  = width();
+	const QRect& rect = QWidget::rect();
+	const int h  = rect.height();
+	const int w  = rect.width();
 
-	int h2 = (h >> 1);
-	int w2 = (w >> 1);
+	const int h2 = (h >> 1);
+	const int w2 = (w >> 1);
 
 	QPainterPath path;
 	path.moveTo(0, h2);
@@ -117,9 +118,10 @@ void synthv1widget_wave::paintEvent ( QPaintEvent *pPaintEvent )
 
 	const QPalette& pal = palette();
 	const bool bDark = (pal.window().color().value() < 0x7f);
-	const QColor& rgbLite = (bDark ? Qt::darkYellow : Qt::yellow);
+	const QColor& rgbLite = (isEnabled()
+		? (bDark ? Qt::darkYellow : Qt::yellow) : pal.mid().color());
 
-	painter.fillRect(0, 0, w, h, pal.dark().color());
+	painter.fillRect(rect, pal.dark().color());
 
 	painter.setPen(bDark ? pal.mid().color() : pal.midlight().color());
 	painter.drawLine(w2, 0, w2, h);
