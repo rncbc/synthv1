@@ -211,7 +211,7 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 }
 
 
-void synthv1_jack::open(void)
+void synthv1_jack::open (void)
 {
 	// open client
 	m_client = ::jack_client_open("synthv1", JackNullOption, NULL);
@@ -224,7 +224,7 @@ void synthv1_jack::open(void)
 
 	// set sample rate
 	synthv1::setSampleRate(jack_get_sample_rate(m_client));
-	synthv1::reset();
+//	synthv1::reset();
 
 	// register audio ports & buffers
 	uint16_t nchannels = channels();
@@ -282,6 +282,8 @@ void synthv1_jack::open(void)
 
 void synthv1_jack::activate (void)
 {
+	synthv1::reset();
+
 	if (m_client) ::jack_activate(m_client);
 }
 

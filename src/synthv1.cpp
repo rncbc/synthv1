@@ -21,8 +21,6 @@
 
 #include "synthv1.h"
 
-#include "synthv1_list.h"
-
 #include "synthv1_wave.h"
 #include "synthv1_ramp.h"
 

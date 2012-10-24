@@ -189,7 +189,7 @@ static bool parse_args ( const QStringList& args )
 }
 
 
-int main( int argc, char *argv[] )
+int main ( int argc, char *argv[] )
 {
 	Q_INIT_RESOURCE(synthv1);
 
