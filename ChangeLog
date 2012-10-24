@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+- Slight minor fix on fast-release re-triggering.
+
 - Added some command line options to the stand-alone JACK client
   program (--help and --version information).
 
