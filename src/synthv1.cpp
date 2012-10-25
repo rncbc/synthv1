@@ -728,12 +728,12 @@ private:
 // voice constructor
 
 synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
-	dco1_osc1(pImpl->dco1_wave1),
-	dco1_osc2(pImpl->dco1_wave2),
-	dco2_osc1(pImpl->dco2_wave1),
-	dco2_osc2(pImpl->dco2_wave2),
-	lfo1_osc(pImpl->lfo1_wave),
-	lfo2_osc(pImpl->lfo2_wave),
+	dco1_osc1(&pImpl->dco1_wave1),
+	dco1_osc2(&pImpl->dco1_wave2),
+	dco2_osc1(&pImpl->dco2_wave1),
+	dco2_osc2(&pImpl->dco2_wave2),
+	lfo1_osc(&pImpl->lfo1_wave),
+	lfo2_osc(&pImpl->lfo2_wave),
 	dco1_glide1(pImpl->dco1_last1),
 	dco1_glide2(pImpl->dco1_last2),
 	dco2_glide1(pImpl->dco2_last1),

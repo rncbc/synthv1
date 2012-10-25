@@ -258,24 +258,26 @@ class synthv1_oscillator
 public:
 
 	// ctor.
-	synthv1_oscillator(const synthv1_wave& wave)
-		: m_wave(wave), m_phase(0.0f) {}
+	synthv1_oscillator(synthv1_wave *wave = 0) { reset(wave); }
 
-	// wave accessor.
-	const synthv1_wave& wave() const
+	// wave and phase accessors.
+	void reset(synthv1_wave *wave)
+		{ m_wave = wave; m_phase = 0.0f; }
+
+	synthv1_wave *wave() const
 		{ return m_wave; }
 
 	// begin.
 	float start(float pshift = 0.0f)
-		{ return m_wave.start(m_phase, pshift); }
+		{ return m_wave->start(m_phase, pshift); }
 
 	// iterate.
 	float sample(float freq)
-		{ return m_wave.sample(m_phase, freq); }
+		{ return m_wave->sample(m_phase, freq); }
 
 private:
 
-	const synthv1_wave& m_wave;
+	synthv1_wave *m_wave;
 
 	float m_phase;
 };
