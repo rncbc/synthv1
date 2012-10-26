@@ -46,6 +46,7 @@ synthv1widget_preset::synthv1widget_preset ( QWidget *pParent )
 	m_pComboBox     = new QComboBox();
 	m_pSaveButton   = new QToolButton();
 	m_pDeleteButton = new QToolButton();
+	m_pResetButton  = new QToolButton();
 
 	m_pNewButton->setIcon(QIcon(":/images/presetNew.png"));
 	m_pOpenButton->setIcon(QIcon(":/images/presetOpen.png"));
@@ -57,11 +58,13 @@ synthv1widget_preset::synthv1widget_preset ( QWidget *pParent )
 	m_pComboBox->setInsertPolicy(QComboBox::NoInsert);
 	m_pSaveButton->setIcon(QIcon(":/images/presetSave.png"));
 	m_pDeleteButton->setIcon(QIcon(":/images/presetDelete.png"));
+	m_pResetButton->setText("&Reset");
 
 	m_pNewButton->setToolTip(tr("New Preset"));
 	m_pOpenButton->setToolTip(tr("Open Preset"));
 	m_pSaveButton->setToolTip(tr("Save Preset"));
 	m_pDeleteButton->setToolTip(tr("Delete Preset"));
+	m_pResetButton->setToolTip(tr("Reset Preset"));
 
 	QHBoxLayout *pHBoxLayout = new QHBoxLayout();
 	pHBoxLayout->setMargin(2);
@@ -71,7 +74,8 @@ synthv1widget_preset::synthv1widget_preset ( QWidget *pParent )
 	pHBoxLayout->addWidget(m_pComboBox);
 	pHBoxLayout->addWidget(m_pSaveButton);
 	pHBoxLayout->addWidget(m_pDeleteButton);
-//	pHBoxLayout->addSpacing(20);
+	pHBoxLayout->addSpacing(4);
+	pHBoxLayout->addWidget(m_pResetButton);
 	QWidget::setLayout(pHBoxLayout);
 
 	m_iInitPreset  = 0;
@@ -93,6 +97,9 @@ synthv1widget_preset::synthv1widget_preset ( QWidget *pParent )
 	QObject::connect(m_pDeleteButton,
 		SIGNAL(clicked()),
 		SLOT(deletePreset()));
+	QObject::connect(m_pResetButton,
+		SIGNAL(clicked()),
+		SLOT(resetPreset()));
 
 	refreshPreset();
 	stabilizePreset();
@@ -360,6 +367,25 @@ void synthv1widget_preset::deletePreset (void)
 }
 
 
+void synthv1widget_preset::resetPreset (void)
+{
+	const QString& sPreset = m_pComboBox->currentText();
+
+	bool bLoadPreset = (!sPreset.isEmpty()
+		&& m_pComboBox->findText(sPreset) >= 0);
+	if (bLoadPreset && !queryPreset())
+		return;
+
+	if (bLoadPreset) {
+		loadPreset(sPreset);
+	} else {
+		emit resetPresetFile();
+		m_iDirtyPreset = 0;
+		stabilizePreset();
+	}
+}
+
+
 // Widget refreshner-loader.
 void synthv1widget_preset::refreshPreset (void)
 {
@@ -416,6 +442,7 @@ void synthv1widget_preset::stabilizePreset (void)
 
 	m_pSaveButton->setEnabled(bEnabled && (!bExists || bDirty));
 	m_pDeleteButton->setEnabled(bEnabled && bExists);
+	m_pResetButton->setEnabled(bDirty);
 }
 
 

@@ -67,27 +67,27 @@
        </property>
       </spacer>
      </item>
-	 <item>
-	  <widget class="QMenuBar" name="MenuBar">
-	   <property name="sizePolicy">
-		<sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-		 <horstretch>0</horstretch>
-		 <verstretch>0</verstretch>
-		</sizepolicy>
-	   </property>
-	   <property name="nativeMenuBar">
-		<bool>false</bool>
-	   </property>
-	   <widget class="QMenu" name="helpMenu">
-		<property name="title">
-		 <string>&amp;Help</string>
-		</property>
-		<addaction name="helpAboutAction"/>
-		<addaction name="helpAboutQtAction"/>
-	   </widget>
-	   <addaction name="helpMenu"/>
-	  </widget>
-	 </item>
+     <item>
+      <widget class="QMenuBar" name="MenuBar">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="nativeMenuBar">
+        <bool>false</bool>
+       </property>
+       <widget class="QMenu" name="helpMenu">
+        <property name="title">
+         <string>&amp;Help</string>
+        </property>
+        <addaction name="helpAboutAction"/>
+        <addaction name="helpAboutQtAction"/>
+       </widget>
+       <addaction name="helpMenu"/>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
@@ -1750,30 +1750,30 @@
   </layout>
   <action name="helpAboutAction" >
    <property name="text" >
-	<string>&amp;About...</string>
+    <string>&amp;About...</string>
    </property>
    <property name="iconText" >
-	<string>About</string>
+    <string>About</string>
    </property>
    <property name="statusTip" >
-	<string>Show information about this application program</string>
+    <string>Show information about this application program</string>
    </property>
    <property name="shortcut" >
-	<string/>
+    <string/>
    </property>
   </action>
   <action name="helpAboutQtAction" >
    <property name="text" >
-	<string>About &amp;Qt...</string>
+    <string>About &amp;Qt...</string>
    </property>
    <property name="iconText" >
-	<string>About Qt</string>
+    <string>About Qt</string>
    </property>
    <property name="statusTip" >
-	<string>Show information about the Qt toolkit</string>
+    <string>Show information about the Qt toolkit</string>
    </property>
    <property name="shortcut" >
-	<string/>
+    <string/>
    </property>
   </action>
  </widget>

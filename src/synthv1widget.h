@@ -69,6 +69,9 @@ protected slots:
 	// Param knob (widget) slots.
 	void paramChanged(float fValue);
 
+	// Reset param knobs to default value.
+	void resetParams();
+
 	// Menu actions.
 	void helpAbout();
 	void helpAboutQt();

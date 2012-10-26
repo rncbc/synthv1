@@ -725,7 +725,9 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	QObject::connect(m_ui.Preset,
 		SIGNAL(savePresetFile(const QString&)),
 		SLOT(savePreset(const QString&)));
-
+	QObject::connect(m_ui.Preset,
+		SIGNAL(resetPresetFile()),
+		SLOT(resetParams()));
 
 	// Menu actions
 	QObject::connect(m_ui.helpAboutAction,
@@ -788,6 +790,21 @@ void synthv1widget::paramChanged ( float fValue )
 		updateParam(m_knobParams.value(pKnob), fValue);
 
 	m_ui.Preset->dirtyPreset();
+}
+
+
+// Reset all param knobs to default values.
+void synthv1widget::resetParams (void)
+{
+	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
+		synthv1::ParamIndex index = synthv1::ParamIndex(i);
+		float fValue = synthv1_default_params[i].value;
+		synthv1widget_knob *pKnob = paramKnob(index);
+		if (pKnob)
+			fValue = pKnob->defaultValue();
+		setParamValue(index, fValue);
+		updateParam(index, fValue);
+	}
 }
 
 

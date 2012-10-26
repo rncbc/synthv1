@@ -53,6 +53,8 @@ signals:
 	void loadPresetFile(const QString&);
 	void savePresetFile(const QString&);
 
+	void resetPresetFile();
+
 public slots:
 
 	void initPreset();
@@ -66,6 +68,7 @@ protected slots:
 	void changePreset(const QString&);
 	void savePreset();
 	void deletePreset();
+	void resetPreset();
 
 protected:
 
@@ -86,6 +89,7 @@ private:
 	QComboBox   *m_pComboBox;
 	QToolButton *m_pSaveButton;
 	QToolButton *m_pDeleteButton;
+	QToolButton *m_pResetButton;
 
 	int m_iInitPreset;
 	int m_iDirtyPreset;
