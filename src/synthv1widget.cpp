@@ -83,7 +83,7 @@ struct {
 	{ "DEF1_PITCHBEND", 0.2f },
 	{ "DEF1_MODWHEEL",  0.2f },
 	{ "DEF1_PRESSURE",  0.2f },
-	{ "DEF1_VELOCITY",  0.5f },
+	{ "DEF1_VELOCITY",  0.2f },
 
 	{ "DCO2_SHAPE1",    1.0f },
 	{ "DCO2_WIDTH1",    1.0f },
