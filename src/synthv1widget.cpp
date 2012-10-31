@@ -129,7 +129,7 @@ struct {
 	{ "DEF2_PITCHBEND", 0.2f },
 	{ "DEF2_MODWHEEL",  0.2f },
 	{ "DEF2_PRESSURE",  0.2f },
-	{ "DEF2_VELOCITY",  0.5f },
+	{ "DEF2_VELOCITY",  0.2f },
 
 	{ "CHO1_WET",       0.0f },
 	{ "CHO1_DELAY",     0.5f },
