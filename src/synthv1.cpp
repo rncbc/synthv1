@@ -1193,11 +1193,10 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 			// waveform
 			pv->note = key;
 			// velocity
-			const float vel = float(value) / 127.0f;
-			pv->vel1  = synthv1_velocity(vel, *m_def1.velocity);
-			pv->vel2  = synthv1_velocity(vel, *m_def2.velocity);
-			pv->vel1 *= pv->vel1;	// quadratic velocity law
-			pv->vel2 *= pv->vel2;
+			float vel = float(value) / 127.0f;
+			vel *= vel;	// quadratic velocity law
+			pv->vel1 = synthv1_velocity(vel, *m_def1.velocity);
+			pv->vel2 = synthv1_velocity(vel, *m_def2.velocity);
 			// balance
 			pv->dco1_bal.reset(m_dco1.balance);
 			pv->dco2_bal.reset(m_dco2.balance);
