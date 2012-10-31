@@ -685,6 +685,16 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Def1VelocityKnob">
+            <property name="toolTip">
+             <string>DEF1 Velocity</string>
+            </property>
+            <property name="text">
+             <string>Velocity</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -1342,6 +1352,16 @@
             </property>
             <property name="text">
              <string>Pressure</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Def2VelocityKnob">
+            <property name="toolTip">
+             <string>DEF2 Velocity</string>
+            </property>
+            <property name="text">
+             <string>Velocity</string>
             </property>
            </widget>
           </item>

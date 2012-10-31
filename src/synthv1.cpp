@@ -81,6 +81,18 @@ inline float synthv1_sigmoid1 ( const float x, const float t = 0.01f )
 }
 
 
+// velocity hard-split curve
+
+inline float synthv1_velocity ( float x, float p = 0.5f )
+{
+	const float q = 2.0f * p;
+	if (q > 1.0f)
+		return (2.0f - q) * x + q - 1.0f;
+	else
+		return q * x;
+}
+
+
 // envelope
 
 struct synthv1_env
@@ -299,6 +311,7 @@ struct synthv1_def
 	float *pitchbend;
 	float *modwheel;
 	float *pressure;
+	float *velocity;
 };
 
 
@@ -603,7 +616,8 @@ struct synthv1_voice : public synthv1_list<synthv1_voice>
 	synthv1_oscillator lfo1_osc,  lfo2_osc;
 
 	int note;									// voice note
-	float vel;									// velocity to vol
+
+	float vel1, vel2;							// velocities to vol
 
 	float dco1_freq1, dco1_sample1;				// frequency and phase
 	float dco1_freq2, dco1_sample2;
@@ -932,12 +946,13 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DCA1_DECAY:     m_dca1.env.decay   = pfParam; break;
 	case synthv1::DCA1_SUSTAIN:   m_dca1.env.sustain = pfParam; break;
 	case synthv1::DCA1_RELEASE:   m_dca1.env.release = pfParam; break;
-	case synthv1::DEF1_PITCHBEND: m_def1.pitchbend   = pfParam; break;
-	case synthv1::DEF1_MODWHEEL:  m_def1.modwheel    = pfParam; break;
-	case synthv1::DEF1_PRESSURE:  m_def1.pressure    = pfParam; break;
 	case synthv1::OUT1_WIDTH:     m_out1.width       = pfParam; break;
 	case synthv1::OUT1_PANNING:   m_out1.panning     = pfParam; break;
 	case synthv1::OUT1_VOLUME:    m_out1.volume      = pfParam; break;
+	case synthv1::DEF1_PITCHBEND: m_def1.pitchbend   = pfParam; break;
+	case synthv1::DEF1_MODWHEEL:  m_def1.modwheel    = pfParam; break;
+	case synthv1::DEF1_PRESSURE:  m_def1.pressure    = pfParam; break;
+	case synthv1::DEF1_VELOCITY:  m_def1.velocity    = pfParam; break;
 	case synthv1::DCO2_SHAPE1:    m_dco2.shape1      = pfParam; break;
 	case synthv1::DCO2_WIDTH1:    m_dco2.width1      = pfParam; break;
 	case synthv1::DCO2_SHAPE2:    m_dco2.shape2      = pfParam; break;
@@ -975,12 +990,13 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DCA2_DECAY:     m_dca2.env.decay   = pfParam; break;
 	case synthv1::DCA2_SUSTAIN:   m_dca2.env.sustain = pfParam; break;
 	case synthv1::DCA2_RELEASE:   m_dca2.env.release = pfParam; break;
-	case synthv1::DEF2_PITCHBEND: m_def2.pitchbend   = pfParam; break;
-	case synthv1::DEF2_MODWHEEL:  m_def2.modwheel    = pfParam; break;
-	case synthv1::DEF2_PRESSURE:  m_def2.pressure    = pfParam; break;
 	case synthv1::OUT2_WIDTH:     m_out2.width       = pfParam; break;
 	case synthv1::OUT2_PANNING:   m_out2.panning     = pfParam; break;
 	case synthv1::OUT2_VOLUME:    m_out2.volume      = pfParam; break;
+	case synthv1::DEF2_PITCHBEND: m_def2.pitchbend   = pfParam; break;
+	case synthv1::DEF2_MODWHEEL:  m_def2.modwheel    = pfParam; break;
+	case synthv1::DEF2_PRESSURE:  m_def2.pressure    = pfParam; break;
+	case synthv1::DEF2_VELOCITY:  m_def2.velocity    = pfParam; break;
 	case synthv1::CHO1_WET:       m_cho.wet          = pfParam; break;
 	case synthv1::CHO1_DELAY:     m_cho.delay        = pfParam; break;
 	case synthv1::CHO1_FEEDB:     m_cho.feedb        = pfParam; break;
@@ -1048,12 +1064,13 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DCA1_DECAY:     pfParam = m_dca1.env.decay;   break;
 	case synthv1::DCA1_SUSTAIN:   pfParam = m_dca1.env.sustain; break;
 	case synthv1::DCA1_RELEASE:   pfParam = m_dca1.env.release; break;
-	case synthv1::DEF1_PITCHBEND: pfParam = m_def1.pitchbend;   break;
-	case synthv1::DEF1_MODWHEEL:  pfParam = m_def1.modwheel;    break;
-	case synthv1::DEF1_PRESSURE:  pfParam = m_def1.pressure;    break;
 	case synthv1::OUT1_WIDTH:     pfParam = m_out1.width;       break;
 	case synthv1::OUT1_PANNING:   pfParam = m_out1.panning;     break;
 	case synthv1::OUT1_VOLUME:    pfParam = m_out1.volume;      break;
+	case synthv1::DEF1_PITCHBEND: pfParam = m_def1.pitchbend;   break;
+	case synthv1::DEF1_MODWHEEL:  pfParam = m_def1.modwheel;    break;
+	case synthv1::DEF1_PRESSURE:  pfParam = m_def1.pressure;    break;
+	case synthv1::DEF1_VELOCITY:  pfParam = m_def1.velocity;    break;
 	case synthv1::DCO2_SHAPE1:    pfParam = m_dco2.shape1;      break;
 	case synthv1::DCO2_WIDTH1:    pfParam = m_dco2.width1;      break;
 	case synthv1::DCO2_SHAPE2:    pfParam = m_dco2.shape2;      break;
@@ -1091,12 +1108,13 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DCA2_DECAY:     pfParam = m_dca2.env.decay;   break;
 	case synthv1::DCA2_SUSTAIN:   pfParam = m_dca2.env.sustain; break;
 	case synthv1::DCA2_RELEASE:   pfParam = m_dca2.env.release; break;
-	case synthv1::DEF2_PITCHBEND: pfParam = m_def2.pitchbend;   break;
-	case synthv1::DEF2_MODWHEEL:  pfParam = m_def2.modwheel;    break;
-	case synthv1::DEF2_PRESSURE:  pfParam = m_def2.pressure;    break;
 	case synthv1::OUT2_WIDTH:     pfParam = m_out2.width;       break;
 	case synthv1::OUT2_PANNING:   pfParam = m_out2.panning;     break;
 	case synthv1::OUT2_VOLUME:    pfParam = m_out2.volume;      break;
+	case synthv1::DEF2_PITCHBEND: pfParam = m_def2.pitchbend;   break;
+	case synthv1::DEF2_MODWHEEL:  pfParam = m_def2.modwheel;    break;
+	case synthv1::DEF2_PRESSURE:  pfParam = m_def2.pressure;    break;
+	case synthv1::DEF2_VELOCITY:  pfParam = m_def2.velocity;    break;
 	case synthv1::CHO1_WET:       pfParam = m_cho.wet;          break;
 	case synthv1::CHO1_DELAY:     pfParam = m_cho.delay;        break;
 	case synthv1::CHO1_FEEDB:     pfParam = m_cho.feedb;        break;
@@ -1175,8 +1193,11 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 			// waveform
 			pv->note = key;
 			// velocity
-			pv->vel = float(value) / 127.0f;
-			pv->vel *= pv->vel; // quadratic velocity law
+			const float vel = float(value) / 127.0f;
+			pv->vel1  = synthv1_velocity(vel, *m_def1.velocity);
+			pv->vel2  = synthv1_velocity(vel, *m_def2.velocity);
+			pv->vel1 *= pv->vel1;	// quadratic velocity law
+			pv->vel2 *= pv->vel2;
 			// balance
 			pv->dco1_bal.reset(m_dco1.balance);
 			pv->dco2_bal.reset(m_dco2.balance);
@@ -1467,9 +1488,9 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				// velocities
 
 				const float vel1
-					= (pv->vel + (1.0f - pv->vel) * m_pre1.value(j));
+					= (pv->vel1 + (1.0f - pv->vel1) * m_pre1.value(j));
 				const float vel2
-					= (pv->vel + (1.0f - pv->vel) * m_pre2.value(j));
+					= (pv->vel2 + (1.0f - pv->vel2) * m_pre2.value(j));
 
 				// generators
 

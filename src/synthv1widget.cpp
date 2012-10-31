@@ -76,12 +76,14 @@ struct {
 	{ "DCA1_DECAY",     0.1f },
 	{ "DCA1_SUSTAIN",   1.0f },
 	{ "DCA1_RELEASE",   0.1f },
-	{ "DEF1_PITCHBEND", 0.2f },
-	{ "DEF1_MODWHEEL",  0.2f },
-	{ "DEF1_PRESSURE",  0.2f },
 	{ "OUT1_WIDTH",     0.0f },
 	{ "OUT1_PANNING",   0.0f },
 	{ "OUT1_VOLUME",    0.5f },
+
+	{ "DEF1_PITCHBEND", 0.2f },
+	{ "DEF1_MODWHEEL",  0.2f },
+	{ "DEF1_PRESSURE",  0.2f },
+	{ "DEF1_VELOCITY",  0.5f },
 
 	{ "DCO2_SHAPE1",    1.0f },
 	{ "DCO2_WIDTH1",    1.0f },
@@ -120,12 +122,14 @@ struct {
 	{ "DCA2_DECAY",     0.1f },
 	{ "DCA2_SUSTAIN",   1.0f },
 	{ "DCA2_RELEASE",   0.1f },
-	{ "DEF2_PITCHBEND", 0.2f },
-	{ "DEF2_MODWHEEL",  0.2f },
-	{ "DEF2_PRESSURE",  0.2f },
 	{ "OUT2_WIDTH",     0.0f },
 	{ "OUT2_PANNING",   0.0f },
 	{ "OUT2_VOLUME",    0.5f },
+
+	{ "DEF2_PITCHBEND", 0.2f },
+	{ "DEF2_MODWHEEL",  0.2f },
+	{ "DEF2_PRESSURE",  0.2f },
+	{ "DEF2_VELOCITY",  0.5f },
 
 	{ "CHO1_WET",       0.0f },
 	{ "CHO1_DELAY",     0.5f },
@@ -480,6 +484,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	setParamKnob(synthv1::DEF1_PITCHBEND, m_ui.Def1PitchbendKnob);
 	setParamKnob(synthv1::DEF1_MODWHEEL,  m_ui.Def1ModwheelKnob);
 	setParamKnob(synthv1::DEF1_PRESSURE,  m_ui.Def1PressureKnob);
+	setParamKnob(synthv1::DEF1_VELOCITY,  m_ui.Def1VelocityKnob);
 
 	// OUT1
 	setParamKnob(synthv1::OUT1_WIDTH,   m_ui.Out1WidthKnob);
@@ -680,6 +685,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	setParamKnob(synthv1::DEF2_PITCHBEND, m_ui.Def2PitchbendKnob);
 	setParamKnob(synthv1::DEF2_MODWHEEL,  m_ui.Def2ModwheelKnob);
 	setParamKnob(synthv1::DEF2_PRESSURE,  m_ui.Def2PressureKnob);
+	setParamKnob(synthv1::DEF2_VELOCITY,  m_ui.Def2VelocityKnob);
 
 	// OUT2
 	setParamKnob(synthv1::OUT2_WIDTH,   m_ui.Out2WidthKnob);
