@@ -26,6 +26,7 @@
 #include <QFileInfo>
 
 #include <QMessageBox>
+#include <QDir>
 
 
 //-------------------------------------------------------------------------
@@ -876,12 +877,15 @@ void synthv1widget::loadPreset ( const QString& sFilename )
 	resetParamValues();
 	resetParamKnobs();
 
+	const QFileInfo fi(sFilename);
+	const QDir currentDir(QDir::current());
+	QDir::setCurrent(fi.absolutePath());
+
 	QDomDocument doc(SYNTHV1_TITLE);
 	if (doc.setContent(&file)) {
 		QDomElement ePreset = doc.documentElement();
 		if (ePreset.tagName() == "preset"
-			&& ePreset.attribute("name")
-				== QFileInfo(sFilename).completeBaseName()) {
+			&& ePreset.attribute("name") == fi.completeBaseName()) {
 			for (QDomNode nChild = ePreset.firstChild();
 					!nChild.isNull();
 						nChild = nChild.nextSibling()) {
@@ -913,7 +917,9 @@ void synthv1widget::loadPreset ( const QString& sFilename )
 
 	file.close();
 
-	m_ui.Preset->setPreset(QFileInfo(sFilename).completeBaseName());
+	m_ui.Preset->setPreset(fi.completeBaseName());
+
+	QDir::setCurrent(currentDir.absolutePath());
 }
 
 

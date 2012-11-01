@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+- Prepared for relative paths from preset file references.
+
 - Velocity sensitivity configuration control has been added.
 
 - Reset (all values to preset defaults) button has been added.
