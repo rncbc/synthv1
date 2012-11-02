@@ -46,7 +46,7 @@
 const uint16_t MAX_VOICES = 32;			// polyphony
 const uint8_t  MAX_NOTES  = 128;
 
-const float MIN_ENV_MSECS = 0.5f;		// min 0.5ms per stage
+const float MIN_ENV_MSECS = 5.0f;		// min 5msec per stage
 const float MAX_ENV_MSECS = 5000.0f;	// max 5 sec per stage
 
 const float DETUNE_SCALE  = 0.5f;
@@ -122,11 +122,6 @@ struct synthv1_env
 		p->stage = Attack;
 		p->level = 0.0f;
 		p->frames = int(*attack * *attack * max_frames);
-	#if 0
-		if (p->frames < min_frames) // prevent click on too fast attack
-			p->frames = min_frames;
-		p->delta = 1.0f / float(p->frames);
-	#endif
 		if (p->frames > 0)
 			p->delta = 1.0f / float(p->frames);
 		else
