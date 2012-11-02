@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+- Increased polyphony baseline from 24 to 32 voices.
+
 - Prepared for relative paths from preset file references.
 
 - Velocity sensitivity configuration control has been added.

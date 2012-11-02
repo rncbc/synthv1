@@ -43,7 +43,7 @@
 //    Copyright (C) 2007 jorgen, linux-vst.com
 //
 
-const uint16_t MAX_VOICES = 24;			// polyphony
+const uint16_t MAX_VOICES = 32;			// polyphony
 const uint8_t  MAX_NOTES  = 128;
 
 const float MIN_ENV_MSECS = 0.5f;		// min 0.5ms per stage
