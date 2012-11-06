@@ -5,21 +5,15 @@ ChangeLog
 
 SVN TRUNK
 
+- Moog-like 24dB/oct resonant filter slight modification.
 - Increased polyphony baseline from 24 to 32 voices.
-
 - Prepared for relative paths from preset file references.
-
 - Velocity sensitivity configuration control has been added.
-
 - Reset (all values to preset defaults) button has been added.
-
 - Slight minor fix on fast-release re-triggering.
-
 - Added some command line options to the stand-alone JACK client
   program (--help and --version information).
-
 - Reimplemented mouse-wheel stepping on combo-dial knob widgets.
-
 - Detached generic double-linked list class into its own header.
 
 
@@ -27,7 +21,6 @@ SVN TRUNK
 
 - Fixed a crash bug on LV2 main widget close (GUI) due to some
   superfluous preset dirty checking.
-
 - Fixed a nasty rather fundamental bug introduced by late voice
   list optimization, which was seriously crippled and noticeable
   when more than one LV2 plug-in were being instantiated.

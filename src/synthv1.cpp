@@ -441,7 +441,7 @@ private:
 };
 
 
-// (second kind of) filter
+// (Stilson/Smith Moog 24dB/oct) filter
 
 class synthv1_filter2
 {
@@ -468,17 +468,17 @@ public:
 		m_q = 1.0f - cutoff;
 		m_p = cutoff + 0.8f * cutoff * m_q;
 		m_f = m_p + m_p - 1.0f;
-		m_q = 0.89f * reso * (1.0f + 0.5f * m_q * (1.0f - m_q + 5.6f * m_q * m_q));
+		m_q = reso * (1.0f + 0.5f * m_q * (1.0f - m_q + 5.6f * m_q * m_q));
 
-		input -= m_q * m_b4;
+		input -= m_q * m_b4;	// feedback
 
-		m_t1 = m_b1;
-		m_b1 = (input + m_b0) * m_p - m_b1 * m_f;
-		m_t2 = m_b2;
-		m_b2 = (m_b1 + m_t1) * m_p - m_b2 * m_f;
-		m_t1 = m_b3;
-		m_b3 = (m_b2 + m_t2) * m_p - m_b3 * m_f;
+		m_t1 = m_b1; m_b1 = (input + m_b0) * m_p - m_b1 * m_f;
+		m_t2 = m_b2; m_b2 = (m_b1 + m_t1) * m_p - m_b2 * m_f;
+		m_t1 = m_b3; m_b3 = (m_b2 + m_t2) * m_p - m_b3 * m_f;
+
 		m_b4 = (m_b3 + m_t1) * m_p - m_b4 * m_f;
+		m_b4 = m_b4 - m_b4 * m_b4 * m_b4 * 0.166667f;	// clipping
+
 		m_b0 = input;
 
 		switch (m_type) {
@@ -1490,10 +1490,10 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				const float lfo1  = pv->lfo1_sample * lfo1_env;
 				const float lfo2  = pv->lfo2_sample * lfo2_env;
 
-				const float dco11 = pv->dco1_sample1 * pv->dco1_bal.value(j, 0);
-				const float dco12 = pv->dco1_sample2 * pv->dco1_bal.value(j, 1);
-				const float dco21 = pv->dco2_sample1 * pv->dco2_bal.value(j, 0);
-				const float dco22 = pv->dco2_sample2 * pv->dco2_bal.value(j, 1);
+				float dco11 = pv->dco1_sample1 * pv->dco1_bal.value(j, 0);
+				float dco12 = pv->dco1_sample2 * pv->dco1_bal.value(j, 1);
+				float dco21 = pv->dco2_sample1 * pv->dco2_bal.value(j, 0);
+				float dco22 = pv->dco2_sample2 * pv->dco2_bal.value(j, 1);
 
 				pv->dco1_sample1 = pv->dco1_osc1.sample(pv->dco1_freq1
 					* (pitchbend1 + modwheel1 * lfo1)
@@ -1523,11 +1523,12 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				const float reso1 = synthv1_sigmoid1(*m_dcf1.reso
 					* env1 * (1.0f + *m_lfo1.reso * lfo1));
 
-				float dcf11 = pv->dcf11.output(dco11, cutoff1, reso1);
-				float dcf12 = pv->dcf12.output(dco12, cutoff1, reso1);
 				if (int(*m_dcf1.slope) > 0) { // 24db/octave
-					dcf11 = pv->dcf13.output(dcf11, cutoff1, reso1);
-					dcf12 = pv->dcf14.output(dcf12, cutoff1, reso1);
+					dco11 = pv->dcf13.output(dco11, cutoff1, reso1);
+					dco12 = pv->dcf14.output(dco12, cutoff1, reso1);
+				} else {
+					dco11 = pv->dcf11.output(dco11, cutoff1, reso1);
+					dco12 = pv->dcf12.output(dco12, cutoff1, reso1);
 				}
 
 				const float env2 = 0.5f * (1.0f + vel2
@@ -1537,24 +1538,25 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				const float reso2 = synthv1_sigmoid1(*m_dcf2.reso
 					* env2 * (1.0f + *m_lfo2.reso * lfo2));
 
-				float dcf21 = pv->dcf21.output(dco21, cutoff2, reso2);
-				float dcf22 = pv->dcf22.output(dco22, cutoff2, reso2);
-				if (int(*m_dcf2.slope) > 1) { // 24db/octave
-					dcf21 = pv->dcf23.output(dcf21, cutoff2, reso2);
-					dcf22 = pv->dcf24.output(dcf22, cutoff2, reso2);
+				if (int(*m_dcf2.slope) > 0) { // 24db/octave
+					dco21 = pv->dcf23.output(dco21, cutoff2, reso2);
+					dco22 = pv->dcf24.output(dco22, cutoff2, reso2);
+				} else {
+					dco21 = pv->dcf21.output(dco21, cutoff2, reso2);
+					dco22 = pv->dcf22.output(dco22, cutoff2, reso2);
 				}
 
 				// volumes
 
 				const float wid1 = m_wid1.value(j);
-				const float mid1 = 0.5f * (dcf11 + dcf12);
-				const float sid1 = 0.5f * (dcf11 - dcf12);
+				const float mid1 = 0.5f * (dco11 + dco12);
+				const float sid1 = 0.5f * (dco11 - dco12);
 				const float vol1 = vel1 * m_vol1.value(j)
 					* pv->dca1_env.value2(j);
 
 				const float wid2 = m_wid2.value(j);
-				const float mid2 = 0.5f * (dcf21 + dcf22);
-				const float sid2 = 0.5f * (dcf21 - dcf22);
+				const float mid2 = 0.5f * (dco21 + dco22);
+				const float sid2 = 0.5f * (dco21 - dco22);
 				const float vol2 = vel2 * m_vol2.value(j)
 					* pv->dca2_env.value2(j);
 
