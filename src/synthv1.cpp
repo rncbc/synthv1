@@ -619,8 +619,8 @@ struct synthv1_voice : public synthv1_list<synthv1_voice>
 
 	synthv1_bal dco1_bal, dco2_bal;
 
-	synthv1_filter1 dcf11, dcf12, dcf13, dcf14;	// filters
-	synthv1_filter2 dcf21, dcf22, dcf23, dcf24;
+	synthv1_filter1 dcf11, dcf12, dcf21, dcf22;	// filters
+	synthv1_filter2 dcf13, dcf14, dcf23, dcf24;
 
 	synthv1_env::State dca1_env, dca2_env;		// envelope states
 	synthv1_env::State dcf1_env, dcf2_env;
@@ -1212,18 +1212,16 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 			pv->dco2_freq1 = note_freq(freq2 - detune2);
 			pv->dco2_freq2 = note_freq(freq2 + detune2);
 			// filters
-			const synthv1_filter1::Type type1
-				= synthv1_filter1::Type(int(*m_dcf1.type));
-			pv->dcf11.reset(type1);
-			pv->dcf12.reset(type1);
-			pv->dcf13.reset(type1);
-			pv->dcf14.reset(type1);
-			const synthv1_filter2::Type type2
-				= synthv1_filter2::Type(int(*m_dcf2.type));
-			pv->dcf21.reset(type2);
-			pv->dcf22.reset(type2);
-			pv->dcf23.reset(type2);
-			pv->dcf24.reset(type2);
+			const int type1 = int(*m_dcf1.type);
+			pv->dcf11.reset(synthv1_filter1::Type(type1));
+			pv->dcf12.reset(synthv1_filter1::Type(type1));
+			pv->dcf13.reset(synthv1_filter2::Type(type1));
+			pv->dcf24.reset(synthv1_filter2::Type(type1));
+			const int type2 = int(*m_dcf2.type);
+			pv->dcf21.reset(synthv1_filter1::Type(type2));
+			pv->dcf22.reset(synthv1_filter1::Type(type2));
+			pv->dcf23.reset(synthv1_filter2::Type(type2));
+			pv->dcf24.reset(synthv1_filter2::Type(type2));
 			// envelopes
 			m_dcf1.env.start(&pv->dcf1_env);
 			m_dcf2.env.start(&pv->dcf2_env);
