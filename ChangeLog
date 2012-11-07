@@ -5,7 +5,7 @@ ChangeLog
 
 SVN TRUNK
 
-- A new parameters A/B comparison toggle button has been added.
+- Parameters A/B comparison toggle buttons have been added.
 - Keep LV2 event buffer valid on each run(), as found for strict
   LV2 specification and compliance (as suggested by falkTX).
 - Moog-like 24dB/oct resonant filter slight modification.
