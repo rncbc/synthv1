@@ -72,6 +72,9 @@ protected slots:
 	// Reset param knobs to default value.
 	void resetParams();
 
+	// Swap params A/B.
+	void swapParams();
+
 	// Menu actions.
 	void helpAbout();
 	void helpAboutQt();
@@ -85,6 +88,9 @@ protected:
 	void resetParamValues();
 	void resetParamKnobs();
 
+	// Reset swap params A/B button state.
+	void resetSwapParams();
+
 	// Param port methods.
 	virtual void updateParam(synthv1::ParamIndex index, float fValue) const = 0;
 
@@ -97,6 +103,8 @@ private:
 
 	QHash<synthv1::ParamIndex, synthv1widget_knob *> m_paramKnobs;
 	QHash<synthv1widget_knob *, synthv1::ParamIndex> m_knobParams;
+
+	float m_params_ab[synthv1::NUM_PARAMS];
 
 	int m_iUpdate;
 };

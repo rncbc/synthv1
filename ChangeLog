@@ -5,6 +5,9 @@ ChangeLog
 
 SVN TRUNK
 
+- A new parameters A/B comparison toggle button has been added.
+- Keep LV2 event buffer valid on each run(), as found for strict
+  LV2 specification and compliance (as suggested by falkTX).
 - Moog-like 24dB/oct resonant filter slight modification.
 - Increased polyphony baseline from 24 to 32 voices.
 - Prepared for relative paths from preset file references.

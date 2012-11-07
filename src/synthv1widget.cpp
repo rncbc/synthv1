@@ -167,6 +167,10 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 
 	m_ui.setupUi(this);
 
+	// Init swapable params A/B to default.
+	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i)
+		m_params_ab[i] = synthv1_default_params[i].value;
+
 	// Start clean.
 	m_iUpdate = 0;
 
@@ -736,6 +740,13 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		SIGNAL(resetPresetFile()),
 		SLOT(resetParams()));
 
+
+	// Swap params A/B
+	QObject::connect(m_ui.SwapParamsButton,
+		SIGNAL(toggled(bool)),
+		SLOT(swapParams()));
+
+
 	// Menu actions
 	QObject::connect(m_ui.helpAboutAction,
 		SIGNAL(triggered(bool)),
@@ -803,6 +814,8 @@ void synthv1widget::paramChanged ( float fValue )
 // Reset all param knobs to default values.
 void synthv1widget::resetParams (void)
 {
+	resetSwapParams();
+
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
 		synthv1::ParamIndex index = synthv1::ParamIndex(i);
 		float fValue = synthv1_default_params[i].value;
@@ -811,6 +824,26 @@ void synthv1widget::resetParams (void)
 			fValue = pKnob->defaultValue();
 		setParamValue(index, fValue);
 		updateParam(index, fValue);
+		m_params_ab[index] = fValue;
+	}
+}
+
+
+// Swap params A/B.
+void synthv1widget::swapParams (void)
+{
+	resetParamKnobs();
+
+	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
+		synthv1::ParamIndex index = synthv1::ParamIndex(i);
+		synthv1widget_knob *pKnob = paramKnob(index);
+		if (pKnob) {
+			const float fOldValue = pKnob->value();
+			const float fNewValue = m_params_ab[index];
+			setParamValue(index, fNewValue);
+			updateParam(index, fNewValue);
+			m_params_ab[index] = fOldValue;
+		}
 	}
 }
 
@@ -818,11 +851,14 @@ void synthv1widget::resetParams (void)
 // Reset all param default values.
 void synthv1widget::resetParamValues (void)
 {
+	resetSwapParams();
+
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
 		synthv1::ParamIndex index = synthv1::ParamIndex(i);
 		float fValue = synthv1_default_params[i].value;
 		setParamValue(index, fValue);
 		updateParam(index, fValue);
+		m_params_ab[index] = fValue;
 	}
 }
 
@@ -835,6 +871,15 @@ void synthv1widget::resetParamKnobs (void)
 		if (pKnob)
 			pKnob->resetDefaultValue();
 	}
+}
+
+
+// Reset swap params A/B button toggle state.
+void synthv1widget::resetSwapParams (void)
+{
+	bool bSwapBlock = m_ui.SwapParamsButton->blockSignals(true);
+	m_ui.SwapParamsButton->setChecked(false);
+	m_ui.SwapParamsButton->blockSignals(bSwapBlock);
 }
 
 
@@ -908,6 +953,7 @@ void synthv1widget::loadPreset ( const QString& sFilename )
 							float fValue = eParam.text().toFloat();
 							setParamValue(index, fValue);
 							updateParam(index, fValue);
+							m_params_ab[index] = fValue;
 						}
 					}
 				}
