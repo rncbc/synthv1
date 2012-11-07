@@ -54,20 +54,33 @@
      <item>
       <widget class="synthv1widget_preset" name="Preset" />
      </item>
-	 <item>
-	  <widget class="QToolButton" name="SwapParamsButton">
-	   <property name="toolTip">
-		<string>Swap A/B</string>
-	   </property>
-	   <property name="text">
-		<string>A / B</string>
-	   </property>
-	   <property name="checkable">
-		<bool>true</bool>
-	   </property>
-	  </widget>
-	 </item>
-	 <item>
+     <item>
+      <widget class="QToolButton" name="SwapParamsAButton">
+       <property name="toolTip">
+        <string>A</string>
+       </property>
+       <property name="text">
+        <string>A</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="SwapParamsBButton">
+       <property name="toolTip">
+        <string>B</string>
+       </property>
+       <property name="text">
+        <string>B</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>

@@ -174,6 +174,12 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	// Start clean.
 	m_iUpdate = 0;
 
+	// Swappable params A/B group.
+	QButtonGroup *pSwapParamsABGroup = new QButtonGroup(this);
+	pSwapParamsABGroup->addButton(m_ui.SwapParamsAButton);
+	pSwapParamsABGroup->addButton(m_ui.SwapParamsBButton);
+	pSwapParamsABGroup->setExclusive(true);
+
 	// Wave shapes.
 	QStringList shapes;
 	shapes << tr("Pulse");
@@ -742,8 +748,8 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 
 
 	// Swap params A/B
-	QObject::connect(m_ui.SwapParamsButton,
-		SIGNAL(toggled(bool)),
+	QObject::connect(pSwapParamsABGroup,
+		SIGNAL(buttonClicked(int)),
 		SLOT(swapParams()));
 
 
@@ -814,7 +820,7 @@ void synthv1widget::paramChanged ( float fValue )
 // Reset all param knobs to default values.
 void synthv1widget::resetParams (void)
 {
-	resetSwapParams();
+	m_ui.SwapParamsAButton->setChecked(true);
 
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
 		synthv1::ParamIndex index = synthv1::ParamIndex(i);
@@ -832,7 +838,7 @@ void synthv1widget::resetParams (void)
 // Swap params A/B.
 void synthv1widget::swapParams (void)
 {
-	resetParamKnobs();
+//	resetParamKnobs();
 
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
 		synthv1::ParamIndex index = synthv1::ParamIndex(i);
@@ -845,13 +851,15 @@ void synthv1widget::swapParams (void)
 			m_params_ab[index] = fOldValue;
 		}
 	}
+
+	m_ui.Preset->dirtyPreset();
 }
 
 
 // Reset all param default values.
 void synthv1widget::resetParamValues (void)
 {
-	resetSwapParams();
+	m_ui.SwapParamsAButton->setChecked(true);
 
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
 		synthv1::ParamIndex index = synthv1::ParamIndex(i);
@@ -871,15 +879,6 @@ void synthv1widget::resetParamKnobs (void)
 		if (pKnob)
 			pKnob->resetDefaultValue();
 	}
-}
-
-
-// Reset swap params A/B button toggle state.
-void synthv1widget::resetSwapParams (void)
-{
-	bool bSwapBlock = m_ui.SwapParamsButton->blockSignals(true);
-	m_ui.SwapParamsButton->setChecked(false);
-	m_ui.SwapParamsButton->blockSignals(bSwapBlock);
 }
 
 
