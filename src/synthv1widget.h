@@ -84,6 +84,9 @@ protected:
 	// Preset init.
 	void initPreset();
 
+	// Reset swap params A/B group.
+	void resetSwapParams();
+
 	// Reset all param/knob default values.
 	void resetParamValues();
 	void resetParamKnobs();
