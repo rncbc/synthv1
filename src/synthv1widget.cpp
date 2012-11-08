@@ -179,6 +179,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	pSwapParamsGroup->addButton(m_ui.SwapParamsAButton);
 	pSwapParamsGroup->addButton(m_ui.SwapParamsBButton);
 	pSwapParamsGroup->setExclusive(true);
+	m_ui.SwapParamsAButton->setChecked(true);
 
 	// Wave shapes.
 	QStringList shapes;
