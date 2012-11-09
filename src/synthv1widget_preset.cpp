@@ -58,7 +58,7 @@ synthv1widget_preset::synthv1widget_preset ( QWidget *pParent )
 	m_pComboBox->setInsertPolicy(QComboBox::NoInsert);
 	m_pSaveButton->setIcon(QIcon(":/images/presetSave.png"));
 	m_pDeleteButton->setIcon(QIcon(":/images/presetDelete.png"));
-	m_pResetButton->setText("&Reset");
+	m_pResetButton->setText("Reset");
 
 	m_pNewButton->setToolTip(tr("New Preset"));
 	m_pOpenButton->setToolTip(tr("Open Preset"));

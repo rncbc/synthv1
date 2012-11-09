@@ -57,7 +57,7 @@
      <item>
       <widget class="QToolButton" name="SwapParamsAButton">
        <property name="toolTip">
-        <string>A</string>
+        <string>Swap A</string>
        </property>
        <property name="text">
         <string>A</string>
@@ -70,7 +70,7 @@
      <item>
       <widget class="QToolButton" name="SwapParamsBButton">
        <property name="toolTip">
-        <string>B</string>
+        <string>Swap B</string>
        </property>
        <property name="text">
         <string>B</string>
