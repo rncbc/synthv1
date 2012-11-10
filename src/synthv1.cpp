@@ -477,7 +477,7 @@ public:
 		m_t1 = m_b3; m_b3 = (m_b2 + m_t2) * m_p - m_b3 * m_f;
 
 		m_b4 = (m_b3 + m_t1) * m_p - m_b4 * m_f;
-		m_b4 = m_b4 - m_b4 * m_b4 * m_b4 * 0.166667f;	// clipping
+	//	m_b4 = m_b4 - m_b4 * m_b4 * m_b4 * 0.166667f;	-- clipping
 
 		m_b0 = input;
 
