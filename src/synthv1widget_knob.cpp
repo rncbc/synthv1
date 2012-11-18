@@ -64,7 +64,7 @@ synthv1widget_knob::synthv1widget_knob ( QWidget *pParent ) : QWidget(pParent)
 	pGridLayout->addWidget(m_pDial,  1, 0, 1, 3);
 	QWidget::setLayout(pGridLayout);
 
-	QWidget::setMaximumSize(QSize(48, 72));
+	QWidget::setMaximumSize(QSize(52, 72));
 
 	QObject::connect(m_pDial,
 		SIGNAL(valueChanged(int)),
