@@ -56,6 +56,7 @@ synthv1widget_knob::synthv1widget_knob ( QWidget *pParent ) : QWidget(pParent)
 	m_pLabel->setAlignment(Qt::AlignCenter);
 	m_pDial->setSingleStep(10);
 	m_pDial->setNotchesVisible(true);
+	m_pDial->setMaximumSize(QSize(48, 42));
 
 	QGridLayout *pGridLayout = new QGridLayout();
 	pGridLayout->setMargin(0);
