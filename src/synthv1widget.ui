@@ -1823,7 +1823,7 @@
    </property>
   </action>
  </widget>
- <layoutdefault spacing="6" margin="8"/>
+ <layoutdefault spacing="8" margin="8"/>
  <customwidgets>
   <customwidget>
    <class>synthv1widget_preset</class>
