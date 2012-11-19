@@ -45,8 +45,8 @@ inline int iroundf(float x) { return int(x < 0.0f ? x - 0.5f : x + 0.5f); }
 synthv1widget_knob::synthv1widget_knob ( QWidget *pParent ) : QWidget(pParent)
 {
 	const QFont& font = QWidget::font();
-	const QFont font2(font.family(), font.pointSize() - 2);
-	QWidget::setFont(font2);
+	const QFont font3(font.family(), font.pointSize() - 3);
+	QWidget::setFont(font3);
 
 	m_pLabel = new QLabel();
 	m_pDial  = new QDial();
@@ -64,7 +64,7 @@ synthv1widget_knob::synthv1widget_knob ( QWidget *pParent ) : QWidget(pParent)
 	pGridLayout->addWidget(m_pDial,  1, 0, 1, 3);
 	QWidget::setLayout(pGridLayout);
 
-	QWidget::setMaximumSize(QSize(52, 72));
+	QWidget::setMaximumSize(QSize(48, 72));
 
 	QObject::connect(m_pDial,
 		SIGNAL(valueChanged(int)),
