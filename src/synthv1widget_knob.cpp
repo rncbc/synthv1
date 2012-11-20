@@ -45,8 +45,8 @@ inline int iroundf(float x) { return int(x < 0.0f ? x - 0.5f : x + 0.5f); }
 synthv1widget_knob::synthv1widget_knob ( QWidget *pParent ) : QWidget(pParent)
 {
 	const QFont& font = QWidget::font();
-	const QFont font3(font.family(), font.pointSize() - 3);
-	QWidget::setFont(font3);
+	const QFont font2(font.family(), font.pointSize() - 2);
+	QWidget::setFont(font2);
 
 	m_pLabel = new QLabel();
 	m_pDial  = new QDial();
@@ -65,7 +65,7 @@ synthv1widget_knob::synthv1widget_knob ( QWidget *pParent ) : QWidget(pParent)
 	pGridLayout->addWidget(m_pDial,  1, 0, 1, 3);
 	QWidget::setLayout(pGridLayout);
 
-	QWidget::setMaximumSize(QSize(48, 72));
+	QWidget::setMaximumSize(QSize(52, 72));
 
 	QObject::connect(m_pDial,
 		SIGNAL(valueChanged(int)),
@@ -202,7 +202,7 @@ synthv1widget_spin::synthv1widget_spin ( QWidget *pParent )
 	m_pSpinBox->setAlignment(Qt::AlignCenter);
 
 	const QFontMetrics fm(synthv1widget_knob::font());
-	m_pSpinBox->setMaximumHeight(fm.lineSpacing() + (fm.height() >> 1));
+	m_pSpinBox->setMaximumHeight(fm.height() + 6);
 
 	QGridLayout *pGridLayout
 		= static_cast<QGridLayout *> (QWidget::layout());
@@ -272,7 +272,7 @@ synthv1widget_combo::synthv1widget_combo ( QWidget *pParent )
 	m_pComboBox = new QComboBox();
 
 	const QFontMetrics fm(synthv1widget_knob::font());
-	m_pComboBox->setMaximumHeight(fm.lineSpacing() + (fm.height() << 1) / 3);
+	m_pComboBox->setMaximumHeight(fm.height() + 6);
 
 	setSingleStep(1);
 
