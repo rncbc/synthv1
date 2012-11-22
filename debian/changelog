@@ -1,3 +1,9 @@
+synthv1 (0.2.0-6) unstable; urgency=low
+
+  * Second public release.
+
+ -- Rui Nuno Capela <rncbc@rncbc.org>  Thu, 22 Nov 2012 18:00:00 +0000
+
 synthv1 (0.1.1-5) unstable; urgency=low
 
   * One first bug-fix release.
