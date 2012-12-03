@@ -70,7 +70,7 @@ synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 #endif
 
 	// Initialize preset stuff...
-	initPreset();
+	// initPreset();
 
 	// Activate client...
 	m_pSynth->activate();
@@ -203,6 +203,8 @@ int main ( int argc, char *argv[] )
 	synthv1widget_jack w(&synth);
 	if (argc > 1)
 		w.loadPreset(argv[1]);
+	else
+		w.initPreset();
 	w.show();
 
 	return app.exec();

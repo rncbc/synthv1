@@ -52,6 +52,9 @@ public:
 	void setParamKnob(synthv1::ParamIndex index, synthv1widget_knob *pKnob);
 	synthv1widget_knob *paramKnob(synthv1::ParamIndex index) const;
 
+	// Preset init.
+	void initPreset();
+
 	// Dirty close prompt,
 	bool queryClose();
 
@@ -80,9 +83,6 @@ protected slots:
 	void helpAboutQt();
 
 protected:
-
-	// Preset init.
-	void initPreset();
 
 	// Reset swap params A/B group.
 	void resetSwapParams();

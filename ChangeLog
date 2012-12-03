@@ -3,6 +3,11 @@ synthv1 - an old-school polyphonic synthesizer
 
 ChangeLog
 
+SVN TRUNK
+
+- JACK stand-alone: preset loader initialization fix.
+
+
 0.2.0  2012-11-22  Second public release.
 
 - Parameters A/B comparison toggle buttons have been added.
