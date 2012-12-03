@@ -54,6 +54,8 @@ public:
 
 	// Preset init.
 	void initPreset();
+	// Preset clear.
+	void clearPreset();
 
 	// Dirty close prompt,
 	bool queryClose();
@@ -66,7 +68,7 @@ public slots:
 
 protected slots:
 
-	// Preset clear.
+	// Preset renewal.
 	void newPreset();
 
 	// Param knob (widget) slots.

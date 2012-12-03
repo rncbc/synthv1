@@ -34,6 +34,8 @@ synthv1widget_lv2::synthv1widget_lv2 (
 {
 	m_controller = controller;
 	m_write_function = write_function;
+
+	clearPreset();
 }
 
 

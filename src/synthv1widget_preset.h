@@ -44,6 +44,7 @@ public:
 	void setPreset(const QString& sPreset);
 	QString preset() const;
 
+	void clearPreset();
 	bool queryPreset();
 
 signals:
@@ -73,8 +74,6 @@ protected slots:
 protected:
 
 	QString presetGroup() const;
-
-	void clearPreset();
 
 	void loadPreset(const QString&);
 	void savePreset(const QString&);

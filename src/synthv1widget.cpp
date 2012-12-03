@@ -909,6 +909,13 @@ void synthv1widget::initPreset (void)
 
 
 // Preset clear.
+void synthv1widget::clearPreset (void)
+{
+	m_ui.Preset->clearPreset();
+}
+
+
+// Preset renewal.
 void synthv1widget::newPreset (void)
 {
 #ifdef CONFIG_DEBUG
