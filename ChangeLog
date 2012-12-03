@@ -5,6 +5,7 @@ ChangeLog
 
 SVN TRUNK
 
+- Added dirty checking also on switching from unamed presets.
 - JACK stand-alone: preset loader initialization fix.
 
 

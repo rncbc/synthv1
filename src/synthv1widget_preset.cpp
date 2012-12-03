@@ -116,7 +116,7 @@ QString synthv1widget_preset::presetGroup (void) const
 // Preset name/text accessors.
 void synthv1widget_preset::clearPreset (void)
 {
-	m_iInitPreset = 0;
+	++m_iInitPreset;
 
 	synthv1widget_config *pConfig = synthv1widget_config::getInstance();
 	if (pConfig)
@@ -151,24 +151,34 @@ bool synthv1widget_preset::queryPreset (void)
 	if (pConfig == NULL)
 		return false;
 
-	const QString& sPreset = pConfig->sPreset;
-	if (!sPreset.isEmpty() && m_iDirtyPreset > 0) {
-		switch (QMessageBox::warning(this,
-			tr("Warning") + " - " SYNTHV1_TITLE,
-			tr("Some preset parameters have been changed:\n\n"
-			"\"%1\".\n\nDo you want to save the changes?")
-			.arg(sPreset),
-			QMessageBox::Save |
-			QMessageBox::Discard |
-			QMessageBox::Cancel)) {
-		case QMessageBox::Save:
-			savePreset(sPreset);
-			// Fall thru...
-		case QMessageBox::Discard:
-			break;
-		default: // Cancel...
-			setPreset(sPreset);
-			return false;
+	if (m_iDirtyPreset > 0) {
+		const QString& sPreset = pConfig->sPreset;
+		if (sPreset.isEmpty()) {
+			if (QMessageBox::warning(this,
+				tr("Warning") + " - " SYNTHV1_TITLE,
+				tr("Some parameters have been changed.\n\n"
+				"Do you want to discard the changes?"),
+				QMessageBox::Discard |
+				QMessageBox::Cancel) == QMessageBox::Cancel)
+				return false;
+		} else {
+			switch (QMessageBox::warning(this,
+				tr("Warning") + " - " SYNTHV1_TITLE,
+				tr("Some preset parameters have been changed:\n\n"
+				"\"%1\".\n\nDo you want to save the changes?")
+				.arg(sPreset),
+				QMessageBox::Save |
+				QMessageBox::Discard |
+				QMessageBox::Cancel)) {
+			case QMessageBox::Save:
+				savePreset(sPreset);
+				// Fall thru...
+			case QMessageBox::Discard:
+				break;
+			default: // Cancel...
+				setPreset(sPreset);
+				return false;
+			}
 		}
 	}
 
