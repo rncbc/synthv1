@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+- LV2 Atom/MIDI event processing is now official, a replacement
+  for the formerly deprecated LV2 Event/MIDI specification.
 - Added dirty checking also on switching from unamed presets.
 - JACK stand-alone: preset loader initialization fix.
 

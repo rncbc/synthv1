@@ -25,7 +25,6 @@
 
 #include "lv2/lv2plug.in/ns/ext/urid/urid.h"
 #include "lv2/lv2plug.in/ns/ext/midi/midi.h"
-#include "lv2/lv2plug.in/ns/ext/event/event-helpers.h"
 
 
 //-------------------------------------------------------------------------
@@ -36,15 +35,15 @@ synthv1_lv2::synthv1_lv2 (
 	double sample_rate, const LV2_Feature *const *host_features )
 	: synthv1(2, uint32_t(sample_rate))
 {
-	m_event_id = 0;
-	m_event_buffer = NULL;
+	m_midi_event_type = 0;
+	m_atom_sequence = NULL;
 
 	for (int i = 0; host_features[i]; ++i) {
 		if (::strcmp(host_features[i]->URI, LV2_URID_MAP_URI) == 0) {
 			LV2_URID_Map *urid_map
 				= (LV2_URID_Map *) host_features[i]->data;
 			if (urid_map) {
-				m_event_id = urid_map->map(
+				m_midi_event_type = urid_map->map(
 					urid_map->handle, LV2_MIDI__MidiEvent);
 				break;
 			}
@@ -70,7 +69,7 @@ void synthv1_lv2::connect_port ( uint32_t port, void *data )
 {
 	switch(PortIndex(port)) {
 	case MidiIn:
-		m_event_buffer = (LV2_Event_Buffer *) data;
+		m_atom_sequence = (LV2_Atom_Sequence *) data;
 		break;
 	case AudioInL:
 		m_ins[0] = (float *) data;
@@ -102,14 +101,16 @@ void synthv1_lv2::run ( uint32_t nframes )
 
 	uint32_t ndelta = 0;
 
-	if (m_event_buffer) {
-		LV2_Event_Iterator iter;
-		lv2_event_begin(&iter, m_event_buffer);
-		while (lv2_event_is_valid(&iter)) {
-			uint8_t   *data;
-			LV2_Event *event = lv2_event_get(&iter, &data);
-			if (event && event->type == m_event_id) {
-				uint32_t nread = event->frames - ndelta;
+	if (m_atom_sequence) {
+		const uint32_t size
+			= m_atom_sequence->atom.size - sizeof(LV2_Atom_Sequence_Body);
+		uint32_t offset = 0;
+		while (offset < size) {
+			LV2_Atom_Event *event = (LV2_Atom_Event *) ((char *)
+				LV2_ATOM_CONTENTS(LV2_Atom_Sequence, m_atom_sequence) + offset);
+			uint8_t *data = (uint8_t *) LV2_ATOM_BODY(&event->body);
+			if (event && event->body.type == m_midi_event_type) {
+				uint32_t nread = event->time.frames - ndelta;
 				if (nread > 0) {
 					process(ins, outs, nread);
 					for (uint16_t k = 0; k < nchannels; ++k) {
@@ -117,12 +118,12 @@ void synthv1_lv2::run ( uint32_t nframes )
 						outs[k] += nread;
 					}
 				}
-				ndelta = event->frames;
-				process_midi(data, event->size);
+				ndelta = event->time.frames;
+				process_midi(data, event->body.size);
 			}
-			lv2_event_increment(&iter);
+			offset += (sizeof(LV2_Atom_Event) + event->body.size + 7) & (~7);
 		}
-	//	m_event_buffer = NULL;
+	//	m_atom_sequence = NULL;
 	}
 
 	process(ins, outs, nframes - ndelta);
