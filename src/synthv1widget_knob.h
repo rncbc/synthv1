@@ -62,6 +62,8 @@ public:
 	void setDefaultValue(float fDefaultValue);
 	float defaultValue() const;
 
+	virtual QString valueText() const;
+
 public slots:
 
 	virtual void setValue(float fValue);
@@ -143,6 +145,8 @@ public:
 	// Accessors.
 	void insertItems(int iIndex, const QStringList& items);
 	void clear();
+
+	QString valueText() const;
 
 public slots:
 

@@ -116,6 +116,12 @@ float synthv1widget_knob::value (void) const
 }
 
 
+QString synthv1widget_knob::valueText (void) const
+{
+	return QString::number(m_pDial->value());
+}
+
+
 void synthv1widget_knob::setMaximum ( float fMaximum )
 {
 	m_pDial->setMaximum(iroundf(100.0f * fMaximum));
@@ -297,6 +303,11 @@ void synthv1widget_combo::setValue ( float fValue )
 	m_pComboBox->blockSignals(bComboBlock);
 }
 
+
+QString synthv1widget_combo::valueText (void) const
+{
+	return m_pComboBox->currentText();
+}
 
 
 // Special combo-box mode accessors.
