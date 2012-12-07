@@ -26,15 +26,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1024</width>
-    <height>560</height>
+    <width>960</width>
+    <height>480</height>
    </rect>
-  </property>
-  <property name="minimumSize" >
-   <size>
-    <width>1024</width>
-    <height>560</height>
-   </size>
   </property>
   <property name="windowTitle">
    <string>synthv1</string>
@@ -117,12 +111,12 @@
     </layout>
    </item>
    <item>
-    <widget class="QToolBox" name="ToolBox">
+    <widget class="QTabWidget" name="TabWidget">
      <property name="currentIndex" >
       <number>0</number>
      </property>
      <widget class="QWidget" name="Synth1Page">
-      <attribute name="label">
+      <attribute name="title">
        <string>Synth 1</string>
       </attribute>
       <layout class="QGridLayout">
@@ -784,7 +778,7 @@
          <property name="sizeHint">
           <size>
            <width>8</width>
-           <height>8</height>
+           <height>4</height>
           </size>
          </property>
         </spacer>
@@ -792,7 +786,7 @@
       </layout>
      </widget>
      <widget class="QWidget" name="Synth2Page">
-      <attribute name="label">
+      <attribute name="title">
        <string>Synth 2</string>
       </attribute>
       <layout class="QGridLayout">
@@ -1454,7 +1448,7 @@
          <property name="sizeHint">
           <size>
            <width>8</width>
-           <height>8</height>
+           <height>4</height>
           </size>
          </property>
         </spacer>
@@ -1462,7 +1456,7 @@
       </layout>
      </widget>
      <widget class="QWidget" name="EffectsPage">
-      <attribute name="label">
+      <attribute name="title">
        <string>Effects</string>
       </attribute>
       <layout class="QGridLayout">

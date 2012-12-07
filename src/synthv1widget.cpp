@@ -767,7 +767,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 
 
 	// Epilog.
-	QWidget::adjustSize();
+	// QWidget::adjustSize();
 }
 
 
