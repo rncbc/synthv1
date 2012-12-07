@@ -174,6 +174,10 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	// Start clean.
 	m_iUpdate = 0;
 
+	// Replicate the stacked/pages
+	for (int iTab = 0; iTab < m_ui.StackedWidget->count(); ++iTab)
+		m_ui.TabBar->addTab(m_ui.StackedWidget->widget(iTab)->windowTitle());
+
 	// Swappable params A/B group.
 	QButtonGroup *pSwapParamsGroup = new QButtonGroup(this);
 	pSwapParamsGroup->addButton(m_ui.SwapParamsAButton);
@@ -756,6 +760,9 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		SIGNAL(toggled(bool)),
 		SLOT(swapParams(bool)));
 
+	// Direct stacked-page signal/slot
+	QObject::connect(m_ui.TabBar, SIGNAL(currentChanged(int)),
+		m_ui.StackedWidget, SLOT(setCurrentIndex(int)));
 
 	// Menu actions
 	QObject::connect(m_ui.helpAboutAction,

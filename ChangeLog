@@ -5,7 +5,7 @@ ChangeLog
 
 SVN TRUNK
 
-- GUI layout moved from a stacked toolbox into a tabbed widget.
+- GUI layout moved from a toolbox into a stacked tab widget.
 - LV2 Atom/MIDI event processing is now official, a replacement
   for the formerly deprecated LV2 Event/MIDI specification.
 - Added dirty checking also on switching from unamed presets.

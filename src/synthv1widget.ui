@@ -28,12 +28,12 @@
   <property name="windowIcon" >
    <iconset resource="synthv1.qrc" >:/images/synthv1.png</iconset>
   </property>
-  <layout class="QVBoxLayout" >
-   <property name="margin" >
+  <layout class="QVBoxLayout">
+   <property name="margin">
     <number>0</number>
    </property>
-   <property name="spacing" >
-    <number>8</number>
+   <property name="spacing">
+    <number>0</number>
    </property>
    <item>
     <layout class="QHBoxLayout">
@@ -73,22 +73,23 @@
        </property>
        <property name="sizeHint">
         <size>
-         <width>8</width>
-         <height>8</height>
+         <width>20</width>
+         <height>20</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
+      <widget class="QTabBar" name="TabBar">
+      </widget>
+     </item>
+     <item>
       <widget class="QMenuBar" name="MenuBar">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="nativeMenuBar">
-        <bool>false</bool>
        </property>
        <widget class="QMenu" name="helpMenu">
         <property name="title">
@@ -103,14 +104,14 @@
     </layout>
    </item>
    <item>
-    <widget class="QTabWidget" name="TabWidget">
+    <widget class="QStackedWidget" name="StackedWidget">
      <property name="currentIndex" >
       <number>0</number>
      </property>
      <widget class="QWidget" name="Synth1Page">
-      <attribute name="title">
+      <property name="windowTitle">
        <string>Synth 1</string>
-      </attribute>
+      </property>
       <layout class="QGridLayout">
        <item row="0" column="0" colspan="12">
         <widget class="QGroupBox" name="Dco1GroupBox">
@@ -778,9 +779,9 @@
       </layout>
      </widget>
      <widget class="QWidget" name="Synth2Page">
-      <attribute name="title">
+      <property name="windowTitle">
        <string>Synth 2</string>
-      </attribute>
+      </property>
       <layout class="QGridLayout">
        <item row="0" column="0" colspan="12">
         <widget class="QGroupBox" name="Dco2GroupBox">
@@ -1448,9 +1449,9 @@
       </layout>
      </widget>
      <widget class="QWidget" name="EffectsPage">
-      <attribute name="title">
+      <property name="windowTitle">
        <string>Effects</string>
-      </attribute>
+      </property>
       <layout class="QGridLayout">
        <item row="0" column="0" colspan="5">
         <widget class="QGroupBox" name="Cho1GroupBox">
