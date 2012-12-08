@@ -34,6 +34,29 @@
 synthv1widget_status::synthv1widget_status ( QWidget *pParent )
 	: QStatusBar (pParent)
 {
+	const QFontMetrics fm(QStatusBar::font());
+	m_pModifiedLabel = new QLabel();
+	m_pModifiedLabel->setAlignment(Qt::AlignHCenter);
+	m_pModifiedLabel->setMinimumSize(QSize(fm.width("MOD") + 4, fm.height()));
+	m_pModifiedLabel->setToolTip(tr("Modification status"));
+	m_pModifiedLabel->setAutoFillBackground(true);
+	QStatusBar::addPermanentWidget(m_pModifiedLabel);
+}
+
+
+// Permanent widgets accessors.
+void synthv1widget_status::setModified ( bool bModified )
+{
+	if (bModified)
+		m_pModifiedLabel->setText(tr("MOD"));
+	else
+		m_pModifiedLabel->clear();
+}
+
+
+bool synthv1widget_status::isModified (void) const
+{
+	return !m_pModifiedLabel->text().isEmpty();
 }
 
 

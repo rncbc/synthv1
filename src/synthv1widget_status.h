@@ -39,6 +39,15 @@ public:
 
 	// Constructor.
 	synthv1widget_status(QWidget *pParent = 0);
+
+	// Permanent widgets accessors.
+	void setModified(bool bModified);
+	bool isModified() const;
+
+private:
+
+	// Permanent widgets.
+	QLabel *m_pModifiedLabel;
 };
 
 
