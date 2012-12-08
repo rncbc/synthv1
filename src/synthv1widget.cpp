@@ -883,7 +883,8 @@ void synthv1widget::swapParams ( bool bOn )
 
 	m_ui.Preset->dirtyPreset();
 
-	m_ui.StatusBar->showMessage(tr("Swap %1").arg(bOn ? 'B' : 'A'), 5000);
+	const bool bSwapA = m_ui.SwapParamsAButton->isChecked();
+	m_ui.StatusBar->showMessage(tr("Swap %1").arg(bSwapA ? 'A' : 'B'), 5000);
 }
 
 
