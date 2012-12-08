@@ -853,6 +853,7 @@ void synthv1widget::resetParams (void)
 	}
 
 	m_ui.StatusBar->showMessage(tr("Reset preset"), 5000);
+	m_ui.StatusBar->setModified(false);
 }
 
 
@@ -884,7 +885,6 @@ void synthv1widget::swapParams ( bool bOn )
 	const bool bSwapA = m_ui.SwapParamsAButton->isChecked();
 	m_ui.StatusBar->showMessage(tr("Swap %1").arg(bSwapA ? 'A' : 'B'), 5000);
 	m_ui.StatusBar->setModified(true);
-
 }
 
 
