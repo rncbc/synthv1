@@ -17,7 +17,8 @@ headers = \
 	src/$(name)widget_env.h \
 	src/$(name)widget_filt.h \
 	src/$(name)widget_knob.h \
-	src/$(name)widget_preset.h
+	src/$(name)widget_preset.h \
+	src/$(name)widget_status.h
 
 sources = \
 	src/$(name).cpp \
@@ -26,7 +27,8 @@ sources = \
 	src/$(name)widget_env.cpp \
 	src/$(name)widget_filt.cpp \
 	src/$(name)widget_knob.cpp \
-	src/$(name)widget_preset.cpp
+	src/$(name)widget_preset.cpp \
+	src/$(name)widget_status.cpp
 
 forms = \
 	src/$(name)widget.ui

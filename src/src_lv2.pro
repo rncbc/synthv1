@@ -22,6 +22,7 @@ HEADERS = \
 	synthv1widget_wave.h \
 	synthv1widget_knob.h \
 	synthv1widget_preset.h \
+	synthv1widget_status.h \
 	synthv1widget_config.h \
 	synthv1widget_lv2.h
 
@@ -34,6 +35,7 @@ SOURCES = \
 	synthv1widget_wave.cpp \
 	synthv1widget_knob.cpp \
 	synthv1widget_preset.cpp \
+	synthv1widget_status.cpp \
 	synthv1widget_config.cpp \
 	synthv1widget_lv2.cpp
 

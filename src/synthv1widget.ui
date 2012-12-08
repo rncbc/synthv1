@@ -1781,7 +1781,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QStatusBar" name="StatusBar" />
+    <widget class="synthv1widget_status" name="StatusBar" />
    </item>
   </layout>
   <action name="helpAboutAction" >
@@ -1819,6 +1819,11 @@
    <class>synthv1widget_preset</class>
    <extends>QComboBox</extends>
    <header>synthv1widget_preset.h</header>
+  </customwidget>
+  <customwidget>
+   <class>synthv1widget_status</class>
+   <extends>QStatusBar</extends>
+   <header>synthv1widget_status.h</header>
   </customwidget>
   <customwidget>
    <class>synthv1widget_spin</class>
