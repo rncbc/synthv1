@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+- Dropped all SSE dummy build optimization flags as they were
+  making more harm than real good, performance wise.
 - GUI layout moved from a toolbox into a stacked tab widget;
   also, a status-bar has been added at the bottom display.
 - LV2 Atom/MIDI event processing is now official, a replacement

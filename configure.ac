@@ -48,12 +48,6 @@ AC_ARG_ENABLE(lv2,
   [ac_lv2="$enableval"],
   [ac_lv2="yes"])
 
-# Enable SSE optimization.
-AC_ARG_ENABLE(sse,
-  AC_HELP_STRING([--enable-sse], [enable SSE optimization (default=yes)]),
-  [ac_sse="$enableval"],
-  [ac_sse="yes"])
-
 
 if test "x$ac_debug" = "xyes"; then
    AC_DEFINE(CONFIG_DEBUG, 1, [Define if debugging is enabled.])
@@ -155,37 +149,7 @@ AC_CACHE_CHECK([for Qt library version >= 4.4],
 ])
 
 
-# Check for SSE optimization.
-if test "x$ac_sse" = "xyes"; then
-   ac_sse_cflags="-msse -mfpmath=sse -ffast-math"
-   ac_old_cflags=$CFLAGS
-   ac_old_cppflags=$CPPFLAGS
-   CFLAGS="$ac_sse_cflags $CFLAGS"
-   CPPFLAGS="$ac_sse_cflags $CPPFLAGS"
-   AC_CACHE_CHECK([for SSE optimization],
-      ac_cv_sse, [
-      AC_TRY_RUN([
-         #include <xmmintrin.h>
-         #if !defined(__SSE__)
-         #error SSE optimization disabled.
-         #endif
-         int main() {
-             unsigned int a, b, c, d;
-             __asm__ __volatile__
-             ("cpuid": "=a" (a), "=b" (b), "=c" (c), "=d" (d) : "a" (1));
-            return ((d & (1 << 25)) ? 0 : 1);
-         }
-      ], ac_cv_sse="yes", ac_cv_sse="no")
-   ])
-   ac_sse=$ac_cv_sse
-   if test "x$ac_sse" = "xyes"; then
-      ac_cflags="$ac_sse_cflags $ac_cflags"
-   else
-      CPPFLAGS=$ac_old_cppflags
-      CFLAGS=$ac_old_cflags
-   fi
-fi
-
+ac_cflags="-ffast-math $ac_cflags"
 AC_SUBST(ac_cflags)
 
 
@@ -357,7 +321,6 @@ echo "  JACK session support . . . . . . . . . . . . . . .: $ac_jack_session"
 echo "  JACK MIDI support  . . . . . . . . . . . . . . . .: $ac_jack_midi"
 echo "  ALSA MIDI support  . . . . . . . . . . . . . . . .: $ac_alsa_midi"
 echo "  LV2 plugin-in build  . . . . . . . . . . . . . . .: $ac_lv2"
-echo "  SSE optimization support (x86) . . . . . . . . . .: $ac_sse"
 echo
 echo "  Install prefix . . . . . . . . . . . . . . . . . .: $ac_prefix"
 echo
