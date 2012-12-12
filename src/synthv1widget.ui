@@ -67,6 +67,10 @@
       </widget>
      </item>
      <item>
+      <widget class="QTabBar" name="TabBar">
+      </widget>
+     </item>
+     <item>
       <spacer>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -78,10 +82,6 @@
         </size>
        </property>
       </spacer>
-     </item>
-     <item>
-      <widget class="QTabBar" name="TabBar">
-      </widget>
      </item>
      <item>
       <widget class="QMenuBar" name="MenuBar">
