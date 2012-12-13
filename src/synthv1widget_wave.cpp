@@ -129,7 +129,11 @@ void synthv1widget_wave::paintEvent ( QPaintEvent *pPaintEvent )
 
 	painter.setRenderHint(QPainter::Antialiasing, true);
 
+	painter.setPen(QPen(rgbLite.darker(), 2));
+	path.translate(+1, +1);
+	painter.drawPath(path);
 	painter.setPen(QPen(rgbLite, 2));
+	path.translate(-1, -1);
 	painter.drawPath(path);
 
 	painter.setRenderHint(QPainter::Antialiasing, false);

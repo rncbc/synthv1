@@ -1453,7 +1453,20 @@
        <string>Effects</string>
       </property>
       <layout class="QGridLayout">
-       <item row="0" column="0" colspan="5">
+       <item row="0" column="0" rowspan="2">
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="1" colspan="5">
         <widget class="QGroupBox" name="Cho1GroupBox">
          <property name="title">
           <string>Chorus</string>
@@ -1476,8 +1489,8 @@
             </property>
             <property name="sizeHint">
              <size>
-              <width>8</width>
-              <height>8</height>
+              <width>20</width>
+              <height>20</height>
              </size>
             </property>
            </spacer>
@@ -1525,7 +1538,7 @@
          </layout>
         </widget>
        </item>
-       <item row="0" column="5" colspan="4">
+       <item row="0" column="6" colspan="4">
         <widget class="QGroupBox" name="Fla1GroupBox">
          <property name="title">
           <string>Flanger</string>
@@ -1548,8 +1561,8 @@
             </property>
             <property name="sizeHint">
              <size>
-              <width>8</width>
-              <height>8</height>
+              <width>20</width>
+              <height>20</height>
              </size>
             </property>
            </spacer>
@@ -1587,7 +1600,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0" colspan="5">
+       <item row="1" column="1" colspan="5">
         <widget class="QGroupBox" name="Pha1GroupBox">
          <property name="title">
           <string>Phaser</string>
@@ -1610,8 +1623,8 @@
             </property>
             <property name="sizeHint">
              <size>
-              <width>8</width>
-              <height>8</height>
+              <width>20</width>
+              <height>20</height>
              </size>
             </property>
            </spacer>
@@ -1659,7 +1672,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="5" colspan="4">
+       <item row="1" column="6" colspan="4">
         <widget class="QGroupBox" name="Del1GroupBox">
          <property name="title">
           <string>Delay</string>
@@ -1682,8 +1695,8 @@
             </property>
             <property name="sizeHint">
              <size>
-              <width>8</width>
-              <height>8</height>
+              <width>20</width>
+              <height>20</height>
              </size>
             </property>
            </spacer>
@@ -1721,7 +1734,7 @@
          </layout>
         </widget>
        </item>
-       <item row="0" column="9" rowspan="2">
+       <item row="0" column="10" rowspan="2">
         <widget class="QGroupBox" name="Dyn1GroupBox">
          <property name="title">
           <string>Dynamic</string>
@@ -1762,6 +1775,19 @@
           </item>
          </layout>
         </widget>
+       </item>
+       <item row="0" column="11" rowspan="2">
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item row="2" column="0" colspan="12">
         <spacer>
