@@ -71,3 +71,6 @@ unix {
 }
 
 QT += xml
+
+# QT5 support
+QT += widgets

@@ -3,6 +3,11 @@ synthv1 - an old-school polyphonic synthesizer
 
 ChangeLog
 
+SVN TRUNK
+
+- Preparations for Qt5 migration. (TESTING)
+
+
 0.3.0  2012-12-21  Third coming release.
 
 - Dropped all SSE dummy build optimization flags as they were
