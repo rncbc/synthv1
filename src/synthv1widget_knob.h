@@ -1,7 +1,7 @@
 // synthv1widget_knob.h
 //
 /****************************************************************************
-   Copyright (C) 2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -64,6 +64,9 @@ public:
 
 	virtual QString valueText() const;
 
+	void setScale(float fScale);
+	float scale() const;
+
 public slots:
 
 	virtual void setValue(float fValue);
@@ -83,6 +86,10 @@ protected:
 	// Mouse behavior event handler.
 	void mousePressEvent(QMouseEvent *pMouseEvent);
 
+	// Scale/value converters.
+	int scaleFromValue(float fValue) const;
+	float valueFromScale(int iScale) const;
+
 private:
 
 	// Widget members.
@@ -92,6 +99,9 @@ private:
 	// Default value.
 	float m_fDefaultValue;
 	int   m_iDefaultValue;
+
+	// Scale multiplier (default=100).
+	float m_fScale;
 };
 
 
