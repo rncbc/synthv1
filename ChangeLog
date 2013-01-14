@@ -5,7 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
-- Experimental LV2 Time designated port support (Delay BPM). 
+- Redefined wave-shaping/sigmoid compressor and limiter fx.
+- Experimental LV2 Time designated port support (Delay BPM).
 - Preparations for Qt5 migration. (TESTING)
 
 

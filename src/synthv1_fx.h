@@ -1,7 +1,7 @@
 // synthv1_fx.h
 //
 /****************************************************************************
-   Copyright (C) 2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -29,14 +29,6 @@
 // -- borrowed, stirred and refactored from Highlife --
 // Copyright (C) 2007 arguru, discodsp.com
 //
-
-// hyperbolic-tangent fast approximation
-inline float synthv1_fx_tanhf ( const float x )
-{
-	const float x2 = x * x;
-	return x * (27.0f + x2) / (27.0f + 9.0f * x2);
-}
-
 
 //-------------------------------------------------------------------------
 // synthv1_fx_filter - RBJ filter implementation.
@@ -266,19 +258,8 @@ public:
 				m_peak += (1.0f - m_release) * gain;
 			}
 			// output
-			*in++ = saturate(lo * m_peak * post_gain, 0.75f);
+			*in++ = lo * m_peak * post_gain;
 		}
-	}
-
-	float saturate(float x, float t) const
-	{
-		if (::fabsf(x) < t)
-			return x;
-
-		if(x > 0.0f)
-			return +(t + (1.0f - t) * synthv1_fx_tanhf((+x - t) / (1.0f - t)));
-		else
-			return -(t + (1.0f - t) * synthv1_fx_tanhf((-x - t) / (1.0f - t)));
 	}
 
 private:
