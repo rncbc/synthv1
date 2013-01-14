@@ -69,10 +69,14 @@ inline float synthv1_tanhf ( const float x )
 
 // sigmoids
 
-inline float synthv1_sigmoid0 ( const float x )
+inline float synthv1_sigmoid ( const float x )
 {
 //	return 2.0f / (1.0f + ::expf(-5.0f * x)) - 1.0f;
-//	return synthv1_tanhf(2.0f * x);
+	return synthv1_tanhf(2.0f * x);
+}
+
+inline float synthv1_sigmoid_0 ( const float x )
+{
 	if (x > +0.75f)
 		return +0.75f + 0.25f * synthv1_tanhf(+4.0f * (x - 0.75f));
 	else
@@ -82,9 +86,9 @@ inline float synthv1_sigmoid0 ( const float x )
 		return x;
 }
 
-inline float synthv1_sigmoid1 ( const float x )
+inline float synthv1_sigmoid_1 ( const float x )
 {
-	return 0.5f * (1.0f + synthv1_sigmoid0(2.0f * x - 1.0f));
+	return 0.5f * (1.0f + synthv1_sigmoid_0(2.0f * x - 1.0f));
 }
 
 
@@ -1530,9 +1534,9 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 
 				const float env1 = 0.5f * (1.0f + vel1
 					* *m_dcf1.envelope * pv->dcf1_env.value2(j));
-				const float cutoff1 = synthv1_sigmoid1(*m_dcf1.cutoff
+				const float cutoff1 = synthv1_sigmoid_1(*m_dcf1.cutoff
 					* env1 * (1.0f + *m_lfo1.cutoff * lfo1));
-				const float reso1 = synthv1_sigmoid1(*m_dcf1.reso
+				const float reso1 = synthv1_sigmoid_1(*m_dcf1.reso
 					* env1 * (1.0f + *m_lfo1.reso * lfo1));
 
 				dco11 = pv->dcf11.output(dco11, cutoff1, reso1);
@@ -1544,9 +1548,9 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 
 				const float env2 = 0.5f * (1.0f + vel2
 					* *m_dcf2.envelope * pv->dcf2_env.value2(j));
-				const float cutoff2 = synthv1_sigmoid1(*m_dcf2.cutoff
+				const float cutoff2 = synthv1_sigmoid_1(*m_dcf2.cutoff
 					* env2 * (1.0f + *m_lfo2.cutoff * lfo2));
-				const float reso2 = synthv1_sigmoid1(*m_dcf2.reso
+				const float reso2 = synthv1_sigmoid_1(*m_dcf2.reso
 					* env2 * (1.0f + *m_lfo2.reso * lfo2));
 
 				dco21 = pv->dcf21.output(dco21, cutoff2, reso2);
@@ -1690,7 +1694,7 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 		// limiter
 		if (int(*m_dyn.limiter) > 0) {
 			for (uint32_t n = 0; n < nframes; ++n)
-				*out++ = synthv1_sigmoid0(*in++);
+				*out++ = synthv1_sigmoid(*in++);
 		}
 	}
 }
