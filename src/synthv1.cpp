@@ -162,7 +162,7 @@ struct synthv1_env
 			p->frames = uint32_t(synthv1_quad(*decay) * max_frames);
 			if (p->frames < min_frames) // prevent click on too fast decay
 				p->frames = min_frames;
-			p->delta = (synthv1_quad(*sustain) - p->level) / float(p->frames);
+			p->delta = (synthv1_quad(*sustain, true) - p->level) / float(p->frames);
 		}
 		else if (p->stage == Decay) {
 			p->running = false; // stay at this stage until note_off received
