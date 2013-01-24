@@ -100,7 +100,15 @@ inline float synthv1_velocity ( const float x, const float p = 0.2f )
 }
 
 
+// quadratic easing
+inline float synthv1_quad ( const float x, const bool b = false )
+{
+	return x * (b ? (2.0f - x) : x);
+}
+
+
 // envelope
+#include <stdio.h>
 
 struct synthv1_env
 {
@@ -113,17 +121,22 @@ struct synthv1_env
 	struct State
 	{
 		// process
-		float value(uint32_t n) const
-			{ return level + float(n) * delta; }
-
-		float value2(uint32_t n) const
-			{ const float v = value(n); return v * v; }
+		float tick()
+		{
+			if (running && frames > 0) {
+				level += delta;
+				value = synthv1_quad(level/*, (stage == Attack)*/);
+				--frames;
+			}
+			return value;
+		}
 
 		// state
 		bool running;
 		Stage stage;
 		float level;
 		float delta;
+		float value;
 		uint32_t frames;
 	};
 
@@ -131,28 +144,29 @@ struct synthv1_env
 	{
 		p->running = true;
 		p->stage = Attack;
-		p->level = 0.0f;
-		p->frames = int(*attack * *attack * max_frames);
-		if (p->frames > 0)
+		p->frames = uint32_t(synthv1_quad(*attack) * max_frames);
+		if (p->frames > 0) {
+			p->level = 0.0f;
 			p->delta = 1.0f / float(p->frames);
-		else
+		} else {
+			p->level = 1.0f;
 			p->delta = 0.0f;
+		}
+		p->value = 0.0f;
 	}
 
 	void next(State *p)
 	{
 		if (p->stage == Attack) {
 			p->stage = Decay;
-			p->level = 1.0f;
-			p->frames = int(*decay * *decay * max_frames);
+			p->frames = uint32_t(synthv1_quad(*decay) * max_frames);
 			if (p->frames < min_frames) // prevent click on too fast decay
 				p->frames = min_frames;
-			p->delta = (*sustain - 1.0f) / float(p->frames);
+			p->delta = (synthv1_quad(*sustain) - p->level) / float(p->frames);
 		}
 		else if (p->stage == Decay) {
 			p->running = false; // stay at this stage until note_off received
 			p->stage = Sustain;
-			p->level = *sustain;
 			p->frames = 0;
 			p->delta = 0.0f;
 		}
@@ -160,8 +174,9 @@ struct synthv1_env
 			p->running = false;
 			p->stage = Done;
 			p->level = 0.0f;
-			p->frames = 0;
 			p->delta = 0.0f;
+			p->value = 0.0f;
+			p->frames = 0;
 		}
 	}
 
@@ -169,17 +184,17 @@ struct synthv1_env
 	{
 		p->running = true;
 		p->stage = Attack;
-		p->frames = int(*attack * *attack * max_frames);
+		p->frames = uint32_t(synthv1_quad(*attack) * max_frames);
 		if (p->frames < min_frames) // prevent click on too fast attack
 			p->frames = min_frames;
-		p->delta = (1.0f - p->level) / float(p->frames);
+		p->delta = 1.0f / float(p->frames);
 	}
 
 	void note_off(State *p)
 	{
 		p->running = true;
 		p->stage = Release;
-		p->frames = int(*release * *release * max_frames);
+		p->frames = uint32_t(synthv1_quad(*release) * max_frames);
 		if (p->frames < min_frames) // prevent click on too fast release
 			p->frames = min_frames;
 		p->delta = -(p->level) / float(p->frames);
@@ -1500,11 +1515,11 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 
 				// generators
 
-				const float lfo1_env = pv->lfo1_env.value2(j);
-				const float lfo2_env = pv->lfo2_env.value2(j);
+				const float lfo1_env = pv->lfo1_env.tick();
+				const float lfo2_env = pv->lfo2_env.tick();
 
-				const float lfo1  = pv->lfo1_sample * lfo1_env;
-				const float lfo2  = pv->lfo2_sample * lfo2_env;
+				const float lfo1 = pv->lfo1_sample * lfo1_env;
+				const float lfo2 = pv->lfo2_sample * lfo2_env;
 
 				float dco11 = pv->dco1_sample1 * pv->dco1_bal.value(j, 0);
 				float dco12 = pv->dco1_sample2 * pv->dco1_bal.value(j, 1);
@@ -1533,7 +1548,7 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				// filters
 
 				const float env1 = 0.5f * (1.0f + vel1
-					* *m_dcf1.envelope * pv->dcf1_env.value2(j));
+					* *m_dcf1.envelope * pv->dcf1_env.tick());
 				const float cutoff1 = synthv1_sigmoid_1(*m_dcf1.cutoff
 					* env1 * (1.0f + *m_lfo1.cutoff * lfo1));
 				const float reso1 = synthv1_sigmoid_1(*m_dcf1.reso
@@ -1547,7 +1562,7 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				}
 
 				const float env2 = 0.5f * (1.0f + vel2
-					* *m_dcf2.envelope * pv->dcf2_env.value2(j));
+					* *m_dcf2.envelope * pv->dcf2_env.tick());
 				const float cutoff2 = synthv1_sigmoid_1(*m_dcf2.cutoff
 					* env2 * (1.0f + *m_lfo2.cutoff * lfo2));
 				const float reso2 = synthv1_sigmoid_1(*m_dcf2.reso
@@ -1566,13 +1581,13 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				const float mid1 = 0.5f * (dco11 + dco12);
 				const float sid1 = 0.5f * (dco11 - dco12);
 				const float vol1 = vel1 * m_vol1.value(j)
-					* pv->dca1_env.value2(j);
+					* pv->dca1_env.tick();
 
 				const float wid2 = m_wid2.value(j);
 				const float mid2 = 0.5f * (dco21 + dco22);
 				const float sid2 = 0.5f * (dco21 - dco22);
 				const float vol2 = vel2 * m_vol2.value(j)
-					* pv->dca2_env.value2(j);
+					* pv->dca2_env.tick();
 
 				// outputs
 
@@ -1598,25 +1613,10 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 
 			// envelope countdowns
 
-			if (pv->dca1_env.running) {
-				if (pv->dca1_env.frames >= ngen) {
-					pv->dca1_env.frames -= ngen;
-					pv->dca1_env.level  += ngen * pv->dca1_env.delta;
-				}
-				else pv->dca1_env.frames = 0;
-				if (pv->dca1_env.frames == 0)
-					m_dca1.env.next(&pv->dca1_env);
-			}
-
-			if (pv->dca2_env.running) {
-				if (pv->dca2_env.frames >= ngen) {
-					pv->dca2_env.frames -= ngen;
-					pv->dca2_env.level  += ngen * pv->dca2_env.delta;
-				}
-				else pv->dca2_env.frames = 0;
-				if (pv->dca2_env.frames == 0)
-					m_dca2.env.next(&pv->dca2_env);
-			}
+			if (pv->dca1_env.running && pv->dca1_env.frames == 0)
+				m_dca1.env.next(&pv->dca1_env);
+			if (pv->dca2_env.running && pv->dca2_env.frames == 0)
+				m_dca2.env.next(&pv->dca2_env);
 
 			if (pv->dca1_env.stage == synthv1_env::Done &&
 				pv->dca2_env.stage == synthv1_env::Done) {
@@ -1625,42 +1625,14 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				free_voice(pv);
 				nblock = 0;
 			} else {
-				if (pv->dcf1_env.running) {
-					if (pv->dcf1_env.frames >= ngen) {
-						pv->dcf1_env.frames -= ngen;
-						pv->dcf1_env.level  += ngen * pv->dcf1_env.delta;
-					}
-					else pv->dcf1_env.frames = 0;
-					if (pv->dcf1_env.frames == 0)
-						m_dcf1.env.next(&pv->dcf1_env);
-				}
-				if (pv->dcf2_env.running) {
-					if (pv->dcf2_env.frames >= ngen) {
-						pv->dcf2_env.frames -= ngen;
-						pv->dcf2_env.level  += ngen * pv->dcf2_env.delta;
-					}
-					else pv->dcf2_env.frames = 0;
-					if (pv->dcf2_env.frames == 0)
-						m_dcf2.env.next(&pv->dcf2_env);
-				}
-				if (pv->lfo1_env.running) {
-					if (pv->lfo1_env.frames >= ngen) {
-						pv->lfo1_env.frames -= ngen;
-						pv->lfo1_env.level  += ngen * pv->lfo1_env.delta;
-					}
-					else pv->lfo1_env.frames = 0;
-					if (pv->lfo1_env.frames == 0)
-						m_lfo1.env.next(&pv->lfo1_env);
-				}
-				if (pv->lfo2_env.running) {
-					if (pv->lfo2_env.frames >= ngen) {
-						pv->lfo2_env.frames -= ngen;
-						pv->lfo2_env.level  += ngen * pv->lfo2_env.delta;
-					}
-					else pv->lfo2_env.frames = 0;
-					if (pv->lfo2_env.frames == 0)
-						m_lfo2.env.next(&pv->lfo2_env);
-				}
+				if (pv->dcf1_env.running && pv->dcf1_env.frames == 0)
+					m_dcf1.env.next(&pv->dcf1_env);
+				if (pv->dcf2_env.running && pv->dcf2_env.frames == 0)
+					m_dcf2.env.next(&pv->dcf2_env);
+				if (pv->lfo1_env.running && pv->lfo1_env.frames == 0)
+					m_lfo1.env.next(&pv->lfo1_env);
+				if (pv->lfo2_env.running && pv->lfo2_env.frames == 0)
+					m_lfo2.env.next(&pv->lfo2_env);
 			}
 		}
 

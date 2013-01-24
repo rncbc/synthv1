@@ -5,6 +5,9 @@ ChangeLog
 
 SVN TRUNK
 
+- Envelope generators stage curves now gone a little more old-
+  schooler and analog-like, hopefully improving on the punchy
+  and click-less sound front. (EXPERIMENTAL)
 - Improved filters parameter sensitivity (cutoff, reso).
 - Experimental LV2 Time designated port support (Delay BPM).
 - Preparations for Qt5 migration. (TESTING)
