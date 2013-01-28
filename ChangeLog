@@ -5,7 +5,6 @@ ChangeLog
 
 SVN TRUNK
 
-- Moog-like 24dB/oct resonant filter slight modification.
 - Envelope generators stage curves now gone a little more old-
   schooler and analog-like, hopefully improving on the punchy
   and click-less sound front. (EXPERIMENTAL)
