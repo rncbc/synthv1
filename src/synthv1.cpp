@@ -75,20 +75,25 @@ inline float synthv1_sigmoid ( const float x )
 	return synthv1_tanhf(2.0f * x);
 }
 
-inline float synthv1_sigmoid_0 ( const float x )
+inline float synthv1_sigmoid_0 ( const float x, const float t0 )
 {
-	if (x > +0.9f)
-		return +0.9f + 0.1f * synthv1_tanhf(+10.0f * (x - 0.9f));
+	const float t1 = 1.0f - t0;
+#if 0
+	if (x > +t1)
+		return +t1 + t0 * synthv1_tanhf(+(x - t1) / t0);
 	else
-	if (x < -0.9f)
-		return -0.9f - 0.1f * synthv1_tanhf(-10.0f * (x + 0.9f));
+	if (x < -t1)
+		return -t1 - t0 * synthv1_tanhf(-(x + t1) / t0);
 	else
 		return x;
+#else
+	return (x < -1.0f ? -t1 : (x > +1.0f ? t1 : t1 * x * (1.5f - 0.5f * x * x)));
+#endif
 }
 
-inline float synthv1_sigmoid_1 ( const float x )
+inline float synthv1_sigmoid_1 ( const float x, const float t0 = 0.001f )
 {
-	return 0.5f * (1.0f + synthv1_sigmoid_0(2.0f * x - 1.0f));
+	return 0.5f * (1.0f + synthv1_sigmoid_0(2.0f * x - 1.0f, t0));
 }
 
 
