@@ -10,6 +10,6 @@ Package: synthv1
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: an old-school polyphonic synthesizer
-  an old-school 4-oscillator subtractive polyphonic synthesizer
+  An old-school 4-oscillator subtractive polyphonic synthesizer
   with stereo fx.
 

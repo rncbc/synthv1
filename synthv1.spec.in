@@ -1,10 +1,10 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 7
+%define release 8
 
 %define _prefix	@ac_prefix@
 
-Summary:	an old-school polyphonic synthesizer
+Summary:	An old-school polyphonic synthesizer
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
@@ -22,7 +22,7 @@ BuildRequires:	alsa-devel
 BuildRequires:	lv2-devel
 
 %description
-  an old-school all-digital 4-oscillator subtractive polyphonic
+  An old-school all-digital 4-oscillator subtractive polyphonic
   synthesizer with stereo fx.
 
 %prep
@@ -56,17 +56,19 @@ BuildRequires:	lv2-devel
 %{_bindir}/%{name}_jack
 
 %changelog
-* Fri Dec 21 2012 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.3.0-7
+* Fri Feb  8 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.1-8
+- One second bug-fix release.
+* Fri Dec 21 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.3.0-7
 - Third coming release.
-* Thu Nov 22 2012 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.2.0-6
+* Thu Nov 22 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.2.0-6
 - Second public release.
-* Mon Sep 24 2012 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.1.1-5
+* Mon Sep 24 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.1.1-5
 - One first bug-fix release.
-* Mon Sep 10 2012 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.1.0-4
+* Mon Sep 10 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.1.0-4
 - First true official release.
-* Mon Aug 27 2012 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.0.9-3
+* Mon Aug 27 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.0.9-3
 - Post-vacation relax: improved polyphony, preset salvage.
-* Sun Jul 15 2012 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.0.8-2
+* Sun Jul 15 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.0.8-2
 - Proto-Icon, Desktop file and Help About menus added.
-* Sun Jul  8 2012 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.0.7-1
+* Sun Jul  8 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.0.7-1
 - Created initial synthv1.spec
