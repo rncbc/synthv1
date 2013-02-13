@@ -165,6 +165,25 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 {
 	Q_INIT_RESOURCE(synthv1);
 
+#if QT_VERSION >= 0x050000
+	// HACK: Dark themes grayed/disabled color group fix...
+	QPalette pal;
+	if (pal.base().color().value() < 0x7f) {
+		const QColor& color = pal.window().color();
+		const int iGroups = int(QPalette::Active | QPalette::Inactive) + 1;
+		for (int i = 0; i < iGroups; ++i) {
+			const QPalette::ColorGroup group = QPalette::ColorGroup(i);
+			pal.setBrush(group, QPalette::Light,    color.lighter(150));
+			pal.setBrush(group, QPalette::Midlight, color.lighter(120));
+			pal.setBrush(group, QPalette::Dark,     color.darker(150));
+			pal.setBrush(group, QPalette::Mid,      color.darker(120));
+			pal.setBrush(group, QPalette::Shadow,   color.darker(200));
+		}
+		pal.setColor(QPalette::Disabled, QPalette::ButtonText, pal.mid().color());
+		QWidget::setPalette(pal);
+	}
+#endif
+
 	m_ui.setupUi(this);
 
 	// Init swapable params A/B to default.
