@@ -251,6 +251,7 @@ struct synthv1_ctl
 		modwheel = 0.0f;
 		panning = 0.0f;
 		volume = 1.0f;
+		sustain = false;
 	}
 
 	float pressure;
@@ -258,6 +259,7 @@ struct synthv1_ctl
 	float modwheel;
 	float panning;
 	float volume;
+	bool  sustain;
 };
 
 
@@ -713,6 +715,7 @@ protected:
 	void allSoundOff();
 	void allControllersOff();
 	void allNotesOff();
+	void allSustainOff();
 
 	synthv1_voice *alloc_voice ()
 	{
@@ -1210,7 +1213,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 	// note on
 	if (status == 0x90 && value > 0) {
 		synthv1_voice *pv = m_notes[key];
-		if (pv) {
+		if (pv && !m_ctl.sustain) {
 			// retrigger fast release
 			m_dcf1.env.note_off_fast(&pv->dcf1_env);
 			m_dcf2.env.note_off_fast(&pv->dcf2_env);
@@ -1291,17 +1294,19 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 	}
 	// note off
 	else if (status == 0x80 || (status == 0x90 && value == 0)) {
-		synthv1_voice *pv = m_notes[key];
-		if (pv && pv->note >= 0) {
-			if (pv->dca1_env.stage != synthv1_env::Release) {
-				m_dca1.env.note_off(&pv->dca1_env);
-				m_dcf1.env.note_off(&pv->dcf1_env);
-				m_lfo1.env.note_off(&pv->lfo1_env);
-			}
-			if (pv->dca2_env.stage != synthv1_env::Release) {
-				m_dca2.env.note_off(&pv->dca2_env);
-				m_dcf2.env.note_off(&pv->dcf2_env);
-				m_lfo2.env.note_off(&pv->lfo2_env);
+		if (!m_ctl.sustain) {
+			synthv1_voice *pv = m_notes[key];
+			if (pv && pv->note >= 0) {
+				if (pv->dca1_env.stage != synthv1_env::Release) {
+					m_dca1.env.note_off(&pv->dca1_env);
+					m_dcf1.env.note_off(&pv->dcf1_env);
+					m_lfo1.env.note_off(&pv->lfo1_env);
+				}
+				if (pv->dca2_env.stage != synthv1_env::Release) {
+					m_dca2.env.note_off(&pv->dca2_env);
+					m_dcf2.env.note_off(&pv->dcf2_env);
+					m_lfo2.env.note_off(&pv->lfo2_env);
+				}
 			}
 		}
 	}
@@ -1319,6 +1324,12 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 		case 0x0a:
 			// channel panning (cc#10)
 			m_ctl.panning = float(value - 64) / 64.0f;
+			break;
+		case 0x40:
+			// sustain/damper pedal (cc#64)
+			if (m_ctl.sustain && value <  64)
+				allSustainOff();
+			m_ctl.sustain = bool(value >= 64);
 			break;
 		case 0x78:
 			// all sound off (cc#120)
@@ -1387,6 +1398,29 @@ void synthv1_impl::allNotesOff (void)
 
 	m_aux1.reset();
 	m_aux2.reset();
+}
+
+
+// all sustained notes off
+
+void synthv1_impl::allSustainOff (void)
+{
+	synthv1_voice *pv = m_play_list.next();
+	while (pv) {
+		if (pv->note >= 0) {
+			if (pv->dca1_env.stage != synthv1_env::Release) {
+				m_dca1.env.note_off(&pv->dca1_env);
+				m_dcf1.env.note_off(&pv->dcf1_env);
+				m_lfo1.env.note_off(&pv->lfo1_env);
+			}
+			if (pv->dca2_env.stage != synthv1_env::Release) {
+				m_dca2.env.note_off(&pv->dca2_env);
+				m_dcf2.env.note_off(&pv->dcf2_env);
+				m_lfo2.env.note_off(&pv->lfo2_env);
+			}
+		}
+		pv = pv->next();
+	}
 }
 
 

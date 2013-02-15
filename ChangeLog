@@ -5,6 +5,7 @@ ChangeLog
 
 SVN TRUNK
 
+- Sustain/damper pedal switch (MIDI CC#64) support added.
 - Color palette hack on Qt5 dark themes. (TESTING)
 
 
