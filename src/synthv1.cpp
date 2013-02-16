@@ -673,6 +673,8 @@ struct synthv1_voice : public synthv1_list<synthv1_voice>
 
 	synthv1_glide dco1_glide1, dco1_glide2;	// glides (portamento)
 	synthv1_glide dco2_glide1, dco2_glide2;
+
+	bool sustain;
 };
 
 
@@ -1288,15 +1290,19 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 			frames = uint32_t(*m_dco2.glide * *m_dco2.glide * srate);
 			pv->dco2_glide1.reset(frames, pv->dco2_freq1);
 			pv->dco2_glide2.reset(frames, pv->dco2_freq2);
+			// sustain
+			pv->sustain = false;
 			// allocated
 			m_notes[key] = pv;
 		}
 	}
 	// note off
 	else if (status == 0x80 || (status == 0x90 && value == 0)) {
-		if (!m_ctl.sustain) {
-			synthv1_voice *pv = m_notes[key];
-			if (pv && pv->note >= 0) {
+		synthv1_voice *pv = m_notes[key];
+		if (pv && pv->note >= 0) {
+			if (m_ctl.sustain) {
+				pv->sustain = true;
+			} else {
 				if (pv->dca1_env.stage != synthv1_env::Release) {
 					m_dca1.env.note_off(&pv->dca1_env);
 					m_dcf1.env.note_off(&pv->dcf1_env);
@@ -1407,7 +1413,8 @@ void synthv1_impl::allSustainOff (void)
 {
 	synthv1_voice *pv = m_play_list.next();
 	while (pv) {
-		if (pv->note >= 0) {
+		if (pv->note >= 0 && pv->sustain) {
+			pv->sustain = false;
 			if (pv->dca1_env.stage != synthv1_env::Release) {
 				m_dca1.env.note_off(&pv->dca1_env);
 				m_dcf1.env.note_off(&pv->dcf1_env);
