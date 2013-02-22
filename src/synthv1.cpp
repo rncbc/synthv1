@@ -54,6 +54,7 @@ const float PHASE_SCALE   = 0.5f;
 const float OCTAVE_SCALE  = 12.0f;
 const float TUNING_SCALE  = 1.0f;
 const float SWEEP_SCALE   = 0.5f;
+const float PITCH_SCALE   = 0.5f;
 
 const float LFO_FREQ_MIN  = 0.4f;
 const float LFO_FREQ_MAX  = 40.0f;
@@ -102,6 +103,15 @@ inline float synthv1_sigmoid_1 ( const float x, const float t0 = 0.01f )
 inline float synthv1_velocity ( const float x, const float p = 0.2f )
 {
 	return ::powf(x, (1.0f - p));
+}
+
+
+// simplest power-of-2 straight linearization
+// -- x argument valid in [-1, 1] interval
+inline float synthv1_pitchbend ( const float x )
+{
+//	return ::powf(2.0f, x);
+	return 1.0f + (x < 0.0f ? 0.5f : 1.0f) * x;
 }
 
 
@@ -247,16 +257,16 @@ struct synthv1_ctl
 	void reset()
 	{
 		pressure = 0.0f;
-		pitchbend = 0.0f;
-		modwheel = 0.0f;
+		pitchbend1 = pitchbend2 = 1.0f;
+		modwheel1 = modwheel2 = 0.0f;
 		panning = 0.0f;
 		volume = 1.0f;
 		sustain = false;
 	}
 
 	float pressure;
-	float pitchbend;
-	float modwheel;
+	float pitchbend1, pitchbend2;
+	float modwheel1, modwheel2;
 	float panning;
 	float volume;
 	bool  sustain;
@@ -1319,10 +1329,13 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 	// control change
 	else if (status == 0xb0) {
 		switch (key) {
-		case 0x01:
+		case 0x01: {
 			// modulation wheel (cc#1)
-			m_ctl.modwheel = float(value) / 127.0f;
+			const float modwheel = float(value) / 127.0f;
+			m_ctl.modwheel1 = *m_def1.modwheel * modwheel;
+			m_ctl.modwheel2 = *m_def2.modwheel * modwheel;
 			break;
+		}
 		case 0x07:
 			// channel volume (cc#7)
 			m_ctl.volume = float(value) / 127.0f;
@@ -1353,7 +1366,9 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 	}
 	// pitch bend
 	else if (status == 0xe0) {
-		m_ctl.pitchbend = float(key + (value << 7) - 0x2000) / 8192.0f;
+		const float pitchbend = float(key + (value << 7) - 0x2000) / 8192.0f;
+		m_ctl.pitchbend1 = synthv1_pitchbend(*m_def1.pitchbend * pitchbend);
+		m_ctl.pitchbend2 = synthv1_pitchbend(*m_def2.pitchbend * pitchbend);
 	}
 }
 
@@ -1488,16 +1503,12 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 
 	// controls
 
-	const float lfo1_rate  = *m_lfo1.rate * *m_lfo1.rate;
-	const float lfo2_rate  = *m_lfo2.rate * *m_lfo2.rate;
-	const float lfo1_freq  = LFO_FREQ_MIN + lfo1_rate * (LFO_FREQ_MAX - LFO_FREQ_MIN);
-	const float lfo2_freq  = LFO_FREQ_MIN + lfo2_rate * (LFO_FREQ_MAX - LFO_FREQ_MIN);
-	const float lfo1_pitch = *m_lfo1.pitch * *m_lfo1.pitch;
-	const float lfo2_pitch = *m_lfo2.pitch * *m_lfo2.pitch;
-	const float modwheel1  = *m_def1.modwheel * (lfo1_pitch + m_ctl.modwheel);
-	const float modwheel2  = *m_def2.modwheel * (lfo2_pitch + m_ctl.modwheel);
-	const float pitchbend1 = (1.0f + *m_def1.pitchbend * m_ctl.pitchbend);
-	const float pitchbend2 = (1.0f + *m_def2.pitchbend * m_ctl.pitchbend);
+	const float lfo1_rate = *m_lfo1.rate * *m_lfo1.rate;
+	const float lfo2_rate = *m_lfo2.rate * *m_lfo2.rate;
+	const float lfo1_freq = LFO_FREQ_MIN + lfo1_rate * (LFO_FREQ_MAX - LFO_FREQ_MIN);
+	const float lfo2_freq = LFO_FREQ_MIN + lfo2_rate * (LFO_FREQ_MAX - LFO_FREQ_MIN);
+	const float modwheel1 = m_ctl.modwheel1 + PITCH_SCALE * *m_lfo1.pitch;
+	const float modwheel2 = m_ctl.modwheel2 + PITCH_SCALE * *m_lfo2.pitch;
 
 	if (int(*m_dco1.shape1) != int(dco1_wave1.shape()) || *m_dco1.width1 != dco1_wave1.width())
 		dco1_wave1.reset(synthv1_wave::Shape(*m_dco1.shape1), *m_dco1.width1);
@@ -1585,17 +1596,17 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				float dco22 = pv->dco2_sample2 * pv->dco2_bal.value(j, 1);
 
 				pv->dco1_sample1 = pv->dco1_osc1.sample(pv->dco1_freq1
-					* (pitchbend1 + modwheel1 * lfo1)
+					* (m_ctl.pitchbend1 + modwheel1 * lfo1)
 					+ pv->dco1_glide1.tick());
 				pv->dco1_sample2 = pv->dco1_osc2.sample(pv->dco1_freq2
-					* (pitchbend1 + modwheel1 * lfo1)
+					* (m_ctl.pitchbend1 + modwheel1 * lfo1)
 					+ pv->dco1_glide2.tick());
 
 				pv->dco2_sample1 = pv->dco2_osc1.sample(pv->dco2_freq1
-					* (pitchbend2 + modwheel2 * lfo2)
+					* (m_ctl.pitchbend2 + modwheel2 * lfo2)
 					+ pv->dco2_glide1.tick());
 				pv->dco2_sample2 = pv->dco2_osc2.sample(pv->dco2_freq2
-					* (pitchbend2 + modwheel2 * lfo2)
+					* (m_ctl.pitchbend2 + modwheel2 * lfo2)
 					+ pv->dco2_glide2.tick());
 
 				pv->lfo1_sample = pv->lfo1_osc.sample(lfo1_freq
