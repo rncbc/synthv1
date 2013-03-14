@@ -1,7 +1,7 @@
 // synthv1_jack.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -213,14 +213,14 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 
 void synthv1_jack::open (void)
 {
+	// init param ports
+	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i)
+		synthv1::setParamPort(synthv1::ParamIndex(i), &m_params[i]);
+
 	// open client
 	m_client = ::jack_client_open("synthv1", JackNullOption, NULL);
 	if (m_client == NULL)
 		return;
-
-	// init param ports
-	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i)
-		synthv1::setParamPort(synthv1::ParamIndex(i), &m_params[i]);
 
 	// set sample rate
 	synthv1::setSampleRate(jack_get_sample_rate(m_client));
