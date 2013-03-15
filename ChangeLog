@@ -5,6 +5,7 @@ ChangeLog
 
 SVN TRUNK
 
+- Moog-like 24dB/oct resonant filter slight modification.
 - Fixed JACK client fail/fake initialization.
 
 
