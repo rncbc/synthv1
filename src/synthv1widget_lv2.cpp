@@ -24,6 +24,11 @@
 #include "synthv1_lv2.h"
 
 
+#ifdef CONFIG_LV2_EXTERNAL_UI
+#include <QCloseEvent>
+#endif
+
+
 //-------------------------------------------------------------------------
 // synthv1widget_lv2 - impl.
 //
@@ -35,8 +40,41 @@ synthv1widget_lv2::synthv1widget_lv2 (
 	m_controller = controller;
 	m_write_function = write_function;
 
+#ifdef CONFIG_LV2_EXTERNAL_UI
+	m_external_host = NULL;
+#endif
+	
 	clearPreset();
 }
+
+
+#ifdef CONFIG_LV2_EXTERNAL_UI
+
+void synthv1widget_lv2::setExternalHost ( LV2_External_UI_Host *external_host )
+{
+	m_external_host = external_host;
+
+	if (m_external_host && m_external_host->plugin_human_id)
+		synthv1widget::setWindowTitle(m_external_host->plugin_human_id);
+}
+
+const LV2_External_UI_Host *synthv1widget_lv2::externalHost (void) const
+{
+	return m_external_host;
+}
+
+void synthv1widget_lv2::closeEvent ( QCloseEvent *pCloseEvent )
+{
+	synthv1widget::closeEvent(pCloseEvent);
+
+	if (m_external_host && m_external_host->ui_closed) {
+		if (pCloseEvent->isAccepted())
+			m_external_host->ui_closed(m_controller);
+	}
+}
+
+#endif	// CONFIG_LV2_EXTERNAL_UI
+
 
 
 void synthv1widget_lv2::port_event ( uint32_t port_index,

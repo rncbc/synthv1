@@ -19,7 +19,8 @@
 	] ;
 	lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
 	lv2:optionalFeature lv2:hardRTCapable ;
-	lv2ui:ui <http://synthv1.sourceforge.net/lv2#ui> ;
+	lv2ui:ui <http://synthv1.sourceforge.net/lv2#ui> ,
+			 <http://synthv1.sourceforge.net/lv2#ui_external> ;
 	lv2:port [
 		a lv2:InputPort, lv2atom:AtomPort ;
 		lv2atom:bufferType lv2atom:Sequence ;
@@ -975,5 +976,9 @@
 
 <http://synthv1.sourceforge.net/lv2#ui>
 	a lv2ui:Qt4UI ;
+	lv2ui:binary <synthv1.so> .
+
+<http://synthv1.sourceforge.net/lv2#ui_external>
+	a <http://lv2plug.in/ns/extensions/ui#external> ;
 	lv2ui:binary <synthv1.so> .
 

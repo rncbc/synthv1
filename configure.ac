@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(synthv1, 0.3.2.3, rncbc@rncbc.org)
+AC_INIT(synthv1, 0.3.2.4, rncbc@rncbc.org)
 
 AC_CONFIG_SRCDIR(src/synthv1.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -48,6 +48,11 @@ AC_ARG_ENABLE(lv2,
   [ac_lv2="$enableval"],
   [ac_lv2="yes"])
 
+AC_ARG_ENABLE(lv2-external-ui,
+  AC_HELP_STRING([--enable-lv2-external-ui], [enable LV2 plug-in External UI support (default=yes)]),
+  [ac_lv2_external_ui="$enableval"],
+  [ac_lv2_external_ui="yes"])
+
 
 if test "x$ac_debug" = "xyes"; then
    AC_DEFINE(CONFIG_DEBUG, 1, [Define if debugging is enabled.])
@@ -90,6 +95,12 @@ AC_ARG_WITH(jack,
 AC_ARG_WITH(lv2,
   AC_HELP_STRING([--with-lv2=PATH], [use alternate LV2 install path]),
   [ac_with_paths="$ac_with_paths $withval"])
+
+
+# Check for LV2 support.
+if test "x$ac_lv2" = "xno"; then
+   ac_lv2_external_ui="no"
+fi
 
 
 # Checks for programs.
@@ -286,6 +297,18 @@ if test "x$ac_lv2" = "xyes"; then
    fi
 fi
 
+if test "x$ac_lv2_external_ui" = "xyes"; then
+   CFLAGS="$CFLAGS -Isrc/lv2"
+   CPPFLAGS="$CPPFLAGS -Isrc/lv2"
+   AC_CHECK_HEADER(lv2_external_ui.h, [ac_lv2_external_ui="yes"], [ac_lv2_external_ui="no"])
+   if test "x$ac_lv2_external_ui" = "xyes"; then
+      AC_DEFINE(CONFIG_LV2_EXTERNAL_UI, 1, [Define if LV2 External UI extension is available.])
+      ac_incpath="lv2 $ac_incpath"
+   else
+      AC_MSG_WARN([*** LV2 External UI extension will be disabled.])
+   fi
+fi
+
 AC_SUBST(ac_incpath)
 
 
@@ -321,6 +344,7 @@ echo "  JACK session support . . . . . . . . . . . . . . .: $ac_jack_session"
 echo "  JACK MIDI support  . . . . . . . . . . . . . . . .: $ac_jack_midi"
 echo "  ALSA MIDI support  . . . . . . . . . . . . . . . .: $ac_alsa_midi"
 echo "  LV2 plugin-in build  . . . . . . . . . . . . . . .: $ac_lv2"
+echo "  LV2 plug-in External UI support  . . . . . . . . .: $ac_lv2_external_ui"
 echo
 echo "  Install prefix . . . . . . . . . . . . . . . . . .: $ac_prefix"
 echo
