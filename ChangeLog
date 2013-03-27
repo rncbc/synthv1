@@ -5,7 +5,7 @@ ChangeLog
 
 SVN TRUNK
 
-- First attempt for LV2 External UI support. (EXPERIMENTAL)
+- Introducing LV2 External UI rougue support. (EXPERIMENTAL)
 - Moog-like 24dB/oct resonant filter slight modification.
 - Fixed JACK client fail/fake initialization.
 
