@@ -1,4 +1,4 @@
-// synthv1widget_config.h
+// synthv1_config.h
 //
 /****************************************************************************
    Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
@@ -19,49 +19,20 @@
 
 *****************************************************************************/
 
-#ifndef __synthv1widget_config_h
-#define __synthv1widget_config_h
+#ifndef __synthv1_config_h
+#define __synthv1_config_h
 
-#include "synthv1_config.h"
+#include "config.h"
 
-#include <QSettings>
-#include <QStringList>
+#define SYNTHV1_TITLE	PACKAGE_NAME
+#define SYNTHV1_VERSION	PACKAGE_VERSION
 
+#define SYNTHV1_SUBTITLE     "an old-school polyphonic synthesizer."
+#define SYNTHV1_WEBSITE      "http://synthv1.sourceforge.net"
+#define SYNTHV1_COPYRIGHT    "Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved."
 
-//-------------------------------------------------------------------------
-// synthv1widget_config - Prototype settings class (singleton).
-//
+#define SYNTHV1_DOMAIN	"rncbc.org"
 
-class synthv1widget_config : public QSettings
-{
-public:
+#endif	// __synthv1_config_h
 
-	// Constructor.
-	synthv1widget_config();
-
-	// Default destructor.
-	~synthv1widget_config();
-
-	// Default options...
-	QString sPreset;
-	QString sPresetDir;
-
-	// Singleton instance accessor.
-	static synthv1widget_config *getInstance();
-
-protected:
-
-	// Explicit I/O methods.
-	void load();
-	void save();
-
-private:
-
-	// The singleton instance.
-	static synthv1widget_config *g_pSettings;
-};
-
-
-#endif	// __synthv1widget_config_h
-
-// end of synthv1widget_config.h
+// end of synthv1_config.h

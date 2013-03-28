@@ -25,6 +25,7 @@
 
 
 #ifdef CONFIG_LV2_EXTERNAL_UI
+#include <QApplication>
 #include <QCloseEvent>
 #endif
 
@@ -99,6 +100,181 @@ void synthv1widget_lv2::updateParam (
 {
 	m_write_function(m_controller,
 		synthv1_lv2::ParamBase + index, sizeof(float), 0, &fValue);
+}
+
+
+//-------------------------------------------------------------------------
+// synthv1widget_lv2 - LV2 UI desc.
+//
+
+static LV2UI_Handle synthv1_lv2ui_instantiate (
+	const LV2UI_Descriptor *, const char *, const char *,
+	LV2UI_Write_Function write_function,
+	LV2UI_Controller controller, LV2UI_Widget *widget,
+	const LV2_Feature *const * )
+{
+	synthv1widget_lv2 *pWidget = new synthv1widget_lv2(controller, write_function);
+	*widget = pWidget;
+	return pWidget;
+}
+
+static void synthv1_lv2ui_cleanup ( LV2UI_Handle ui )
+{
+	synthv1widget_lv2 *pWidget = static_cast<synthv1widget_lv2 *> (ui);
+	if (pWidget)
+		delete pWidget;
+}
+
+static void synthv1_lv2ui_port_event (
+	LV2UI_Handle ui, uint32_t port_index,
+	uint32_t buffer_size, uint32_t format, const void *buffer )
+{
+	synthv1widget_lv2 *pWidget = static_cast<synthv1widget_lv2 *> (ui);
+	if (pWidget)
+		pWidget->port_event(port_index, buffer_size, format, buffer);
+}
+
+static const void *synthv1_lv2ui_extension_data ( const char * )
+{
+	return NULL;
+}
+
+
+#ifdef CONFIG_LV2_EXTERNAL_UI
+
+struct synthv1_lv2ui_external_widget
+{
+	LV2_External_UI_Widget external;
+	static QApplication   *app_instance;
+	static unsigned int    app_refcount;
+	synthv1widget_lv2     *widget;
+};
+
+QApplication *synthv1_lv2ui_external_widget::app_instance = NULL;
+unsigned int  synthv1_lv2ui_external_widget::app_refcount = 0;
+
+
+static void synthv1_lv2ui_external_run ( LV2_External_UI_Widget *ui_external )
+{
+	synthv1_lv2ui_external_widget *pExtWidget
+		= (synthv1_lv2ui_external_widget *) (ui_external);
+	if (pExtWidget && pExtWidget->app_instance)
+		pExtWidget->app_instance->processEvents();
+}
+
+static void synthv1_lv2ui_external_show ( LV2_External_UI_Widget *ui_external )
+{
+	synthv1_lv2ui_external_widget *pExtWidget
+		= (synthv1_lv2ui_external_widget *) (ui_external);
+	if (pExtWidget && pExtWidget->widget)
+		pExtWidget->widget->show();
+}
+
+static void synthv1_lv2ui_external_hide ( LV2_External_UI_Widget *ui_external )
+{
+	synthv1_lv2ui_external_widget *pExtWidget
+		= (synthv1_lv2ui_external_widget *) (ui_external);
+	if (pExtWidget && pExtWidget->widget)
+		pExtWidget->widget->hide();
+}
+
+static LV2UI_Handle synthv1_lv2ui_external_instantiate (
+	const LV2UI_Descriptor *, const char *, const char *,
+	LV2UI_Write_Function write_function,
+	LV2UI_Controller controller, LV2UI_Widget *widget,
+	const LV2_Feature *const *ui_features )
+{
+	LV2_External_UI_Host *external_host = NULL;
+	for (int i = 0; ui_features[i] && !external_host; ++i) {
+		if (::strcmp(ui_features[i]->URI, LV2_EXTERNAL_UI__Host) == 0 ||
+			::strcmp(ui_features[i]->URI, LV2_EXTERNAL_UI_DEPRECATED_URI) == 0) {
+			external_host = (LV2_External_UI_Host *) ui_features[i]->data;
+		}
+	}
+
+	synthv1_lv2ui_external_widget *pExtWidget = new synthv1_lv2ui_external_widget;
+	if (qApp == NULL && pExtWidget->app_instance == NULL) {
+		static int s_argc = 1;
+		static const char *s_argv[] = { __func__, NULL };
+		pExtWidget->app_instance = new QApplication(s_argc, (char **) s_argv);
+	}
+	pExtWidget->app_refcount++;
+
+	pExtWidget->external.run  = synthv1_lv2ui_external_run;
+	pExtWidget->external.show = synthv1_lv2ui_external_show;
+	pExtWidget->external.hide = synthv1_lv2ui_external_hide;
+	pExtWidget->widget = new synthv1widget_lv2(controller, write_function);
+	if (external_host)
+		pExtWidget->widget->setExternalHost(external_host);
+	*widget = pExtWidget;
+	return pExtWidget;
+}
+
+static void synthv1_lv2ui_external_cleanup ( LV2UI_Handle ui )
+{
+	synthv1_lv2ui_external_widget *pExtWidget
+		= static_cast<synthv1_lv2ui_external_widget *> (ui);
+	if (pExtWidget) {
+		if (pExtWidget->widget)
+			delete pExtWidget->widget;
+		if (--pExtWidget->app_refcount == 0 && pExtWidget->app_instance) {
+			delete pExtWidget->app_instance;
+			pExtWidget->app_instance = NULL;
+		}
+		delete pExtWidget;
+	}
+}
+
+static void synthv1_lv2ui_external_port_event (
+	LV2UI_Handle ui, uint32_t port_index,
+	uint32_t buffer_size, uint32_t format, const void *buffer )
+{
+	synthv1_lv2ui_external_widget *pExtWidget
+		= static_cast<synthv1_lv2ui_external_widget *> (ui);
+	if (pExtWidget && pExtWidget->widget)
+		pExtWidget->widget->port_event(port_index, buffer_size, format, buffer);
+}
+
+static const void *synthv1_lv2ui_external_extension_data ( const char * )
+{
+	return NULL;
+}
+
+#endif	// CONFIG_LV2_EXTERNAL_UI
+
+
+static const LV2UI_Descriptor synthv1_lv2ui_descriptor =
+{
+	SYNTHV1_LV2UI_URI,
+	synthv1_lv2ui_instantiate,
+	synthv1_lv2ui_cleanup,
+	synthv1_lv2ui_port_event,
+	synthv1_lv2ui_extension_data
+};
+
+#ifdef CONFIG_LV2_EXTERNAL_UI
+static const LV2UI_Descriptor synthv1_lv2ui_external_descriptor =
+{
+	SYNTHV1_LV2UI_EXTERNAL_URI,
+	synthv1_lv2ui_external_instantiate,
+	synthv1_lv2ui_external_cleanup,
+	synthv1_lv2ui_external_port_event,
+	synthv1_lv2ui_external_extension_data
+};
+#endif	// CONFIG_LV2_EXTERNAL_UI
+
+
+LV2_SYMBOL_EXPORT const LV2UI_Descriptor *lv2ui_descriptor ( uint32_t index )
+{
+	if (index == 0)
+		return &synthv1_lv2ui_descriptor;
+	else
+#ifdef CONFIG_LV2_EXTERNAL_UI
+	if (index == 1)
+		return &synthv1_lv2ui_external_descriptor;
+	else
+#endif
+	return NULL;
 }
 
 

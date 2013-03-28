@@ -10,6 +10,7 @@ include(src.pri)
 HEADERS = \
 	config.h \
 	synthv1.h \
+	synthv1_config.h \
 	synthv1_jack.h \
 	synthv1_wave.h \
 	synthv1_ramp.h \
