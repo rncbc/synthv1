@@ -343,7 +343,7 @@ echo "  JACK stand-alone build . . . . . . . . . . . . . .: $ac_jack"
 echo "  JACK session support . . . . . . . . . . . . . . .: $ac_jack_session"
 echo "  JACK MIDI support  . . . . . . . . . . . . . . . .: $ac_jack_midi"
 echo "  ALSA MIDI support  . . . . . . . . . . . . . . . .: $ac_alsa_midi"
-echo "  LV2 plugin-in build  . . . . . . . . . . . . . . .: $ac_lv2"
+echo "  LV2 plug-in build  . . . . . . . . . . . . . . . .: $ac_lv2"
 echo "  LV2 plug-in External UI support  . . . . . . . . .: $ac_lv2_external_ui"
 echo
 echo "  Install prefix . . . . . . . . . . . . . . . . . .: $ac_prefix"
