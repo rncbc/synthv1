@@ -1,7 +1,7 @@
 // synthv1widget_preset.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -90,7 +90,10 @@ synthv1widget_preset::synthv1widget_preset ( QWidget *pParent )
 		SLOT(openPreset()));
 	QObject::connect(m_pComboBox,
 		SIGNAL(editTextChanged(const QString&)),
-		SLOT(changePreset(const QString&)));
+		SLOT(stabilizePreset()));
+	QObject::connect(m_pComboBox,
+		SIGNAL(activated(const QString&)),
+		SLOT(activatePreset(const QString&)));
 	QObject::connect(m_pSaveButton,
 		SIGNAL(clicked()),
 		SLOT(savePreset()));
@@ -187,17 +190,10 @@ bool synthv1widget_preset::queryPreset (void)
 
 
 // Preset management slots...
-void synthv1widget_preset::changePreset ( const QString& sPreset )
+void synthv1widget_preset::activatePreset ( const QString& sPreset )
 {
-	bool bLoadPreset = (!sPreset.isEmpty()
-		&& m_pComboBox->findText(sPreset) >= 0);
-	if (bLoadPreset && !queryPreset())
-		return;
-
-	if (bLoadPreset)
+	if (!sPreset.isEmpty() && !queryPreset())
 		loadPreset(sPreset);
-	else
-		stabilizePreset();
 }
 
 

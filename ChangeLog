@@ -5,6 +5,9 @@ ChangeLog
 
 SVN TRUNK
 
+- A slight GUI behavior change: (re)writing existing names
+  doesn't load the respective preset anymore (after ticket
+  by Jiri Prochazka aka. Anchakor, thanks).
 - Introducing LV2 External UI rougue support. (EXPERIMENTAL)
 - Moog-like 24dB/oct resonant filter slight modification.
 - Fixed JACK client fail/fake initialization.
