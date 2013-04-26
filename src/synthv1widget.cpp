@@ -797,6 +797,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 
 	m_ui.StatusBar->showMessage(tr("Ready"), 5000);
 	m_ui.StatusBar->setModified(false);
+	m_ui.Preset->setDirtyPreset(false);
 }
 
 
@@ -850,9 +851,8 @@ void synthv1widget::paramChanged ( float fValue )
 			.arg(pKnob->toolTip())
 			.arg(pKnob->valueText()), 5000);
 		m_ui.StatusBar->setModified(true);
+		m_ui.Preset->setDirtyPreset(true);
 	}
-
-	m_ui.Preset->dirtyPreset();
 }
 
 
@@ -874,6 +874,7 @@ void synthv1widget::resetParams (void)
 
 	m_ui.StatusBar->showMessage(tr("Reset preset"), 5000);
 	m_ui.StatusBar->setModified(false);
+	m_ui.Preset->setDirtyPreset(false);
 }
 
 
@@ -900,11 +901,10 @@ void synthv1widget::swapParams ( bool bOn )
 		}
 	}
 
-	m_ui.Preset->dirtyPreset();
-
 	const bool bSwapA = m_ui.SwapParamsAButton->isChecked();
 	m_ui.StatusBar->showMessage(tr("Swap %1").arg(bSwapA ? 'A' : 'B'), 5000);
 	m_ui.StatusBar->setModified(true);
+	m_ui.Preset->setDirtyPreset(true);
 }
 
 
@@ -969,6 +969,7 @@ void synthv1widget::newPreset (void)
 
 	m_ui.StatusBar->showMessage(tr("New preset"), 5000);
 	m_ui.StatusBar->setModified(false);
+	m_ui.Preset->setDirtyPreset(false);
 }
 
 
@@ -1042,6 +1043,7 @@ void synthv1widget::loadPreset ( const QString& sFilename )
 
 	m_ui.StatusBar->showMessage(tr("Load preset: %1").arg(sPreset), 5000);
 	m_ui.StatusBar->setModified(false);
+	m_ui.Preset->setDirtyPreset(false);
 
 	QDir::setCurrent(currentDir.absolutePath());
 }
@@ -1079,6 +1081,7 @@ void synthv1widget::savePreset ( const QString& sFilename )
 
 	m_ui.StatusBar->showMessage(tr("Save preset: %1").arg(sPreset), 5000);
 	m_ui.StatusBar->setModified(false);
+	m_ui.Preset->setDirtyPreset(false);
 }
 
 

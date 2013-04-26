@@ -44,6 +44,9 @@ public:
 	void setPreset(const QString& sPreset);
 	QString preset() const;
 
+	void setDirtyPreset(bool bDirtyPreset);
+	bool isDirtyPreset() const;
+
 	void clearPreset();
 	bool queryPreset();
 
@@ -59,7 +62,6 @@ signals:
 public slots:
 
 	void initPreset();
-	void dirtyPreset();
 	void stabilizePreset();
 
 protected slots:
