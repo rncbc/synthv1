@@ -125,7 +125,28 @@ int synthv1_jack_process ( jack_nframes_t nframes, void *arg )
 
 synthv1_jack::synthv1_jack (void) : synthv1(2)
 {
-	open();
+	m_client = NULL;
+
+	m_audio_ins = NULL;
+	m_audio_outs = NULL;
+
+	m_ins = m_outs = NULL;
+
+	::memset(m_params, 0, NUM_PARAMS * sizeof(float));
+
+#ifdef CONFIG_JACK_MIDI
+	m_midi_in = NULL;
+#endif
+#ifdef CONFIG_ALSA_MIDI
+	m_alsa_seq     = NULL;
+//	m_alsa_client  = -1;
+	m_alsa_port    = -1;
+	m_alsa_decoder = NULL;
+	m_alsa_buffer  = NULL;
+	m_alsa_thread  = NULL;
+#endif
+
+//	open("synthv1");
 //	activate();
 }
 
@@ -133,7 +154,7 @@ synthv1_jack::synthv1_jack (void) : synthv1(2)
 synthv1_jack::~synthv1_jack (void)
 {
 //	deactivate();
-	close();
+//	close();
 }
 
 
@@ -211,14 +232,14 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 }
 
 
-void synthv1_jack::open (void)
+void synthv1_jack::open ( const char *client_id )
 {
 	// init param ports
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i)
 		synthv1::setParamPort(synthv1::ParamIndex(i), &m_params[i]);
 
 	// open client
-	m_client = ::jack_client_open("synthv1", JackNullOption, NULL);
+	m_client = ::jack_client_open(client_id, JackNullOption, NULL);
 	if (m_client == NULL)
 		return;
 

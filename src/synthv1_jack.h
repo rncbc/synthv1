@@ -49,10 +49,13 @@ public:
 
 	jack_client_t *client() const;
 
-	int process(jack_nframes_t nframes);
+	void open(const char *client_id);
+	void close();
 
 	void activate();
 	void deactivate();
+
+	int process(jack_nframes_t nframes);
 
 	void setParamValue(synthv1::ParamIndex index, float fValue);
 	float paramValue(synthv1::ParamIndex index) const;
@@ -61,11 +64,6 @@ public:
 	snd_seq_t *alsa_seq() const;
 	void alsa_capture(snd_seq_event_t *ev);
 #endif
-
-protected:
-
-	void open();
-	void close();
 
 private:
 
