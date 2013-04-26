@@ -5,6 +5,7 @@ ChangeLog
 
 SVN TRUNK
 
+- NSM support introduced to JACK client. (EXPERIMENTAL)
 - A slight GUI behavior change: (re)writing existing names
   doesn't load the respective preset anymore (after ticket
   by Jiri Prochazka aka. Anchakor, thanks).

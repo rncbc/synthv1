@@ -28,6 +28,10 @@
 // Forward decls.
 class synthv1_jack;
 
+#ifdef CONFIG_NSM
+class synthv1_nsm;
+#endif
+
 
 //-------------------------------------------------------------------------
 // synthv1widget_jack - decl.
@@ -62,6 +66,16 @@ protected slots:
 
 #endif	// CONFIG_JACK_SESSION
 
+#ifdef CONFIG_NSM
+
+protected slots:
+
+	// NSM callback slots.
+	void openSession();
+	void saveSession();
+	
+#endif	// CONFIG_NSM
+
 protected:
 
 	// Param methods.
@@ -74,6 +88,10 @@ private:
 
 	// Instance variables.
 	synthv1_jack *m_pSynth;
+
+#ifdef CONFIG_NSM
+	synthv1_nsm *m_nsm;
+#endif
 };
 
 

@@ -23,6 +23,10 @@
 
 #include "synthv1_jack.h"
 
+#ifdef CONFIG_NSM
+#include "synthv1_nsm.h"
+#endif
+
 #include <QApplication>
 #include <QFileInfo>
 #include <QDir>
@@ -57,8 +61,28 @@ static void synthv1widget_jack_session_event (
 // Constructor.
 synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 	: synthv1widget(), m_pSynth(pSynth)
+	#ifdef CONFIG_NSM
+		, m_nsm(NULL)
+	#endif
 {
-	m_pSynth->open("synthv1");
+#ifdef CONFIG_NSM
+	// Check whether to participate into a NSM session...
+	const QString& nsm_url
+		= QString::fromLatin1(::getenv("NSM_URL"));
+	if (!nsm_url.isEmpty()) {
+		m_nsm = new synthv1_nsm(nsm_url);
+		QObject::connect(m_nsm,
+			SIGNAL(open()),
+			SLOT(openSession()));
+		QObject::connect(m_nsm,
+			SIGNAL(save()),
+			SLOT(saveSession()));
+		m_nsm->announce(SYNTHV1_TITLE, ":switch:");
+		return;
+	}
+#endif	// CONFIG_NSM
+
+	m_pSynth->open(SYNTHV1_TITLE);
 
 #ifdef CONFIG_JACK_SESSION
 	// JACK session event callback...
@@ -133,6 +157,66 @@ void synthv1widget_jack::sessionEvent ( void *pvSessionArg )
 }
 
 #endif	// CONFIG_JACK_SESSION
+
+
+#ifdef CONFIG_NSM
+
+void synthv1widget_jack::openSession (void)
+{
+	if (m_nsm == NULL)
+		return;
+
+	if (!m_nsm->is_active())
+		return;
+
+#ifdef CONFIG_DEBUG
+	qDebug("synthv1widget_jack::openSession()");
+#endif
+
+	m_pSynth->deactivate();
+	m_pSynth->close();
+
+	const QString& path_name = m_nsm->path_name();
+	const QString& display_name = m_nsm->display_name();
+	const QString& client_id = m_nsm->client_id();
+
+	const QDir dir(path_name);
+	if (!dir.exists())
+		dir.mkpath(path_name);
+
+	const QFileInfo fi(path_name, display_name + '.' + SYNTHV1_TITLE);
+	if (fi.exists())
+		loadPreset(fi.absoluteFilePath());
+
+	m_pSynth->open(client_id.toUtf8().constData());
+	m_pSynth->activate();
+
+	m_nsm->open_reply();
+}
+
+void synthv1widget_jack::saveSession (void)
+{
+	if (m_nsm == NULL)
+		return;
+
+	if (!m_nsm->is_active())
+		return;
+
+#ifdef CONFIG_DEBUG
+	qDebug("synthv1widget_jack::saveSession()");
+#endif
+
+	const QString& path_name = m_nsm->path_name();
+	const QString& display_name = m_nsm->display_name();
+//	const QString& client_id = m_nsm->client_id();
+
+	const QFileInfo fi(path_name, display_name + '.' + SYNTHV1_TITLE);
+	savePreset(fi.absoluteFilePath());
+
+	m_nsm->save_reply();
+}
+
+#endif	// CONFIG_NSM
 
 
 // Param method.

@@ -53,6 +53,18 @@ AC_ARG_ENABLE(lv2-external-ui,
   [ac_lv2_external_ui="$enableval"],
   [ac_lv2_external_ui="yes"])
 
+# Enable liblo availability.
+AC_ARG_ENABLE(liblo,
+  AC_HELP_STRING([--enable-liblo], [enable liblo interface (default=yes)]),
+  [ac_liblo="$enableval"],
+  [ac_liblo="yes"])
+
+# Enable NSM support.
+AC_ARG_ENABLE(nsm,
+  AC_HELP_STRING([--enable-nsm], [enable NSM support (default=yes)]),
+  [ac_nsm="$enableval"],
+  [ac_nsm="yes"])
+
 
 if test "x$ac_debug" = "xyes"; then
    AC_DEFINE(CONFIG_DEBUG, 1, [Define if debugging is enabled.])
@@ -94,6 +106,11 @@ AC_ARG_WITH(jack,
 # Set for alternate LV2 installation dir.
 AC_ARG_WITH(lv2,
   AC_HELP_STRING([--with-lv2=PATH], [use alternate LV2 install path]),
+  [ac_with_paths="$ac_with_paths $withval"])
+
+# Set for alternate liblo installation dir.
+AC_ARG_WITH(liblo,
+  AC_HELP_STRING([--with-liblo=PATH], [use alternate liblo path]),
   [ac_with_paths="$ac_with_paths $withval"])
 
 
@@ -231,6 +248,21 @@ if test "x$ac_jack" = "xyes"; then
    fi
 fi
 
+# Check for optional liblo library.
+if test "x$ac_liblo" = "xyes"; then
+   AC_CHECK_LIB(lo, main, [ac_liblo="yes"], [ac_liblo="no"])
+   if test "x$ac_liblo" = "xyes"; then
+      AC_DEFINE(CONFIG_LIBLO, 1, [Define if liblo is available.])
+      ac_libs="$ac_libs -llo"
+   else
+      AC_MSG_WARN([*** liblo library not found.])
+      AC_MSG_WARN([*** OSC service support will be disabled.])
+      ac_nsm="no"
+   fi
+else
+   ac_nsm="no"
+fi
+
 AC_SUBST(ac_libs)
 
 
@@ -309,7 +341,22 @@ if test "x$ac_lv2_external_ui" = "xyes"; then
    fi
 fi
 
+# Check for liblo headers.
+if test "x$ac_liblo" = "xyes"; then
+   AC_CHECK_HEADER(lo/lo.h, [ac_lo_h="yes"], [ac_lo_h="no"])
+   if test "x$ac_lo_h" = "xno"; then
+      AC_MSG_ERROR([lo.h header file not found.])
+      ac_nsm="no"
+   fi
+fi
+
 AC_SUBST(ac_incpath)
+
+
+# Check for NSM support.
+if test "x$ac_nsm" = "xyes"; then
+   AC_DEFINE(CONFIG_NSM, 1, [Define if NSM support is available.])
+fi
 
 
 # Checks for build targets
@@ -345,6 +392,8 @@ echo "  JACK MIDI support  . . . . . . . . . . . . . . . .: $ac_jack_midi"
 echo "  ALSA MIDI support  . . . . . . . . . . . . . . . .: $ac_alsa_midi"
 echo "  LV2 plug-in build  . . . . . . . . . . . . . . . .: $ac_lv2"
 echo "  LV2 plug-in External UI support  . . . . . . . . .: $ac_lv2_external_ui"
+echo "  OSC service support (liblo)  . . . . . . . . . . .: $ac_liblo"
+echo "  NSM support (EXPERIMENTAL) . . . . . . . . . . . .: $ac_nsm"
 echo
 echo "  Install prefix . . . . . . . . . . . . . . . . . .: $ac_prefix"
 echo

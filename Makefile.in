@@ -51,11 +51,13 @@ sources_lv2 = \
 
 headers_jack = \
 	$(headers) \
+	src/$(name)_nsm.h \
 	src/$(name)_jack.h \
 	src/$(name)widget_jack.h
 
 sources_jack = \
 	$(sources) \
+	src/$(name)_nsm.cpp \
 	src/$(name)_jack.cpp \
 	src/$(name)widget_jack.cpp
 
