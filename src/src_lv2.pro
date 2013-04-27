@@ -6,7 +6,7 @@ TARGET = $${NAME}_lv2
 TEMPLATE = lib
 CONFIG += shared plugin
 
-include(src.pri)
+include(src_lv2.pri)
 
 HEADERS = \
 	config.h \
