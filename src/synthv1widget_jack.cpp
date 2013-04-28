@@ -242,7 +242,7 @@ void synthv1widget_jack::updateDirtyPreset ( bool bDirtyPreset )
 
 #ifdef CONFIG_NSM
 	if (m_pNsmClient && m_pNsmClient->is_active()) {
-		if (!m_bNsmDirty && bDirtyPreset) {
+		if (!m_bNsmDirty/* && bDirtyPreset*/) {
 			m_pNsmClient->dirty(true);
 			m_bNsmDirty = true;
 		}
