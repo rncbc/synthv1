@@ -78,8 +78,11 @@ protected slots:
 
 protected:
 
-	// Param methods.
+	// Param port method.
 	void updateParam(synthv1::ParamIndex index, float fValue) const;
+
+	// Dirty flag method.
+	void updateDirtyPreset(bool bDirtyPreset);
 
 	// Application close.
 	void closeEvent(QCloseEvent *pCloseEvent);
@@ -90,7 +93,8 @@ private:
 	synthv1_jack *m_pSynth;
 
 #ifdef CONFIG_NSM
-	synthv1_nsm *m_nsm;
+	synthv1_nsm *m_pNsmClient;
+	bool m_bNsmDirty;
 #endif
 };
 
