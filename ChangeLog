@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+- Parameter value ramping moved into the late post-processing,
+  an attempt to reduce some pop/click artifacts even further.
 - NSM support introduced to JACK client. (EXPERIMENTAL)
 - A slight GUI behavior change: (re)writing existing names
   doesn't load the respective preset anymore (after ticket

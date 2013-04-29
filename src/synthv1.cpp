@@ -1525,17 +1525,6 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	if (int(*m_lfo2.shape) != int(lfo2_wave.shape()) || *m_lfo2.width != lfo2_wave.width())
 		lfo2_wave.reset(synthv1_wave::Shape(*m_lfo2.shape), *m_lfo2.width);
 
-	m_wid1.process(nframes);
-	m_pan1.process(nframes);
-	m_vol1.process(nframes);
-
-	m_wid2.process(nframes);
-	m_pan2.process(nframes);
-	m_vol2.process(nframes);
-
-	m_pre1.process(nframes);
-	m_pre2.process(nframes);
-
 	// per voice
 
 	synthv1_voice *pv = m_play_list.next();
@@ -1740,6 +1729,19 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				*out++ = synthv1_sigmoid(*in++);
 		}
 	}
+
+	// post-processing
+
+	m_wid1.process(nframes);
+	m_pan1.process(nframes);
+	m_vol1.process(nframes);
+
+	m_wid2.process(nframes);
+	m_pan2.process(nframes);
+	m_vol2.process(nframes);
+
+	m_pre1.process(nframes);
+	m_pre2.process(nframes);
 }
 
 

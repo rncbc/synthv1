@@ -1,7 +1,7 @@
 // synthv1_ramp.h
 //
 /****************************************************************************
-   Copyright (C) 2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@ public:
 			reset();
 			m_frames = nframes;
 			const uint32_t MIN_FRAMES = 32;
-			if (m_frames > MIN_FRAMES)
+			if (m_frames < MIN_FRAMES)
 				m_frames = MIN_FRAMES;
 			for (uint16_t i = 0; i < m_nvalues; ++i)
 				m_delta[i] = (m_value1[i] - m_value0[i]) / float(m_frames);
