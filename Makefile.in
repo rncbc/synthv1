@@ -62,7 +62,7 @@ sources_jack = \
 	src/$(name)widget_jack.cpp
 
 
-all:	lv2 jack
+all:	@ac_all_targets@
 
 
 lv2:	$(name_lv2).mak $(resources) ${forms} $(sources_lv2) $(headers_lv2)

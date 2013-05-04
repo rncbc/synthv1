@@ -278,6 +278,8 @@ AC_CHECK_HEADERS(fcntl.h sys/ioctl.h sys/stat.h unistd.h signal.h)
 ac_jack_incpath="$ac_incpath"
 ac_lv2_incpath="$ac_incpath"
 
+ac_all_targets=""
+
 # Check for JACK headers.
 if test "x$ac_jack" = "xyes"; then
    AC_CHECK_HEADERS(jack/jack.h, [ac_jack="yes"], [ac_jack="no"])
@@ -286,6 +288,7 @@ if test "x$ac_jack" = "xyes"; then
       AC_MSG_WARN([*** JACK stand-alone build will be disabled.])
    else
       AC_DEFINE(CONFIG_JACK, 1, [Define if JACK stand-alone build is enabled.])
+      ac_all_targets="jack $ac_all_targets"
    fi
 else
   ac_jack_session="no"
@@ -333,6 +336,7 @@ if test "x$ac_lv2" = "xyes"; then
       AC_MSG_WARN([*** LV2 header files not found.])
    else
       AC_DEFINE(CONFIG_LV2, 1, [Define if LV2 plug-in build is enabled.])
+      ac_all_targets="lv2 $ac_all_targets"
    fi
 fi
 
@@ -356,6 +360,8 @@ if test "x$ac_liblo" = "xyes"; then
       ac_nsm="no"
    fi
 fi
+
+AC_SUBST(ac_all_targets)
 
 AC_SUBST(ac_jack_incpath)
 AC_SUBST(ac_lv2_incpath)
