@@ -26,6 +26,7 @@
 #endif
 
 #include <stdio.h>
+#include <string.h>
 
 
 #ifdef CONFIG_ALSA_MIDI
