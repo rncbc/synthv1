@@ -21,9 +21,7 @@
 
 #include "synthv1_jack.h"
 
-#ifdef CONFIG_JACK_MIDI
 #include <jack/midiport.h>
-#endif
 
 #include <stdio.h>
 #include <string.h>
