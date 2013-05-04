@@ -279,6 +279,8 @@ ac_jack_incpath="$ac_incpath"
 ac_lv2_incpath="$ac_incpath"
 
 ac_all_targets=""
+ac_install_targets=""
+ac_uninstall_targets=""
 
 # Check for JACK headers.
 if test "x$ac_jack" = "xyes"; then
@@ -289,6 +291,8 @@ if test "x$ac_jack" = "xyes"; then
    else
       AC_DEFINE(CONFIG_JACK, 1, [Define if JACK stand-alone build is enabled.])
       ac_all_targets="jack $ac_all_targets"
+      ac_install_targets="install_jack $ac_install_targets"
+      ac_uninstall_targets="uninstall_jack $ac_uninstall_targets"
    fi
 else
   ac_jack_session="no"
@@ -337,6 +341,8 @@ if test "x$ac_lv2" = "xyes"; then
    else
       AC_DEFINE(CONFIG_LV2, 1, [Define if LV2 plug-in build is enabled.])
       ac_all_targets="lv2 $ac_all_targets"
+      ac_install_targets="install_lv2 $ac_install_targets"
+      ac_uninstall_targets="uninstall_lv2 $ac_install_targets"
    fi
 fi
 
@@ -362,6 +368,8 @@ if test "x$ac_liblo" = "xyes"; then
 fi
 
 AC_SUBST(ac_all_targets)
+AC_SUBST(ac_install_targets)
+AC_SUBST(ac_uninstall_targets)
 
 AC_SUBST(ac_jack_incpath)
 AC_SUBST(ac_lv2_incpath)

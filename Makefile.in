@@ -102,8 +102,8 @@ clean_jack:	$(name_jack).mak
 	@rm -f $(name_jack).mak
 
 
-install:	install_lv2 install_jack
+install:	@ac_install_targets@
 
-uninstall:	uninstall_lv2 uninstall_jack
+uninstall:	@ac_uninstall_targets@
 
 clean:	clean_lv2 clean_jack
