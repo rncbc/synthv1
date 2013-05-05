@@ -106,4 +106,4 @@ install:	@ac_install_targets@
 
 uninstall:	@ac_uninstall_targets@
 
-clean:	clean_lv2 clean_jack
+clean:	@ac_clean_targets@
