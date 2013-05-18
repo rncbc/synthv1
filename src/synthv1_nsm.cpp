@@ -111,6 +111,34 @@ int osc_nsm_loaded ( const char */*path*/, const char */*types*/,
 	return 0;
 }
 
+
+static
+int osc_nsm_show ( const char */*path*/, const char */*types*/,
+	lo_arg **/*argv*/, int /*argc*/, lo_message /*msg*/, void *user_data )
+{
+	synthv1_nsm *pNsmClient
+		= static_cast<synthv1_nsm *> (user_data);
+	if (pNsmClient == NULL)
+		return -1;
+
+	pNsmClient->nsm_show();
+	return 0;
+}
+
+
+static
+int osc_nsm_hide ( const char */*path*/, const char */*types*/,
+	lo_arg **/*argv*/, int /*argc*/, lo_message /*msg*/, void *user_data )
+{
+	synthv1_nsm *pNsmClient
+		= static_cast<synthv1_nsm *> (user_data);
+	if (pNsmClient == NULL)
+		return -1;
+
+	pNsmClient->nsm_hide();
+	return 0;
+}
+
 #endif	// CONFIG_LIBLO
 
 
@@ -144,6 +172,10 @@ synthv1_nsm::synthv1_nsm (
 			"/nsm/client/save", "", osc_nsm_save, this);
 		lo_server_thread_add_method(m_thread,
 			"/nsm/client/session_is_loaded", "", osc_nsm_loaded, this);
+		lo_server_thread_add_method(m_thread,
+			"/nsm/client/show_optional_gui", "", osc_nsm_show, this);
+		lo_server_thread_add_method(m_thread,
+			"/nsm/client/hide_optional_gui", "", osc_nsm_hide, this);
 		lo_server_thread_start(m_thread);
 	}
 #endif
@@ -232,6 +264,21 @@ void synthv1_nsm::dirty ( bool is_dirty )
 		const char *path = is_dirty
 			? "/nsm/client/is_dirty"
 			: "/nsm/client/is_clean";
+		lo_send_from(m_address,
+			m_server, LO_TT_IMMEDIATE,
+			path, "");
+	}
+#endif
+}
+
+
+void synthv1_nsm::visible ( bool is_visible )
+{
+#ifdef CONFIG_LIBLO
+	if (m_address && m_server && m_active) {
+		const char *path = is_visible
+			? "/nsm/client/gui_is_shown"
+			: "/nsm/client/gui_is_hidden";
 		lo_send_from(m_address,
 			m_server, LO_TT_IMMEDIATE,
 			path, "");
@@ -400,6 +447,36 @@ void synthv1_nsm::nsm_loaded (void)
 #endif
 
 	emit loaded();
+}
+
+
+// Client show optional GUI.
+void synthv1_nsm::nsm_show (void)
+{
+#ifdef CONFIG_DEBUG
+	qDebug("synthv1_nsm::nsm_show: "
+		"path_name=\"%s\" display_name=\"%s\" client_id=\"%s\".",
+		m_path_name.toUtf8().constData(),
+		m_display_name.toUtf8().constData(),
+		m_client_id.toUtf8().constData());
+#endif
+
+	emit show();
+}
+
+
+// Client hide optional GUI.
+void synthv1_nsm::nsm_hide (void)
+{
+#ifdef CONFIG_DEBUG
+	qDebug("synthv1_nsm::nsm_hide: "
+		"path_name=\"%s\" display_name=\"%s\" client_id=\"%s\".",
+		m_path_name.toUtf8().constData(),
+		m_display_name.toUtf8().constData(),
+		m_client_id.toUtf8().constData());
+#endif
+
+	emit hide();
 }
 
 

@@ -77,7 +77,13 @@ synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 		QObject::connect(m_pNsmClient,
 			SIGNAL(save()),
 			SLOT(saveSession()));
-		m_pNsmClient->announce(SYNTHV1_TITLE, ":switch:dirty:");
+		QObject::connect(m_pNsmClient,
+			SIGNAL(show()),
+			SLOT(showSession()));
+		QObject::connect(m_pNsmClient,
+			SIGNAL(hide()),
+			SLOT(hideSession()));
+		m_pNsmClient->announce(SYNTHV1_TITLE, ":switch:dirty:optional-gui:");
 		return;
 	}
 #endif	// CONFIG_NSM
@@ -195,6 +201,8 @@ void synthv1widget_jack::openSession (void)
 
 	m_pNsmClient->open_reply();
 	m_pNsmClient->dirty(false);
+
+	m_pNsmClient->visible(QWidget::isVisible());
 }
 
 void synthv1widget_jack::saveSession (void)
@@ -221,6 +229,38 @@ void synthv1widget_jack::saveSession (void)
 	m_pNsmClient->save_reply();
 	m_pNsmClient->dirty(false);
 }
+
+
+void synthv1widget_jack::showSession (void)
+{
+	if (m_pNsmClient == NULL)
+		return;
+
+	if (!m_pNsmClient->is_active())
+		return;
+
+#ifdef CONFIG_DEBUG
+	qDebug("synthv1widget_jack::showSession()");
+#endif
+
+	QWidget::show();
+}
+
+void synthv1widget_jack::hideSession (void)
+{
+	if (m_pNsmClient == NULL)
+		return;
+
+	if (!m_pNsmClient->is_active())
+		return;
+
+#ifdef CONFIG_DEBUG
+	qDebug("synthv1widget_jack::hideSession()");
+#endif
+
+	QWidget::hide();
+}
+
 
 #endif	// CONFIG_NSM
 
@@ -267,6 +307,28 @@ void synthv1widget_jack::closeEvent ( QCloseEvent *pCloseEvent )
 		pCloseEvent->ignore();
 	}
 }
+
+
+#ifdef CONFIG_NSM
+
+// Optional GUI handlers.
+void synthv1widget_jack::showEvent ( QShowEvent *pShowEvent )
+{
+	QWidget::showEvent(pShowEvent);
+
+	if (m_pNsmClient)
+		m_pNsmClient->visible(true);
+}
+
+void synthv1widget_jack::hideEvent ( QHideEvent *pHideEvent )
+{
+	if (m_pNsmClient)
+		m_pNsmClient->visible(false);
+
+	QWidget::hideEvent(pHideEvent);
+}
+
+#endif	// CONFIG_NSM
 
 
 //-------------------------------------------------------------------------

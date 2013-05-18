@@ -73,7 +73,10 @@ protected slots:
 	// NSM callback slots.
 	void openSession();
 	void saveSession();
-	
+
+	void hideSession();
+	void showSession();
+
 #endif	// CONFIG_NSM
 
 protected:
@@ -86,6 +89,14 @@ protected:
 
 	// Application close.
 	void closeEvent(QCloseEvent *pCloseEvent);
+
+#ifdef CONFIG_NSM
+
+	// Optional GUI handlers.
+	void showEvent(QShowEvent *pShowEvent);
+	void hideEvent(QHideEvent *pHideEvent);
+
+#endif	// CONFIG_NSM
 
 private:
 
