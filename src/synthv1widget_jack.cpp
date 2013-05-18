@@ -244,6 +244,8 @@ void synthv1widget_jack::showSession (void)
 #endif
 
 	QWidget::show();
+	QWidget::raise();
+	QWidget::activateWindow();
 }
 
 void synthv1widget_jack::hideSession (void)
