@@ -5,6 +5,9 @@ ChangeLog
 
 SVN TRUNK
 
+- MIDI Key pressure/polyphonic aftertouch events now properly
+  recognized, in addition to MIDI channel pressure/aftertouch
+  processing. (EXPERIMENTAL)
 - Parameter value ramping moved into the late post-processing,
   an attempt to reduce some pop/click artifacts even further.
 - NSM support introduced to JACK client. (EXPERIMENTAL)

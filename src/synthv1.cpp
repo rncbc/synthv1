@@ -666,6 +666,7 @@ struct synthv1_voice : public synthv1_list<synthv1_voice>
 	int note;									// voice note
 
 	float vel1, vel2;							// velocities to vol
+	float pre1, pre2;							// key pressure/aftertouch
 
 	float dco1_freq1, dco1_sample1;				// frequency and phase
 	float dco1_freq2, dco1_sample2;
@@ -685,6 +686,8 @@ struct synthv1_voice : public synthv1_list<synthv1_voice>
 
 	synthv1_glide dco1_glide1, dco1_glide2;	// glides (portamento)
 	synthv1_glide dco2_glide1, dco2_glide2;
+
+	synthv1_ramp2 dca1_pre, dca2_pre;
 
 	bool sustain;
 };
@@ -779,8 +782,6 @@ private:
 	synthv1_ramp1 m_wid1, m_wid2;
 	synthv1_pan   m_pan1, m_pan2;
 	synthv1_ramp4 m_vol1, m_vol2;
-
-	synthv1_ramp2 m_pre1, m_pre2;
 
 	synthv1_fx_chorus   m_chorus;
 	synthv1_fx_flanger *m_flanger;
@@ -1251,6 +1252,11 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 			// balance
 			pv->dco1_bal.reset(m_dco1.balance);
 			pv->dco2_bal.reset(m_dco2.balance);
+			// pressure/aftertouch
+			pv->pre1 = *m_def1.pressure;
+			pv->pre2 = *m_def2.pressure;
+			pv->dca1_pre.reset(&m_ctl.pressure, &pv->pre1);
+			pv->dca2_pre.reset(&m_ctl.pressure, &pv->pre2);
 			// phases
 			pv->dco1_sample1 = pv->dco1_osc1.start();
 			pv->dco1_sample2 = pv->dco1_osc2.start(*m_dco1.phase * PHASE_SCALE);
@@ -1326,14 +1332,23 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 			}
 		}
 	}
+	// key pressure/poly.aftertouch
+	else if (status == 0xa0) {
+		synthv1_voice *pv = m_notes[key];
+		if (pv && pv->note >= 0) {
+			const float pre = float(value) / 127.0f;
+			pv->pre1 = *m_def1.pressure * pre;
+			pv->pre2 = *m_def2.pressure * pre;
+		}
+	}
 	// control change
 	else if (status == 0xb0) {
 		switch (key) {
 		case 0x01: {
 			// modulation wheel (cc#1)
-			const float modwheel = float(value) / 127.0f;
-			m_ctl.modwheel1 = *m_def1.modwheel * modwheel;
-			m_ctl.modwheel2 = *m_def2.modwheel * modwheel;
+			const float mod = float(value) / 127.0f;
+			m_ctl.modwheel1 = *m_def1.modwheel * mod;
+			m_ctl.modwheel2 = *m_def2.modwheel * mod;
 			break;
 		}
 		case 0x07:
@@ -1463,9 +1478,6 @@ void synthv1_impl::reset (void)
 	m_pan2.reset(m_out2.panning, &m_ctl.panning, &m_aux2.panning);
 	m_wid2.reset(m_out2.width);
 	
-	m_pre1.reset(m_def1.pressure, &m_ctl.pressure);
-	m_pre2.reset(m_def2.pressure, &m_ctl.pressure);
-
 	// flangers
 	if (m_flanger == 0)
 		m_flanger = new synthv1_fx_flanger [m_iChannels];
@@ -1559,17 +1571,14 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 			if (pv->lfo2_env.running && pv->lfo2_env.frames < ngen)
 				ngen = pv->lfo2_env.frames;
 
-			pv->dco1_bal.process(ngen);
-			pv->dco2_bal.process(ngen);
-
 			for (uint32_t j = 0; j < ngen; ++j) {
 
 				// velocities
 
 				const float vel1
-					= (pv->vel1 + (1.0f - pv->vel1) * m_pre1.value(j));
+					= (pv->vel1 + (1.0f - pv->vel1) * pv->dca1_pre.value(j));
 				const float vel2
-					= (pv->vel2 + (1.0f - pv->vel2) * m_pre2.value(j));
+					= (pv->vel2 + (1.0f - pv->vel2) * pv->dca1_pre.value(j));
 
 				// generators
 
@@ -1671,6 +1680,14 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 
 			nblock -= ngen;
 
+			// voice ramps countdown
+
+			pv->dco1_bal.process(ngen);
+			pv->dco2_bal.process(ngen);
+
+			pv->dca1_pre.process(ngen);
+			pv->dca2_pre.process(ngen);
+
 			// envelope countdowns
 
 			if (pv->dca1_env.running && pv->dca1_env.frames == 0)
@@ -1739,9 +1756,6 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	m_wid2.process(nframes);
 	m_pan2.process(nframes);
 	m_vol2.process(nframes);
-
-	m_pre1.process(nframes);
-	m_pre2.process(nframes);
 }
 
 
