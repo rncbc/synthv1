@@ -60,7 +60,16 @@ const float LFO_FREQ_MIN  = 0.4f;
 const float LFO_FREQ_MAX  = 40.0f;
 
 
+// maximum helper
+
+inline float synthv1_max ( float a, float b )
+{
+	return (a > b ? a : b);
+}
+
+
 // hyperbolic-tangent fast approximation
+
 inline float synthv1_tanhf ( const float x )
 {
 	const float x2 = x * x;
@@ -114,6 +123,14 @@ inline float synthv1_pow2f ( const float x )
 // -- x argument valid in [-1, 1] interval
 //	return 1.0f + (x < 0.0f ? 0.5f : 1.0f) * x;
 	return ::powf(2.0f, x);
+}
+
+
+// convert note to frequency (hertz)
+
+inline float synthv1_freq ( float note )
+{
+	return (440.0f / 32.0f) * ::powf(2.0f, (note - 9.0f) / 12.0f);
 }
 
 
@@ -647,7 +664,26 @@ protected:
 };
 
 
-// a forward decl.
+// pressure smoother (3 parameters)
+
+class synthv1_pre : public synthv1_ramp3
+{
+public:
+
+	synthv1_pre() : synthv1_ramp3() {}
+
+protected:
+
+	virtual float evaluate(uint16_t i)
+	{
+		synthv1_ramp3::evaluate(i);
+
+		return m_param1_v * synthv1_max(m_param2_v, m_param3_v);
+	}
+};
+
+
+// forward decl.
 
 class synthv1_impl;
 
@@ -687,7 +723,7 @@ struct synthv1_voice : public synthv1_list<synthv1_voice>
 	synthv1_glide dco1_glide1, dco1_glide2;	// glides (portamento)
 	synthv1_glide dco2_glide1, dco2_glide2;
 
-	synthv1_ramp2 dca1_pre, dca2_pre;
+	synthv1_pre dca1_pre, dca2_pre;
 
 	bool sustain;
 };
@@ -1194,14 +1230,6 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 }
 
 
-// convert note to frequency (hertz)
-
-inline float note_freq ( float note )
-{
-	return (440.0f / 32.0f) * ::powf(2.0f, (note - 9.0f) / 12.0f);
-}
-
-
 // handle midi input
 
 void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
@@ -1253,10 +1281,9 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 			pv->dco1_bal.reset(m_dco1.balance);
 			pv->dco2_bal.reset(m_dco2.balance);
 			// pressure/aftertouch
-			pv->pre1 = *m_def1.pressure;
-			pv->pre2 = *m_def2.pressure;
-			pv->dca1_pre.reset(&m_ctl.pressure, &pv->pre1);
-			pv->dca2_pre.reset(&m_ctl.pressure, &pv->pre2);
+			pv->pre1 = pv->pre2 = 0.0f;
+			pv->dca1_pre.reset(m_def1.pressure, &m_ctl.pressure, &pv->pre1);
+			pv->dca2_pre.reset(m_def2.pressure, &m_ctl.pressure, &pv->pre2);
 			// phases
 			pv->dco1_sample1 = pv->dco1_osc1.start();
 			pv->dco1_sample2 = pv->dco1_osc2.start(*m_dco1.phase * PHASE_SCALE);
@@ -1268,15 +1295,15 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 				+ *m_dco1.tuning * TUNING_SCALE;
 			const float detune1
 				= *m_dco1.detune * DETUNE_SCALE;
-			pv->dco1_freq1 = note_freq(freq1 - detune1);
-			pv->dco1_freq2 = note_freq(freq1 + detune1);
+			pv->dco1_freq1 = synthv1_freq(freq1 - detune1);
+			pv->dco1_freq2 = synthv1_freq(freq1 + detune1);
 			const float freq2 = float(key)
 				+ *m_dco2.octave * OCTAVE_SCALE
 				+ *m_dco2.tuning * TUNING_SCALE;
 			const float detune2
 				= *m_dco2.detune * DETUNE_SCALE;
-			pv->dco2_freq1 = note_freq(freq2 - detune2);
-			pv->dco2_freq2 = note_freq(freq2 + detune2);
+			pv->dco2_freq1 = synthv1_freq(freq2 - detune2);
+			pv->dco2_freq2 = synthv1_freq(freq2 + detune2);
 			// filters
 			const int type1 = int(*m_dcf1.type);
 			pv->dcf11.reset(synthv1_filter1::Type(type1));
