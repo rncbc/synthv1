@@ -130,10 +130,15 @@ protected:
 
 	virtual float evaluate(uint16_t)
 	{
-		if (m_param1)
-			m_param1_v = *m_param1;
+		update();
 
 		return m_param1_v;
+	}
+
+	void update()
+	{
+		if (m_param1)
+			m_param1_v = *m_param1;
 	}
 
 	float *m_param1;
@@ -169,10 +174,17 @@ protected:
 
 	virtual float evaluate(uint16_t i)
 	{
-		if (m_param2)
-			m_param2_v = *m_param2;
+		update();
 
 		return synthv1_ramp1::evaluate(i) * m_param2_v;
+	}
+
+	void update()
+	{
+		synthv1_ramp1::update();
+
+		if (m_param2)
+			m_param2_v = *m_param2;
 	}
 
 	float *m_param2;
@@ -208,10 +220,17 @@ protected:
 
 	virtual float evaluate(uint16_t i)
 	{
-		if (m_param3)
-			m_param3_v = *m_param3;
+		update();
 
 		return synthv1_ramp2::evaluate(i) * m_param3_v;
+	}
+
+	void update()
+	{
+		synthv1_ramp2::update();
+
+		if (m_param3)
+			m_param3_v = *m_param3;
 	}
 
 	float *m_param3;
@@ -249,10 +268,17 @@ protected:
 
 	virtual float evaluate(uint16_t i)
 	{
-		if (m_param4)
-			m_param4_v = *m_param4;
+		update();
 
 		return synthv1_ramp3::evaluate(i) * m_param4_v;
+	}
+
+	void update()
+	{
+		synthv1_ramp3::update();
+
+		if (m_param4)
+			m_param4_v = *m_param4;
 	}
 
 	float *m_param4;
