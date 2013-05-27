@@ -6,7 +6,7 @@ synthv1 - an old-school polyphonic synthesizer
 
 features:
 
-  - pure stand-alone JACK client with JACK-session and both JACK MIDI
+  - pure stand-alone JACK client with JACK-session, NSM and both JACK MIDI
     and ALSA MIDI input support;
 
   - LV2 instrument plugin.
@@ -52,6 +52,13 @@ requirements:
 
   - LV2, Audio Plugin Standard, the extensible successor of LADSPA
     http://lv2plug.in/
+
+  - NSM, Non Session Management
+    http://non.tuxfamily.org/nsm/
+
+  - liblo, Lightweight OSC implementation
+    (needed for NSM support)
+    http://liblo.sourceforge.net/
 
 
 installation:
