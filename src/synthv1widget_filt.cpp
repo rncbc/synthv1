@@ -1,7 +1,7 @@
 // synthv1widget_filt.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -193,8 +193,9 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 	const bool bDark = (pal.window().color().value() < 0x7f);
 	const QColor& rgbLite = (isEnabled()
 		? (bDark ? Qt::darkYellow : Qt::yellow) : pal.mid().color());
+	const QColor& rgbDark = pal.window().color().darker();
 
-	painter.fillRect(rect, pal.dark().color());
+	painter.fillRect(rect, rgbDark);
 
 	painter.setPen(bDark ? Qt::gray : Qt::darkGray);
 

@@ -5,16 +5,19 @@ ChangeLog
 
 SVN TRUNK
 
+- Some sympathy to extreme dark color (read black) schemes is
+  now being indulged; some discrete changes on the icon front
+  has also emerged ;)
 - MIDI Key pressure/polyphonic aftertouch events now properly
   recognized, in addition to MIDI channel pressure/aftertouch
-  processing. (EXPERIMENTAL)
+  processing.
 - Parameter value ramping moved into the late post-processing,
   an attempt to reduce some pop/click artifacts even further.
-- NSM support introduced to JACK client. (EXPERIMENTAL)
+- NSM support introduced to JACK client.
 - A slight GUI behavior change: (re)writing existing names
   doesn't load the respective preset anymore (after ticket
   by Jiri Prochazka aka. Anchakor, thanks).
-- Introducing LV2 External UI rougue support. (EXPERIMENTAL)
+- Introducing LV2 External UI "rougue" support.
 - Moog-like 24dB/oct resonant filter slight modification.
 - Fixed JACK client fail/fake initialization.
 
