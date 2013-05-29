@@ -166,8 +166,14 @@ static void synthv1_lv2ui_external_show ( LV2_External_UI_Widget *ui_external )
 {
 	synthv1_lv2ui_external_widget *pExtWidget
 		= (synthv1_lv2ui_external_widget *) (ui_external);
-	if (pExtWidget && pExtWidget->widget)
-		pExtWidget->widget->show();
+	if (pExtWidget) {
+		synthv1widget_lv2 *widget = pExtWidget->widget;
+		if (widget) {
+			widget->show();
+			widget->raise();
+			widget->activateWindow();
+		}
+	}
 }
 
 static void synthv1_lv2ui_external_hide ( LV2_External_UI_Widget *ui_external )
