@@ -120,7 +120,7 @@ void synthv1widget_wave::paintEvent ( QPaintEvent *pPaintEvent )
 	const bool bDark = (pal.window().color().value() < 0x7f);
 	const QColor& rgbLite = (isEnabled()
 		? (bDark ? Qt::darkYellow : Qt::yellow) : pal.mid().color());
-	const QColor& rgbDark = pal.window().color().darker();
+    const QColor& rgbDark = pal.window().color().darker(180);
 
 	painter.fillRect(rect, rgbDark);
 
