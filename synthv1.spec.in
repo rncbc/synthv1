@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 9
+%define release 10
 
 %define _prefix	@ac_prefix@
 
@@ -56,6 +56,8 @@ BuildRequires:	lv2-devel
 %{_bindir}/%{name}_jack
 
 %changelog
+* Fri May 31 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.3-10
+- Late spring blossoming.
 * Fri Mar  1 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.2-9
 - One third bug-fix release.
 * Fri Feb  8 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.1-8

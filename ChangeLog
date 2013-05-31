@@ -3,7 +3,7 @@ synthv1 - an old-school polyphonic synthesizer
 
 ChangeLog
 
-SVN TRUNK
+0.3.3  2013-05-31  Late spring blossoming
 
 - Some sympathy to extreme dark color (read black) schemes is
   now being indulged; some discrete changes on the icon front
@@ -22,14 +22,14 @@ SVN TRUNK
 - Fixed JACK client fail/fake initialization.
 
 
-0.3.2  2012-03-01  One third bug-fix release.
+0.3.2  2013-03-01  One third bug-fix release.
 
 - Pitch-bend, Modwheel and LFO Pitch range internal fixes.
 - Sustain/damper pedal switch (MIDI CC#64) support added.
-- Color palette hack on Qt5 dark themes. (TESTING)
+- Color palette hack on Qt5 dark themes.
 
 
-0.3.1  2012-02-08  One second bug-fix release.
+0.3.1  2013-02-08  One second bug-fix release.
 
 - Improved filters parameter sensitivity (cutoff, reso).
 - Envelope generators stage curves now gone a little more old-

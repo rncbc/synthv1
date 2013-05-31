@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(synthv1, 0.3.2.20, rncbc@rncbc.org)
+AC_INIT(synthv1, 0.3.3, rncbc@rncbc.org)
 
 AC_CONFIG_SRCDIR(src/synthv1.cpp)
 AC_CONFIG_HEADERS(src/config.h)
