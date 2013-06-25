@@ -62,7 +62,8 @@ unix {
 
 	DEFINES += DATADIR=\"$${DATADIR}\"
 
-	INSTALLS += target desktop icon
+	INSTALLS += target desktop icon \
+		icon_scalable mimeinfo mimetypes mimetypes_scalable
 
 	target.path = $${BINDIR}
 
@@ -71,6 +72,18 @@ unix {
 
 	icon.path = $${DATADIR}/icons/hicolor/32x32/apps
 	icon.files += images/$${NAME}.png 
+
+	icon_scalable.path = $${DATADIR}/icons/hicolor/scalable/apps
+	icon_scalable.files += images/$${NAME}.svgz
+
+	mimeinfo.path = $${DATADIR}/mime/packages
+	mimeinfo.files += mimetypes/$${NAME}.xml
+
+	mimetypes.path = $${DATADIR}/icons/hicolor/32x32/mimetypes
+	mimetypes.files += mimetypes/application-x-$${NAME}-preset.png
+
+	mimetypes_scalable.path = $${DATADIR}/icons/hicolor/scalable/mimetypes
+	mimetypes_scalable.files += mimetypes/application-x-$${NAME}-preset.svgz
 }
 
 QT += xml

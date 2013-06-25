@@ -51,9 +51,15 @@ BuildRequires:	lv2-devel
 %dir %{_datadir}/icons/hicolor
 %dir %{_datadir}/icons/hicolor/32x32
 %dir %{_datadir}/icons/hicolor/32x32/apps
+%dir %{_datadir}/icons/hicolor/32x32/mimetypes
+%dir %{_datadir}/icons/hicolor/scalable
+%dir %{_datadir}/icons/hicolor/scalable/apps
+%dir %{_datadir}/icons/hicolor/scalable/mimetypes
+%{_datadir}/mime/packages/%{name}.xml
 %{_datadir}/icons/hicolor/32x32/apps/%{name}.png
-%{_datadir}/applications/%{name}.desktop
-%{_bindir}/%{name}_jack
+%{_datadir}/icons/hicolor/32x32/mimetypes/application-x-%{name}*.png
+%{_datadir}/icons/hicolor/scalable/apps/%{name}.svgz
+%{_datadir}/icons/hicolor/scalable/mimetypes/application-x-%{name}*.svgz
 
 %changelog
 * Fri May 31 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.3-10
