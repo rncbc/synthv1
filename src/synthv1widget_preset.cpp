@@ -398,11 +398,18 @@ void synthv1widget_preset::refreshPreset (void)
 	bool bBlockSignals = m_pComboBox->blockSignals(true);
 
 	const QString sOldPreset = m_pComboBox->currentText();
+	const QIcon icon(":/images/synthv1_preset.png");
 	m_pComboBox->clear();
 	synthv1widget_config *pConfig = synthv1widget_config::getInstance();
 	if (pConfig) {
 		pConfig->beginGroup(presetGroup());
-		m_pComboBox->insertItems(0, pConfig->childKeys());
+		const QStringList& list = pConfig->childKeys();
+		QStringListIterator iter(list);
+		while (iter.hasNext()) {
+			const QString& sPreset = iter.next();
+			if (QFileInfo(pConfig->value(sPreset).toString()).exists())
+				m_pComboBox->addItem(icon, sPreset);
+		}
 		m_pComboBox->model()->sort(0);
 		pConfig->endGroup();
 	}
