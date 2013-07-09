@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(synthv1, 0.3.3.4, rncbc@rncbc.org)
+AC_INIT(synthv1, 0.3.3.5, rncbc@rncbc.org)
 
 AC_CONFIG_SRCDIR(src/synthv1.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -419,7 +419,7 @@ echo "  ALSA MIDI support  . . . . . . . . . . . . . . . .: $ac_alsa_midi"
 echo "  LV2 plug-in build  . . . . . . . . . . . . . . . .: $ac_lv2"
 echo "  LV2 plug-in External UI support  . . . . . . . . .: $ac_lv2_external_ui"
 echo "  OSC service support (liblo)  . . . . . . . . . . .: $ac_liblo"
-echo "  NSM support (EXPERIMENTAL) . . . . . . . . . . . .: $ac_nsm"
+echo "  Non Session Management (NSM) support . . . . . . .: $ac_nsm"
 echo
 echo "  Install prefix . . . . . . . . . . . . . . . . . .: $ac_prefix"
 echo
