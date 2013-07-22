@@ -708,6 +708,16 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="synthv1widget_combo" name="Def1MonoKnob">
+            <property name="toolTip">
+             <string>DEF1 Mono</string>
+            </property>
+            <property name="text">
+             <string>Mono</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -1375,6 +1385,16 @@
             </property>
             <property name="text">
              <string>Velocity</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_combo" name="Def2MonoKnob">
+            <property name="toolTip">
+             <string>DEF2 Mono</string>
+            </property>
+            <property name="text">
+             <string>Mono</string>
             </property>
            </widget>
           </item>

@@ -85,6 +85,7 @@ struct {
 	{ "DEF1_MODWHEEL",  0.2f },
 	{ "DEF1_PRESSURE",  0.2f },
 	{ "DEF1_VELOCITY",  0.2f },
+	{ "DEF1_MONO",      0.0f },
 
 	{ "DCO2_SHAPE1",    1.0f },
 	{ "DCO2_WIDTH1",    1.0f },
@@ -131,6 +132,7 @@ struct {
 	{ "DEF2_MODWHEEL",  0.2f },
 	{ "DEF2_PRESSURE",  0.2f },
 	{ "DEF2_VELOCITY",  0.2f },
+	{ "DEF2_MONO",      0.0f },
 
 	{ "CHO1_WET",       0.0f },
 	{ "CHO1_DELAY",     0.5f },
@@ -306,6 +308,10 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_ui.Lfo2PanningKnob->setMaximum(+1.0f);
 	m_ui.Lfo2VolumeKnob->setMinimum(-1.0f);
 	m_ui.Lfo2VolumeKnob->setMaximum(+1.0f);
+
+	// Mono switches
+	m_ui.Def1MonoKnob->insertItems(0, states);
+	m_ui.Def2MonoKnob->insertItems(0, states);
 
 	// Output (stereo-)width limits.
 	m_ui.Out1WidthKnob->setMinimum(-1.0f);
@@ -521,6 +527,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	setParamKnob(synthv1::DEF1_MODWHEEL,  m_ui.Def1ModwheelKnob);
 	setParamKnob(synthv1::DEF1_PRESSURE,  m_ui.Def1PressureKnob);
 	setParamKnob(synthv1::DEF1_VELOCITY,  m_ui.Def1VelocityKnob);
+	setParamKnob(synthv1::DEF1_MONO,      m_ui.Def1MonoKnob);
 
 	// OUT1
 	setParamKnob(synthv1::OUT1_WIDTH,   m_ui.Out1WidthKnob);
@@ -722,6 +729,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	setParamKnob(synthv1::DEF2_MODWHEEL,  m_ui.Def2ModwheelKnob);
 	setParamKnob(synthv1::DEF2_PRESSURE,  m_ui.Def2PressureKnob);
 	setParamKnob(synthv1::DEF2_VELOCITY,  m_ui.Def2VelocityKnob);
+	setParamKnob(synthv1::DEF2_MONO,      m_ui.Def2MonoKnob);
 
 	// OUT2
 	setParamKnob(synthv1::OUT2_WIDTH,   m_ui.Out2WidthKnob);
@@ -755,7 +763,6 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	// Dynamics
 	setParamKnob(synthv1::DYN1_COMPRESS, m_ui.Dyn1CompressKnob);
 	setParamKnob(synthv1::DYN1_LIMITER,  m_ui.Dyn1LimiterKnob);
-
 
 	// Preset management
 	QObject::connect(m_ui.Preset,

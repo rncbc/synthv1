@@ -247,8 +247,7 @@ struct synthv1_env
 	{
 		p->running = true;
 		p->stage = Release;
-		if (p->frames > min_frames)
-			p->frames = min_frames;
+		p->frames = min_frames;
 		p->phase = 0.0f;
 		p->delta = 1.0f / float(p->frames);
 		p->c1 = -(p->value);
@@ -377,6 +376,8 @@ struct synthv1_def
 	float *modwheel;
 	float *pressure;
 	float *velocity;
+
+	float *mono;
 };
 
 
@@ -1041,6 +1042,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DEF1_MODWHEEL:  m_def1.modwheel    = pfParam; break;
 	case synthv1::DEF1_PRESSURE:  m_def1.pressure    = pfParam; break;
 	case synthv1::DEF1_VELOCITY:  m_def1.velocity    = pfParam; break;
+	case synthv1::DEF1_MONO:      m_def1.mono        = pfParam; break;
 	case synthv1::DCO2_SHAPE1:    m_dco2.shape1      = pfParam; break;
 	case synthv1::DCO2_WIDTH1:    m_dco2.width1      = pfParam; break;
 	case synthv1::DCO2_SHAPE2:    m_dco2.shape2      = pfParam; break;
@@ -1085,6 +1087,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DEF2_MODWHEEL:  m_def2.modwheel    = pfParam; break;
 	case synthv1::DEF2_PRESSURE:  m_def2.pressure    = pfParam; break;
 	case synthv1::DEF2_VELOCITY:  m_def2.velocity    = pfParam; break;
+	case synthv1::DEF2_MONO:      m_def2.mono        = pfParam; break;
 	case synthv1::CHO1_WET:       m_cho.wet          = pfParam; break;
 	case synthv1::CHO1_DELAY:     m_cho.delay        = pfParam; break;
 	case synthv1::CHO1_FEEDB:     m_cho.feedb        = pfParam; break;
@@ -1159,6 +1162,7 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DEF1_MODWHEEL:  pfParam = m_def1.modwheel;    break;
 	case synthv1::DEF1_PRESSURE:  pfParam = m_def1.pressure;    break;
 	case synthv1::DEF1_VELOCITY:  pfParam = m_def1.velocity;    break;
+	case synthv1::DEF1_MONO:      pfParam = m_def1.mono;        break;
 	case synthv1::DCO2_SHAPE1:    pfParam = m_dco2.shape1;      break;
 	case synthv1::DCO2_WIDTH1:    pfParam = m_dco2.width1;      break;
 	case synthv1::DCO2_SHAPE2:    pfParam = m_dco2.shape2;      break;
@@ -1203,6 +1207,7 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DEF2_MODWHEEL:  pfParam = m_def2.modwheel;    break;
 	case synthv1::DEF2_PRESSURE:  pfParam = m_def2.pressure;    break;
 	case synthv1::DEF2_VELOCITY:  pfParam = m_def2.velocity;    break;
+	case synthv1::DEF2_MONO:      pfParam = m_def2.mono;        break;
 	case synthv1::CHO1_WET:       pfParam = m_cho.wet;          break;
 	case synthv1::CHO1_DELAY:     pfParam = m_cho.delay;        break;
 	case synthv1::CHO1_FEEDB:     pfParam = m_cho.feedb;        break;
@@ -1255,7 +1260,28 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 
 	// note on
 	if (status == 0x90 && value > 0) {
-		synthv1_voice *pv = m_notes[key];
+		synthv1_voice *pv;
+		// mono voice modes
+		if (*m_def1.mono > 0.0f) {
+			for (pv = m_play_list.next(); pv; pv = pv->next()) {
+				if (pv->dca1_env.stage != synthv1_env::Release) {
+					m_dcf1.env.note_off_fast(&pv->dcf1_env);
+					m_lfo1.env.note_off_fast(&pv->lfo1_env);
+					m_dca1.env.note_off_fast(&pv->dca1_env);
+				}
+			}
+		}
+		if (*m_def2.mono > 0.0f) {
+			for (pv = m_play_list.next(); pv; pv = pv->next()) {
+				if (pv->dca2_env.stage != synthv1_env::Release) {
+					m_dcf2.env.note_off_fast(&pv->dcf2_env);
+					m_lfo2.env.note_off_fast(&pv->lfo2_env);
+					m_dca2.env.note_off_fast(&pv->dca2_env);
+				}
+			}
+		}
+		// note retrigger
+		pv = m_notes[key];
 		if (pv/* && !m_ctl.sustain*/) {
 			// retrigger fast release
 			m_dcf1.env.note_off_fast(&pv->dcf1_env);
