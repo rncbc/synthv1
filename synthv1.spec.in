@@ -47,6 +47,8 @@ BuildRequires:	lv2-devel
 %{_libdir}/lv2/%{name}.lv2/manifest.ttl
 %{_libdir}/lv2/%{name}.lv2/%{name}.ttl
 %{_libdir}/lv2/%{name}.lv2/%{name}.so
+%{_libdir}/lv2/%{name}.lv2/%{name}_ui.ttl
+%{_libdir}/lv2/%{name}.lv2/%{name}_ui.so
 #dir %{_datadir}/mime
 #dir %{_datadir}/mime/packages
 #dir %{_datadir}/applications

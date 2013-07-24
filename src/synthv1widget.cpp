@@ -20,6 +20,7 @@
 *****************************************************************************/
 
 #include "synthv1widget.h"
+#include "synthv1_preset.h"
 
 #include <QDomDocument>
 #include <QTextStream>
@@ -27,134 +28,6 @@
 
 #include <QMessageBox>
 #include <QDir>
-
-
-//-------------------------------------------------------------------------
-// default state (params)
-
-static
-struct {
-
-	const char *name;
-	float value;
-
-} synthv1_default_params[synthv1::NUM_PARAMS] = {
-
-	{ "DCO1_SHAPE1",    1.0f },
-	{ "DCO1_WIDTH1",    1.0f },
-	{ "DCO1_SHAPE2",    1.0f },
-	{ "DCO1_WIDTH2",    1.0f },
-	{ "DCO1_BALANCE",   0.0f },
-	{ "DCO1_DETUNE",    0.1f },
-	{ "DCO1_PHASE",     0.0f },
-	{ "DCO1_OCTAVE",    0.0f },
-	{ "DCO1_TUNING",    0.0f },
-	{ "DCO1_GLIDE",     0.0f },
-	{ "DCF1_CUTOFF",    0.5f },
-	{ "DCF1_RESO",      0.0f },
-	{ "DCF1_TYPE",      0.0f },
-	{ "DCF1_SLOPE",     0.0f },
-	{ "DCF1_ENVELOPE",  1.0f },
-	{ "DCF1_ATTACK",    0.0f },
-	{ "DCF1_DECAY",     0.2f },
-	{ "DCF1_SUSTAIN",   0.5f },
-	{ "DCF1_RELEASE",   0.5f },
-	{ "LFO1_SHAPE",     1.0f },
-	{ "LFO1_WIDTH",     1.0f },
-	{ "LFO1_RATE",      0.5f },
-	{ "LFO1_SWEEP",     0.0f },
-	{ "LFO1_PITCH",     0.0f },
-	{ "LFO1_CUTOFF",    0.0f },
-	{ "LFO1_RESO",      0.0f },
-	{ "LFO1_PANNING",   0.0f },
-	{ "LFO1_VOLUME",    0.0f },
-	{ "LFO1_ATTACK",    0.0f },
-	{ "LFO1_DECAY",     0.1f },
-	{ "LFO1_SUSTAIN",   1.0f },
-	{ "LFO1_RELEASE",   0.5f },
-	{ "DCA1_VOLUME",    0.5f },
-	{ "DCA1_ATTACK",    0.0f },
-	{ "DCA1_DECAY",     0.1f },
-	{ "DCA1_SUSTAIN",   1.0f },
-	{ "DCA1_RELEASE",   0.1f },
-	{ "OUT1_WIDTH",     0.0f },
-	{ "OUT1_PANNING",   0.0f },
-	{ "OUT1_VOLUME",    0.5f },
-
-	{ "DEF1_PITCHBEND", 0.2f },
-	{ "DEF1_MODWHEEL",  0.2f },
-	{ "DEF1_PRESSURE",  0.2f },
-	{ "DEF1_VELOCITY",  0.2f },
-	{ "DEF1_MONO",      0.0f },
-
-	{ "DCO2_SHAPE1",    1.0f },
-	{ "DCO2_WIDTH1",    1.0f },
-	{ "DCO2_SHAPE2",    1.0f },
-	{ "DCO2_WIDTH2",    1.0f },
-	{ "DCO2_BALANCE",   0.0f },
-	{ "DCO2_DETUNE",    0.1f },
-	{ "DCO2_PHASE",     0.0f },
-	{ "DCO2_OCTAVE",   -2.0f },
-	{ "DCO2_TUNING",    0.0f },
-	{ "DCO2_GLIDE",     0.0f },
-	{ "DCF2_CUTOFF",    0.5f },
-	{ "DCF2_RESO",      0.0f },
-	{ "DCF2_TYPE",      0.0f },
-	{ "DCF2_SLOPE",     0.0f },
-	{ "DCF2_ENVELOPE",  1.0f },
-	{ "DCF2_ATTACK",    0.0f },
-	{ "DCF2_DECAY",     0.2f },
-	{ "DCF2_SUSTAIN",   0.5f },
-	{ "DCF2_RELEASE",   0.5f },
-	{ "LFO2_SHAPE",     1.0f },
-	{ "LFO2_WIDTH",     1.0f },
-	{ "LFO2_RATE",      0.5f },
-	{ "LFO2_SWEEP",     0.0f },
-	{ "LFO2_PITCH",     0.0f },
-	{ "LFO2_CUTOFF",    0.0f },
-	{ "LFO2_RESO",      0.0f },
-	{ "LFO2_PANNING",   0.0f },
-	{ "LFO2_VOLUME",    0.0f },
-	{ "LFO2_ATTACK",    0.0f },
-	{ "LFO2_DECAY",     0.1f },
-	{ "LFO2_SUSTAIN",   1.0f },
-	{ "LFO2_RELEASE",   0.5f },
-	{ "DCA2_VOLUME",    0.5f },
-	{ "DCA2_ATTACK",    0.0f },
-	{ "DCA2_DECAY",     0.1f },
-	{ "DCA2_SUSTAIN",   1.0f },
-	{ "DCA2_RELEASE",   0.1f },
-	{ "OUT2_WIDTH",     0.0f },
-	{ "OUT2_PANNING",   0.0f },
-	{ "OUT2_VOLUME",    0.5f },
-
-	{ "DEF2_PITCHBEND", 0.2f },
-	{ "DEF2_MODWHEEL",  0.2f },
-	{ "DEF2_PRESSURE",  0.2f },
-	{ "DEF2_VELOCITY",  0.2f },
-	{ "DEF2_MONO",      0.0f },
-
-	{ "CHO1_WET",       0.0f },
-	{ "CHO1_DELAY",     0.5f },
-	{ "CHO1_FEEDB",     0.5f },
-	{ "CHO1_RATE",      0.5f },
-	{ "CHO1_MOD",       0.5f },
-	{ "FLA1_WET",       0.0f },
-	{ "FLA1_DELAY",     0.5f },
-	{ "FLA1_FEEDB",     0.5f },
-	{ "FLA1_DAFT",      0.0f },
-	{ "PHA1_WET",       0.0f },
-	{ "PHA1_RATE",      0.5f },
-	{ "PHA1_FEEDB",     0.5f },
-	{ "PHA1_DEPTH",     0.5f },
-	{ "PHA1_DAFT",      0.0f },
-	{ "DEL1_WET",       0.0f },
-	{ "DEL1_DELAY",     0.5f },
-	{ "DEL1_FEEDB",     0.5f },
-	{ "DEL1_BPM",     180.0f },
-	{ "DYN1_COMPRESS",  0.0f },
-	{ "DYN1_LIMIT",     1.0f }
-};
 
 
 //-------------------------------------------------------------------------
@@ -190,7 +63,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 
 	// Init swapable params A/B to default.
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i)
-		m_params_ab[i] = synthv1_default_params[i].value;
+		m_params_ab[i] = synthv1_preset::paramDefaultValue(synthv1::ParamIndex(i));
 
 	// Start clean.
 	m_iUpdate = 0;
@@ -869,7 +742,7 @@ void synthv1widget::resetParams (void)
 
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
 		synthv1::ParamIndex index = synthv1::ParamIndex(i);
-		float fValue = synthv1_default_params[i].value;
+		float fValue = synthv1_preset::paramDefaultValue(index);
 		synthv1widget_knob *pKnob = paramKnob(index);
 		if (pKnob)
 			fValue = pKnob->defaultValue();
@@ -928,7 +801,7 @@ void synthv1widget::resetParamValues (void)
 
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
 		synthv1::ParamIndex index = synthv1::ParamIndex(i);
-		float fValue = synthv1_default_params[i].value;
+		float fValue = synthv1_preset::paramDefaultValue(index);
 		setParamValue(index, fValue);
 		updateParam(index, fValue);
 		m_params_ab[index] = fValue;
@@ -989,8 +862,10 @@ void synthv1widget::loadPreset ( const QString& sFilename )
 
 	static QHash<QString, synthv1::ParamIndex> s_hash;
 	if (s_hash.isEmpty()) {
-		for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i)
-			s_hash.insert(synthv1_default_params[i].name, synthv1::ParamIndex(i));
+		for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
+			synthv1::ParamIndex index = synthv1::ParamIndex(i);
+			s_hash.insert(synthv1_preset::paramName(index), index);
+		}
 	}
 
 	resetParamValues();
@@ -1066,10 +941,11 @@ void synthv1widget::savePreset ( const QString& sFilename )
 	QDomElement eParams = doc.createElement("params");
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
 		QDomElement eParam = doc.createElement("param");
+		synthv1::ParamIndex index = synthv1::ParamIndex(i);
 		eParam.setAttribute("index", QString::number(i));
-		eParam.setAttribute("name", synthv1_default_params[i].name);
-		eParam.appendChild(doc.createTextNode(QString::number(
-			paramValue(synthv1::ParamIndex(i)))));
+		eParam.setAttribute("name", synthv1_preset::paramDefaultValue(index));
+		eParam.appendChild(
+			doc.createTextNode(QString::number(paramValue(index))));
 		eParams.appendChild(eParam);
 	}
 	ePreset.appendChild(eParams);

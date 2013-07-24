@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+- First attempt on separating the DSP code from UI as runtime
+  objects, effective for the LV2 plugin deploy. (EXPERIMENTAL)
 - Mono(phonic) switch is now being introduced. (EXPERIMENTAL)
 - Another minor fix to note-off fast-release.
 
@@ -12,7 +14,6 @@ SVN TRUNK
 0.3.4  2013-07-16  Brand new icon ready.
 
 - Preset file icon and mimetype now introduced.
-
 - A brand new icon drops the lamest old-schooler's out, in a
   master lesson taught by Jarle Richard Akselsen, thanks.
 

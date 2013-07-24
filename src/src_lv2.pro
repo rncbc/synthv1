@@ -2,7 +2,7 @@
 #
 NAME = synthv1
 
-TARGET = $${NAME}_lv2
+TARGET = $${NAME}
 TEMPLATE = lib
 CONFIG += shared plugin
 
@@ -17,33 +17,12 @@ HEADERS = \
 	synthv1_ramp.h \
 	synthv1_list.h \
 	synthv1_fx.h \
-	synthv1widget.h \
-	synthv1widget_env.h \
-	synthv1widget_filt.h \
-	synthv1widget_wave.h \
-	synthv1widget_knob.h \
-	synthv1widget_preset.h \
-	synthv1widget_status.h \
-	synthv1widget_config.h \
-	synthv1widget_lv2.h
+	synthv1_preset.h
 
 SOURCES = \
 	synthv1.cpp \
 	synthv1_lv2.cpp \
-	synthv1widget.cpp \
-	synthv1widget_env.cpp \
-	synthv1widget_filt.cpp \
-	synthv1widget_wave.cpp \
-	synthv1widget_knob.cpp \
-	synthv1widget_preset.cpp \
-	synthv1widget_status.cpp \
-	synthv1widget_config.cpp \
-	synthv1widget_lv2.cpp
-
-FORMS = \
-	synthv1widget.ui
-
-RESOURCES += synthv1.qrc
+	synthv1_preset.cpp
 
 
 unix {
@@ -71,7 +50,7 @@ unix {
 		QMAKE_EXTENSION_SHLIB = so
 	}
 
-	TARGET_LV2 = $${NAME}.lv2/$${NAME}.$${QMAKE_EXTENSION_SHLIB}
+	TARGET_LV2 = $${NAME}.lv2/$${TARGET}.$${QMAKE_EXTENSION_SHLIB}
 
 	!exists($${TARGET_LV2}) {
 		system(touch $${TARGET_LV2})
@@ -89,10 +68,5 @@ unix {
 	QMAKE_CLEAN += $${TARGET_LV2}
 }
 
+QT -= gui
 QT += xml
-
-
-# QT5 support
-!lessThan(QT_MAJOR_VERSION, 5) {
-	QT += widgets
-}
