@@ -991,3 +991,12 @@
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
 	] .
+
+<http://synthv1.sourceforge.net/lv2#ui>
+	a lv2ui:Qt4UI ;
+	lv2ui:binary <synthv1.so> .
+
+<http://synthv1.sourceforge.net/lv2#ui_external>
+	a <http://lv2plug.in/ns/extensions/ui#external> ;
+	lv2ui:binary <synthv1.so> .
+

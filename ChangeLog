@@ -5,8 +5,6 @@ ChangeLog
 
 SVN TRUNK
 
-- First attempt on separating the DSP code from UI as runtime
-  objects, effective for the LV2 plugin deploy. (EXPERIMENTAL)
 - Mono(phonic) switch is now being introduced. (EXPERIMENTAL)
 - Another minor fix to note-off fast-release.
 
