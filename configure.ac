@@ -344,7 +344,7 @@ if test "x$ac_lv2" = "xyes"; then
       AC_DEFINE(CONFIG_LV2, 1, [Define if LV2 plug-in build is enabled.])
       ac_all_targets="lv2 $ac_all_targets"
       ac_install_targets="install_lv2 $ac_install_targets"
-      ac_uninstall_targets="uninstall_lv2 $ac_install_targets"
+      ac_uninstall_targets="uninstall_lv2 $ac_uninstall_targets"
       ac_clean_targets="clean_lv2 $ac_clean_targets"
    fi
 fi
