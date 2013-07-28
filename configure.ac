@@ -223,10 +223,6 @@ if test "x$ac_jack" = "xyes"; then
    else
       ac_jack_libs="$ac_jack_libs -ljack"
    fi
-else
-  ac_jack_session="no"
-  ac_jack_midi="no"
-  ac_alsa_midi="no"
 fi
 
 if test "x$ac_jack" = "xyes"; then
@@ -296,10 +292,14 @@ if test "x$ac_jack" = "xyes"; then
       ac_uninstall_targets="uninstall_jack $ac_uninstall_targets"
       ac_clean_targets="clean_jack $ac_clean_targets"
    fi
-else
+fi
+
+if test "x$ac_jack" = "xno"; then
   ac_jack_session="no"
   ac_jack_midi="no"
   ac_alsa_midi="no"
+  ac_liblo="no"
+  ac_nsm="no"
 fi
 
 # Check for JACK session headers availability.
@@ -349,6 +349,10 @@ if test "x$ac_lv2" = "xyes"; then
    fi
 fi
 
+if test "x$ac_lv2" = "xno"; then
+   lv2_external_ui="no"
+fi
+
 if test "x$ac_lv2_external_ui" = "xyes"; then
    CFLAGS="$CFLAGS -Isrc/lv2"
    CPPFLAGS="$CPPFLAGS -Isrc/lv2"
@@ -366,6 +370,7 @@ if test "x$ac_liblo" = "xyes"; then
    AC_CHECK_HEADER(lo/lo.h, [ac_lo_h="yes"], [ac_lo_h="no"])
    if test "x$ac_lo_h" = "xno"; then
       AC_MSG_ERROR([lo.h header file not found.])
+      ac_liblo="no"
       ac_nsm="no"
    fi
 fi
@@ -419,7 +424,7 @@ echo "  ALSA MIDI support  . . . . . . . . . . . . . . . .: $ac_alsa_midi"
 echo "  LV2 plug-in build  . . . . . . . . . . . . . . . .: $ac_lv2"
 echo "  LV2 plug-in External UI support  . . . . . . . . .: $ac_lv2_external_ui"
 echo "  OSC service support (liblo)  . . . . . . . . . . .: $ac_liblo"
-echo "  Non Session Management (NSM) support . . . . . . .: $ac_nsm"
+echo "  NSM (Non Session Management) support . . . . . . .: $ac_nsm"
 echo
 echo "  Install prefix . . . . . . . . . . . . . . . . . .: $ac_prefix"
 echo
