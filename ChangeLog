@@ -5,6 +5,7 @@ ChangeLog
 
 SVN TRUNK
 
+- MIDI channel filter switch is now introduced. (EXPERIMENTAL)
 - Fixed uninstall target make rule.
 - Mono(phonic) mode switch is now being introduced.
 - Another minor fix to note-off fast-release.

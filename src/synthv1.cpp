@@ -140,12 +140,17 @@ struct synthv1_env
 {
 	// envelope stages
 
-	enum Stage { Attack = 0, Decay, Sustain, Release, Done };
+	enum Stage { Done = 0, Attack, Decay, Sustain, Release };
 
 	// per voice
 
 	struct State
 	{
+		// ctor.
+		State() : running(false), stage(Done),
+			phase(0.0f), delta(0.0f), value(0.0f),
+			c1(1.0f), c0(0.0f), frames(0) {}
+
 		// process
 		float tick()
 		{
@@ -275,16 +280,16 @@ struct synthv1_ctl
 	void reset()
 	{
 		pressure = 0.0f;
-		pitchbend1 = pitchbend2 = 1.0f;
-		modwheel1 = modwheel2 = 0.0f;
+		pitchbend = 1.0f;
+		modwheel = 0.0f;
 		panning = 0.0f;
 		volume = 1.0f;
 		sustain = false;
 	}
 
 	float pressure;
-	float pitchbend1, pitchbend2;
-	float modwheel1, modwheel2;
+	float pitchbend;
+	float modwheel;
 	float panning;
 	float volume;
 	bool  sustain;
@@ -376,7 +381,7 @@ struct synthv1_def
 	float *modwheel;
 	float *pressure;
 	float *velocity;
-
+	float *channel;
 	float *mono;
 };
 
@@ -695,15 +700,15 @@ struct synthv1_voice : public synthv1_list<synthv1_voice>
 {
 	synthv1_voice(synthv1_impl *pImpl);
 
-	synthv1_oscillator dco1_osc1, dco1_osc2;
+	int note1, note2;							// voice note
+
+	float vel1, vel2;							// key velocity
+	float pre1, pre2;							// key pressure/after-touch
+
+	synthv1_oscillator dco1_osc1, dco1_osc2;	// oscillators
 	synthv1_oscillator dco2_osc1, dco2_osc2;
 
-	synthv1_oscillator lfo1_osc,  lfo2_osc;
-
-	int note;									// voice note
-
-	float vel1, vel2;							// velocities to vol
-	float pre1, pre2;							// key pressure/aftertouch
+	synthv1_oscillator lfo1_osc,  lfo2_osc;		// low frequency oscillators
 
 	float dco1_freq1, dco1_sample1;				// frequency and phase
 	float dco1_freq2, dco1_sample2;
@@ -721,12 +726,12 @@ struct synthv1_voice : public synthv1_list<synthv1_voice>
 	synthv1_env::State dcf1_env, dcf2_env;
 	synthv1_env::State lfo1_env, lfo2_env;
 
-	synthv1_glide dco1_glide1, dco1_glide2;	// glides (portamento)
+	synthv1_glide dco1_glide1, dco1_glide2;		// glides (portamento)
 	synthv1_glide dco2_glide1, dco2_glide2;
 
 	synthv1_pre dca1_pre, dca2_pre;
 
-	bool sustain;
+	bool sustain1, sustain2;
 };
 
 
@@ -766,10 +771,15 @@ public:
 
 protected:
 
-	void allSoundOff();
 	void allControllersOff();
+	void allControllersOff_1();
+	void allControllersOff_2();
 	void allNotesOff();
-	void allSustainOff();
+	void allNotesOff_1();
+	void allNotesOff_2();
+	void allSustainOff_1();
+	void allSustainOff_2();
+	void allSoundOff();
 
 	synthv1_voice *alloc_voice ()
 	{
@@ -792,7 +802,7 @@ private:
 	uint16_t m_iChannels;
 	uint32_t m_iSampleRate;
 
-	synthv1_ctl m_ctl;
+	synthv1_ctl m_ctl1, m_ctl2;
 
 	synthv1_dco m_dco1, m_dco2;
 	synthv1_dcf m_dcf1, m_dcf2;
@@ -809,7 +819,8 @@ private:
 	synthv1_dyn m_dyn;
 
 	synthv1_voice **m_voices;
-	synthv1_voice  *m_notes[MAX_NOTES];
+	synthv1_voice  *m_note1[MAX_NOTES];
+	synthv1_voice  *m_note2[MAX_NOTES];
 
 	synthv1_list<synthv1_voice> m_free_list;
 	synthv1_list<synthv1_voice> m_play_list;
@@ -831,16 +842,25 @@ private:
 // voice constructor
 
 synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
+	note1(-1), note2(-1),
+	vel1(0.0f), vel2(0.0f),
+	pre1(0.0f), pre2(0.0f),
 	dco1_osc1(&pImpl->dco1_wave1),
 	dco1_osc2(&pImpl->dco1_wave2),
 	dco2_osc1(&pImpl->dco2_wave1),
 	dco2_osc2(&pImpl->dco2_wave2),
 	lfo1_osc(&pImpl->lfo1_wave),
 	lfo2_osc(&pImpl->lfo2_wave),
+	dco1_freq1(0.0f), dco1_sample1(0.0f),
+	dco1_freq2(0.0f), dco1_sample2(0.0f),
+	dco2_freq1(0.0f), dco2_sample1(0.0f),
+	dco2_freq2(0.0f), dco2_sample2(0.0f),
+	lfo1_sample(0.0f), lfo2_sample(0.0f),
 	dco1_glide1(pImpl->dco1_last1),
 	dco1_glide2(pImpl->dco1_last2),
 	dco2_glide1(pImpl->dco2_last1),
-	dco2_glide2(pImpl->dco2_last2)
+	dco2_glide2(pImpl->dco2_last2),
+	sustain1(false), sustain2(false)
 {
 }
 
@@ -863,7 +883,7 @@ synthv1_impl::synthv1_impl ( uint16_t iChannels, uint32_t iSampleRate )
 	}
 
 	for (int note = 0; note < MAX_NOTES; ++note)
-		m_notes[note] = 0;
+		m_note1[note] = m_note2[note] = 0;
 
 	// flangers none yet
 	m_flanger = 0;
@@ -1042,6 +1062,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DEF1_MODWHEEL:  m_def1.modwheel    = pfParam; break;
 	case synthv1::DEF1_PRESSURE:  m_def1.pressure    = pfParam; break;
 	case synthv1::DEF1_VELOCITY:  m_def1.velocity    = pfParam; break;
+	case synthv1::DEF1_CHANNEL:   m_def1.channel     = pfParam; break;
 	case synthv1::DEF1_MONO:      m_def1.mono        = pfParam; break;
 	case synthv1::DCO2_SHAPE1:    m_dco2.shape1      = pfParam; break;
 	case synthv1::DCO2_WIDTH1:    m_dco2.width1      = pfParam; break;
@@ -1087,6 +1108,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DEF2_MODWHEEL:  m_def2.modwheel    = pfParam; break;
 	case synthv1::DEF2_PRESSURE:  m_def2.pressure    = pfParam; break;
 	case synthv1::DEF2_VELOCITY:  m_def2.velocity    = pfParam; break;
+	case synthv1::DEF2_CHANNEL:   m_def2.channel     = pfParam; break;
 	case synthv1::DEF2_MONO:      m_def2.mono        = pfParam; break;
 	case synthv1::CHO1_WET:       m_cho.wet          = pfParam; break;
 	case synthv1::CHO1_DELAY:     m_cho.delay        = pfParam; break;
@@ -1162,6 +1184,7 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DEF1_MODWHEEL:  pfParam = m_def1.modwheel;    break;
 	case synthv1::DEF1_PRESSURE:  pfParam = m_def1.pressure;    break;
 	case synthv1::DEF1_VELOCITY:  pfParam = m_def1.velocity;    break;
+	case synthv1::DEF1_CHANNEL:   pfParam = m_def1.channel;     break;
 	case synthv1::DEF1_MONO:      pfParam = m_def1.mono;        break;
 	case synthv1::DCO2_SHAPE1:    pfParam = m_dco2.shape1;      break;
 	case synthv1::DCO2_WIDTH1:    pfParam = m_dco2.width1;      break;
@@ -1207,6 +1230,7 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DEF2_MODWHEEL:  pfParam = m_def2.modwheel;    break;
 	case synthv1::DEF2_PRESSURE:  pfParam = m_def2.pressure;    break;
 	case synthv1::DEF2_VELOCITY:  pfParam = m_def2.velocity;    break;
+	case synthv1::DEF2_CHANNEL:   pfParam = m_def2.channel;     break;
 	case synthv1::DEF2_MONO:      pfParam = m_def2.mono;        break;
 	case synthv1::CHO1_WET:       pfParam = m_cho.wet;          break;
 	case synthv1::CHO1_DELAY:     pfParam = m_cho.delay;        break;
@@ -1243,13 +1267,26 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 	if (size < 2)
 		return;
 
+	// channel filter
+	const int channel = (data[0] & 0x0f) + 1;
+
+	const int ch1 = int(*m_def1.channel);
+	const int ch2 = int(*m_def2.channel);
+	const int on1 = (ch1 == 0 || ch1 == channel);
+	const int on2 = (ch2 == 0 || ch2 == channel);
+
+	if (!on1 && !on2)
+		return;
+
 	// note on
 	const int status = (data[0] & 0xf0);
 	const int key    = (data[1] & 0x7f);
 
 	if (status == 0xd0) {
 		// channel aftertouch
-		m_ctl.pressure = float(key) / 127.0f;
+		const float pre = float(key) / 127.0f;
+		if (on1) m_ctl1.pressure = pre;
+		if (on2) m_ctl2.pressure = pre;
 	}
 
 	// check data size (#2)
@@ -1261,137 +1298,199 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 	// note on
 	if (status == 0x90 && value > 0) {
 		synthv1_voice *pv;
-		// mono voice modes
-		if (*m_def1.mono > 0.0f) {
-			for (pv = m_play_list.next(); pv; pv = pv->next()) {
-				if (pv->dca1_env.stage != synthv1_env::Release) {
-					m_dcf1.env.note_off_fast(&pv->dcf1_env);
-					m_lfo1.env.note_off_fast(&pv->lfo1_env);
-					m_dca1.env.note_off_fast(&pv->dca1_env);
+		// synth 1
+		if (on1) {
+			// mono voice modes
+			if (*m_def1.mono > 0.0f) {
+				for (pv = m_play_list.next(); pv; pv = pv->next()) {
+					if (pv->note1 >= 0
+						&& pv->dca1_env.stage != synthv1_env::Release) {
+						m_dcf1.env.note_off_fast(&pv->dcf1_env);
+						m_lfo1.env.note_off_fast(&pv->lfo1_env);
+						m_dca1.env.note_off_fast(&pv->dca1_env);
+						m_note1[pv->note1] = 0;
+						pv->note1 = -1;
+					}
 				}
 			}
-		}
-		if (*m_def2.mono > 0.0f) {
-			for (pv = m_play_list.next(); pv; pv = pv->next()) {
-				if (pv->dca2_env.stage != synthv1_env::Release) {
-					m_dcf2.env.note_off_fast(&pv->dcf2_env);
-					m_lfo2.env.note_off_fast(&pv->lfo2_env);
-					m_dca2.env.note_off_fast(&pv->dca2_env);
-				}
+			// note retrigger
+			pv = m_note1[key];
+			if (pv && pv->note1 >= 0/* && !m_ctl1.sustain*/) {
+				// retrigger fast release
+				m_dcf1.env.note_off_fast(&pv->dcf1_env);
+				m_lfo1.env.note_off_fast(&pv->lfo1_env);
+				m_dca1.env.note_off_fast(&pv->dca1_env);
+				m_note1[pv->note1] = 0;
+				pv->note1 = -1;
 			}
 		}
-		// note retrigger
-		pv = m_notes[key];
-		if (pv/* && !m_ctl.sustain*/) {
-			// retrigger fast release
-			m_dcf1.env.note_off_fast(&pv->dcf1_env);
-			m_dcf2.env.note_off_fast(&pv->dcf2_env);
-			m_lfo1.env.note_off_fast(&pv->lfo1_env);
-			m_lfo2.env.note_off_fast(&pv->lfo2_env);
-			m_dca1.env.note_off_fast(&pv->dca1_env);
-			m_dca2.env.note_off_fast(&pv->dca2_env);
-			pv->note = -1;
-			m_notes[key] = 0;
+		// synth 2
+		if (on2) {
+			// mono voice modes
+			if (*m_def2.mono > 0.0f) {
+				for (pv = m_play_list.next(); pv; pv = pv->next()) {
+					if (pv->note2 >= 0
+						&& pv->dca2_env.stage != synthv1_env::Release) {
+						m_dcf2.env.note_off_fast(&pv->dcf2_env);
+						m_lfo2.env.note_off_fast(&pv->lfo2_env);
+						m_dca2.env.note_off_fast(&pv->dca2_env);
+						m_note2[pv->note2] = 0;
+						pv->note2 = -1;
+					}
+				}
+			}
+			// note retrigger
+			pv = m_note2[key];
+			if (pv && pv->note2 >= 0/* && !m_ctl2.sustain*/) {
+				// retrigger fast release
+				m_dcf2.env.note_off_fast(&pv->dcf2_env);
+				m_lfo2.env.note_off_fast(&pv->lfo2_env);
+				m_dca2.env.note_off_fast(&pv->dca2_env);
+				m_note2[pv->note2] = 0;
+				pv->note2 = -1;
+			}
 		}
 		// find free voice
 		pv = alloc_voice();
 		if (pv) {
-			// waveform
-			pv->note = key;
-			// velocity
-			float vel = float(value) / 127.0f;
-			vel *= vel;	// quadratic velocity law
-			pv->vel1 = synthv1_velocity(vel, *m_def1.velocity);
-			pv->vel2 = synthv1_velocity(vel, *m_def2.velocity);
-			// balance
-			pv->dco1_bal.reset(m_dco1.balance);
-			pv->dco2_bal.reset(m_dco2.balance);
-			// pressure/aftertouch
-			pv->pre1 = pv->pre2 = 0.0f;
-			pv->dca1_pre.reset(m_def1.pressure, &m_ctl.pressure, &pv->pre1);
-			pv->dca2_pre.reset(m_def2.pressure, &m_ctl.pressure, &pv->pre2);
-			// phases
-			pv->dco1_sample1 = pv->dco1_osc1.start();
-			pv->dco1_sample2 = pv->dco1_osc2.start(*m_dco1.phase * PHASE_SCALE);
-			pv->dco2_sample1 = pv->dco2_osc1.start();
-			pv->dco2_sample2 = pv->dco2_osc2.start(*m_dco2.phase * PHASE_SCALE);
-			// frequencies
-			const float freq1 = float(key)
-				+ *m_dco1.octave * OCTAVE_SCALE
-				+ *m_dco1.tuning * TUNING_SCALE;
-			const float detune1
-				= *m_dco1.detune * DETUNE_SCALE;
-			pv->dco1_freq1 = synthv1_freq(freq1 - detune1);
-			pv->dco1_freq2 = synthv1_freq(freq1 + detune1);
-			const float freq2 = float(key)
-				+ *m_dco2.octave * OCTAVE_SCALE
-				+ *m_dco2.tuning * TUNING_SCALE;
-			const float detune2
-				= *m_dco2.detune * DETUNE_SCALE;
-			pv->dco2_freq1 = synthv1_freq(freq2 - detune2);
-			pv->dco2_freq2 = synthv1_freq(freq2 + detune2);
-			// filters
-			const int type1 = int(*m_dcf1.type);
-			pv->dcf11.reset(synthv1_filter1::Type(type1));
-			pv->dcf12.reset(synthv1_filter1::Type(type1));
-			pv->dcf13.reset(synthv1_filter2::Type(type1));
-			pv->dcf14.reset(synthv1_filter2::Type(type1));
-			const int type2 = int(*m_dcf2.type);
-			pv->dcf21.reset(synthv1_filter1::Type(type2));
-			pv->dcf22.reset(synthv1_filter1::Type(type2));
-			pv->dcf23.reset(synthv1_filter2::Type(type2));
-			pv->dcf24.reset(synthv1_filter2::Type(type2));
-			// envelopes
-			m_dcf1.env.start(&pv->dcf1_env);
-			m_dcf2.env.start(&pv->dcf2_env);
-			m_lfo1.env.start(&pv->lfo1_env);
-			m_lfo2.env.start(&pv->lfo2_env);
-			m_dca1.env.start(&pv->dca1_env);
-			m_dca2.env.start(&pv->dca2_env);
-			// lfos
-			pv->lfo1_sample = pv->lfo1_osc.start();
-			pv->lfo2_sample = pv->lfo2_osc.start();
-			// glides (portamentoa)
 			const float srate = float(m_iSampleRate);
-			float frames = uint32_t(*m_dco1.glide * *m_dco1.glide * srate);
-			pv->dco1_glide1.reset(frames, pv->dco1_freq1);
-			pv->dco1_glide2.reset(frames, pv->dco1_freq2);
-			frames = uint32_t(*m_dco2.glide * *m_dco2.glide * srate);
-			pv->dco2_glide1.reset(frames, pv->dco2_freq1);
-			pv->dco2_glide2.reset(frames, pv->dco2_freq2);
-			// sustain
-			pv->sustain = false;
-			// allocated
-			m_notes[key] = pv;
+			// velocity (quadratic velocity law)
+			float vel = float(value) / 127.0f; vel *= vel;
+			// synth 1
+			if (on1) {
+				// waveform
+				pv->note1 = key;
+				pv->vel1 = synthv1_velocity(vel, *m_def1.velocity);
+				// balance
+				pv->dco1_bal.reset(m_dco1.balance);
+				// pressure/after-touch
+				pv->pre1 = 0.0f;
+				pv->dca1_pre.reset(m_def1.pressure, &m_ctl1.pressure, &pv->pre1);
+				// phases
+				pv->dco1_sample1 = pv->dco1_osc1.start();
+				pv->dco1_sample2 = pv->dco1_osc2.start(*m_dco1.phase * PHASE_SCALE);
+				// frequencies
+				const float freq1 = float(key)
+					+ *m_dco1.octave * OCTAVE_SCALE
+					+ *m_dco1.tuning * TUNING_SCALE;
+				const float detune1
+					= *m_dco1.detune * DETUNE_SCALE;
+				pv->dco1_freq1 = synthv1_freq(freq1 - detune1);
+				pv->dco1_freq2 = synthv1_freq(freq1 + detune1);
+				// filters
+				const int type1 = int(*m_dcf1.type);
+				pv->dcf11.reset(synthv1_filter1::Type(type1));
+				pv->dcf12.reset(synthv1_filter1::Type(type1));
+				pv->dcf13.reset(synthv1_filter2::Type(type1));
+				pv->dcf14.reset(synthv1_filter2::Type(type1));
+				// envelopes
+				m_dcf1.env.start(&pv->dcf1_env);
+				m_lfo1.env.start(&pv->lfo1_env);
+				m_dca1.env.start(&pv->dca1_env);
+				// lfos
+				pv->lfo1_sample = pv->lfo1_osc.start();
+				// glides (portamento)
+				const float frames1
+					= uint32_t(*m_dco1.glide * *m_dco1.glide * srate);
+				pv->dco1_glide1.reset(frames1, pv->dco1_freq1);
+				pv->dco1_glide2.reset(frames1, pv->dco1_freq2);
+				// sustain
+				pv->sustain1 = false;
+				// allocated
+				m_note1[key] = pv;
+			}
+			// synth 2
+			if (on2) {
+				// waveform
+				pv->note2 = key;
+				pv->vel2 = synthv1_velocity(vel, *m_def2.velocity);
+				// balance
+				pv->dco2_bal.reset(m_dco2.balance);
+				// pressure/after-touch
+				pv->pre2 = 0.0f;
+				pv->dca2_pre.reset(m_def2.pressure, &m_ctl2.pressure, &pv->pre2);
+				// phases
+				pv->dco2_sample1 = pv->dco2_osc1.start();
+				pv->dco2_sample2 = pv->dco2_osc2.start(*m_dco2.phase * PHASE_SCALE);
+				const float freq2 = float(key)
+					+ *m_dco2.octave * OCTAVE_SCALE
+					+ *m_dco2.tuning * TUNING_SCALE;
+				const float detune2
+					= *m_dco2.detune * DETUNE_SCALE;
+				pv->dco2_freq1 = synthv1_freq(freq2 - detune2);
+				pv->dco2_freq2 = synthv1_freq(freq2 + detune2);
+				// filters
+				const int type2 = int(*m_dcf2.type);
+				pv->dcf21.reset(synthv1_filter1::Type(type2));
+				pv->dcf22.reset(synthv1_filter1::Type(type2));
+				pv->dcf23.reset(synthv1_filter2::Type(type2));
+				pv->dcf24.reset(synthv1_filter2::Type(type2));
+				// envelopes
+				m_dcf2.env.start(&pv->dcf2_env);
+				m_lfo2.env.start(&pv->lfo2_env);
+				m_dca2.env.start(&pv->dca2_env);
+				// lfos
+				pv->lfo2_sample = pv->lfo2_osc.start();
+				// glides (portamento)
+				const float frames2
+					= uint32_t(*m_dco2.glide * *m_dco2.glide * srate);
+				pv->dco2_glide2.reset(frames2, pv->dco2_freq2);
+				// sustain
+				pv->sustain2 = false;
+				// allocated
+				m_note2[key] = pv;
+			}
 		}
 	}
 	// note off
 	else if (status == 0x80 || (status == 0x90 && value == 0)) {
-		synthv1_voice *pv = m_notes[key];
-		if (pv && pv->note >= 0) {
-			if (m_ctl.sustain) {
-				pv->sustain = true;
-			} else {
-				if (pv->dca1_env.stage != synthv1_env::Release) {
-					m_dca1.env.note_off(&pv->dca1_env);
-					m_dcf1.env.note_off(&pv->dcf1_env);
-					m_lfo1.env.note_off(&pv->lfo1_env);
+		synthv1_voice *pv;
+		// synth 1
+		if (on1) {
+			pv = m_note1[key];
+			if (pv && pv->note1 >= 0) {
+				if (m_ctl1.sustain) {
+					pv->sustain1 = true;
+				} else {
+					if (pv->dca1_env.stage != synthv1_env::Release) {
+						m_dca1.env.note_off(&pv->dca1_env);
+						m_dcf1.env.note_off(&pv->dcf1_env);
+						m_lfo1.env.note_off(&pv->lfo1_env);
+					}
 				}
-				if (pv->dca2_env.stage != synthv1_env::Release) {
-					m_dca2.env.note_off(&pv->dca2_env);
-					m_dcf2.env.note_off(&pv->dcf2_env);
-					m_lfo2.env.note_off(&pv->lfo2_env);
+			}
+		}
+		// synth 2
+		if (on2) {
+			pv = m_note2[key];
+			if (pv && pv->note2 >= 0) {
+				if (m_ctl2.sustain) {
+					pv->sustain2 = true;
+				} else {
+					if (pv->dca2_env.stage != synthv1_env::Release) {
+						m_dca2.env.note_off(&pv->dca2_env);
+						m_dcf2.env.note_off(&pv->dcf2_env);
+						m_lfo2.env.note_off(&pv->lfo2_env);
+					}
 				}
 			}
 		}
 	}
 	// key pressure/poly.aftertouch
 	else if (status == 0xa0) {
-		synthv1_voice *pv = m_notes[key];
-		if (pv && pv->note >= 0) {
-			const float pre = float(value) / 127.0f;
-			pv->pre1 = *m_def1.pressure * pre;
-			pv->pre2 = *m_def2.pressure * pre;
+		const float pre = float(value) / 127.0f;
+		synthv1_voice *pv;
+		// synth 1
+		if (on1) {
+			pv = m_note1[key];
+			if (pv && pv->note1 >= 0)
+				pv->pre1 = *m_def1.pressure * pre;
+		}
+		// synth 2
+		if (on2) {
+			pv = m_note2[key];
+			if (pv && pv->note2 >= 0)
+				pv->pre2 = *m_def2.pressure * pre;
 		}
 	}
 	// control change
@@ -1400,23 +1499,36 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 		case 0x01: {
 			// modulation wheel (cc#1)
 			const float mod = float(value) / 127.0f;
-			m_ctl.modwheel1 = *m_def1.modwheel * mod;
-			m_ctl.modwheel2 = *m_def2.modwheel * mod;
+			if (on1) m_ctl1.modwheel = *m_def1.modwheel * mod;
+			if (on2) m_ctl2.modwheel = *m_def2.modwheel * mod;
 			break;
 		}
-		case 0x07:
+		case 0x07: {
 			// channel volume (cc#7)
-			m_ctl.volume = float(value) / 127.0f;
+			const float vol = float(value) / 127.0f;
+			if (on1) m_ctl1.volume = vol;
+			if (on2) m_ctl2.volume = vol;
 			break;
-		case 0x0a:
+		}
+		case 0x0a: {
 			// channel panning (cc#10)
-			m_ctl.panning = float(value - 64) / 64.0f;
+			const float pan = float(value - 64) / 64.0f;
+			if (on1) m_ctl1.panning = pan;
+			if (on2) m_ctl2.panning = pan;
 			break;
+		}
 		case 0x40:
 			// sustain/damper pedal (cc#64)
-			if (m_ctl.sustain && value <  64)
-				allSustainOff();
-			m_ctl.sustain = bool(value >= 64);
+			if (on1) {
+				if (m_ctl1.sustain && value <  64)
+					allSustainOff_1();
+				m_ctl1.sustain = bool(value >= 64);
+			}
+			if (on2) {
+				if (m_ctl2.sustain && value <  64)
+					allSustainOff_2();
+				m_ctl2.sustain = bool(value >= 64);
+			}
 			break;
 		case 0x78:
 			// all sound off (cc#120)
@@ -1424,19 +1536,21 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 			break;
 		case 0x79:
 			// all controllers off (cc#121)
-			allControllersOff();
+			if (on1) allControllersOff_1();
+			if (on2) allControllersOff_2();
 			break;
 		case 0x7b:
 			// all notes off (cc#123)
-			allNotesOff();
+			if (on1) allNotesOff_1();
+			if (on2) allNotesOff_2();
 			break;
 		}
 	}
 	// pitch bend
 	else if (status == 0xe0) {
 		const float pitchbend = float(key + (value << 7) - 0x2000) / 8192.0f;
-		m_ctl.pitchbend1 = synthv1_pow2f(*m_def1.pitchbend * pitchbend);
-		m_ctl.pitchbend2 = synthv1_pow2f(*m_def2.pitchbend * pitchbend);
+		if (on1) m_ctl1.pitchbend = synthv1_pow2f(*m_def1.pitchbend * pitchbend);
+		if (on2) m_ctl2.pitchbend = synthv1_pow2f(*m_def2.pitchbend * pitchbend);
 	}
 }
 
@@ -1445,7 +1559,126 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 
 void synthv1_impl::allControllersOff (void)
 {
-	m_ctl.reset();
+	m_ctl1.reset();
+	m_ctl2.reset();
+}
+
+void synthv1_impl::allControllersOff_1 (void)
+{
+	m_ctl1.reset();
+}
+
+void synthv1_impl::allControllersOff_2 (void)
+{
+	m_ctl2.reset();
+}
+
+
+// all notes off
+
+void synthv1_impl::allNotesOff (void)
+{
+#if 0
+	allNotesOff_1();
+	allNotesOff_2();
+#else
+
+	synthv1_voice *pv = m_play_list.next();
+	while (pv) {
+		if (pv->note1 >= 0)
+			m_note1[pv->note1] = 0;
+		if (pv->note2 >= 0)
+			m_note2[pv->note2] = 0;
+		free_voice(pv);
+		pv = m_play_list.next();
+	}
+
+	dco1_last1 = 0.0f;
+	dco1_last2 = 0.0f;
+	dco2_last1 = 0.0f;
+	dco2_last2 = 0.0f;
+
+	m_aux1.reset();
+	m_aux2.reset();
+
+#endif
+}
+
+void synthv1_impl::allNotesOff_1 (void)
+{
+	synthv1_voice *pv = m_play_list.next();
+	while (pv) {
+		if (pv->note1 >= 0) {
+			m_dca1.env.note_off_fast(&pv->dca1_env);
+			m_dcf1.env.note_off_fast(&pv->dcf1_env);
+			m_lfo1.env.note_off_fast(&pv->lfo1_env);
+			m_note1[pv->note1] = 0;
+			pv->note1 = -1;
+		}
+		pv = pv->next();
+	}
+
+	dco1_last1 = 0.0f;
+	dco1_last2 = 0.0f;
+
+	m_aux1.reset();
+}
+
+
+void synthv1_impl::allNotesOff_2 (void)
+{
+	synthv1_voice *pv = m_play_list.next();
+	while (pv) {
+		if (pv->note2 >= 0) {
+			m_dca2.env.note_off_fast(&pv->dca2_env);
+			m_dcf2.env.note_off_fast(&pv->dcf2_env);
+			m_lfo2.env.note_off_fast(&pv->lfo2_env);
+			m_note2[pv->note2] = 0;
+			pv->note2 = -1;
+		}
+		pv = pv->next();
+	}
+
+	dco2_last1 = 0.0f;
+	dco2_last2 = 0.0f;
+
+	m_aux2.reset();
+}
+
+
+// all sustained notes off
+
+void synthv1_impl::allSustainOff_1 (void)
+{
+	synthv1_voice *pv = m_play_list.next();
+	while (pv) {
+		if (pv->note1 >= 0 && pv->sustain1) {
+			pv->sustain1 = false;
+			if (pv->dca1_env.stage != synthv1_env::Release) {
+				m_dca1.env.note_off(&pv->dca1_env);
+				m_dcf1.env.note_off(&pv->dcf1_env);
+				m_lfo1.env.note_off(&pv->lfo1_env);
+			}
+		}
+		pv = pv->next();
+	}
+}
+
+
+void synthv1_impl::allSustainOff_2 (void)
+{
+	synthv1_voice *pv = m_play_list.next();
+	while (pv) {
+		if (pv->note2 >= 0 && pv->sustain2) {
+			pv->sustain2 = false;
+			if (pv->dca2_env.stage != synthv1_env::Release) {
+				m_dca2.env.note_off(&pv->dca2_env);
+				m_dcf2.env.note_off(&pv->dcf2_env);
+				m_lfo2.env.note_off(&pv->lfo2_env);
+			}
+		}
+		pv = pv->next();
+	}
 }
 
 
@@ -1468,52 +1701,6 @@ void synthv1_impl::allSoundOff (void)
 }
 
 
-// all notes off
-
-void synthv1_impl::allNotesOff (void)
-{
-	synthv1_voice *pv = m_play_list.next();
-	while (pv) {
-		if (pv->note >= 0)
-			m_notes[pv->note] = 0;
-		free_voice(pv);
-		pv = m_play_list.next();
-	}
-
-	dco1_last1 = 0.0f;
-	dco1_last2 = 0.0f;
-	dco2_last1 = 0.0f;
-	dco2_last2 = 0.0f;
-
-	m_aux1.reset();
-	m_aux2.reset();
-}
-
-
-// all sustained notes off
-
-void synthv1_impl::allSustainOff (void)
-{
-	synthv1_voice *pv = m_play_list.next();
-	while (pv) {
-		if (pv->note >= 0 && pv->sustain) {
-			pv->sustain = false;
-			if (pv->dca1_env.stage != synthv1_env::Release) {
-				m_dca1.env.note_off(&pv->dca1_env);
-				m_dcf1.env.note_off(&pv->dcf1_env);
-				m_lfo1.env.note_off(&pv->lfo1_env);
-			}
-			if (pv->dca2_env.stage != synthv1_env::Release) {
-				m_dca2.env.note_off(&pv->dca2_env);
-				m_dcf2.env.note_off(&pv->dcf2_env);
-				m_lfo2.env.note_off(&pv->lfo2_env);
-			}
-		}
-		pv = pv->next();
-	}
-}
-
-
 // all reset clear
 
 void synthv1_impl::reset (void)
@@ -1523,12 +1710,12 @@ void synthv1_impl::reset (void)
 		*m_del.bpm *= 100.0f;
 //--legacy support < 0.3.0.4 -- end.
 
-	m_vol1.reset(m_out1.volume, m_dca1.volume, &m_ctl.volume, &m_aux1.volume);
-	m_pan1.reset(m_out1.panning, &m_ctl.panning, &m_aux1.panning);
+	m_vol1.reset(m_out1.volume, m_dca1.volume, &m_ctl1.volume, &m_aux1.volume);
+	m_pan1.reset(m_out1.panning, &m_ctl1.panning, &m_aux1.panning);
 	m_wid1.reset(m_out1.width);
 
-	m_vol2.reset(m_out2.volume, m_dca2.volume, &m_ctl.volume, &m_aux2.volume);
-	m_pan2.reset(m_out2.panning, &m_ctl.panning, &m_aux2.panning);
+	m_vol2.reset(m_out2.volume, m_dca2.volume, &m_ctl2.volume, &m_aux2.volume);
+	m_pan2.reset(m_out2.panning, &m_ctl2.panning, &m_aux2.panning);
 	m_wid2.reset(m_out2.width);
 	
 	// flangers
@@ -1572,8 +1759,8 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	const float lfo2_rate = *m_lfo2.rate * *m_lfo2.rate;
 	const float lfo1_freq = LFO_FREQ_MIN + lfo1_rate * (LFO_FREQ_MAX - LFO_FREQ_MIN);
 	const float lfo2_freq = LFO_FREQ_MIN + lfo2_rate * (LFO_FREQ_MAX - LFO_FREQ_MIN);
-	const float modwheel1 = m_ctl.modwheel1 + PITCH_SCALE * *m_lfo1.pitch;
-	const float modwheel2 = m_ctl.modwheel2 + PITCH_SCALE * *m_lfo2.pitch;
+	const float modwheel1 = m_ctl1.modwheel + PITCH_SCALE * *m_lfo1.pitch;
+	const float modwheel2 = m_ctl2.modwheel + PITCH_SCALE * *m_lfo2.pitch;
 
 	if (int(*m_dco1.shape1) != int(dco1_wave1.shape()) || *m_dco1.width1 != dco1_wave1.width())
 		dco1_wave1.reset(synthv1_wave::Shape(*m_dco1.shape1), *m_dco1.width1);
@@ -1631,7 +1818,7 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				const float vel1
 					= (pv->vel1 + (1.0f - pv->vel1) * pv->dca1_pre.value(j));
 				const float vel2
-					= (pv->vel2 + (1.0f - pv->vel2) * pv->dca1_pre.value(j));
+					= (pv->vel2 + (1.0f - pv->vel2) * pv->dca2_pre.value(j));
 
 				// generators
 
@@ -1647,17 +1834,17 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				float dco22 = pv->dco2_sample2 * pv->dco2_bal.value(j, 1);
 
 				pv->dco1_sample1 = pv->dco1_osc1.sample(pv->dco1_freq1
-					* (m_ctl.pitchbend1 + modwheel1 * lfo1)
+					* (m_ctl1.pitchbend + modwheel1 * lfo1)
 					+ pv->dco1_glide1.tick());
 				pv->dco1_sample2 = pv->dco1_osc2.sample(pv->dco1_freq2
-					* (m_ctl.pitchbend1 + modwheel1 * lfo1)
+					* (m_ctl1.pitchbend + modwheel1 * lfo1)
 					+ pv->dco1_glide2.tick());
 
 				pv->dco2_sample1 = pv->dco2_osc1.sample(pv->dco2_freq1
-					* (m_ctl.pitchbend2 + modwheel2 * lfo2)
+					* (m_ctl2.pitchbend + modwheel2 * lfo2)
 					+ pv->dco2_glide1.tick());
 				pv->dco2_sample2 = pv->dco2_osc2.sample(pv->dco2_freq2
-					* (m_ctl.pitchbend2 + modwheel2 * lfo2)
+					* (m_ctl2.pitchbend + modwheel2 * lfo2)
 					+ pv->dco2_glide2.tick());
 
 				pv->lfo1_sample = pv->lfo1_osc.sample(lfo1_freq
@@ -1750,8 +1937,10 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 
 			if (pv->dca1_env.stage == synthv1_env::Done &&
 				pv->dca2_env.stage == synthv1_env::Done) {
-				if (pv->note >= 0)
-					m_notes[pv->note] = 0;
+				if (pv->note1 >= 0)
+					m_note1[pv->note1] = 0;
+				if (pv->note2 >= 0)
+					m_note2[pv->note2] = 0;
 				free_voice(pv);
 				nblock = 0;
 			} else {

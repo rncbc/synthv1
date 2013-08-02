@@ -113,7 +113,7 @@
        <string>Synth 1</string>
       </property>
       <layout class="QGridLayout">
-       <item row="0" column="0" colspan="12">
+       <item row="0" column="0" colspan="13">
         <widget class="QGroupBox" name="Dco1GroupBox">
          <property name="title">
           <string>DCO1</string>
@@ -396,7 +396,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="5" rowspan="2" colspan="7">
+       <item row="1" column="5" rowspan="2" colspan="8">
         <widget class="QGroupBox" name="Lfo1GroupBox">
          <property name="title">
           <string>LFO1</string>
@@ -662,7 +662,7 @@
          </layout>
         </widget>
        </item>
-       <item row="3" column="5" colspan="4">
+       <item row="3" column="5" colspan="5">
         <widget class="QGroupBox" name="Def1GroupBox">
          <property name="title">
           <string>DEF1</string>
@@ -709,6 +709,16 @@
            </widget>
           </item>
           <item>
+           <widget class="synthv1widget_combo" name="Def1ChannelKnob">
+            <property name="toolTip">
+             <string>DEF1 Channel</string>
+            </property>
+            <property name="text">
+             <string>Channel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="synthv1widget_combo" name="Def1MonoKnob">
             <property name="toolTip">
              <string>DEF1 Mono</string>
@@ -721,7 +731,7 @@
          </layout>
         </widget>
        </item>
-       <item row="3" column="9" colspan="3">
+       <item row="3" column="10" colspan="3">
         <widget class="QGroupBox" name="Out1GroupBox">
          <property name="title">
           <string>OUT1</string>
@@ -793,7 +803,7 @@
        <string>Synth 2</string>
       </property>
       <layout class="QGridLayout">
-       <item row="0" column="0" colspan="12">
+       <item row="0" column="0" colspan="13">
         <widget class="QGroupBox" name="Dco2GroupBox">
          <property name="title">
           <string>DCO2</string>
@@ -1076,7 +1086,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="5" rowspan="2" colspan="7">
+       <item row="1" column="5" rowspan="2" colspan="8">
         <widget class="QGroupBox" name="Lfo2GroupBox">
          <property name="title">
           <string>LFO2</string>
@@ -1342,7 +1352,7 @@
          </layout>
         </widget>
        </item>
-       <item row="3" column="5" colspan="4">
+       <item row="3" column="5" colspan="5">
         <widget class="QGroupBox" name="Def2GroupBox">
          <property name="title">
           <string>DEF2</string>
@@ -1389,6 +1399,16 @@
            </widget>
           </item>
           <item>
+           <widget class="synthv1widget_combo" name="Def2ChannelKnob">
+            <property name="toolTip">
+             <string>DEF2 Channel</string>
+            </property>
+            <property name="text">
+             <string>Channel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="synthv1widget_combo" name="Def2MonoKnob">
             <property name="toolTip">
              <string>DEF2 Mono</string>
@@ -1401,7 +1421,7 @@
          </layout>
         </widget>
        </item>
-       <item row="3" column="9" colspan="3">
+       <item row="3" column="10" colspan="3">
         <widget class="QGroupBox" name="Out2GroupBox">
          <property name="title">
           <string>OUT2</string>
