@@ -165,6 +165,13 @@ void synthv1widget_jack::sessionEvent ( void *pvSessionArg )
 #endif	// CONFIG_JACK_SESSION
 
 
+// Synth engine accessor.
+synthv1 *synthv1widget_jack::instance (void) const
+{
+	return m_pSynth;
+}
+
+
 #ifdef CONFIG_NSM
 
 void synthv1widget_jack::openSession (void)

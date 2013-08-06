@@ -31,6 +31,10 @@
 #define SYNTHV1_LV2UI_URI SYNTHV1_LV2_PREFIX "ui"
 
 
+// Forward decls.
+class synthv1_lv2;
+
+
 #ifdef CONFIG_LV2_EXTERNAL_UI
 #include "lv2_external_ui.h"
 #define SYNTHV1_LV2UI_EXTERNAL_URI SYNTHV1_LV2_PREFIX "ui_external"
@@ -45,7 +49,7 @@ class synthv1widget_lv2 : public synthv1widget
 {
 public:
 
-	synthv1widget_lv2(
+	synthv1widget_lv2(synthv1_lv2 *pSynth,
 		LV2UI_Controller controller, LV2UI_Write_Function write_function);
 
 	void port_event(uint32_t port_index,
@@ -58,6 +62,9 @@ public:
 
 protected:
 
+	// Synth engine accessor.
+	synthv1 *instance() const;
+
 	// Param methods.
 	void updateParam(synthv1::ParamIndex index, float fValue) const;
 
@@ -66,6 +73,9 @@ protected:
 #endif
 
 private:
+
+	// Instance variables.
+	synthv1_lv2 *m_pSynth;
 
 	// Instance variables.
 	LV2UI_Controller     m_controller;

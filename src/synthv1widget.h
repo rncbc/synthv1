@@ -86,6 +86,9 @@ protected slots:
 
 protected:
 
+	// Synth engine accessor.
+	virtual synthv1 *instance() const = 0;
+
 	// Reset swap params A/B group.
 	void resetSwapParams();
 

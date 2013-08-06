@@ -878,6 +878,12 @@ void synthv1widget::paramChanged ( float fValue )
 // Reset all param knobs to default values.
 void synthv1widget::resetParams (void)
 {
+	synthv1 *pSynth = instance();
+	if (pSynth == NULL)
+		return;
+
+	pSynth->reset();
+
 	resetSwapParams();
 
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
@@ -996,6 +1002,10 @@ void synthv1widget::loadPreset ( const QString& sFilename )
 	qDebug("synthv1widget::loadPreset(\"%s\")", sFilename.toUtf8().constData());
 #endif
 
+	synthv1 *pSynth = instance();
+	if (pSynth == NULL)
+		return;
+
 	QFile file(sFilename);
 	if (!file.open(QIODevice::ReadOnly))
 		return;
@@ -1008,6 +1018,8 @@ void synthv1widget::loadPreset ( const QString& sFilename )
 
 	resetParamValues();
 	resetParamKnobs();
+
+	pSynth->reset();
 
 	const QFileInfo fi(sFilename);
 	const QDir currentDir(QDir::current());

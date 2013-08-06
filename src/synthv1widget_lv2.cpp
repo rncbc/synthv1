@@ -23,6 +23,7 @@
 
 #include "synthv1_lv2.h"
 
+#include "lv2/lv2plug.in/ns/ext/instance-access/instance-access.h"
 
 #ifdef CONFIG_LV2_EXTERNAL_UI
 #include <QApplication>
@@ -34,9 +35,9 @@
 // synthv1widget_lv2 - impl.
 //
 
-synthv1widget_lv2::synthv1widget_lv2 (
+synthv1widget_lv2::synthv1widget_lv2 ( synthv1_lv2 *pSynth,
 	LV2UI_Controller controller, LV2UI_Write_Function write_function )
-	: synthv1widget()
+	: synthv1widget(), m_pSynth(pSynth)
 {
 	m_controller = controller;
 	m_write_function = write_function;
@@ -46,6 +47,13 @@ synthv1widget_lv2::synthv1widget_lv2 (
 #endif
 	
 	clearPreset();
+}
+
+
+// Synth engine accessor.
+synthv1 *synthv1widget_lv2::instance (void) const
+{
+	return m_pSynth;
 }
 
 
@@ -111,9 +119,22 @@ static LV2UI_Handle synthv1_lv2ui_instantiate (
 	const LV2UI_Descriptor *, const char *, const char *,
 	LV2UI_Write_Function write_function,
 	LV2UI_Controller controller, LV2UI_Widget *widget,
-	const LV2_Feature *const * )
+	const LV2_Feature *const *features )
 {
-	synthv1widget_lv2 *pWidget = new synthv1widget_lv2(controller, write_function);
+	synthv1_lv2 *pSynth = NULL;
+
+	for (int i = 0; features && features[i]; ++i) {
+		if (::strcmp(features[i]->URI, LV2_INSTANCE_ACCESS_URI) == 0) {
+			pSynth = static_cast<synthv1_lv2 *> (features[i]->data);
+			break;
+		}
+	}
+
+	if (pSynth == NULL)
+		return NULL;
+
+	synthv1widget_lv2 *pWidget
+		= new synthv1widget_lv2(pSynth, controller, write_function);
 	*widget = pWidget;
 	return pWidget;
 }
@@ -190,8 +211,13 @@ static LV2UI_Handle synthv1_lv2ui_external_instantiate (
 	LV2UI_Controller controller, LV2UI_Widget *widget,
 	const LV2_Feature *const *ui_features )
 {
+	synthv1_lv2 *pSynth = NULL;
 	LV2_External_UI_Host *external_host = NULL;
+
 	for (int i = 0; ui_features[i] && !external_host; ++i) {
+		if (::strcmp(ui_features[i]->URI, LV2_INSTANCE_ACCESS_URI) == 0)
+			pSynth = static_cast<synthv1_lv2 *> (ui_features[i]->data);
+		else
 		if (::strcmp(ui_features[i]->URI, LV2_EXTERNAL_UI__Host) == 0 ||
 			::strcmp(ui_features[i]->URI, LV2_EXTERNAL_UI_DEPRECATED_URI) == 0) {
 			external_host = (LV2_External_UI_Host *) ui_features[i]->data;
@@ -209,7 +235,7 @@ static LV2UI_Handle synthv1_lv2ui_external_instantiate (
 	pExtWidget->external.run  = synthv1_lv2ui_external_run;
 	pExtWidget->external.show = synthv1_lv2ui_external_show;
 	pExtWidget->external.hide = synthv1_lv2ui_external_hide;
-	pExtWidget->widget = new synthv1widget_lv2(controller, write_function);
+	pExtWidget->widget = new synthv1widget_lv2(pSynth, controller, write_function);
 	if (external_host)
 		pExtWidget->widget->setExternalHost(external_host);
 	*widget = pExtWidget;

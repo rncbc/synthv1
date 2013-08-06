@@ -81,6 +81,9 @@ protected slots:
 
 protected:
 
+	// Synth engine accessor.
+	synthv1 *instance() const;
+
 	// Param port method.
 	void updateParam(synthv1::ParamIndex index, float fValue) const;
 

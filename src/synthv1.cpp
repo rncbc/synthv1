@@ -140,14 +140,14 @@ struct synthv1_env
 {
 	// envelope stages
 
-	enum Stage { Done = 0, Attack, Decay, Sustain, Release };
+	enum Stage { Idle = 0, Attack, Decay, Sustain, Release };
 
 	// per voice
 
 	struct State
 	{
 		// ctor.
-		State() : running(false), stage(Done),
+		State() : running(false), stage(Idle),
 			phase(0.0f), delta(0.0f), value(0.0f),
 			c1(1.0f), c0(0.0f), frames(0) {}
 
@@ -212,7 +212,7 @@ struct synthv1_env
 		}
 		else if (p->stage == Release) {
 			p->running = false;
-			p->stage = Done;
+			p->stage = Idle;
 			p->frames = 0;
 			p->phase = 0.0f;
 			p->delta = 0.0f;
@@ -220,19 +220,6 @@ struct synthv1_env
 			p->c1 = 0.0f;
 			p->c0 = 0.0f;
 		}
-	}
-
-	void note_on(State *p)
-	{
-		p->running = true;
-		p->stage = Attack;
-		p->frames = uint32_t(*attack * *attack * max_frames);
-		if (p->frames < min_frames) // prevent click on too fast attack
-			p->frames = min_frames;
-		p->phase = 0.0f;
-		p->delta = 1.0f / float(p->frames);
-		p->c1 = 1.0f - p->value;
-		p->c0 = p->value;
 	}
 
 	void note_off(State *p)
@@ -1935,8 +1922,8 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 			if (pv->dca2_env.running && pv->dca2_env.frames == 0)
 				m_dca2.env.next(&pv->dca2_env);
 
-			if (pv->dca1_env.stage == synthv1_env::Done &&
-				pv->dca2_env.stage == synthv1_env::Done) {
+			if (pv->dca1_env.stage == synthv1_env::Idle &&
+				pv->dca2_env.stage == synthv1_env::Idle) {
 				if (pv->note1 >= 0)
 					m_note1[pv->note1] = 0;
 				if (pv->note2 >= 0)
