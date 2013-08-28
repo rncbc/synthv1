@@ -1,0 +1,12 @@
+@prefix lv2:     <http://lv2plug.in/ns/lv2core#> .
+@prefix lv2ui:   <http://lv2plug.in/ns/extensions/ui#> .
+
+<http://synthv1.sourceforge.net/lv2#ui>
+	a lv2ui:Qt4UI ;
+	lv2:requiredFeature <http://lv2plug.in/ns/ext/instance-access> ;
+	lv2ui:binary <synthv1_ui.so> .
+
+<http://synthv1.sourceforge.net/lv2#ui_external>
+	a <http://lv2plug.in/ns/extensions/ui#external> ;
+	lv2:requiredFeature <http://lv2plug.in/ns/ext/instance-access> ;
+	lv2ui:binary <synthv1_ui.so> .

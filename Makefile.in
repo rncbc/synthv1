@@ -2,8 +2,9 @@ qmake = @ac_qmake@
 
 name = synthv1
 
-name_lv2  = $(name)_lv2
-name_jack = $(name)_jack
+name_lv2   = $(name)_lv2
+name_lv2ui = $(name)_lv2ui
+name_jack  = $(name)_jack
 
 headers = \
 	src/config.h \
@@ -13,6 +14,13 @@ headers = \
 	src/$(name)_wave.h \
 	src/$(name)_list.h \
 	src/$(name)_config.h \
+	src/$(name)_param.h
+
+sources = \
+	src/$(name).cpp \
+	src/$(name)_param.cpp
+
+headers_ui = \
 	src/$(name)widget.h \
 	src/$(name)widget_config.h \
 	src/$(name)widget_env.h \
@@ -21,8 +29,7 @@ headers = \
 	src/$(name)widget_preset.h \
 	src/$(name)widget_status.h
 
-sources = \
-	src/$(name).cpp \
+sources_ui = \
 	src/$(name)widget.cpp \
 	src/$(name)widget_config.cpp \
 	src/$(name)widget_env.cpp \
@@ -30,6 +37,7 @@ sources = \
 	src/$(name)widget_knob.cpp \
 	src/$(name)widget_preset.cpp \
 	src/$(name)widget_status.cpp
+
 
 forms = \
 	src/$(name)widget.ui
@@ -40,23 +48,36 @@ resources = \
 
 headers_lv2 = \
 	$(headers) \
-	src/$(name)_lv2.h \
-	src/$(name)widget_lv2.h
+	src/$(name)_lv2.h
 
 sources_lv2 = \
 	$(sources) \
+	src/$(name)_lv2.cpp
+
+
+headers_lv2ui = \
+	$(headers_ui) \
+	src/$(name)_param.h \
+	src/$(name)_lv2.h \
+	src/$(name)widget_lv2.h
+
+sources_lv2ui = \
+	$(sources_ui) \
+	src/$(name)_param.cpp \
 	src/$(name)_lv2.cpp \
 	src/$(name)widget_lv2.cpp
 
 
 headers_jack = \
 	$(headers) \
+	$(headers_ui) \
 	src/$(name)_nsm.h \
 	src/$(name)_jack.h \
 	src/$(name)widget_jack.h
 
 sources_jack = \
 	$(sources) \
+	$(sources_ui) \
 	src/$(name)_nsm.cpp \
 	src/$(name)_jack.cpp \
 	src/$(name)widget_jack.cpp
@@ -65,8 +86,11 @@ sources_jack = \
 all:	@ac_all_targets@
 
 
-lv2:	$(name_lv2).mak $(resources) ${forms} $(sources_lv2) $(headers_lv2)
+lv2:	$(name_lv2).mak $(sources_lv2) $(headers_lv2)
 	@$(MAKE) -f $(name_lv2).mak
+
+lv2ui:	$(name_lv2ui).mak $(resources) ${forms} $(sources_lv2ui) $(headers_lv2ui)
+	@$(MAKE) -f $(name_lv2ui).mak
 
 jack:	$(name_jack).mak $(resources) ${forms} $(sources_jack) $(headers_jack)
 	@$(MAKE) -f $(name_jack).mak
@@ -75,27 +99,34 @@ jack:	$(name_jack).mak $(resources) ${forms} $(sources_jack) $(headers_jack)
 $(name_lv2).mak:	$(name_lv2).pro
 	@$(qmake) -o $(name_lv2).mak $(name_lv2).pro
 
+$(name_lv2ui).mak:	$(name_lv2ui).pro
+	@$(qmake) -o $(name_lv2ui).mak $(name_lv2ui).pro
+
 $(name_jack).mak:	$(name_jack).pro
 	@$(qmake) -o $(name_jack).mak $(name_jack).pro
 
 
-install_lv2:	lv2
+install_lv2:	lv2 lv2ui
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_lv2).mak install
+	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_lv2ui).mak install
 
 install_jack:	jack
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_jack).mak install
 
 
-uninstall_lv2:	lv2
+uninstall_lv2:	lv2 lv2ui
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_lv2).mak uninstall
+	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_lv2ui).mak uninstall
 
 uninstall_jack:	jack
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_jack).mak uninstall
 
 
-clean_lv2:	$(name_lv2).mak
+clean_lv2:	$(name_lv2).mak $(name_lv2ui).mak
 	@$(MAKE) -f $(name_lv2).mak distclean
+	@$(MAKE) -f $(name_lv2ui).mak distclean
 	@rm -f $(name_lv2).mak
+	@rm -f $(name_lv2ui).mak
 
 clean_jack:	$(name_jack).mak
 	@$(MAKE) -f $(name_jack).mak distclean

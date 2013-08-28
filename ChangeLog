@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+- First attempt on separating the DSP code from UI as runtime
+  objects, effective for the LV2 plugin deploy. (EXPERIMENTAL)
 - MIDI channel filter switch is now introduced. (EXPERIMENTAL)
 - Fixed uninstall target make rule.
 - Mono(phonic) mode switch is now being introduced.
