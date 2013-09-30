@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 11
+%define release 12
 
 %define _prefix	@ac_prefix@
 
@@ -68,6 +68,8 @@ BuildRequires:	lv2-devel
 %{_datadir}/icons/hicolor/scalable/mimetypes/application-x-%{name}*.svgz
 
 %changelog
+* Mon Sep 30 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.5-12
+- Fall greetings release.
 * Tue Jul 16 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.4-11
 - Brand new icon ready.
 * Fri May 31 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.3-10
