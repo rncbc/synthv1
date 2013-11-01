@@ -3,6 +3,11 @@ synthv1 - an old-school polyphonic synthesizer
 
 ChangeLog
 
+SVN TRUNK
+
+- More preparations for Qt5 configure build.
+
+
 0.3.5  2013-09-30  Fall greetings.
 
 - First attempt on separating the DSP code from UI as runtime
