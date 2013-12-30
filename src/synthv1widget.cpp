@@ -731,8 +731,21 @@ void synthv1widget::setParamValue ( synthv1::ParamIndex index, float fValue )
 
 float synthv1widget::paramValue ( synthv1::ParamIndex index ) const
 {
+	float fParamValue = 0.0f;
+
 	synthv1widget_knob *pKnob = paramKnob(index);
-	return (pKnob ? pKnob->value() : 0.0f);
+	if (pKnob) {
+		fParamValue = pKnob->value();
+	} else {
+		synthv1 *pSynth = instance();
+		if (pSynth) {
+			const float *pParamPort = pSynth->paramPort(index);
+			if (pParamPort)
+				fParamValue = *pParamPort;
+		}
+	}
+
+	return fParamValue;
 }
 
 
