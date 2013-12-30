@@ -5,6 +5,7 @@ ChangeLog
 
 SVN TRUNK
 
+- Effects/Delay BPM sync option to current transport (Auto).
 - More preparations for Qt5 configure build.
 
 

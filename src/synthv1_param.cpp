@@ -147,6 +147,8 @@ struct {
 	{ "DEL1_DELAY",     0.5f },
 	{ "DEL1_FEEDB",     0.5f },
 	{ "DEL1_BPM",     180.0f },
+	{ "DEL1_BPMSYNC",   0.0f },
+	{ "DEL1_BPMHOST", 180.0f },
 	{ "DYN1_COMPRESS",  0.0f },
 	{ "DYN1_LIMIT",     1.0f }
 };

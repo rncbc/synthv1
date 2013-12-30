@@ -80,6 +80,9 @@ protected slots:
 	// Swap params A/B.
 	void swapParams(bool bOn);
 
+	// Delay BPM change.
+	void bpmSyncChanged();
+
 	// Menu actions.
 	void helpAbout();
 	void helpAboutQt();
@@ -98,6 +101,9 @@ protected:
 
 	// Param port methods.
 	virtual void updateParam(synthv1::ParamIndex index, float fValue) const = 0;
+
+	// Update local tied widgets.
+	void updateParamEx(synthv1::ParamIndex index, float fValue);
 
 	// Dirty flag (overridable virtual) methods.
 	virtual void updateDirtyPreset(bool bDirtyPreset);

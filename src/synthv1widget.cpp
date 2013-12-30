@@ -127,6 +127,8 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_ui.Pha1WetKnob->setSpecialValueText(sOff);
 	m_ui.Del1WetKnob->setSpecialValueText(sOff);
 
+	m_ui.Del1BpmKnob->setSpecialValueText(tr("Auto"));
+
 	// DCO octave limits.
 	m_ui.Dco1OctaveKnob->setMinimum(-4.0f);
 	m_ui.Dco1OctaveKnob->setMaximum(+4.0f);
@@ -644,6 +646,10 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	setParamKnob(synthv1::DEL1_FEEDB, m_ui.Del1FeedbKnob);
 	setParamKnob(synthv1::DEL1_BPM,   m_ui.Del1BpmKnob);
 
+	QObject::connect(m_ui.Del1BpmKnob,
+		SIGNAL(valueChanged(float)),
+		SLOT(bpmSyncChanged()));
+
 	// Dynamics
 	setParamKnob(synthv1::DYN1_COMPRESS, m_ui.Dyn1CompressKnob);
 	setParamKnob(synthv1::DYN1_LIMITER,  m_ui.Dyn1LimiterKnob);
@@ -718,6 +724,8 @@ void synthv1widget::setParamValue ( synthv1::ParamIndex index, float fValue )
 	if (pKnob)
 		pKnob->setValue(fValue);
 
+	updateParamEx(index, fValue);
+
 	--m_iUpdate;
 }
 
@@ -736,13 +744,33 @@ void synthv1widget::paramChanged ( float fValue )
 
 	synthv1widget_knob *pKnob = qobject_cast<synthv1widget_knob *> (sender());
 	if (pKnob) {
-		updateParam(m_knobParams.value(pKnob), fValue);
+		synthv1::ParamIndex index = m_knobParams.value(pKnob);
+		updateParam(index, fValue);
+		updateParamEx(index, fValue);
 		m_ui.StatusBar->showMessage(QString("%1 / %2: %3")
 			.arg(m_ui.StackedWidget->currentWidget()->windowTitle())
 			.arg(pKnob->toolTip())
 			.arg(pKnob->valueText()), 5000);
 		updateDirtyPreset(true);
 	}
+}
+
+
+// Update local tied widgets.
+void synthv1widget::updateParamEx ( synthv1::ParamIndex index, float fValue )
+{
+	++m_iUpdate;
+
+	switch (index) {
+	case synthv1::DEL1_BPMSYNC:
+		if (fValue > 0.0f)
+			m_ui.Del1BpmKnob->setValue(0.0f);
+		// Fall thru...
+	default:
+		break;
+	}
+
+	--m_iUpdate;
 }
 
 
@@ -1053,6 +1081,29 @@ void synthv1widget::updateDirtyPreset ( bool bDirtyPreset )
 {
 	m_ui.StatusBar->setModified(bDirtyPreset);
 	m_ui.Preset->setDirtyPreset(bDirtyPreset);
+}
+
+
+// Delay BPM change.
+void synthv1widget::bpmSyncChanged (void)
+{
+	if (m_iUpdate > 0)
+		return;
+
+	++m_iUpdate;
+	synthv1 *pSynth = instance();
+	if (pSynth) {
+		float *pBpmSync = pSynth->paramPort(synthv1::DEL1_BPMSYNC);
+		if (pBpmSync) {
+			const bool bBpmSync0
+				= (*pBpmSync > 0.0f);
+			const bool bBpmSync1
+				= (m_ui.Del1BpmKnob->minimum() >= m_ui.Del1BpmKnob->value());
+			if ((bBpmSync1 && !bBpmSync0) || (!bBpmSync1 && bBpmSync0))
+				*pBpmSync = (bBpmSync1 ? 1.0f : 0.0f);
+		}
+	}
+	--m_iUpdate;
 }
 
 
