@@ -3,7 +3,7 @@ synthv1 - an old-school polyphonic synthesizer
 
 ChangeLog
 
-SVN TRUNK
+0.3.6  2013-12-31  A fifth of a Jubilee.
 
 - Effects/Delay BPM sync option to current transport (Auto).
 - More preparations for Qt5 configure build.

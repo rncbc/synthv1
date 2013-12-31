@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 12
+%define release 13
 
 %define _prefix	@ac_prefix@
 
@@ -68,27 +68,29 @@ BuildRequires:	lv2-devel
 %{_datadir}/icons/hicolor/scalable/mimetypes/application-x-%{name}*.svg
 
 %changelog
-* Mon Sep 30 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.5-12
+* Tue Dec 31 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.6
+- A fifth of a Jubilee release.
+* Mon Sep 30 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.5
 - Fall greetings release.
-* Tue Jul 16 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.4-11
+* Tue Jul 16 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.4
 - Brand new icon ready.
-* Fri May 31 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.3-10
+* Fri May 31 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.3
 - Late spring blossoming.
-* Fri Mar  1 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.2-9
+* Fri Mar  1 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.2
 - One third bug-fix release.
-* Fri Feb  8 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.1-8
+* Fri Feb  8 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.1
 - One second bug-fix release.
-* Fri Dec 21 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.3.0-7
+* Fri Dec 21 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.3.0
 - Third coming release.
-* Thu Nov 22 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.2.0-6
+* Thu Nov 22 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.2.0
 - Second public release.
-* Mon Sep 24 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.1.1-5
+* Mon Sep 24 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.1.1
 - One first bug-fix release.
-* Mon Sep 10 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.1.0-4
+* Mon Sep 10 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.1.0
 - First true official release.
-* Mon Aug 27 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.0.9-3
+* Mon Aug 27 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.0.9
 - Post-vacation relax: improved polyphony, preset salvage.
-* Sun Jul 15 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.0.8-2
+* Sun Jul 15 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.0.8
 - Proto-Icon, Desktop file and Help About menus added.
-* Sun Jul  8 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.0.7-1
+* Sun Jul  8 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.0.7
 - Created initial synthv1.spec
