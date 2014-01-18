@@ -1,7 +1,7 @@
 // synthv1.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@ const uint16_t MAX_VOICES = 32;			// polyphony
 const uint8_t  MAX_NOTES  = 128;
 
 const float MIN_ENV_MSECS = 2.0f;		// min 2msec per stage
-const float MAX_ENV_MSECS = 5000.0f;	// max 5 sec per stage
+const float MAX_ENV_MSECS = 5000.0f;	// max 5 sec per stage (default)
 
 const float DETUNE_SCALE  = 0.5f;
 const float PHASE_SCALE   = 0.5f;
@@ -314,6 +314,7 @@ struct synthv1_dco
 	float *octave;
 	float *tuning;
 	float *glide;
+	float *envtime, envtime0;
 };
 
 
@@ -760,6 +761,10 @@ public:
 
 protected:
 
+	void updateEnvTimes();
+	void updateEnvTimes_1();
+	void updateEnvTimes_2();
+
 	void allControllersOff();
 	void allControllersOff_1();
 	void allControllersOff_2();
@@ -858,6 +863,9 @@ synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
 
 synthv1_impl::synthv1_impl ( uint16_t iChannels, uint32_t iSampleRate )
 {
+	// max env. stage length (default)
+	m_dco1.envtime0 = m_dco2.envtime0 = 0.0001f * MAX_ENV_MSECS;
+
 	// glide notes
 	dco1_last1 = 0.0f;
 	dco1_last2 = 0.0f;
@@ -971,35 +979,58 @@ void synthv1_impl::setSampleRate ( uint32_t iSampleRate )
 	lfo1_wave.setSampleRate(m_iSampleRate);
 	lfo2_wave.setSampleRate(m_iSampleRate);
 
-	// update envelope range times in frames
-	const float srate_ms = 0.001f * float(m_iSampleRate);
-
-	const uint32_t min_frames = uint32_t(srate_ms * MIN_ENV_MSECS);
-	const uint32_t max_frames = uint32_t(srate_ms * MAX_ENV_MSECS);
-
-	m_dcf1.env.min_frames = min_frames;
-	m_dcf1.env.max_frames = max_frames;
-
-	m_dcf2.env.min_frames = min_frames;
-	m_dcf2.env.max_frames = max_frames;
-
-	m_lfo1.env.min_frames = min_frames;
-	m_lfo1.env.max_frames = max_frames;
-
-	m_lfo2.env.min_frames = min_frames;
-	m_lfo2.env.max_frames = max_frames;
-
-	m_dca1.env.min_frames = min_frames;
-	m_dca1.env.max_frames = max_frames;
-
-	m_dca2.env.min_frames = min_frames;
-	m_dca2.env.max_frames = max_frames;
+	updateEnvTimes();
 }
 
 
 uint32_t synthv1_impl::sampleRate (void) const
 {
 	return m_iSampleRate;
+}
+
+
+void synthv1_impl::updateEnvTimes_1 (void)
+{
+	// update envelope range times in frames
+	const float srate_ms = 0.001f * float(m_iSampleRate);
+
+	const uint32_t min_frames = uint32_t(srate_ms * MIN_ENV_MSECS);
+	const uint32_t max_frames = uint32_t(srate_ms * m_dco1.envtime0 * 10000.0f);
+
+	m_dcf1.env.min_frames = min_frames;
+	m_dcf1.env.max_frames = max_frames;
+
+	m_lfo1.env.min_frames = min_frames;
+	m_lfo1.env.max_frames = max_frames;
+
+	m_dca1.env.min_frames = min_frames;
+	m_dca1.env.max_frames = max_frames;
+}
+
+
+void synthv1_impl::updateEnvTimes_2 (void)
+{
+	// update envelope range times in frames
+	const float srate_ms = 0.001f * float(m_iSampleRate);
+
+	const uint32_t min_frames = uint32_t(srate_ms * MIN_ENV_MSECS);
+	const uint32_t max_frames = uint32_t(srate_ms * m_dco2.envtime0 * 10000.0f);
+
+	m_dcf2.env.min_frames = min_frames;
+	m_dcf2.env.max_frames = max_frames;
+
+	m_lfo2.env.min_frames = min_frames;
+	m_lfo2.env.max_frames = max_frames;
+
+	m_dca2.env.min_frames = min_frames;
+	m_dca2.env.max_frames = max_frames;
+}
+
+
+void synthv1_impl::updateEnvTimes (void)
+{
+	updateEnvTimes_1();
+	updateEnvTimes_2();
 }
 
 
@@ -1021,6 +1052,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DCO1_OCTAVE:    m_dco1.octave      = pfParam; break;
 	case synthv1::DCO1_TUNING:    m_dco1.tuning      = pfParam; break;
 	case synthv1::DCO1_GLIDE:     m_dco1.glide       = pfParam; break;
+	case synthv1::DCO1_ENVTIME:   m_dco1.envtime     = pfParam; break;
 	case synthv1::DCF1_CUTOFF:    m_dcf1.cutoff      = pfParam; break;
 	case synthv1::DCF1_RESO:      m_dcf1.reso        = pfParam; break;
 	case synthv1::DCF1_TYPE:      m_dcf1.type        = pfParam; break;
@@ -1067,6 +1099,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DCO2_OCTAVE:    m_dco2.octave      = pfParam; break;
 	case synthv1::DCO2_TUNING:    m_dco2.tuning      = pfParam; break;
 	case synthv1::DCO2_GLIDE:     m_dco2.glide       = pfParam; break;
+	case synthv1::DCO2_ENVTIME:   m_dco2.envtime     = pfParam; break;
 	case synthv1::DCF2_CUTOFF:    m_dcf2.cutoff      = pfParam; break;
 	case synthv1::DCF2_RESO:      m_dcf2.reso        = pfParam; break;
 	case synthv1::DCF2_TYPE:      m_dcf2.type        = pfParam; break;
@@ -1145,6 +1178,7 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DCO1_OCTAVE:    pfParam = m_dco1.octave;      break;
 	case synthv1::DCO1_TUNING:    pfParam = m_dco1.tuning;      break;
 	case synthv1::DCO1_GLIDE:     pfParam = m_dco1.glide;       break;
+	case synthv1::DCO1_ENVTIME:   pfParam = m_dco1.envtime;     break;
 	case synthv1::DCF1_CUTOFF:    pfParam = m_dcf1.cutoff;      break;
 	case synthv1::DCF1_RESO:      pfParam = m_dcf1.reso;        break;
 	case synthv1::DCF1_TYPE:      pfParam = m_dcf1.type;        break;
@@ -1191,6 +1225,7 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DCO2_OCTAVE:    pfParam = m_dco2.octave;      break;
 	case synthv1::DCO2_TUNING:    pfParam = m_dco2.tuning;      break;
 	case synthv1::DCO2_GLIDE:     pfParam = m_dco2.glide;       break;
+	case synthv1::DCO2_ENVTIME:   pfParam = m_dco2.envtime;     break;
 	case synthv1::DCF2_CUTOFF:    pfParam = m_dcf2.cutoff;      break;
 	case synthv1::DCF2_RESO:      pfParam = m_dcf2.reso;        break;
 	case synthv1::DCF2_TYPE:      pfParam = m_dcf2.type;        break;
@@ -1773,6 +1808,16 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 		lfo1_wave.reset(synthv1_wave::Shape(*m_lfo1.shape), *m_lfo1.width);
 	if (int(*m_lfo2.shape) != int(lfo2_wave.shape()) || *m_lfo2.width != lfo2_wave.width())
 		lfo2_wave.reset(synthv1_wave::Shape(*m_lfo2.shape), *m_lfo2.width);
+
+	if (m_dco1.envtime0 != *m_dco1.envtime) {
+		m_dco1.envtime0  = *m_dco1.envtime;
+		updateEnvTimes_1();
+	}
+
+	if (m_dco2.envtime0 != *m_dco2.envtime) {
+		m_dco2.envtime0  = *m_dco2.envtime;
+		updateEnvTimes_2();
+	}
 
 	// per voice
 

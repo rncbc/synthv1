@@ -1,7 +1,7 @@
 // synthv1.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -60,6 +60,7 @@ public:
 		DCO1_OCTAVE,
 		DCO1_TUNING,
 		DCO1_GLIDE,
+		DCO1_ENVTIME,
 		DCF1_CUTOFF,
 		DCF1_RESO,
 		DCF1_TYPE,
@@ -108,6 +109,7 @@ public:
 		DCO2_OCTAVE,
 		DCO2_TUNING,
 		DCO2_GLIDE,
+		DCO2_ENVTIME,
 		DCF2_CUTOFF,
 		DCF2_RESO,
 		DCF2_TYPE,

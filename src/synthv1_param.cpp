@@ -1,7 +1,7 @@
 // synthv1_param.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -43,6 +43,7 @@ struct {
 	{ "DCO1_OCTAVE",    0.0f },
 	{ "DCO1_TUNING",    0.0f },
 	{ "DCO1_GLIDE",     0.0f },
+	{ "DCO1_ENVTIME",   0.5f },
 	{ "DCF1_CUTOFF",    0.5f },
 	{ "DCF1_RESO",      0.0f },
 	{ "DCF1_TYPE",      0.0f },
@@ -91,6 +92,7 @@ struct {
 	{ "DCO2_OCTAVE",   -2.0f },
 	{ "DCO2_TUNING",    0.0f },
 	{ "DCO2_GLIDE",     0.0f },
+	{ "DCO2_ENVTIME",   0.5f },
 	{ "DCF2_CUTOFF",    0.5f },
 	{ "DCF2_RESO",      0.0f },
 	{ "DCF2_TYPE",      0.0f },
