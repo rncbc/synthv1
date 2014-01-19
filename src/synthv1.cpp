@@ -1794,7 +1794,6 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	const float modwheel1 = m_ctl1.modwheel + PITCH_SCALE * *m_lfo1.pitch;
 	const float modwheel2 = m_ctl2.modwheel + PITCH_SCALE * *m_lfo2.pitch;
 
-#if 0
 	if (m_dco1.envtime0 != *m_dco1.envtime) {
 		m_dco1.envtime0  = *m_dco1.envtime;
 		updateEnvTimes_1();
@@ -1803,7 +1802,6 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 		m_dco2.envtime0  = *m_dco2.envtime;
 		updateEnvTimes_2();
 	}
-#endif
 
 	if (int(*m_dco1.shape1) != int(dco1_wave1.shape()) || *m_dco1.width1 != dco1_wave1.width())
 		dco1_wave1.reset(synthv1_wave::Shape(*m_dco1.shape1), *m_dco1.width1);
