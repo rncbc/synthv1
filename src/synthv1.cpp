@@ -994,8 +994,10 @@ void synthv1_impl::updateEnvTimes_1 (void)
 	// update envelope range times in frames
 	const float srate_ms = 0.001f * float(m_iSampleRate);
 
+	const float envtime_msecs = 10000.0f * synthv1_max(m_dco1.envtime0, 0.1f);
+
 	const uint32_t min_frames = uint32_t(srate_ms * MIN_ENV_MSECS);
-	const uint32_t max_frames = uint32_t(srate_ms * m_dco1.envtime0 * 10000.0f);
+	const uint32_t max_frames = uint32_t(srate_ms * envtime_msecs);
 
 	m_dcf1.env.min_frames = min_frames;
 	m_dcf1.env.max_frames = max_frames;
@@ -1013,8 +1015,10 @@ void synthv1_impl::updateEnvTimes_2 (void)
 	// update envelope range times in frames
 	const float srate_ms = 0.001f * float(m_iSampleRate);
 
+	const float envtime_msecs = 10000.0f * synthv1_max(m_dco2.envtime0, 0.1f);
+
 	const uint32_t min_frames = uint32_t(srate_ms * MIN_ENV_MSECS);
-	const uint32_t max_frames = uint32_t(srate_ms * m_dco2.envtime0 * 10000.0f);
+	const uint32_t max_frames = uint32_t(srate_ms * envtime_msecs);
 
 	m_dcf2.env.min_frames = min_frames;
 	m_dcf2.env.max_frames = max_frames;
