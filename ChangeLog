@@ -5,6 +5,7 @@ ChangeLog
 
 SVN TRUNK
 
+- Fixed initial knobs default/center value.
 - Introducing a variable env.stage time parameter. (EXPERIMENTAL)
 - Dummy change-log entry for the new year.
 

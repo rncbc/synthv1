@@ -703,6 +703,8 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 // Param kbob (widget) map accesors.
 void synthv1widget::setParamKnob ( synthv1::ParamIndex index, synthv1widget_knob *pKnob )
 {
+	pKnob->setDefaultValue(synthv1_param::paramDefaultValue(index));
+
 	m_paramKnobs.insert(index, pKnob);
 	m_knobParams.insert(pKnob, index);
 

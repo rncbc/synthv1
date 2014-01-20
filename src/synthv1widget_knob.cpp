@@ -1,7 +1,7 @@
 // synthv1widget_knob.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -53,7 +53,8 @@ synthv1widget_knob::synthv1widget_knob ( QWidget *pParent ) : QWidget(pParent)
 
 	m_fScale = 100.0f;
 
-	resetDefaultValue();
+	m_fDefaultValue = 0.0f;
+	m_iDefaultValue = 0;
 
 	m_pLabel->setAlignment(Qt::AlignCenter);
 	m_pDial->setSingleStep(10);
@@ -148,8 +149,12 @@ float synthv1widget_knob::minimum (void) const
 
 void synthv1widget_knob::resetDefaultValue (void)
 {
-	m_fDefaultValue = 0.0f;
-	m_iDefaultValue = 0;
+	if (m_iDefaultValue < 1) {
+		m_fDefaultValue = 0.5f * (maximum() + minimum());
+		m_iDefaultValue++;
+	}
+
+	setValue(m_fDefaultValue);
 }
 
 void synthv1widget_knob::setDefaultValue ( float fDefaultValue )
@@ -178,13 +183,8 @@ float synthv1widget_knob::singleStep (void) const
 // Mouse behavior event handler.
 void synthv1widget_knob::mousePressEvent ( QMouseEvent *pMouseEvent )
 {
-	if (pMouseEvent->button() == Qt::MidButton) {
-		if (m_iDefaultValue < 1) {
-			m_fDefaultValue = 0.5f * (maximum() + minimum());
-			m_iDefaultValue++;
-		}
-		setValue(m_fDefaultValue);
-	}
+	if (pMouseEvent->button() == Qt::MidButton)
+		resetDefaultValue();
 
 	QWidget::mousePressEvent(pMouseEvent);
 }
