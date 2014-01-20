@@ -53,8 +53,7 @@ synthv1widget_knob::synthv1widget_knob ( QWidget *pParent ) : QWidget(pParent)
 
 	m_fScale = 100.0f;
 
-	m_fDefaultValue = 0.0f;
-	m_iDefaultValue = 0;
+	resetDefaultValue();
 
 	m_pLabel->setAlignment(Qt::AlignCenter);
 	m_pDial->setSingleStep(10);
@@ -149,12 +148,8 @@ float synthv1widget_knob::minimum (void) const
 
 void synthv1widget_knob::resetDefaultValue (void)
 {
-	if (m_iDefaultValue < 1) {
-		m_fDefaultValue = 0.5f * (maximum() + minimum());
-		m_iDefaultValue++;
-	}
-
-	setValue(m_fDefaultValue);
+	m_fDefaultValue = 0.0f;
+	m_iDefaultValue = 0;
 }
 
 void synthv1widget_knob::setDefaultValue ( float fDefaultValue )
@@ -183,8 +178,13 @@ float synthv1widget_knob::singleStep (void) const
 // Mouse behavior event handler.
 void synthv1widget_knob::mousePressEvent ( QMouseEvent *pMouseEvent )
 {
-	if (pMouseEvent->button() == Qt::MidButton)
-		resetDefaultValue();
+	if (pMouseEvent->button() == Qt::MidButton) {
+		if (m_iDefaultValue < 1) {
+			m_fDefaultValue = 0.5f * (maximum() + minimum());
+			m_iDefaultValue++;
+		}
+		setValue(m_fDefaultValue);
+	}
 
 	QWidget::mousePressEvent(pMouseEvent);
 }
