@@ -147,7 +147,7 @@
 		lv2:symbol "DCO1_ENVTIME" ;
 		lv2:name "DCO1 Env.Time" ;
 		lv2:default 0.5 ;
-		lv2:minimum 0.1 ;
+		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
@@ -550,7 +550,7 @@
 		lv2:symbol "DCO2_ENVTIME" ;
 		lv2:name "DCO2 Env.Time" ;
 		lv2:default 0.5 ;
-		lv2:minimum 0.1 ;
+		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;

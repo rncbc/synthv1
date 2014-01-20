@@ -3,7 +3,7 @@
  <author>rncbc aka Rui Nuno Capela</author>
  <comment>synthv1 - An almost virtual-analog polyphonic synthesizer
 
-  Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+  Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -269,6 +269,29 @@
             </property>
             <property name="text">
              <string>Glide</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco1EnvTimeKnob">
+            <property name="toolTip">
+             <string>DCO1 Env.Time</string>
+            </property>
+            <property name="text">
+             <string>Env.Time</string>
             </property>
            </widget>
           </item>
@@ -959,6 +982,29 @@
             </property>
             <property name="text">
              <string>Glide</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco2EnvTimeKnob">
+            <property name="toolTip">
+             <string>DCO2 Env.Time</string>
+            </property>
+            <property name="text">
+             <string>Env.Time</string>
             </property>
            </widget>
           </item>

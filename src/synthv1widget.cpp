@@ -1,7 +1,7 @@
 // synthv1widget.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -228,6 +228,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	setParamKnob(synthv1::DCO1_OCTAVE,  m_ui.Dco1OctaveKnob);
 	setParamKnob(synthv1::DCO1_TUNING,  m_ui.Dco1TuningKnob);
 	setParamKnob(synthv1::DCO1_GLIDE,   m_ui.Dco1GlideKnob);
+	setParamKnob(synthv1::DCO1_ENVTIME, m_ui.Dco1EnvTimeKnob);
 
 	QObject::connect(
 		m_ui.Dco1Shape1Knob, SIGNAL(valueChanged(float)),
@@ -431,6 +432,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	setParamKnob(synthv1::DCO2_OCTAVE,  m_ui.Dco2OctaveKnob);
 	setParamKnob(synthv1::DCO2_TUNING,  m_ui.Dco2TuningKnob);
 	setParamKnob(synthv1::DCO2_GLIDE,   m_ui.Dco2GlideKnob);
+	setParamKnob(synthv1::DCO2_ENVTIME, m_ui.Dco2EnvTimeKnob);
 
 	QObject::connect(
 		m_ui.Dco2Shape1Knob, SIGNAL(valueChanged(float)),
