@@ -18,6 +18,7 @@ HEADERS = \
 	synthv1_fx.h \
 	synthv1_nsm.h \
 	synthv1_param.h \
+	synthv1_reverb.h \
 	synthv1widget.h \
 	synthv1widget_env.h \
 	synthv1widget_filt.h \

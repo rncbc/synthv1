@@ -28,6 +28,8 @@
 
 #include "synthv1_fx.h"
 
+#include "synthv1_reverb.h"
+
 
 #ifdef CONFIG_DEBUG_0
 #include <stdio.h>
@@ -441,6 +443,17 @@ struct synthv1_dyn
 };
 
 
+// reverb
+
+struct synthv1_rev
+{
+	float *wet;
+	float *room;
+	float *damp;
+	float *width;
+};
+
+
 // (Hal Chamberlin's state variable) filter
 
 class synthv1_filter1
@@ -811,6 +824,7 @@ private:
 	synthv1_pha m_pha;
 	synthv1_del m_del;
 	synthv1_dyn m_dyn;
+	synthv1_rev m_rev;
 
 	synthv1_voice **m_voices;
 	synthv1_voice  *m_note1[MAX_NOTES];
@@ -830,6 +844,8 @@ private:
 	synthv1_fx_phaser  *m_phaser;
 	synthv1_fx_delay   *m_delay;
 	synthv1_fx_comp    *m_comp;
+
+	synthv1_reverb m_reverb;
 };
 
 
@@ -1162,6 +1178,10 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DEL1_BPMHOST:   m_del.bpmhost      = pfParam; break;
 	case synthv1::DYN1_COMPRESS:  m_dyn.compress     = pfParam; break;
 	case synthv1::DYN1_LIMITER:   m_dyn.limiter      = pfParam; break;
+	case synthv1::REV1_WET:       m_rev.wet          = pfParam; break;
+	case synthv1::REV1_ROOM:      m_rev.room         = pfParam; break;
+	case synthv1::REV1_DAMP:      m_rev.damp         = pfParam; break;
+	case synthv1::REV1_WIDTH:     m_rev.width        = pfParam; break;
 	default: break;
 	}
 }
@@ -1288,6 +1308,10 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DEL1_BPMHOST:   pfParam = m_del.bpmhost;      break;
 	case synthv1::DYN1_COMPRESS:  pfParam = m_dyn.compress;     break;
 	case synthv1::DYN1_LIMITER:   pfParam = m_dyn.limiter;      break;
+	case synthv1::REV1_WET:       pfParam = m_rev.wet;          break;
+	case synthv1::REV1_ROOM:      pfParam = m_rev.room;         break;
+	case synthv1::REV1_DAMP:      pfParam = m_rev.damp;         break;
+	case synthv1::REV1_WIDTH:     pfParam = m_rev.width;        break;
 	default: break;
 	}
 
@@ -1734,6 +1758,8 @@ void synthv1_impl::allSoundOff (void)
 		m_delay[k].reset();
 		m_comp[k].reset();
 	}
+
+	m_reverb.setSampleRate(m_iSampleRate);
 }
 
 
@@ -1769,6 +1795,9 @@ void synthv1_impl::reset (void)
 	// compressors
 	if (m_comp == 0)
 		m_comp = new synthv1_fx_comp [m_iChannels];
+
+	// reverbs
+	m_reverb.reset(true);
 
 	allSoundOff();
 //	allControllersOff();
@@ -2040,6 +2069,11 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 		if (int(*m_dyn.limiter) > 0) {
 			for (uint32_t n = 0; n < nframes; ++n)
 				*out++ = synthv1_sigmoid(*in++);
+		}
+		// reverb
+		if (k > 0) {
+			m_reverb.process(outs[k - 1], outs[k], nframes, *m_rev.wet,
+				*m_rev.room, *m_rev.damp, *m_rev.width);
 		}
 	}
 

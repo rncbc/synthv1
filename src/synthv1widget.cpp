@@ -216,6 +216,9 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_ui.Del1BpmKnob->setMinimum(3.6f);
 	m_ui.Del1BpmKnob->setMaximum(360.0f);
 
+	// Reverb (stereo-)width limits.
+	m_ui.Rev1WidthKnob->setMinimum(-1.0f);
+	m_ui.Rev1WidthKnob->setMaximum(+1.0f);
 
 	// DCO1
 	setParamKnob(synthv1::DCO1_SHAPE1,  m_ui.Dco1Shape1Knob);
@@ -655,6 +658,13 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	// Dynamics
 	setParamKnob(synthv1::DYN1_COMPRESS, m_ui.Dyn1CompressKnob);
 	setParamKnob(synthv1::DYN1_LIMITER,  m_ui.Dyn1LimiterKnob);
+
+	// Reverb
+	setParamKnob(synthv1::REV1_WET,   m_ui.Rev1WetKnob);
+	setParamKnob(synthv1::REV1_ROOM,  m_ui.Rev1RoomKnob);
+	setParamKnob(synthv1::REV1_DAMP,  m_ui.Rev1DampKnob);
+	setParamKnob(synthv1::REV1_WIDTH, m_ui.Rev1WidthKnob);
+
 
 	// Preset management
 	QObject::connect(m_ui.Preset,

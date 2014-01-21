@@ -17,6 +17,7 @@ HEADERS = \
 	synthv1_ramp.h \
 	synthv1_list.h \
 	synthv1_fx.h \
+	synthv1_reverb.h \
 	synthv1_param.h
 
 SOURCES = \
