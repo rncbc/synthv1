@@ -2046,16 +2046,15 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 		m_del.bpm = del_bpmhost;
 	}
 
-	// effects
+	// chorus
+	if (m_iChannels > 1) {
+		m_chorus.process(outs[0], outs[1], nframes, *m_cho.wet,
+			*m_cho.delay, *m_cho.feedb, *m_cho.rate, *m_cho.mod);
+	}
 
+	// effects
 	for (k = 0; k < m_iChannels; ++k) {
 		float *in = outs[k];
-		float *out = in;
-		// chorus
-		if (k > 0) {
-			m_chorus.process(outs[k - 1], outs[k], nframes, *m_cho.wet,
-				*m_cho.delay, *m_cho.feedb, *m_cho.rate, *m_cho.mod);
-		}
 		// flanger
 		m_flanger[k].process(in, nframes, *m_fla.wet,
 			*m_fla.delay, *m_fla.feedb, *m_fla.daft * float(k));
@@ -2065,18 +2064,25 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 		// delay
 		m_delay[k].process(in, nframes, *m_del.wet,
 			*m_del.delay, *m_del.feedb, *m_del.bpm);
+	}
+
+	// reverb
+	if (m_iChannels > 1) {
+		m_reverb.process(outs[0], outs[1], nframes, *m_rev.wet,
+			*m_rev.feedb, *m_rev.room, *m_rev.damp, *m_rev.width);
+	}
+
+	// dynamics
+	for (k = 0; k < m_iChannels; ++k) {
+		float *in = outs[k];
 		// compressor
 		if (int(*m_dyn.compress) > 0)
 			m_comp[k].process(in, nframes);
 		// limiter
 		if (int(*m_dyn.limiter) > 0) {
+			float *out = in;
 			for (uint32_t n = 0; n < nframes; ++n)
 				*out++ = synthv1_sigmoid(*in++);
-		}
-		// reverb
-		if (k > 0) {
-			m_reverb.process(outs[k - 1], outs[k], nframes, *m_rev.wet,
-				*m_rev.feedb, *m_rev.room, *m_rev.damp, *m_rev.width);
 		}
 	}
 
