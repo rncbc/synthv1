@@ -661,6 +661,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 
 	// Reverb
 	setParamKnob(synthv1::REV1_WET,   m_ui.Rev1WetKnob);
+	setParamKnob(synthv1::REV1_FEEDB, m_ui.Rev1FeedbKnob);
 	setParamKnob(synthv1::REV1_ROOM,  m_ui.Rev1RoomKnob);
 	setParamKnob(synthv1::REV1_DAMP,  m_ui.Rev1DampKnob);
 	setParamKnob(synthv1::REV1_WIDTH, m_ui.Rev1WidthKnob);

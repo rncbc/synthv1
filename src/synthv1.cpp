@@ -448,6 +448,7 @@ struct synthv1_dyn
 struct synthv1_rev
 {
 	float *wet;
+	float *feedb;
 	float *room;
 	float *damp;
 	float *width;
@@ -1179,6 +1180,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DYN1_COMPRESS:  m_dyn.compress     = pfParam; break;
 	case synthv1::DYN1_LIMITER:   m_dyn.limiter      = pfParam; break;
 	case synthv1::REV1_WET:       m_rev.wet          = pfParam; break;
+	case synthv1::REV1_FEEDB:     m_rev.feedb        = pfParam; break;
 	case synthv1::REV1_ROOM:      m_rev.room         = pfParam; break;
 	case synthv1::REV1_DAMP:      m_rev.damp         = pfParam; break;
 	case synthv1::REV1_WIDTH:     m_rev.width        = pfParam; break;
@@ -1309,6 +1311,7 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DYN1_COMPRESS:  pfParam = m_dyn.compress;     break;
 	case synthv1::DYN1_LIMITER:   pfParam = m_dyn.limiter;      break;
 	case synthv1::REV1_WET:       pfParam = m_rev.wet;          break;
+	case synthv1::REV1_FEEDB:     pfParam = m_rev.feedb;        break;
 	case synthv1::REV1_ROOM:      pfParam = m_rev.room;         break;
 	case synthv1::REV1_DAMP:      pfParam = m_rev.damp;         break;
 	case synthv1::REV1_WIDTH:     pfParam = m_rev.width;        break;
@@ -2073,7 +2076,7 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 		// reverb
 		if (k > 0) {
 			m_reverb.process(outs[k - 1], outs[k], nframes, *m_rev.wet,
-				*m_rev.room, *m_rev.damp, *m_rev.width);
+				*m_rev.feedb, *m_rev.room, *m_rev.damp, *m_rev.width);
 		}
 	}
 

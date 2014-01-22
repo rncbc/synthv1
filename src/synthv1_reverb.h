@@ -37,17 +37,18 @@ class synthv1_reverb
 public:
 
 	synthv1_reverb (uint32_t iSampleRate = 44100)
-		: m_srate(float(iSampleRate)), m_room(0.5f), m_damp(0.5f)
-		{ reset(false); }
+		: m_srate(float(iSampleRate)),
+			m_feedb(0.5f), m_room(0.5f), m_damp(0.5f)
+			{ reset(false); }
 
-	void setSampleRate ( uint32_t iSampleRate )
+	void setSampleRate(uint32_t iSampleRate)
 		{ m_srate = float(iSampleRate); reset(true); }
 
-	uint32_t sampleRate () const
+	uint32_t sampleRate() const
 		{ return uint32_t(m_srate); }
 
 	// call this after changing roomsize or dampening
-	void reset ( bool bReset = false )
+	void reset(bool bReset = false)
 	{
 		const float sc = m_srate / 44100.0f;
 
@@ -56,8 +57,6 @@ public:
 		for (j = 0; j < NUM_ALLPASSES; ++j) {
 			m_allpasses[j][0].resize(uint32_t(s_allpasses[j] * sc));
 			m_allpasses[j][1].resize(uint32_t((s_allpasses[j] + STEREO_SPREAD) * sc));
-			m_allpasses[j][0].set_feedback(0.5f);
-			m_allpasses[j][1].set_feedback(0.5f);
 			if (bReset) {
 				m_allpasses[j][0].reset();
 				m_allpasses[j][1].reset();
@@ -67,27 +66,36 @@ public:
 		for (j = 0; j < NUM_COMBS; ++j) {
 			m_combs[j][0].resize(uint32_t(s_combs[j] * sc));
 			m_combs[j][1].resize(uint32_t((s_combs[j] + STEREO_SPREAD) * sc));
-			m_combs[j][0].set_feedback(m_room);
-			m_combs[j][1].set_feedback(m_room);
-			m_combs[j][0].set_dampening(m_damp * 0.4f);
-			m_combs[j][1].set_dampening(m_damp * 0.4f);
 			if (bReset) {
 				m_combs[j][0].reset();
 				m_combs[j][1].reset();
 			}
 		}
+
+		reset_feedb();
+		reset_room();
+		reset_damp();
 	}
 
-	void process ( float *in0, float *in1, uint32_t nframes,
-		float wet, float room, float damp, float width )
+	void process(float *in0, float *in1, uint32_t nframes,
+		float wet, float feedb, float room, float damp, float width)
 	{
 		if (wet < 1E-9f)
 			return;
 
-		if (m_room != room || m_damp != damp) {
+		if (m_feedb != feedb) {
+			m_feedb  = feedb;
+			reset_feedb();
+		}
+
+		if (m_room != room) {
 			m_room  = room;
+			reset_room();
+		}
+
+		if (m_damp != damp) {
 			m_damp  = damp;
-			reset(false);
+			reset_damp();
 		}
 
 		uint32_t i, j;
@@ -101,13 +109,13 @@ public:
 			float tmp1 = 0.0f;
 
 			for (j = 0; j < NUM_COMBS; ++j) {
-				tmp0 += m_combs[j][0].process(out0);
-				tmp1 += m_combs[j][1].process(out1);
+				tmp0 += m_combs[j][0].output(out0);
+				tmp1 += m_combs[j][1].output(out1);
 			}
 
 			for (j = 0; j < NUM_ALLPASSES; ++j) {
-				tmp0 = m_allpasses[j][0].process(tmp0);
-				tmp1 = m_allpasses[j][1].process(tmp1);
+				tmp0 = m_allpasses[j][0].output(tmp0);
+				tmp1 = m_allpasses[j][1].output(tmp1);
 			}
 
 			if (width < 0.0f) {
@@ -125,34 +133,52 @@ public:
 
 protected:
 
-	static const uint32_t STEREO_SPREAD = 23;
+	static const uint32_t STEREO_SPREAD = 24;
 	static const uint32_t NUM_COMBS = 10;
 	static const uint32_t NUM_ALLPASSES = 6;
 
 	static const uint32_t s_combs[NUM_COMBS];
 	static const uint32_t s_allpasses[NUM_ALLPASSES];
 
-	static float denormal ( float a )
+	void reset_feedb()
 	{
-		union { float f; unsigned int w; } u;
-		u.f = a;
-		return (u.w & 0x7f800000) ? a : 0.0f;
+		for (uint32_t j = 0; j < NUM_ALLPASSES; ++j) {
+			m_combs[j][0].set_feedback(m_feedb);
+			m_combs[j][1].set_feedback(m_feedb);
+		}
+	}
+
+	void reset_room()
+	{
+		for (uint32_t j = 0; j < NUM_COMBS; ++j) {
+			m_combs[j][0].set_feedback(m_room);
+			m_combs[j][1].set_feedback(m_room);
+		}
+	}
+
+	void reset_damp()
+	{
+		const float damp2 = m_damp * m_damp;
+		for (uint32_t j = 0; j < NUM_COMBS; ++j) {
+			m_combs[j][0].set_dampening(damp2);
+			m_combs[j][1].set_dampening(damp2);
+		}
 	}
 
 	class heap_buffer
 	{
 	public:
 
-		heap_buffer ( uint32_t size = 4096 )
+		heap_buffer(uint32_t size = 2048)
 			: m_buffer(0), m_size(0) { resize(size); }
 
-		float *ptr () const
+		float *ptr() const
 			{ return m_buffer; }
 
-		uint32_t size () const
+		uint32_t size() const
 			{ return m_size; }
 
-		void resize ( uint32_t new_size )
+		void resize(uint32_t new_size)
 		{
 			const uint32_t old_size = m_size;
 			if (new_size > old_size) {
@@ -176,24 +202,24 @@ protected:
 	{
 	public:
 
-		comb_filter ( uint32_t size = 0 )
+		comb_filter (uint32_t size = 0)
 			: m_feedb(0.5f), m_damp(0.5f), m_index(0), m_size(0), m_filt0(0.0f)
 			{ resize(size); }
 
-		void set_feedback ( float feedb )
+		void set_feedback(float feedb)
 			{ m_feedb = feedb; }
-		float feedback () const
+		float feedback() const
 			{ return m_feedb; }
 
-		void set_dampening ( float damp )
+		void set_dampening(float damp)
 			{ m_damp = damp; }
-		float dampening () const
+		float dampening() const
 			{ return m_damp; }
 
-		void reset ()
+		void reset()
 			{ ::memset(m_buf.ptr(), 0, m_size * sizeof(float)); m_filt0 = 0.0f; }
 
-		void resize ( uint32_t size )
+		void resize(uint32_t size)
 		{
 			if (size < 1)
 				size = 1;
@@ -205,7 +231,7 @@ protected:
 			}
 		}
 
-		float process ( float in )
+		float output(float in)
 		{
 			float *buf = m_buf.ptr() + m_index;
 			float  out = *buf;
@@ -230,19 +256,19 @@ protected:
 	{
 	public:
 
-		allpass_filter ( uint32_t size = 0 )
+		allpass_filter(uint32_t size = 0)
 			: m_feedb(0.5f), m_index(0), m_size(0)
 			{ resize(size); }
 
-		void set_feedback ( float feedb )
+		void set_feedback(float feedb)
 			{ m_feedb = feedb; }
 		float feedback () const
 			{ return m_feedb; }
 
-		void reset ()
+		void reset()
 			{ ::memset(m_buf.ptr(), 0, m_size * sizeof(float)); }
 
-		void resize ( uint32_t size )
+		void resize(uint32_t size)
 		{
 			if (size < 1)
 				size = 1;
@@ -254,7 +280,7 @@ protected:
 			}
 		}
 
-		float process ( float in )
+		float output(float in)
 		{
 			float *buf = m_buf.ptr() + m_index;
 			float  out = *buf;
@@ -272,9 +298,17 @@ protected:
 		heap_buffer m_buf;
 	};
 
+	static float denormal(float v)
+	{
+		union { float f; unsigned int w; } u;
+		u.f = v;
+		return (u.w & 0x7f800000) ? v : 0.0f;
+	}
+
 private:
 
 	float m_srate;
+	float m_feedb;
 	float m_room;
 	float m_damp;
 
@@ -283,7 +317,6 @@ private:
 };
 
 
-// these represent lengths in samples at 44.1khz but are scaled accordingly
 const uint32_t synthv1_reverb::s_combs[]
 	= { 1116, 1188, 1277, 1356, 1422, 1491, 1557, 1617, 1685, 1748 };
 

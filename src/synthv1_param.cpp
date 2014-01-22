@@ -154,6 +154,7 @@ struct {
 	{ "DYN1_COMPRESS",  0.0f },
 	{ "DYN1_LIMIT",     1.0f },
 	{ "REV1_WET",       0.0f },
+	{ "REV1_FEEDB",     0.5f },
 	{ "REV1_ROOM",      0.5f },
 	{ "REV1_DAMP",      0.5f },
 	{ "REV1_WIDTH",     0.0f }

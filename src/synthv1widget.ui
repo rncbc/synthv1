@@ -1875,69 +1875,79 @@
          </property>
         </spacer>
        </item>
-	   <item row="2" column="6" colspan="4">
-		<widget class="QGroupBox" name="Rev1GroupBox">
-		 <property name="title">
-		  <string>Reverb</string>
-		 </property>
-		 <layout class="QHBoxLayout">
-		  <item>
-		   <widget class="synthv1widget_spin" name="Rev1WetKnob">
-			<property name="toolTip">
-			 <string>Reverb Wet</string>
-			</property>
-			<property name="text">
-			 <string>Wet</string>
-			</property>
-		   </widget>
-		  </item>
-		  <item>
-		   <spacer>
-			<property name="orientation">
-			 <enum>Qt::Horizontal</enum>
-			</property>
-			<property name="sizeHint">
-			 <size>
-			  <width>20</width>
-			  <height>20</height>
-			 </size>
-			</property>
-		   </spacer>
-		  </item>
-		  <item>
-		   <widget class="synthv1widget_spin" name="Rev1RoomKnob">
-			 <property name="toolTip">
-			 <string>Reverb Room</string>
-			</property>
-			<property name="text">
-			 <string>Room</string>
-			</property>
-		   </widget>
-		  </item>
-		  <item>
-		   <widget class="synthv1widget_spin" name="Rev1DampKnob">
-			<property name="toolTip">
-			 <string>Reverb Damp</string>
-			</property>
-			<property name="text">
-			 <string>Damp</string>
-			</property>
-		   </widget>
-		  </item>
-		  <item>
-		   <widget class="synthv1widget_spin" name="Rev1WidthKnob">
-			<property name="toolTip">
-			 <string>Reverb Width</string>
-			</property>
-			<property name="text">
-			 <string>Width</string>
-			</property>
-		   </widget>
-		  </item>
-		 </layout>
-		</widget>
-	   </item>
-	   <item row="3" column="0" colspan="12">
+       <item row="2" column="1" colspan="5">
+        <widget class="QGroupBox" name="Rev1GroupBox">
+         <property name="title">
+          <string>Reverb</string>
+         </property>
+         <layout class="QHBoxLayout">
+          <item>
+           <widget class="synthv1widget_spin" name="Rev1WetKnob">
+            <property name="toolTip">
+             <string>Reverb Wet</string>
+            </property>
+            <property name="text">
+             <string>Wet</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Rev1FeedbKnob">
+             <property name="toolTip">
+             <string>Reverb Feedback</string>
+            </property>
+            <property name="text">
+             <string>Feedback</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Rev1RoomKnob">
+             <property name="toolTip">
+             <string>Reverb Room</string>
+            </property>
+            <property name="text">
+             <string>Room</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Rev1DampKnob">
+            <property name="toolTip">
+             <string>Reverb Damp</string>
+            </property>
+            <property name="text">
+             <string>Damp</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Rev1WidthKnob">
+            <property name="toolTip">
+             <string>Reverb Width</string>
+            </property>
+            <property name="text">
+             <string>Width</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="12">
         <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>

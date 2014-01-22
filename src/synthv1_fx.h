@@ -1,7 +1,7 @@
 // synthv1_fx.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -399,12 +399,13 @@ public:
 		}
 	}
 
+protected:
+
 	float pseudo_sinf(float x) const
 	{
 		x *= x;
 		x -= 1.0f;
-		x *= x;
-		return x;
+		return x * x;
 	}
 
 private:
@@ -425,6 +426,7 @@ class synthv1_fx_delay
 {
 public:
 
+	static const uint32_t MIN_SIZE = 256;
 	static const uint32_t MAX_SIZE = 65536;	//= (1 << 16);
 	static const uint32_t MAX_MASK = MAX_SIZE - 1;
 
@@ -459,8 +461,9 @@ public:
 		// set integer delay
 		uint32_t ndelay = uint32_t(delay_time);
 		// clamp
-		if (ndelay < 256)
-			ndelay = 256;
+		if (ndelay < MIN_SIZE)
+			ndelay = MAX_SIZE;
+		else
 		if (ndelay > MAX_SIZE)
 			ndelay = MAX_SIZE;
 		// delay process
@@ -563,16 +566,23 @@ public:
 			// positive wrap phase
 			if (m_lfo_phase >= 2.0f * M_PI)
 				m_lfo_phase -= 2.0f * M_PI;
-			// anti-denormalizer noise
-			const float ad = 1E-14f * float(::rand());
 			// get input
-			m_out = in[i] + ad + m_out * feedb;
+			m_out = denormal(in[i] + m_out * feedb);
 			// update filter coeffs and calculate output
 			for (uint16_t n = 0; n < MAX_TAPS; ++n)
 				m_out = m_taps[n].output(m_out, delay);
 			// output
 			in[i] += wet * m_out * depth;
 		}
+	}
+
+protected:
+
+	static float denormal(float v)
+	{
+		union { float f; unsigned int w; } u;
+		u.f = v;
+		return (u.w & 0x7f800000) ? v : 0.0f;
 	}
 
 private:
