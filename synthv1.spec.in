@@ -20,6 +20,7 @@ BuildRequires:	libqt4-devel >= 4.4
 BuildRequires:	libjack-devel >= 0.109.2
 BuildRequires:	alsa-devel
 BuildRequires:	lv2-devel
+BuildRequires:	liblo-devel
 
 %description
   An old-school all-digital 4-oscillator subtractive polyphonic
