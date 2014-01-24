@@ -101,26 +101,9 @@ if test "x$ac_qt5" = "xyes"; then
    ac_qt4="no"
 fi
 
+
 # Standard installation base dirs.
 ac_with_paths="/usr /usr/local"
-
-ac_qtdirs="qt"
-
-if test "x$ac_qt4" = "xyes"; then
-   ac_qtdirs="qt4 $ac_qtdirs"
-fi
-if test "x$ac_qt5" = "xyes"; then
-   ac_qtdirs="qt5 $ac_qtdirs"
-fi
-
-# Some a-la-debian alternatives...
-for X in /usr/lib /usr/lib64 /usr/share; do
-  for Y in $ac_qtdirs; do
-    if test -d $X/$Y/bin; then
-      ac_with_paths="$ac_with_paths $X/$Y"
-    fi
-  done
-done
 
 # Set for alternate Qt installation dir.
 AC_ARG_WITH(qt,
@@ -165,6 +148,36 @@ AC_PROG_GCC_TRADITIONAL
 AC_LANG_C
 AC_LANG_CPLUSPLUS
 
+
+# Check for proper flags.
+ac_arch=`uname -m`
+
+# Check for some a-la-debian alternatives...
+ac_qtdirs="qt"
+
+if test "x$ac_qt4" = "xyes"; then
+   ac_qtdirs="qt4 $ac_qtdirs"
+fi
+if test "x$ac_qt5" = "xyes"; then
+   ac_qtdirs="qt5 $ac_qtdirs"
+fi
+
+ac_topdirs="/usr/share /usr/lib"
+
+if test "x$ac_arch" = "xx86_64"; then
+   CFLAGS="-fPIC $CFLAGS"
+   CPPFLAGS="-fPIC $CPPFLAGS"
+   ac_topdirs="$ac_topdirs /usr/lib64"
+fi
+
+for X in $ac_topdirs; do
+  for Y in $ac_qtdirs; do
+    if test -d $X/$Y/bin; then
+      ac_with_paths="$X/$Y $ac_with_paths"
+    fi
+  done
+done
+
 # Prepend alternate dependencies paths.
 ac_path=$PATH
 for X in $ac_with_paths; do
@@ -186,7 +199,7 @@ for X in $ac_with_paths; do
     CPPFLAGS="-I$X/include $CPPFLAGS"
     ac_incpath="$X/include $ac_incpath"
   fi
-  if test -d $X/lib64; then
+  if test "x$ac_arch" = "xx86_64" -a -d $X/lib64; then
     LIBS="-L$X/lib64 $LIBS"
     ac_libs="-L$X/lib64 $ac_libs"
   fi
@@ -196,13 +209,6 @@ for X in $ac_with_paths; do
   fi
 done
 
-
-# Check for proper flags.
-ac_arch=`uname -m`
-if test "x$ac_arch" = "xx86_64"; then
-   CFLAGS="-fPIC $CFLAGS"
-   CPPFLAGS="-fPIC $CPPFLAGS"
-fi
 
 # Check for proper Qt version.
 AC_CACHE_CHECK([for Qt library version >= 4.4],
