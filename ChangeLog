@@ -5,8 +5,12 @@ ChangeLog
 
 SVN TRUNK
 
-- Reverb added as a brand new effects stage, although based on
-  good old FreeVerb :). (EXPERIMENTAL)
+- Auto-detection of the correct target library path for the
+  LV2 plugin, whether it may be .../lib or .../lib64 on bi
+  -arch targets, when libdir is not specified on configure
+  time (--libdir=LIBDIR). (EXPERIMENTAL)
+- Reverb has been added as a brand new effects stage, though
+  based on good old FreeVerb :). (EXPERIMENTAL)
 - Introduced a variable env.stage time icontrol parameter.
   (EXPERIMENTAL)
 - Dummy change-log entry for the new year.

@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(synthv1, 0.3.6.6, rncbc@rncbc.org)
+AC_INIT(synthv1, 0.3.6.7, rncbc@rncbc.org)
 
 AC_CONFIG_SRCDIR(src/synthv1.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -12,6 +12,13 @@ if test "x$ac_prefix" = "xNONE"; then
     ac_prefix=$ac_default_prefix
 fi
 AC_SUBST(ac_prefix)
+
+# Set default library/plugin prefix.
+if test "x$exec_prefix" = "xNONE"; then
+    exec_prefix=$ac_prefix
+fi
+eval ac_libdir=$libdir
+AC_SUBST(ac_libdir)
 
 # Enable debugging argument option.
 AC_ARG_ENABLE(debug,
@@ -107,7 +114,7 @@ if test "x$ac_qt5" = "xyes"; then
 fi
 
 # Some a-la-debian alternatives...
-for X in /usr/lib /usr/lib64 /usr/share; do
+for X in /usr/lib /usr/share; do
   for Y in $ac_qtdirs; do
     if test -d $X/$Y/bin; then
       ac_with_paths="$ac_with_paths $X/$Y"
@@ -178,10 +185,6 @@ for X in $ac_with_paths; do
     CFLAGS="-I$X/include $CFLAGS"
     CPPFLAGS="-I$X/include $CPPFLAGS"
     ac_incpath="$X/include $ac_incpath"
-  fi
-  if test -d $X/lib64; then
-    LIBS="-L$X/lib64 $LIBS"
-    ac_libs="-L$X/lib64 $ac_libs"
   fi
   if test -d $X/lib; then
     LIBS="-L$X/lib $LIBS"
