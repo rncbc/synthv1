@@ -27,9 +27,8 @@
 //-------------------------------------------------------------------------
 // synthv1_reverb
 //
-// -- borrowed, stirred and refactored from FreeVerb (public domain) --
-//    by Jezar at Dreampoint, June 2000
-//    http://www.dreampoint.co.uk
+// -- borrowed, stirred and refactored from original FreeVerb --
+//    by Jezar at Dreampoint, June 2000 (public domain)
 //
 
 class synthv1_reverb
@@ -43,20 +42,19 @@ public:
 
 	void setSampleRate(uint32_t iSampleRate)
 		{ m_srate = float(iSampleRate); reset(true); }
-
 	uint32_t sampleRate() const
 		{ return uint32_t(m_srate); }
 
 	// call this after changing roomsize or dampening
 	void reset(bool bReset = false)
 	{
-		const float sc = m_srate / 44100.0f;
+		const float sr = m_srate / 44100.0f;
 
 		uint32_t j;
 
 		for (j = 0; j < NUM_ALLPASSES; ++j) {
-			m_allpasses[j][0].resize(uint32_t(s_allpasses[j] * sc));
-			m_allpasses[j][1].resize(uint32_t((s_allpasses[j] + STEREO_SPREAD) * sc));
+			m_allpasses[j][0].resize(uint32_t(s_allpasses[j] * sr));
+			m_allpasses[j][1].resize(uint32_t((s_allpasses[j] + STEREO_SPREAD) * sr));
 			if (bReset) {
 				m_allpasses[j][0].reset();
 				m_allpasses[j][1].reset();
@@ -64,8 +62,8 @@ public:
 		}
 
 		for (j = 0; j < NUM_COMBS; ++j) {
-			m_combs[j][0].resize(uint32_t(s_combs[j] * sc));
-			m_combs[j][1].resize(uint32_t((s_combs[j] + STEREO_SPREAD) * sc));
+			m_combs[j][0].resize(uint32_t(s_combs[j] * sr));
+			m_combs[j][1].resize(uint32_t((s_combs[j] + STEREO_SPREAD) * sr));
 			if (bReset) {
 				m_combs[j][0].reset();
 				m_combs[j][1].reset();
@@ -133,9 +131,9 @@ public:
 
 protected:
 
-	static const uint32_t STEREO_SPREAD = 24;
-	static const uint32_t NUM_COMBS = 10;
-	static const uint32_t NUM_ALLPASSES = 6;
+	static const uint32_t STEREO_SPREAD = 23;
+	static const uint32_t NUM_COMBS     = 8;
+	static const uint32_t NUM_ALLPASSES = 4;
 
 	static const uint32_t s_combs[NUM_COMBS];
 	static const uint32_t s_allpasses[NUM_ALLPASSES];
@@ -143,16 +141,16 @@ protected:
 	void reset_feedb()
 	{
 		for (uint32_t j = 0; j < NUM_ALLPASSES; ++j) {
-			m_combs[j][0].set_feedback(m_feedb);
-			m_combs[j][1].set_feedback(m_feedb);
+			m_combs[j][0].set_feedb(m_feedb);
+			m_combs[j][1].set_feedb(m_feedb);
 		}
 	}
 
 	void reset_room()
 	{
 		for (uint32_t j = 0; j < NUM_COMBS; ++j) {
-			m_combs[j][0].set_feedback(m_room);
-			m_combs[j][1].set_feedback(m_room);
+			m_combs[j][0].set_feedb(m_room);
+			m_combs[j][1].set_feedb(m_room);
 		}
 	}
 
@@ -160,8 +158,8 @@ protected:
 	{
 		const float damp2 = m_damp * m_damp;
 		for (uint32_t j = 0; j < NUM_COMBS; ++j) {
-			m_combs[j][0].set_dampening(damp2);
-			m_combs[j][1].set_dampening(damp2);
+			m_combs[j][0].set_damp(damp2);
+			m_combs[j][1].set_damp(damp2);
 		}
 	}
 
@@ -206,14 +204,14 @@ protected:
 			: m_feedb(0.5f), m_damp(0.5f), m_index(0), m_size(0), m_filt0(0.0f)
 			{ resize(size); }
 
-		void set_feedback(float feedb)
+		void set_feedb(float feedb)
 			{ m_feedb = feedb; }
-		float feedback() const
+		float feedb() const
 			{ return m_feedb; }
 
-		void set_dampening(float damp)
+		void set_damp(float damp)
 			{ m_damp = damp; }
-		float dampening() const
+		float damp() const
 			{ return m_damp; }
 
 		void reset()
@@ -260,9 +258,9 @@ protected:
 			: m_feedb(0.5f), m_index(0), m_size(0)
 			{ resize(size); }
 
-		void set_feedback(float feedb)
+		void set_feedb(float feedb)
 			{ m_feedb = feedb; }
-		float feedback () const
+		float feedb () const
 			{ return m_feedb; }
 
 		void reset()
@@ -308,6 +306,7 @@ protected:
 private:
 
 	float m_srate;
+
 	float m_feedb;
 	float m_room;
 	float m_damp;
@@ -318,10 +317,10 @@ private:
 
 
 const uint32_t synthv1_reverb::s_combs[]
-	= { 1116, 1188, 1277, 1356, 1422, 1491, 1557, 1617, 1685, 1748 };
+	= { 1116, 1188, 1277, 1356, 1422, 1491, 1557, 1617 };
 
 const uint32_t synthv1_reverb::s_allpasses[]
-	= { 556, 441, 341, 225, 180, 153 };
+	= { 556, 441, 341, 225 };
 
 
 #endif	// __synthv1_reverb_h

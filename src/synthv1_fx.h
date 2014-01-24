@@ -27,7 +27,7 @@
 // synthv1_fx
 //
 // -- borrowed, stirred and refactored from Highlife --
-// Copyright (C) 2007 arguru, discodsp.com
+//    Copyright (C) 2007 arguru, discodsp.com
 //
 
 //-------------------------------------------------------------------------
@@ -281,9 +281,6 @@ class synthv1_fx_flanger
 {
 public:
 
-	static const uint32_t MAX_SIZE = 4096;	//= (1 << 12);
-	static const uint32_t MAX_MASK = MAX_SIZE - 1;
-
 	synthv1_fx_flanger()
 		{ reset(); }
 
@@ -339,6 +336,9 @@ public:
 		for (uint32_t i = 0; i < nframes; ++i)
 			in[i] += wet * output(in[i], delay, feedb);
 	}
+
+	static const uint32_t MAX_SIZE = (1 << 12);	//= 4096;
+	static const uint32_t MAX_MASK = MAX_SIZE - 1;
 
 private:
 
@@ -426,10 +426,6 @@ class synthv1_fx_delay
 {
 public:
 
-	static const uint32_t MIN_SIZE = 256;
-	static const uint32_t MAX_SIZE = 65536;	//= (1 << 16);
-	static const uint32_t MAX_MASK = MAX_SIZE - 1;
-
 	synthv1_fx_delay(uint32_t iSampleRate = 44100)
 		: m_srate(iSampleRate) { reset(); }
 
@@ -462,7 +458,7 @@ public:
 		uint32_t ndelay = uint32_t(delay_time);
 		// clamp
 		if (ndelay < MIN_SIZE)
-			ndelay = MAX_SIZE;
+			ndelay = MIN_SIZE;
 		else
 		if (ndelay > MAX_SIZE)
 			ndelay = MAX_SIZE;
@@ -474,6 +470,10 @@ public:
 			*in++ += wet * m_out;
 		}
 	}
+
+	static const uint32_t MIN_SIZE = (1 <<  8);	//= 256;
+	static const uint32_t MAX_SIZE = (1 << 16);	//= 65536;
+	static const uint32_t MAX_MASK = MAX_SIZE - 1;
 
 private:
 
@@ -519,8 +519,6 @@ private:
 class synthv1_fx_phaser
 {
 public:
-
-	static const uint16_t MAX_TAPS = 6;
 
 	synthv1_fx_phaser(uint32_t iSampleRate = 44100)
 		: m_srate(float(iSampleRate)) { reset(); }
@@ -575,6 +573,8 @@ public:
 			in[i] += wet * m_out * depth;
 		}
 	}
+
+	static const uint16_t MAX_TAPS = 6;
 
 protected:
 
