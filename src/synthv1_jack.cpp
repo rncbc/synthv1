@@ -1,7 +1,7 @@
 // synthv1_jack.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -156,8 +156,8 @@ synthv1_jack::synthv1_jack (void) : synthv1(2)
 
 synthv1_jack::~synthv1_jack (void)
 {
-//	deactivate();
-//	close();
+	deactivate();
+	close();
 }
 
 
@@ -336,31 +336,6 @@ void synthv1_jack::close (void)
 	if (m_client == NULL)
 		return;
 
-#ifdef CONFIG_ALSA_MIDI
-	// close alsa sequencer client...
-	if (m_alsa_seq) {
-		if (m_alsa_thread) {
-			delete m_alsa_thread;
-			m_alsa_thread = NULL;
-		}
-		if (m_alsa_buffer) {
-			::jack_ringbuffer_free(m_alsa_buffer);
-			m_alsa_buffer = NULL;
-		}
-		if (m_alsa_decoder) {
-			snd_midi_event_free(m_alsa_decoder);
-			m_alsa_decoder = NULL;
-		}
-		if (m_alsa_port >= 0) {
-			snd_seq_delete_simple_port(m_alsa_seq, m_alsa_port);
-			m_alsa_port = -1;
-		}
-		snd_seq_close(m_alsa_seq);
-	//	m_alsa_client = -1;
-		m_alsa_seq = NULL;
-	}
-#endif
-
 #ifdef CONFIG_JACK_MIDI
 	// unregister midi ports
 	if (m_midi_in) {
@@ -408,6 +383,31 @@ void synthv1_jack::close (void)
 	// close client
 	::jack_client_close(m_client);
 	m_client = NULL;
+
+#ifdef CONFIG_ALSA_MIDI
+	// close alsa sequencer client...
+	if (m_alsa_seq) {
+		if (m_alsa_thread) {
+			delete m_alsa_thread;
+			m_alsa_thread = NULL;
+		}
+		if (m_alsa_buffer) {
+			::jack_ringbuffer_free(m_alsa_buffer);
+			m_alsa_buffer = NULL;
+		}
+		if (m_alsa_decoder) {
+			snd_midi_event_free(m_alsa_decoder);
+			m_alsa_decoder = NULL;
+		}
+		if (m_alsa_port >= 0) {
+			snd_seq_delete_simple_port(m_alsa_seq, m_alsa_port);
+			m_alsa_port = -1;
+		}
+		snd_seq_close(m_alsa_seq);
+	//	m_alsa_client = -1;
+		m_alsa_seq = NULL;
+	}
+#endif
 }
 
 
