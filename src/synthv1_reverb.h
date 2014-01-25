@@ -158,11 +158,10 @@ protected:
 
 	void reset_feedb()
 	{
-		const float x = 2.0f * m_feedb - 1.0f;
-		const float feedb3 = 0.25f * x * (1.5f - 0.5f * x * x) + 0.5f;
+		const float feedb2 = 2.0f * m_feedb * (2.0f - m_feedb) / 3.0f;
 		for (uint32_t j = 0; j < NUM_ALLPASSES; ++j) {
-			m_allpass0[j].set_feedb(feedb3);
-			m_allpass1[j].set_feedb(feedb3);
+			m_allpass0[j].set_feedb(feedb2);
+			m_allpass1[j].set_feedb(feedb2);
 		}
 	}
 
