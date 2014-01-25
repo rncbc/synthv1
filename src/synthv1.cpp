@@ -434,15 +434,6 @@ struct synthv1_del
 };
 
 
-// dynamic(compressor/limiter)
-
-struct synthv1_dyn
-{
-	float *compress;
-	float *limiter;
-};
-
-
 // reverb
 
 struct synthv1_rev
@@ -452,6 +443,15 @@ struct synthv1_rev
 	float *room;
 	float *damp;
 	float *width;
+};
+
+
+// dynamic(compressor/limiter)
+
+struct synthv1_dyn
+{
+	float *compress;
+	float *limiter;
 };
 
 
@@ -824,8 +824,8 @@ private:
 	synthv1_fla m_fla;
 	synthv1_pha m_pha;
 	synthv1_del m_del;
-	synthv1_dyn m_dyn;
 	synthv1_rev m_rev;
+	synthv1_dyn m_dyn;
 
 	synthv1_voice **m_voices;
 	synthv1_voice  *m_note1[MAX_NOTES];
@@ -1177,12 +1177,12 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DEL1_BPM:       m_del.bpm          = pfParam; break;
 	case synthv1::DEL1_BPMSYNC:   m_del.bpmsync      = pfParam; break;
 	case synthv1::DEL1_BPMHOST:   m_del.bpmhost      = pfParam; break;
-	case synthv1::DYN1_COMPRESS:  m_dyn.compress     = pfParam; break;
-	case synthv1::DYN1_LIMITER:   m_dyn.limiter      = pfParam; break;
 	case synthv1::REV1_WET:       m_rev.wet          = pfParam; break;
 	case synthv1::REV1_FEEDB:     m_rev.feedb        = pfParam; break;
 	case synthv1::REV1_ROOM:      m_rev.room         = pfParam; break;
 	case synthv1::REV1_DAMP:      m_rev.damp         = pfParam; break;
+	case synthv1::DYN1_COMPRESS:  m_dyn.compress     = pfParam; break;
+	case synthv1::DYN1_LIMITER:   m_dyn.limiter      = pfParam; break;
 	case synthv1::REV1_WIDTH:     m_rev.width        = pfParam; break;
 	default: break;
 	}
@@ -1308,13 +1308,13 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DEL1_BPM:       pfParam = m_del.bpm;          break;
 	case synthv1::DEL1_BPMSYNC:   pfParam = m_del.bpmsync;      break;
 	case synthv1::DEL1_BPMHOST:   pfParam = m_del.bpmhost;      break;
-	case synthv1::DYN1_COMPRESS:  pfParam = m_dyn.compress;     break;
-	case synthv1::DYN1_LIMITER:   pfParam = m_dyn.limiter;      break;
 	case synthv1::REV1_WET:       pfParam = m_rev.wet;          break;
 	case synthv1::REV1_FEEDB:     pfParam = m_rev.feedb;        break;
 	case synthv1::REV1_ROOM:      pfParam = m_rev.room;         break;
 	case synthv1::REV1_DAMP:      pfParam = m_rev.damp;         break;
 	case synthv1::REV1_WIDTH:     pfParam = m_rev.width;        break;
+	case synthv1::DYN1_COMPRESS:  pfParam = m_dyn.compress;     break;
+	case synthv1::DYN1_LIMITER:   pfParam = m_dyn.limiter;      break;
 	default: break;
 	}
 
