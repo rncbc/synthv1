@@ -1763,6 +1763,7 @@ void synthv1_impl::allSoundOff (void)
 	}
 
 	m_reverb.setSampleRate(m_iSampleRate);
+	m_reverb.reset();
 }
 
 
@@ -1800,7 +1801,7 @@ void synthv1_impl::reset (void)
 		m_comp = new synthv1_fx_comp [m_iChannels];
 
 	// reverbs
-	m_reverb.reset(true);
+	m_reverb.reset();
 
 	allSoundOff();
 //	allControllersOff();

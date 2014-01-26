@@ -38,14 +38,14 @@ public:
 	synthv1_reverb (uint32_t iSampleRate = 44100)
 		: m_srate(float(iSampleRate)),
 			m_room(0.5f), m_damp(0.5f), m_feedb(0.5f)
-			{ reset(false); }
+			{ reset(); }
 
 	void setSampleRate(uint32_t iSampleRate)
-		{ m_srate = float(iSampleRate); reset(true); }
+		{ m_srate = float(iSampleRate); }
 	uint32_t sampleRate() const
 		{ return uint32_t(m_srate); }
 
-	void reset(bool bReset = false)
+	void reset()
 	{
 		static const uint32_t s_comb[NUM_COMBS]
 			= { 1116, 1188, 1277, 1356, 1422, 1491, 1557, 1617 };
@@ -58,20 +58,16 @@ public:
 
 		for (j = 0; j < NUM_ALLPASSES; ++j) {
 			m_allpass0[j].resize(uint32_t(s_allpass[j] * sr));
+			m_allpass0[j].reset();
 			m_allpass1[j].resize(uint32_t((s_allpass[j] + STEREO_SPREAD) * sr));
-			if (bReset) {
-				m_allpass0[j].reset();
-				m_allpass1[j].reset();
-			}
+			m_allpass1[j].reset();
 		}
 
 		for (j = 0; j < NUM_COMBS; ++j) {
 			m_comb0[j].resize(uint32_t(s_comb[j] * sr));
+			m_comb0[j].reset();
 			m_comb1[j].resize(uint32_t((s_comb[j] + STEREO_SPREAD) * sr));
-			if (bReset) {
-				m_comb0[j].reset();
-				m_comb1[j].reset();
-			}
+			m_comb1[j].reset();
 		}
 
 		reset_feedb();
@@ -165,45 +161,13 @@ protected:
 		}
 	}
 
-	class heap_buffer
-	{
-	public:
-
-		heap_buffer(uint32_t size = 0)
-			: m_buffer(0), m_size(0) { resize(size); }
-
-		float *ptr() const
-			{ return m_buffer; }
-
-		uint32_t size() const
-			{ return m_size; }
-
-		void resize(uint32_t new_size)
-		{
-			const uint32_t old_size = m_size;
-			if (new_size > old_size) {
-				float *old_buffer = m_buffer;
-				m_buffer = new float [new_size];
-				m_size = new_size;
-				if (old_buffer) {
-					::memcpy(m_buffer, old_buffer, old_size * sizeof(float));
-					delete [] old_buffer;
-				}
-			}
-		}
-
-	private:
-
-		float *m_buffer;
-		uint32_t m_size;
-	};
-
 	class comb_filter
 	{
 	public:
 
 		comb_filter (uint32_t size = 0)
-			: m_feedb(0.5f), m_damp(0.5f), m_index(0), m_size(0), m_filt0(0.0f)
+			: m_feedb(0.5f), m_damp(0.5f), m_out(0.0f),
+				m_index(0),	m_size(0), m_buffer(0)
 			{ resize(size); }
 
 		void set_feedb(float feedb)
@@ -217,26 +181,35 @@ protected:
 			{ return m_damp; }
 
 		void reset()
-			{ ::memset(m_buf.ptr(), 0, m_size * sizeof(float)); m_filt0 = 0.0f; }
+			{ ::memset(m_buffer, 0, m_size * sizeof(float)); m_out = 0.0f; }
 
 		void resize(uint32_t size)
 		{
 			if (size < 1)
 				size = 1;
 			if (m_size != size) {
-				m_size  = size;
+				const uint32_t old_size = m_size;
+				if (size > old_size) {
+					float *old_buffer = m_buffer;
+					m_buffer = new float [size];
+					m_size = size;
+					if (old_buffer) {
+						::memcpy(m_buffer, old_buffer,
+							old_size * sizeof(float));
+						delete [] old_buffer;
+					}
+				}
 				m_index = 0;
-				m_buf.resize(size);
 				reset();
 			}
 		}
 
 		float output(float in)
 		{
-			float *buf = m_buf.ptr() + m_index;
+			float *buf = m_buffer + m_index;
 			float  out = *buf;
-			m_filt0 = denormal((out * (1 - m_damp)) + (m_filt0 * m_damp));
-			*buf = in + (m_filt0 * m_feedb);
+			m_out = denormal((out * (1 - m_damp)) + (m_out * m_damp));
+			*buf = in + (m_out * m_feedb);
 			if (++m_index >= m_size)
 				m_index = 0;
 			return out;
@@ -244,12 +217,12 @@ protected:
 
 	private:
 
-		float m_feedb;
-		float m_damp;
+		float    m_feedb;
+		float    m_damp;
+		float    m_out;
 		uint32_t m_index;
 		uint32_t m_size;
-		heap_buffer m_buf;
-		float m_filt0;
+		float   *m_buffer;
 	};
 
 	class allpass_filter
@@ -257,7 +230,7 @@ protected:
 	public:
 
 		allpass_filter(uint32_t size = 0)
-			: m_feedb(0.5f), m_index(0), m_size(0)
+			: m_feedb(0.5f), m_index(0), m_size(0), m_buffer(0)
 			{ resize(size); }
 
 		void set_feedb(float feedb)
@@ -266,23 +239,32 @@ protected:
 			{ return m_feedb; }
 
 		void reset()
-			{ ::memset(m_buf.ptr(), 0, m_size * sizeof(float)); }
+			{ ::memset(m_buffer, 0, m_size * sizeof(float)); }
 
 		void resize(uint32_t size)
 		{
 			if (size < 1)
 				size = 1;
 			if (m_size != size) {
-				m_size  = size;
-				m_index = 0;
-				m_buf.resize(size);
+				const uint32_t old_size = m_size;
+				if (size > old_size) {
+					float *old_buffer = m_buffer;
+					m_buffer = new float [size];
+					m_size = size;
+					if (old_buffer) {
+						::memcpy(m_buffer, old_buffer,
+							old_size * sizeof(float));
+						delete [] old_buffer;
+					}
+				}
+				m_index = 0;				
 				reset();
 			}
 		}
 
 		float output(float in)
 		{
-			float *buf = m_buf.ptr() + m_index;
+			float *buf = m_buffer + m_index;
 			float  out = *buf;
 			*buf = denormal(in + (out * m_feedb));
 			if (++m_index >= m_size)
@@ -292,10 +274,10 @@ protected:
 
 	private:
 
-		float m_feedb;
+		float    m_feedb;
 		uint32_t m_index;
 		uint32_t m_size;
-		heap_buffer m_buf;
+		float   *m_buffer;
 	};
 
 	static float denormal(float v)
