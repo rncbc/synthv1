@@ -48,9 +48,9 @@ public:
 	void reset()
 	{
 		static const uint32_t s_comb[NUM_COMBS]
-			= { 1116, 1188, 1277, 1356, 1422, 1491, 1557, 1617 };
+			= { 1116, 1188, 1277, 1356, 1422, 1491, 1557, 1617, 1685, 1748 };
 		static const uint32_t s_allpass[NUM_ALLPASSES]
-			= { 556, 441, 341, 225 };
+			= { 556, 441, 341, 225, 180, 153 };
 
 		const float sr = m_srate / 44100.0f;
 
@@ -131,8 +131,8 @@ public:
 
 protected:
 
-	static const uint32_t NUM_COMBS     = 8;
-	static const uint32_t NUM_ALLPASSES = 4;
+	static const uint32_t NUM_COMBS     = 10;
+	static const uint32_t NUM_ALLPASSES = 6;
 	static const uint32_t STEREO_SPREAD = 23;
 
 	void reset_room()
