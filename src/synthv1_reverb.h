@@ -239,9 +239,9 @@ protected:
 
 	private:
 
-		float    m_feedb;
-		float    m_damp;
-		float    m_out;
+		float m_feedb;
+		float m_damp;
+		float m_out;
 	};
 
 	class allpass_filter : public sample_buffer
@@ -258,7 +258,7 @@ protected:
 
 		float output(float in)
 		{
-			float *buf = sample_buffer::tick();
+			float *buf = tick();
 			float  out = *buf;
 			*buf = denormal(in + (out * m_feedb));
 			return out - in;
