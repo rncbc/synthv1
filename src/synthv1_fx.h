@@ -22,6 +22,9 @@
 #ifndef __synthv1_fx_h
 #define __synthv1_fx_h
 
+#include <stdint.h>
+#include <math.h>
+
 
 //-------------------------------------------------------------------------
 // synthv1_fx

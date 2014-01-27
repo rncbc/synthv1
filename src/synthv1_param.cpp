@@ -157,7 +157,7 @@ struct {
 	{ "REV1_FEEDB",     0.5f },
 	{ "REV1_WIDTH",     0.0f },
 	{ "DYN1_COMPRESS",  0.0f },
-	{ "DYN1_LIMIT",     1.0f }
+	{ "DYN1_LIMITER",   1.0f }
 };
 
 
