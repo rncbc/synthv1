@@ -5,6 +5,10 @@ ChangeLog
 
 SVN TRUNK
 
+- A run-time circumention have been hacked in, strictly related
+  to when NSM session management is in charge: the native file
+  browser/requester dialogs are then disabled (were taking too
+  long to list the current directory on first time invocation).
 - Auto-detection of the correct target library path for the
   LV2 plugin, whether it may be .../lib or .../lib64 on bi
   -arch targets, when libdir is not specified on configure

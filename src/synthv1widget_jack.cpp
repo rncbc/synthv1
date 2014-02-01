@@ -1,7 +1,7 @@
 // synthv1widget_jack.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -84,6 +84,9 @@ synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 			SIGNAL(hide()),
 			SLOT(hideSession()));
 		m_pNsmClient->announce(SYNTHV1_TITLE, ":switch:dirty:optional-gui:");
+		synthv1widget_config *pConfig = synthv1widget_config::getInstance();
+		if (pConfig)
+			pConfig->bDontUseNativeDialog = true;
 		return;
 	}
 #endif	// CONFIG_NSM
