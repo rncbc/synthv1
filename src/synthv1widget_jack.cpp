@@ -192,9 +192,12 @@ void synthv1widget_jack::openSession (void)
 	m_pSynth->deactivate();
 	m_pSynth->close();
 
+	const QString& client_id = m_pNsmClient->client_id();
 	const QString& path_name = m_pNsmClient->path_name();
 	const QString& display_name = m_pNsmClient->display_name();
-	const QString& client_id = m_pNsmClient->client_id();
+
+	m_pSynth->open(client_id.toUtf8().constData());
+	m_pSynth->activate();
 
 	const QDir dir(path_name);
 	if (!dir.exists())
@@ -203,9 +206,6 @@ void synthv1widget_jack::openSession (void)
 	const QFileInfo fi(path_name, display_name + '.' + SYNTHV1_TITLE);
 	if (fi.exists())
 		loadPreset(fi.absoluteFilePath());
-
-	m_pSynth->open(client_id.toUtf8().constData());
-	m_pSynth->activate();
 
 	m_bNsmDirty = false;
 
