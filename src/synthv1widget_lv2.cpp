@@ -228,7 +228,7 @@ static LV2UI_Handle synthv1_lv2ui_external_instantiate (
 	if (qApp == NULL && pExtWidget->app_instance == NULL) {
 		static int s_argc = 1;
 		static const char *s_argv[] = { __func__, NULL };
-		pExtWidget->app_instance = new QApplication(s_argc, (char **) s_argv);
+		pExtWidget->app_instance = new QApplication(s_argc, (char **) s_argv, true);
 	}
 	pExtWidget->app_refcount++;
 
