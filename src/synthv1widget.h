@@ -45,7 +45,8 @@ public:
 	synthv1widget(QWidget *pParent = 0, Qt::WindowFlags wflags = 0);
 
 	// Param port accessors.
-	void setParamValue(synthv1::ParamIndex index, float fValue);
+	void setParamValue(
+		synthv1::ParamIndex index, float fValue, bool bDefault = false);
 	float paramValue(synthv1::ParamIndex index) const;
 
 	// Param kbob (widget) mapper.

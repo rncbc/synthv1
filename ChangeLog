@@ -5,6 +5,7 @@ ChangeLog
 
 SVN TRUNK
 
+- All knobs default value setting slightly improved.
 - A run-time circumention have been hacked in, strictly related
   to when NSM session management is in charge: the native file
   browser/requester dialogs are then disabled (were taking too
@@ -12,11 +13,10 @@ SVN TRUNK
 - Auto-detection of the correct target library path for the
   LV2 plugin, whether it may be .../lib or .../lib64 on bi
   -arch targets, when libdir is not specified on configure
-  time (--libdir=LIBDIR). (EXPERIMENTAL)
+  time (--libdir=LIBDIR).
 - Reverb has been added as a brand new effects stage, though
-  based on good old FreeVerb :). (EXPERIMENTAL)
+  based on good old FreeVerb :).
 - Introduced a variable env.stage time icontrol parameter.
-  (EXPERIMENTAL)
 - Dummy change-log entry for the new year.
 
 

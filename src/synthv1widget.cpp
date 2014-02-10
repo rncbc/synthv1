@@ -732,13 +732,14 @@ synthv1widget_knob *synthv1widget::paramKnob ( synthv1::ParamIndex index ) const
 
 
 // Param port accessors.
-void synthv1widget::setParamValue ( synthv1::ParamIndex index, float fValue )
+void synthv1widget::setParamValue (
+	synthv1::ParamIndex index, float fValue, bool bDefault )
 {
 	++m_iUpdate;
 
 	synthv1widget_knob *pKnob = paramKnob(index);
 	if (pKnob)
-		pKnob->setValue(fValue);
+		pKnob->setValue(fValue, bDefault);
 
 	updateParamEx(index, fValue);
 
@@ -875,8 +876,8 @@ void synthv1widget::resetParamValues (void)
 
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
 		synthv1::ParamIndex index = synthv1::ParamIndex(i);
-		float fValue = synthv1_param::paramDefaultValue(index);
-		setParamValue(index, fValue);
+		const float fValue = synthv1_param::paramDefaultValue(index);
+		setParamValue(index, fValue, true);
 		updateParam(index, fValue);
 		m_params_ab[index] = fValue;
 	}
@@ -946,8 +947,8 @@ void synthv1widget::loadPreset ( const QString& sFilename )
 		}
 	}
 
-	resetParamValues();
 	resetParamKnobs();
+	resetParamValues();
 
 	pSynth->reset();
 
@@ -987,7 +988,7 @@ void synthv1widget::loadPreset ( const QString& sFilename )
 							if (index == synthv1::DEL1_BPM && fValue < 3.6f)
 								fValue *= 100.0f;
 						//--legacy support < 0.3.0.4 -- end.
-							setParamValue(index, fValue);
+							setParamValue(index, fValue, true);
 							updateParam(index, fValue);
 							m_params_ab[index] = fValue;
 						}

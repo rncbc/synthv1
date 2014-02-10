@@ -69,7 +69,7 @@ public:
 
 public slots:
 
-	virtual void setValue(float fValue);
+	virtual void setValue(float fValue, bool bDefault = false);
 
 signals:
 
@@ -126,7 +126,7 @@ public:
 public slots:
 
 	// Virtual accessors.
-	void setValue(float fValue);
+	void setValue(float fValue, bool bDefault = false);
 
 protected slots:
 
@@ -161,7 +161,7 @@ public:
 public slots:
 
 	// Virtual accessor.
-	void setValue(float fValue);
+	void setValue(float fValue, bool bDefault = false);
 
 protected slots:
 
