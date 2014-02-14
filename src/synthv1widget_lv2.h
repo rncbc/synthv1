@@ -1,7 +1,7 @@
 // synthv1widget_lv2.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -80,6 +80,8 @@ private:
 	// Instance variables.
 	LV2UI_Controller     m_controller;
 	LV2UI_Write_Function m_write_function;
+
+	bool m_params_def[synthv1::NUM_PARAMS];
 
 #ifdef CONFIG_LV2_EXTERNAL_UI
 	LV2_External_UI_Host *m_external_host;

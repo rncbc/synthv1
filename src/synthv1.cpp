@@ -1826,8 +1826,12 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 
 	const float lfo1_rate = *m_lfo1.rate * *m_lfo1.rate;
 	const float lfo2_rate = *m_lfo2.rate * *m_lfo2.rate;
-	const float lfo1_freq = LFO_FREQ_MIN + lfo1_rate * (LFO_FREQ_MAX - LFO_FREQ_MIN);
-	const float lfo2_freq = LFO_FREQ_MIN + lfo2_rate * (LFO_FREQ_MAX - LFO_FREQ_MIN);
+
+	const float lfo1_freq
+		= LFO_FREQ_MIN + lfo1_rate * (LFO_FREQ_MAX - LFO_FREQ_MIN);
+	const float lfo2_freq
+		= LFO_FREQ_MIN + lfo2_rate * (LFO_FREQ_MAX - LFO_FREQ_MIN);
+
 	const float modwheel1 = m_ctl1.modwheel + PITCH_SCALE * *m_lfo1.pitch;
 	const float modwheel2 = m_ctl2.modwheel + PITCH_SCALE * *m_lfo2.pitch;
 
@@ -1840,19 +1844,25 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 		updateEnvTimes_2();
 	}
 
-	if (int(*m_dco1.shape1) != int(dco1_wave1.shape()) || *m_dco1.width1 != dco1_wave1.width())
+	if (int(*m_dco1.shape1) != int(dco1_wave1.shape())
+		|| *m_dco1.width1 != dco1_wave1.width())
 		dco1_wave1.reset(synthv1_wave::Shape(*m_dco1.shape1), *m_dco1.width1);
-	if (int(*m_dco1.shape2) != int(dco1_wave2.shape()) || *m_dco1.width2 != dco1_wave2.width())
+	if (int(*m_dco1.shape2) != int(dco1_wave2.shape())
+		|| *m_dco1.width2 != dco1_wave2.width())
 		dco1_wave2.reset(synthv1_wave::Shape(*m_dco1.shape2), *m_dco1.width2);
 
-	if (int(*m_dco2.shape1) != int(dco2_wave1.shape()) || *m_dco2.width1 != dco2_wave1.width())
+	if (int(*m_dco2.shape1) != int(dco2_wave1.shape())
+		|| *m_dco2.width1 != dco2_wave1.width())
 		dco2_wave1.reset(synthv1_wave::Shape(*m_dco2.shape1), *m_dco2.width1);
-	if (int(*m_dco2.shape2) != int(dco2_wave2.shape()) || *m_dco2.width2 != dco2_wave2.width())
+	if (int(*m_dco2.shape2) != int(dco2_wave2.shape())
+		|| *m_dco2.width2 != dco2_wave2.width())
 		dco2_wave2.reset(synthv1_wave::Shape(*m_dco2.shape2), *m_dco2.width2);
 	
-	if (int(*m_lfo1.shape) != int(lfo1_wave.shape()) || *m_lfo1.width != lfo1_wave.width())
+	if (int(*m_lfo1.shape) != int(lfo1_wave.shape())
+		|| *m_lfo1.width != lfo1_wave.width())
 		lfo1_wave.reset(synthv1_wave::Shape(*m_lfo1.shape), *m_lfo1.width);
-	if (int(*m_lfo2.shape) != int(lfo2_wave.shape()) || *m_lfo2.width != lfo2_wave.width())
+	if (int(*m_lfo2.shape) != int(lfo2_wave.shape())
+		|| *m_lfo2.width != lfo2_wave.width())
 		lfo2_wave.reset(synthv1_wave::Shape(*m_lfo2.shape), *m_lfo2.width);
 
 	// per voice
