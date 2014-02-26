@@ -62,8 +62,11 @@ void synthv1widget_config::load (void)
 	sPresetDir = QSettings::value("/PresetDir").toString();
 	QSettings::endGroup();
 
+	QSettings::beginGroup("/Dialogs");
+	bUseNativeDialogs = QSettings::value("/UseNativeDialogs", true).toBool();
 	// Run-time special non-persistent options.
-	bDontUseNativeDialog = false;
+	bDontUseNativeDialogs = !bUseNativeDialogs;
+	QSettings::endGroup();
 }
 
 
@@ -76,6 +79,10 @@ void synthv1widget_config::save (void)
 	QSettings::beginGroup("/Default");
 	QSettings::setValue("/Preset", sPreset);
 	QSettings::setValue("/PresetDir", sPresetDir);
+	QSettings::endGroup();
+
+	QSettings::beginGroup("/Dialogs");
+	QSettings::setValue("/UseNativeDialogs", bUseNativeDialogs);
 	QSettings::endGroup();
 
 	QSettings::sync();

@@ -46,8 +46,11 @@ public:
 	QString sPreset;
 	QString sPresetDir;
 
+	// Special persistent options.
+	bool bUseNativeDialogs;
+
 	// Run-time special non-persistent options.
-	bool bDontUseNativeDialog;
+	bool bDontUseNativeDialogs;
 
 	// Singleton instance accessor.
 	static synthv1widget_config *getInstance();

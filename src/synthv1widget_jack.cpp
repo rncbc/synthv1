@@ -86,7 +86,7 @@ synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 		m_pNsmClient->announce(SYNTHV1_TITLE, ":switch:dirty:optional-gui:");
 		synthv1widget_config *pConfig = synthv1widget_config::getInstance();
 		if (pConfig)
-			pConfig->bDontUseNativeDialog = true;
+			pConfig->bDontUseNativeDialogs = true;
 		return;
 	}
 #endif	// CONFIG_NSM
