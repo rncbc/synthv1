@@ -125,7 +125,7 @@ void synthv1widget_preset::clearPreset (void)
 	if (pConfig)
 		pConfig->sPreset.clear();
 
-	bool bBlockSignals = m_pComboBox->blockSignals(true);
+	const bool bBlockSignals = m_pComboBox->blockSignals(true);
 	m_pComboBox->clearEditText();
 	m_pComboBox->blockSignals(bBlockSignals);
 }
@@ -133,7 +133,7 @@ void synthv1widget_preset::clearPreset (void)
 
 void synthv1widget_preset::setPreset ( const QString& sPreset )
 {
-	bool bBlockSignals = m_pComboBox->blockSignals(true);
+	const bool bBlockSignals = m_pComboBox->blockSignals(true);
 	m_pComboBox->setEditText(sPreset);
 	m_pComboBox->blockSignals(bBlockSignals);
 }
@@ -386,8 +386,7 @@ void synthv1widget_preset::deletePreset (void)
 void synthv1widget_preset::resetPreset (void)
 {
 	const QString& sPreset = m_pComboBox->currentText();
-
-	bool bLoadPreset = (!sPreset.isEmpty()
+	const bool bLoadPreset = (!sPreset.isEmpty()
 		&& m_pComboBox->findText(sPreset) >= 0);
 	if (bLoadPreset && !queryPreset())
 		return;
@@ -405,7 +404,7 @@ void synthv1widget_preset::resetPreset (void)
 // Widget refreshner-loader.
 void synthv1widget_preset::refreshPreset (void)
 {
-	bool bBlockSignals = m_pComboBox->blockSignals(true);
+	const bool bBlockSignals = m_pComboBox->blockSignals(true);
 
 	const QString sOldPreset = m_pComboBox->currentText();
 	const QIcon icon(":/images/synthv1_preset.png");
@@ -424,7 +423,7 @@ void synthv1widget_preset::refreshPreset (void)
 		pConfig->endGroup();
 	}
 
-	int iIndex = m_pComboBox->findText(sOldPreset);
+	const int iIndex = m_pComboBox->findText(sOldPreset);
 	if (iIndex >= 0)
 		m_pComboBox->setCurrentIndex(iIndex);
 	else
