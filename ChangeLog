@@ -3,10 +3,16 @@ synthv1 - an old-school polyphonic synthesizer
 
 ChangeLog
 
+SVN TRUNK
+
+- Make sure the LV2 plugin back-end always builds first, before
+  its respective LV2 UI front-end client.
+
+
 0.4.0  2014-03-06  A proto-beta party.
 
 - All knobs default value setting slightly improved.
-- A run-time circumention have been hacked in, strictly related
+- A run-time circumvention have been hacked, strictly related
   to when NSM session management is in charge: the native file
   browser/requester dialogs are then disabled (were taking too
   long to list the current directory on first time invocation).
@@ -16,7 +22,7 @@ ChangeLog
   time (--libdir=LIBDIR).
 - Reverb has been added as a brand new effects stage, though
   based on good old FreeVerb :).
-- Introduced a variable env.stage time icontrol parameter.
+- Introduced a variable env.stage time control parameter.
 - Dummy change-log entry for the new year.
 
 

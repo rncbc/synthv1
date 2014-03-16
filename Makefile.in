@@ -90,7 +90,7 @@ all:	@ac_all_targets@
 lv2:	$(name_lv2).mak $(sources_lv2) $(headers_lv2)
 	@$(MAKE) -f $(name_lv2).mak
 
-lv2ui:	$(name_lv2ui).mak $(resources) ${forms} $(sources_lv2ui) $(headers_lv2ui)
+lv2ui:	$(name_lv2ui).mak $(resources) ${forms} $(sources_lv2ui) $(headers_lv2ui) lv2
 	@$(MAKE) -f $(name_lv2ui).mak
 
 jack:	$(name_jack).mak $(resources) ${forms} $(sources_jack) $(headers_jack)
