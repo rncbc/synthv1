@@ -1433,17 +1433,17 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 				// pressure/after-touch
 				pv->pre1 = 0.0f;
 				pv->dca1_pre.reset(m_def1.pressure, &m_ctl1.pressure, &pv->pre1);
-				// phases
-				pv->dco1_sample1 = pv->dco1_osc1.start();
-				pv->dco1_sample2 = pv->dco1_osc2.start(*m_dco1.phase * PHASE_SCALE);
 				// frequencies
-				const float freq1 = float(key)
+				const float note1 = float(key)
 					+ *m_dco1.octave * OCTAVE_SCALE
 					+ *m_dco1.tuning * TUNING_SCALE;
 				const float detune1
 					= *m_dco1.detune * DETUNE_SCALE;
-				pv->dco1_freq1 = synthv1_freq(freq1 - detune1);
-				pv->dco1_freq2 = synthv1_freq(freq1 + detune1);
+				pv->dco1_freq1 = synthv1_freq(note1 - detune1);
+				pv->dco1_freq2 = synthv1_freq(note1 + detune1);
+				// phases
+				pv->dco1_sample1 = pv->dco1_osc1.start();
+				pv->dco1_sample2 = pv->dco1_osc2.start(*m_dco1.phase * PHASE_SCALE);
 				// filters
 				const int type1 = int(*m_dcf1.type);
 				pv->dcf11.reset(synthv1_filter1::Type(type1));
@@ -1476,16 +1476,17 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 				// pressure/after-touch
 				pv->pre2 = 0.0f;
 				pv->dca2_pre.reset(m_def2.pressure, &m_ctl2.pressure, &pv->pre2);
-				// phases
-				pv->dco2_sample1 = pv->dco2_osc1.start();
-				pv->dco2_sample2 = pv->dco2_osc2.start(*m_dco2.phase * PHASE_SCALE);
-				const float freq2 = float(key)
+				// frequencies
+				const float note2 = float(key)
 					+ *m_dco2.octave * OCTAVE_SCALE
 					+ *m_dco2.tuning * TUNING_SCALE;
 				const float detune2
 					= *m_dco2.detune * DETUNE_SCALE;
-				pv->dco2_freq1 = synthv1_freq(freq2 - detune2);
-				pv->dco2_freq2 = synthv1_freq(freq2 + detune2);
+				pv->dco2_freq1 = synthv1_freq(note2 - detune2);
+				pv->dco2_freq2 = synthv1_freq(note2 + detune2);
+				// phases
+				pv->dco2_sample1 = pv->dco2_osc1.start();
+				pv->dco2_sample2 = pv->dco2_osc2.start(*m_dco2.phase * PHASE_SCALE);
 				// filters
 				const int type2 = int(*m_dcf2.type);
 				pv->dcf21.reset(synthv1_filter1::Type(type2));
