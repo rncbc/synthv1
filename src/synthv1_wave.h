@@ -1,7 +1,7 @@
 // synthv1_wave.h
 //
 /****************************************************************************
-   Copyright (C) 2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -44,18 +44,14 @@ public:
 		: m_nsize(nsize), m_nover(nover),
 			m_shape(Pulse), m_width(1.0f), m_srate(44100)
 	{
-		m_table0 = new float [m_nsize];
-		m_table1 = new float [m_nsize];
+		m_table = new float [m_nsize + 4];
 
 		reset(m_shape, m_width);
 	}
 
 	// dtor.
 	~synthv1_wave()
-	{
-		delete [] m_table0;
-		delete [] m_table1;
-	}
+		{ delete [] m_table; }
 
 	Shape shape() const
 		{ return m_shape; }
@@ -74,49 +70,22 @@ public:
 		m_shape = shape;
 		m_width = width;;
 
-		const float p0 = float(m_nsize);
-		const float w0 = p0 * m_width;
-		const float w2 = w0 * 0.5f;
-
-		const uint32_t ihold = (uint32_t(p0 - w0) >> 3) + 1;
-		if (m_shape == Noise)
-			::srand(long(this));
-		float phold = 0.0f;
-
-		for (uint32_t i = 0; i < m_nsize; ++i) {
-			float p = float(i);
-			switch (m_shape) {
-			case Pulse:
-				p = (p < w2 ? 1.0f : -1.0f);
-				break;
-			case Saw:
-				if (p < w0)
-					p = 2.0f * p / w0 - 1.0f;
-				else
-					p = 1.0f - 2.0f * (1.0f + (p - w0)) / (p0 - w0);
-				break;
-			case Sine:
-				if (p < w2)
-					p = ::sinf(2.0f * M_PI * p / w0);
-				else
-					p = ::sinf(M_PI * (p + (p0 - w0))/ (p0 - w2));
-				break;
-			case Noise:
-			default:
-				if ((i % ihold) == 0)
-					phold = (2.0f * float(::rand()) / float(RAND_MAX)) - 1.0f;
-				p = phold;
-				break;
-			}
-			m_table0[i] = p;
+		switch (m_shape) {
+		case Pulse:
+			reset_pulse();
+			break;
+		case Saw:
+			reset_saw();
+			break;
+		case Sine:
+			reset_sine();
+			break;
+		case Noise:
+			reset_noise();
+			// thru...
+		default:
+			break;
 		}
-
-		if (m_nover > 0)
-			reset_filter();
-		if (m_shape == Noise)
-			reset_normalize();
-
-		reset_interp();
 	}
 
 	// begin.
@@ -134,15 +103,27 @@ public:
 	// iterate.
 	float sample(float& phase, float freq = 0.0f) const
 	{
-		const uint32_t k = uint32_t(phase);
-		const float alpha = phase - float(k);
+		const uint32_t i = uint32_t(phase);
+		const float alpha = phase - float(i);
 		const float p0 = float(m_nsize);
 
 		phase += p0 * freq / m_srate;
 		if (phase >= p0)
 			phase -= p0;
 
-		return m_table0[k] + alpha * m_table1[k];
+		// cubic interpolation
+		const float x0 = m_table[i];
+		const float x1 = m_table[i + 1];
+		const float x2 = m_table[i + 2];
+		const float x3 = m_table[i + 3];
+
+		const float c1 = (x2 - x0) * 0.5f;
+		const float b1 = (x1 - x2);
+		const float b2 = (c1 + b1);
+		const float c3 = (x3 - x1) * 0.5f + b2 + b1;
+		const float c2 = (c3 + b2);
+
+		return (((c3 * alpha) - c2) * alpha + c1) * alpha + x1;
 	}
 
 	// absolute value.
@@ -155,18 +136,98 @@ public:
 		if (phase >= p0)
 			phase -= p0;
 
-		return m_table0[uint32_t(phase)];
+		return m_table[uint32_t(phase)];
 	}
 
 protected:
 
+	// processors.
+	void reset_pulse()
+	{
+		const float p0 = float(m_nsize);
+		const float w2 = p0 * m_width * 0.5f;
+
+		for (uint32_t i = 0; i < m_nsize; ++i) {
+			const float p = float(i);
+			m_table[i] = (p < w2 ? 1.0f : -1.0f);
+		}
+
+		reset_filter();
+		reset_normalize();
+		reset_interp();
+	}
+
+	void reset_saw()
+	{
+		const float p0 = float(m_nsize);
+		const float w0 = p0 * m_width;
+
+		for (uint32_t i = 0; i < m_nsize; ++i) {
+			const float p = float(i);
+			if (p < w0) {
+				m_table[i] = 2.0f * p / w0 - 1.0f;
+			} else {
+				m_table[i] = 1.0f - 2.0f * (1.0f + (p - w0)) / (p0 - w0);
+			}
+		}
+
+		reset_filter();
+		reset_normalize();
+		reset_interp();
+	}
+
+	void reset_sine()
+	{
+		const float p0 = float(m_nsize);
+		const float w0 = p0 * m_width;
+		const float w2 = w0 * 0.5f;
+
+		for (uint32_t i = 0; i < m_nsize; ++i) {
+			float p = float(i);
+			if (p < w2)
+				m_table[i] = ::sinf(2.0f * M_PI * p / w0);
+			else
+				m_table[i] = ::sinf(M_PI * (p + (p0 - w0)) / (p0 - w2));
+		}
+
+		if (m_width < 1.0f) {
+			reset_filter();
+			reset_normalize();
+		}
+
+		reset_interp();
+	}
+
+	// init noise table.
+	void reset_noise()
+	{
+		const float p0 = float(m_nsize);
+		const float w0 = p0 * m_width;
+		const uint32_t ihold = (uint32_t(p0 - w0) >> 3) + 1;
+
+		::srand(long(this));
+
+		float p = 0.0f;
+
+		for (uint32_t i = 0; i < m_nsize; ++i) {
+			if ((i % ihold) == 0)
+				p = (2.0f * float(::rand()) / float(RAND_MAX)) - 1.0f;
+			m_table[i] = p;
+		}
+
+		reset_filter();
+		reset_normalize();
+		reset_interp();
+	}
+
+	// post-processors
 	void reset_filter()
 	{
 		uint32_t i, k = 0;
 
 		for (i = 1; i < m_nsize; ++i) {
-			const float p1 = m_table0[i - 1];
-			const float p2 = m_table0[i];
+			const float p1 = m_table[i - 1];
+			const float p2 = m_table[i];
 			if (p1 < 0.0f && p2 >= 0.0f) {
 				k = i;
 				break;
@@ -174,11 +235,11 @@ protected:
 		}
 
 		for (uint16_t n = 0; n < m_nover; ++n) {
-			float p = m_table0[k];
+			float p = m_table[k];
 			for (i = 0; i < m_nsize; ++i) {
 				if (++k >= m_nsize) k = 0;
-				p = 0.5f * (m_table0[k] + p);
-				m_table0[k] = p;
+				p = 0.5f * (m_table[k] + p);
+				m_table[k] = p;
 			}
 		}
 	}
@@ -191,7 +252,7 @@ protected:
 		float pmin = 0.0f;
 
 		for (i = 0; i < m_nsize; ++i) {
-			const float p = m_table0[i];
+			const float p = m_table[i];
 			if (pmax < p)
 				pmax = p;
 			else
@@ -203,8 +264,8 @@ protected:
 
 		pmax = 0.0f;
 		for (i = 0; i < m_nsize; ++i) {
-			m_table0[i] -= pmid;
-			const float p = ::fabs(m_table0[i]);
+			m_table[i] -= pmid;
+			const float p = ::fabs(m_table[i]);
 			if (pmax < p)
 				pmax = p;
 		}
@@ -212,20 +273,20 @@ protected:
 		if (pmax > 0.0f) {
 			const float gain = 1.0f / pmax;
 			for (i = 0; i < m_nsize; ++i)
-				m_table0[i] *= gain;
+				m_table[i] *= gain;
 		}
 	}
 
 	void reset_interp()
 	{
-		uint32_t pk = 0;
+		uint32_t i, pk = 0;
 
-		m_table1[0] = m_table0[m_nsize - 1] - m_table0[0];
+		for (i = m_nsize; i < m_nsize + 4; ++i)
+			m_table[i] = m_table[i - m_nsize];
 
-		for (uint32_t i = 1; i < m_nsize; ++i) {
-			const float p1 = m_table0[i - 1];
-			const float p2 = m_table0[i];
-			m_table1[i] = p2 - p1;
+		for (i = 1; i < m_nsize; ++i) {
+			const float p1 = m_table[i - 1];
+			const float p2 = m_table[i];
 			if (p1 < 0.0f && p2 >= 0.0f)
 				pk = i;
 		}
@@ -242,16 +303,28 @@ private:
 	float  m_width;
 
 	float  m_srate;
-
-	float *m_table0;
-	float *m_table1;
-
+	float *m_table;
 	float  m_phase0;
 };
 
 
 //-------------------------------------------------------------------------
-// synthv1_wave - smoothed (integrating oversampled) oscillator
+// synthv1_wave_lf - hard/non-smoothed wave table (eg. LFO).
+//
+
+class synthv1_wave_lf : public synthv1_wave
+{
+public:
+
+	// ctor.
+	synthv1_wave_lf(uint32_t nsize = 128)
+		: synthv1_wave(nsize, 0) {}
+};
+
+
+//-------------------------------------------------------------------------
+// synthv1_oscillator - smoothed (integrating oversampled) oscillator
+//
 
 class synthv1_oscillator
 {

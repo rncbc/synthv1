@@ -1,7 +1,7 @@
 // synthv1widget_wave.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
 
 
 // Forward decl.
-class synthv1_wave;
+class synthv1_wave_lf;
 
 
 //----------------------------------------------------------------------------
@@ -77,7 +77,7 @@ protected:
 private:
 
 	// Instance state.
-	synthv1_wave *m_pWave;
+	synthv1_wave_lf *m_pWave;
 
 	// Drag state.
 	bool m_bDragging;

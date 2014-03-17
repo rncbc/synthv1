@@ -766,7 +766,7 @@ public:
 	synthv1_wave dco1_wave1, dco1_wave2;
 	synthv1_wave dco2_wave1, dco2_wave2;
 
-	synthv1_wave lfo1_wave,  lfo2_wave;
+	synthv1_wave_lf lfo1_wave, lfo2_wave;
 
 	float dco1_last1;
 	float dco1_last2;

@@ -5,6 +5,7 @@ ChangeLog
 
 SVN TRUNK
 
+- Late optimizations to basic wave-table oscillators.
 - Make sure the LV2 plugin back-end always builds first, before
   its respective LV2 UI front-end client.
 
