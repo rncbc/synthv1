@@ -42,7 +42,7 @@ public:
 	// ctor.
 	synthv1_wave(uint32_t nsize = 1024, uint16_t nover = 24)
 		: m_nsize(nsize), m_nover(nover),
-			m_shape(Pulse), m_width(1.0f), m_srate(44100)
+			m_shape(Pulse), m_width(1.0f), m_srate(44100.0f)
 	{
 		m_table = new float [m_nsize + 4];
 
@@ -53,6 +53,7 @@ public:
 	~synthv1_wave()
 		{ delete [] m_table; }
 
+	// properties.
 	Shape shape() const
 		{ return m_shape; }
 	float width() const
@@ -89,7 +90,7 @@ public:
 	}
 
 	// begin.
-	float start(float& phase, float pshift = 0.0f) const
+	float start(float& phase, float pshift = 0.0f, float freq = 0.0f) const
 	{
 		const float p0 = float(m_nsize);
 
@@ -97,11 +98,11 @@ public:
 		if (phase >= p0)
 			phase -= p0;
 
-		return sample(phase);
+		return sample(phase, freq);
 	}
 
 	// iterate.
-	float sample(float& phase, float freq = 0.0f) const
+	float sample(float& phase, float freq) const
 	{
 		const uint32_t i = uint32_t(phase);
 		const float alpha = phase - float(i);
@@ -111,7 +112,7 @@ public:
 		if (phase >= p0)
 			phase -= p0;
 
-		// cubic interpolation
+		// cubic interpolation...
 		const float x0 = m_table[i];
 		const float x1 = m_table[i + 1];
 		const float x2 = m_table[i + 2];
@@ -131,7 +132,7 @@ public:
 	{
 		const float p0 = float(m_nsize);
 
-		phase *= float(m_nsize);
+		phase *= p0;
 		phase += m_phase0;
 		if (phase >= p0)
 			phase -= p0;
@@ -141,7 +142,7 @@ public:
 
 protected:
 
-	// processors.
+	// init pulse table.
 	void reset_pulse()
 	{
 		const float p0 = float(m_nsize);
@@ -157,6 +158,7 @@ protected:
 		reset_interp();
 	}
 
+	// init saw table.
 	void reset_saw()
 	{
 		const float p0 = float(m_nsize);
@@ -176,6 +178,7 @@ protected:
 		reset_interp();
 	}
 
+	// init sine table.
 	void reset_sine()
 	{
 		const float p0 = float(m_nsize);
@@ -299,12 +302,12 @@ private:
 	uint32_t m_nsize;
 	uint16_t m_nover;
 
-	Shape  m_shape;
-	float  m_width;
+	Shape    m_shape;
+	float    m_width;
 
-	float  m_srate;
-	float *m_table;
-	float  m_phase0;
+	float    m_srate;
+	float   *m_table;
+	float    m_phase0;
 };
 
 
@@ -323,7 +326,7 @@ public:
 
 
 //-------------------------------------------------------------------------
-// synthv1_oscillator - smoothed (integrating oversampled) oscillator
+// synthv1_oscillator - wave table oscillator
 //
 
 class synthv1_oscillator
