@@ -27,6 +27,7 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 
+#include <math.h>
 
 
 // Safe value capping.

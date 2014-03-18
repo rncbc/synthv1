@@ -32,6 +32,7 @@ HEADERS = \
 SOURCES = \
 	synthv1.cpp \
 	synthv1_jack.cpp \
+	synthv1_wave.cpp \
 	synthv1_nsm.cpp \
 	synthv1_param.cpp \
 	synthv1widget.cpp \

@@ -19,6 +19,7 @@ headers = \
 
 sources = \
 	src/$(name).cpp \
+	src/$(name)_wave.cpp \
 	src/$(name)_param.cpp
 
 headers_ui = \

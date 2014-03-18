@@ -23,6 +23,7 @@ HEADERS = \
 SOURCES = \
 	synthv1.cpp \
 	synthv1_lv2.cpp \
+	synthv1_wave.cpp \
 	synthv1_param.cpp
 
 
