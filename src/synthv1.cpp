@@ -1442,8 +1442,9 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 				pv->dco1_freq1 = synthv1_freq(note1 - detune1);
 				pv->dco1_freq2 = synthv1_freq(note1 + detune1);
 				// phases
-				pv->dco1_sample1 = pv->dco1_osc1.start();
-				pv->dco1_sample2 = pv->dco1_osc2.start(*m_dco1.phase * PHASE_SCALE);
+				const float phase1 = *m_dco1.phase * PHASE_SCALE;
+				pv->dco1_sample1 = pv->dco1_osc1.start(  0.0f, pv->dco1_freq1);
+				pv->dco1_sample2 = pv->dco1_osc2.start(phase1, pv->dco1_freq2);
 				// filters
 				const int type1 = int(*m_dcf1.type);
 				pv->dcf11.reset(synthv1_filter1::Type(type1));
@@ -1485,8 +1486,9 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 				pv->dco2_freq1 = synthv1_freq(note2 - detune2);
 				pv->dco2_freq2 = synthv1_freq(note2 + detune2);
 				// phases
-				pv->dco2_sample1 = pv->dco2_osc1.start();
-				pv->dco2_sample2 = pv->dco2_osc2.start(*m_dco2.phase * PHASE_SCALE);
+				const float phase2 = *m_dco2.phase * PHASE_SCALE;
+				pv->dco2_sample1 = pv->dco2_osc1.start(  0.0f, pv->dco2_freq1);
+				pv->dco2_sample2 = pv->dco2_osc2.start(phase2, pv->dco2_freq2);
 				// filters
 				const int type2 = int(*m_dcf2.type);
 				pv->dcf21.reset(synthv1_filter1::Type(type2));

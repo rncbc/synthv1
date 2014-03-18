@@ -174,8 +174,8 @@ public:
 		{ return m_wave; }
 
 	// begin.
-	float start(float pshift = 0.0f)
-		{ return m_wave->start(m_phase, pshift); }
+	float start(float pshift = 0.0f, float freq = 0.0f)
+		{ return m_wave->start(m_phase, pshift, freq); }
 
 	// iterate.
 	float sample(float freq)
