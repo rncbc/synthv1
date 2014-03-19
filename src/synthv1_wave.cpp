@@ -186,6 +186,8 @@ synthv1_wave::synthv1_wave ( uint32_t nsize, uint16_t nover, uint16_t ntabs )
 	for (uint16_t itab = 0; itab < ntabs1; ++itab)
 		m_tables[itab] = new float [m_nsize + 4];
 
+	reset(m_shape, m_width);
+
 	if (ntabs > 0) {
 		if (++g_sync_refcount == 1 && g_sync_thread == NULL) {
 			g_sync_thread = new synthv1_wave_thread();
@@ -193,8 +195,6 @@ synthv1_wave::synthv1_wave ( uint32_t nsize, uint16_t nover, uint16_t ntabs )
 		}
 		m_sync_thread = g_sync_thread;
 	}
-
-	reset(m_shape, m_width);
 }
 
 
