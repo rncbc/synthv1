@@ -24,6 +24,9 @@
 
 #include <stdint.h>
 
+// forward decls.
+class synthv1_wave_thread;
+
 
 //-------------------------------------------------------------------------
 // synthv1_wave - smoothed (integrating oversampled) wave table.
@@ -37,7 +40,7 @@ public:
 	enum Shape { Pulse = 0, Saw, Sine, Noise };
 
 	// ctor.
-	synthv1_wave(uint32_t nsize = 1024, uint16_t nover = 24);
+	synthv1_wave(uint32_t nsize = 1024, uint16_t nover = 24, uint16_t ntabs = 8);
 
 	// dtor.
 	~synthv1_wave();
@@ -55,12 +58,17 @@ public:
 		{ return uint32_t(m_srate); }
 
 	// init.
-	void reset(Shape shape = Pulse, float width = 1.0f);
+	void reset(Shape shape, float width = 1.0f);
+
+	void reset_sync(Shape shape, float width);
+	bool reset_sync_wait();
 
 	// begin.
-	float start(float& phase, float pshift = 0.0f, float freq = 0.0f) const
+	float start(float& phase, float pshift = 0.0f, float freq = 0.0f)
 	{
 		const float p0 = float(m_nsize);
+
+		update(freq);
 
 		phase = m_phase0 + pshift * p0;
 		if (phase >= p0)
@@ -80,11 +88,25 @@ public:
 		if (phase >= p0)
 			phase -= p0;
 
-		// cubic interpolation...
-		const float x0 = m_table[i];
-		const float x1 = m_table[i + 1];
-		const float x2 = m_table[i + 2];
-		const float x3 = m_table[i + 3];
+		if (m_itab < m_ntabs) {
+			const float x0 = interp(i, m_itab, alpha);
+			const float x1 = interp(i, m_itab + 1, alpha);
+			return x0 + m_ftab * (x1 - x0);
+		} else {
+			return interp(i, m_itab, alpha);
+		}
+	}
+
+	// interpolate.
+	float interp(uint16_t i, uint16_t itab, float alpha) const
+	{
+		float *frames = m_tables[itab];
+
+		const float x0 = frames[i];
+		const float x1 = frames[i + 1];
+	#if 0	// cubic interp.
+		const float x2 = frames[i + 2];
+		const float x3 = frames[i + 3];
 
 		const float c1 = (x2 - x0) * 0.5f;
 		const float b1 = (x1 - x2);
@@ -93,6 +115,9 @@ public:
 		const float c2 = (c3 + b2);
 
 		return (((c3 * alpha) - c2) * alpha + c1) * alpha + x1;
+	#else	// linear interp.
+		return x0 + alpha * (x1 - x0);
+	#endif
 	}
 
 	// absolute value.
@@ -105,10 +130,34 @@ public:
 		if (phase >= p0)
 			phase -= p0;
 
-		return m_table[uint32_t(phase)];
+		return m_tables[m_ntabs][uint32_t(phase)];
+	}
+
+	// post-iter.
+	void update(float freq)
+	{
+		if (freq < m_min_freq) {
+			m_itab  = m_ntabs;
+			m_ftab  = 0.0f;
+		} else if (freq < m_max_freq) {
+			m_ftab  = fast_flog2f(m_max_freq / freq);
+			m_itab  = uint16_t(m_ftab);
+			m_ftab -= float(m_itab);
+		} else {
+			m_itab  = 0;
+			m_ftab  = 0.0f;
+		}
 	}
 
 protected:
+
+	// fast log2f approximation.
+	static inline float fast_flog2f ( float x )
+	{
+		union { float f; uint32_t i; } u;
+		u.f = x;
+		return (u.i * 1.192092896e-7f) - 126.943612f;
+	}
 
 	// init pulse table.
 	void reset_pulse();
@@ -122,22 +171,38 @@ protected:
 	// init noise table.
 	void reset_noise();
 
-	// post-processors
-	void reset_filter();
-	void reset_normalize();
-	void reset_interp();
+	// init pulse partial table.
+	void reset_pulse_part(uint16_t itab, uint16_t nparts);
+
+	// init saw partial table.
+	void reset_saw_part(uint16_t itab, uint16_t nparts);
+
+	// post-processors.
+	void reset_filter(uint16_t itab);
+	void reset_normalize(uint16_t itab);
+	void reset_interp(uint16_t itab);
 
 private:
 
 	uint32_t m_nsize;
 	uint16_t m_nover;
+	uint16_t m_ntabs;
 
 	Shape    m_shape;
 	float    m_width;
-
 	float    m_srate;
-	float   *m_table;
+	float  **m_tables;
 	float    m_phase0;
+
+	float    m_min_freq;
+	float    m_max_freq;
+
+	float    m_ftab;
+	uint16_t m_itab;
+
+	synthv1_wave_thread *m_sync_thread;
+
+	volatile bool m_sync_wait;
 };
 
 
@@ -151,7 +216,7 @@ public:
 
 	// ctor.
 	synthv1_wave_lf(uint32_t nsize = 128)
-		: synthv1_wave(nsize, 0) {}
+		: synthv1_wave(nsize, 0, 0) {}
 };
 
 
@@ -180,6 +245,10 @@ public:
 	// iterate.
 	float sample(float freq)
 		{ return m_wave->sample(m_phase, freq); }
+
+	// post-iter.
+	void update(float freq)
+		{ m_wave->update(freq); }
 
 private:
 
