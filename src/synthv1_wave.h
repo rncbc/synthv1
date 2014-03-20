@@ -177,6 +177,9 @@ protected:
 	// init saw partial table.
 	void reset_saw_part(uint16_t itab, uint16_t nparts);
 
+	// init sine partial table.
+	void reset_sine_part(uint16_t itab);
+
 	// post-processors.
 	void reset_filter(uint16_t itab);
 	void reset_normalize(uint16_t itab);

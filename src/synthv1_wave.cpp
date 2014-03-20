@@ -290,28 +290,20 @@ void synthv1_wave::reset_saw (void)
 // init sine table.
 void synthv1_wave::reset_sine (void)
 {
-	const float p0 = float(m_nsize);
-	const float w0 = p0 * m_width;
-	const float w2 = w0 * 0.5f;
-
-	float *frames = m_tables[m_ntabs];
-
-	for (uint32_t i = 0; i < m_nsize; ++i) {
-		float p = float(i);
-		if (p < w2)
-			frames[i] = ::sinf(2.0f * M_PI * p / w0);
-		else
-			frames[i] = ::sinf(M_PI * (p + (p0 - w0)) / (p0 - w2));
+	if (m_width < 1.0f) {
+		for (uint16_t itab = 0; itab < m_ntabs; ++itab)
+			reset_sine_part(itab);
 	}
+
+	reset_sine_part(m_ntabs);
 
 	if (m_width < 1.0f) {
-		reset_filter(m_ntabs);
-		reset_normalize(m_ntabs);
+		m_max_freq = (0.25f * m_srate);
+		m_min_freq = m_max_freq / float(1 << m_ntabs);
+	} else {
+		m_max_freq = (0.5f * m_srate);
+		m_min_freq = m_max_freq;
 	}
-	reset_interp(m_ntabs);
-
-	m_max_freq = (0.5f * m_srate);
-	m_min_freq = m_max_freq;
 }
 
 
@@ -417,6 +409,34 @@ void synthv1_wave::reset_saw_part ( uint16_t itab, uint16_t nparts )
 
 	reset_filter(itab);
 	reset_normalize(itab);
+	reset_interp(itab);
+}
+
+
+// init sine partial table.
+void synthv1_wave::reset_sine_part ( uint16_t itab )
+{
+	const float width
+		= 1.0f + float(itab) * (m_width - 1.0f) / float(m_ntabs);
+
+	const float p0 = float(m_nsize);
+	const float w0 = p0 * width;
+	const float w2 = w0 * 0.5f;
+
+	float *frames = m_tables[itab];
+
+	for (uint32_t i = 0; i < m_nsize; ++i) {
+		float p = float(i);
+		if (p < w2)
+			frames[i] = ::sinf(2.0f * M_PI * p / w0);
+		else
+			frames[i] = ::sinf(M_PI * (p + (p0 - w0)) / (p0 - w2));
+	}
+
+	if (width < 1.0f) {
+		reset_filter(itab);
+		reset_normalize(itab);
+	}
 	reset_interp(itab);
 }
 
