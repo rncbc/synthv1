@@ -98,13 +98,13 @@ public:
 	}
 
 	// interpolate.
-	float interp(uint16_t i, uint16_t itab, float alpha) const
+	float interp(uint32_t i, uint16_t itab, float alpha) const
 	{
 		float *frames = m_tables[itab];
 
 		const float x0 = frames[i];
 		const float x1 = frames[i + 1];
-	#if 0	// cubic interp.
+#if 0	// cubic interp.
 		const float x2 = frames[i + 2];
 		const float x3 = frames[i + 3];
 
@@ -115,9 +115,9 @@ public:
 		const float c2 = (c3 + b2);
 
 		return (((c3 * alpha) - c2) * alpha + c1) * alpha + x1;
-	#else	// linear interp.
+#else	// linear interp.
 		return x0 + alpha * (x1 - x0);
-	#endif
+#endif
 	}
 
 	// absolute value.

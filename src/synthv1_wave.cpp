@@ -82,8 +82,7 @@ public:
 	}
 
 	// wake from executive wait condition.
-	void reset_sync (
-		synthv1_wave *wave, synthv1_wave::Shape shape, float width )
+	void reset ( synthv1_wave *wave, synthv1_wave::Shape shape, float width )
 	{
 		if (!wave->reset_sync_wait()) {
 			const uint32_t w = (m_iwrite + 1) & m_nmask;
@@ -221,7 +220,7 @@ synthv1_wave::~synthv1_wave (void)
 void synthv1_wave::reset ( Shape shape, float width )
 {
 	if (m_sync_thread)
-		m_sync_thread->reset_sync(this, shape, width);
+		m_sync_thread->reset(this, shape, width);
 	else
 		reset_sync(shape, width);
 }
@@ -300,10 +299,9 @@ void synthv1_wave::reset_sine (void)
 	for (uint32_t i = 0; i < m_nsize; ++i) {
 		float p = float(i);
 		if (p < w2)
-			p = ::sinf(2.0f * M_PI * p / w0);
+			frames[i] = ::sinf(2.0f * M_PI * p / w0);
 		else
-			p = ::sinf(M_PI * (p + (p0 - w0)) / (p0 - w2));
-		frames[i] = p;
+			frames[i] = ::sinf(M_PI * (p + (p0 - w0)) / (p0 - w2));
 	}
 
 	if (m_width < 1.0f) {
