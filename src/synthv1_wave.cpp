@@ -416,8 +416,8 @@ void synthv1_wave::reset_saw_part ( uint16_t itab, uint16_t nparts )
 // init sine partial table.
 void synthv1_wave::reset_sine_part ( uint16_t itab )
 {
-	const float width
-		= 1.0f + float(itab) * (m_width - 1.0f) / float(m_ntabs);
+	const float width = (itab >= m_ntabs ? m_width
+		: 1.0f + float(itab) * (m_width - 1.0f) / float(m_ntabs));
 
 	const float p0 = float(m_nsize);
 	const float w0 = p0 * width;
