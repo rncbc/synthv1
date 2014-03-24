@@ -18,13 +18,15 @@ HEADERS = \
 	synthv1_list.h \
 	synthv1_fx.h \
 	synthv1_reverb.h \
-	synthv1_param.h
+	synthv1_param.h \
+	synthv1_sched.h
 
 SOURCES = \
 	synthv1.cpp \
 	synthv1_lv2.cpp \
 	synthv1_wave.cpp \
-	synthv1_param.cpp
+	synthv1_param.cpp \
+	synthv1_sched.cpp
 
 
 unix {

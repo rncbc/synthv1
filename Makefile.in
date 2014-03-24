@@ -15,12 +15,14 @@ headers = \
 	src/$(name)_wave.h \
 	src/$(name)_list.h \
 	src/$(name)_config.h \
-	src/$(name)_param.h
+	src/$(name)_param.h \
+	src/$(name)_sched.h
 
 sources = \
 	src/$(name).cpp \
 	src/$(name)_wave.cpp \
-	src/$(name)_param.cpp
+	src/$(name)_param.cpp \
+	src/$(name)_sched.cpp
 
 headers_ui = \
 	src/$(name)widget.h \

@@ -26,146 +26,42 @@
 
 
 //-------------------------------------------------------------------------
-// synthv1_wave_thread - local module thread stuff.
+// synthv1_wave_sched - local module schedule thread stuff.
 //
 
-#include <pthread.h>
-#include <string.h>
+#include "synthv1_sched.h"
 
 
-class synthv1_wave_thread
+class synthv1_wave_sched : public synthv1_sched
 {
 public:
 
 	// ctor.
-	synthv1_wave_thread ( uint32_t nsize = 8 )
+	synthv1_wave_sched (synthv1_wave *wave)	: synthv1_sched(),
+		m_wave(wave), m_shape(synthv1_wave::Pulse), m_width(1.0f) {}
+
+	// schedule reset.
+	void reset(synthv1_wave::Shape shape, float width)
 	{
-		m_nsize = (4 << 1);
-		while (m_nsize < nsize)
-			m_nsize <<= 1;
-		m_nmask = (m_nmask - 1);
-		m_items = new Item [m_nsize];
+		m_shape = shape;
+		m_width = width;
 
-		m_iread  = 0;
-		m_iwrite = 0;
-
-		::memset(m_items, 0, m_nsize * sizeof(Item));
-
-		m_running = false;
-
-		pthread_mutex_init(&m_mutex, NULL);
-		pthread_cond_init(&m_cond, NULL);
+		schedule();
 	}
 
-	// dtor.
-	~synthv1_wave_thread ()
+	// process reset (virtual).
+	void process()
 	{
-		// fake sync and wait 
-		if (m_running) {
-			pthread_mutex_lock(&m_mutex);
-			m_running = false;
-			pthread_cond_signal(&m_cond);
-			pthread_mutex_unlock(&m_mutex);
-			pthread_join(m_thread, NULL);
-		}
-
-		pthread_cond_destroy(&m_cond);
-		pthread_mutex_destroy(&m_mutex);
-
-		delete [] m_items;
-	}
-
-	// real thread start executive.
-	void start ()
-	{
-		pthread_create(&m_thread, NULL, synthv1_wave_thread::run, this);
-	}
-
-	// wake from executive wait condition.
-	void reset ( synthv1_wave *wave, synthv1_wave::Shape shape, float width )
-	{
-		if (!wave->reset_sync_wait()) {
-			const uint32_t w = (m_iwrite + 1) & m_nmask;
-			if (w != m_iread) {
-				Item& item = m_items[m_iwrite];
-				item.wave  = wave;
-				item.shape = shape;
-				item.width = width;
-				m_iwrite = w;
-			}
-		}
-
-		if (pthread_mutex_trylock(&m_mutex) == 0) {
-			pthread_cond_signal(&m_cond);
-			pthread_mutex_unlock(&m_mutex);
-		}
-	}
-
-protected:
-
-	// main thread executive.
-	void *run ()
-	{
-		pthread_mutex_lock(&m_mutex);
-
-		m_running = true;
-
-		while (m_running) {
-			// do whatever we must...
-			uint32_t r = m_iread;
-			while (r != m_iwrite) {
-				Item& item = m_items[r];
-				if (item.wave) {
-					item.wave->reset_sync(item.shape, item.width);
-					item.wave = NULL;
-				}
-				++r &= m_nmask;
-			}
-			m_iread = r;
-			// wait for sync...
-			pthread_cond_wait(&m_cond, &m_mutex);
-		}
-
-		pthread_mutex_unlock(&m_mutex);
-		return NULL;
-	}
-
-	static void *run ( void *arg )
-	{
-		return static_cast<synthv1_wave_thread *> (arg)->run();
+		m_wave->reset_sync(m_shape, m_width);
 	}
 
 private:
 
-	// sync queue instance reference.
-	uint32_t m_nsize;
-	uint32_t m_nmask;
-
-	// sync ref.item.
-	struct Item
-	{
-		synthv1_wave *wave;
-		synthv1_wave::Shape shape;
-		float width;
-	};
-
-	Item *m_items;
-
-	volatile uint32_t m_iread;
-	volatile uint32_t m_iwrite;
-
-	// whether the thread is logically running.
-	volatile bool   m_running;
-
-	// thread synchronization objects.
-	pthread_t       m_thread;
-	pthread_mutex_t m_mutex;
-	pthread_cond_t  m_cond;
+	// instance variables.
+	synthv1_wave *m_wave;
+	synthv1_wave::Shape m_shape;
+	float m_width;
 };
-
-
-static synthv1_wave_thread *g_sync_thread   = NULL;
-static uint32_t             g_sync_refcount = 0;
 
 
 //-------------------------------------------------------------------------
@@ -177,7 +73,7 @@ synthv1_wave::synthv1_wave ( uint32_t nsize, uint16_t nover, uint16_t ntabs )
 	: m_nsize(nsize), m_nover(nover), m_ntabs(ntabs),
 		m_shape(Saw), m_width(1.0f), m_srate(44100.0f),
 		m_min_freq(0.0f), m_max_freq(0.0f), m_ftab(0.0f), m_itab(0),
-		m_sync_thread(NULL), m_sync_wait(false)
+		m_sched(NULL)
 {
 	const uint16_t ntabs1 = m_ntabs + 1;
 
@@ -187,25 +83,16 @@ synthv1_wave::synthv1_wave ( uint32_t nsize, uint16_t nover, uint16_t ntabs )
 
 	reset(m_shape, m_width);
 
-	if (ntabs > 0) {
-		if (++g_sync_refcount == 1 && g_sync_thread == NULL) {
-			g_sync_thread = new synthv1_wave_thread();
-			g_sync_thread->start();
-		}
-		m_sync_thread = g_sync_thread;
-	}
+	if (ntabs > 0)
+		m_sched = new synthv1_wave_sched(this);
 }
 
 
 // dtor.
 synthv1_wave::~synthv1_wave (void)
 {
-	if (m_sync_thread) {
-		if (--g_sync_refcount == 0 && g_sync_thread) {
-			delete g_sync_thread;
-			g_sync_thread = NULL;
-		}
-	}
+	if (m_sched)
+		delete m_sched;
 
 	const uint16_t ntabs1 = m_ntabs + 1;
 
@@ -219,8 +106,8 @@ synthv1_wave::~synthv1_wave (void)
 // init.
 void synthv1_wave::reset ( Shape shape, float width )
 {
-	if (m_sync_thread)
-		m_sync_thread->reset(this, shape, width);
+	if (m_sched)
+		m_sched->reset(shape, width);
 	else
 		reset_sync(shape, width);
 }
@@ -247,17 +134,6 @@ void synthv1_wave::reset_sync ( Shape shape, float width )
 	default:
 		break;
 	}
-
-	m_sync_wait = false;
-}
-
-
-bool synthv1_wave::reset_sync_wait (void)
-{
-	const bool sync_wait = m_sync_wait;
-	if (!sync_wait)
-		m_sync_wait = true;
-	return sync_wait;
 }
 
 

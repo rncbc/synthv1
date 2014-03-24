@@ -25,7 +25,7 @@
 #include <stdint.h>
 
 // forward decls.
-class synthv1_wave_thread;
+class synthv1_wave_sched;
 
 
 //-------------------------------------------------------------------------
@@ -59,9 +59,8 @@ public:
 
 	// init.
 	void reset(Shape shape, float width = 1.0f);
-
+	// init.synch.
 	void reset_sync(Shape shape, float width);
-	bool reset_sync_wait();
 
 	// begin.
 	float start(float& phase, float pshift = 0.0f, float freq = 0.0f)
@@ -159,26 +158,23 @@ protected:
 		return (u.i * 1.192092896e-7f) - 126.943612f;
 	}
 
-	// init pulse table.
+	// init pulse tables.
 	void reset_pulse();
-
-	// init saw table.
-	void reset_saw();
-
-	// init sine table.
-	void reset_sine();
-
-	// init noise table.
-	void reset_noise();
-
 	// init pulse partial table.
 	void reset_pulse_part(uint16_t itab, uint16_t nparts);
 
+	// init saw tables.
+	void reset_saw();
 	// init saw partial table.
 	void reset_saw_part(uint16_t itab, uint16_t nparts);
 
+	// init sine tables.
+	void reset_sine();
 	// init sine partial table.
 	void reset_sine_part(uint16_t itab);
+
+	// init noise tables.
+	void reset_noise();
 
 	// post-processors.
 	void reset_filter(uint16_t itab);
@@ -203,9 +199,7 @@ private:
 	float    m_ftab;
 	uint16_t m_itab;
 
-	synthv1_wave_thread *m_sync_thread;
-
-	volatile bool m_sync_wait;
+	synthv1_wave_sched *m_sched;
 };
 
 

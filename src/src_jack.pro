@@ -18,6 +18,7 @@ HEADERS = \
 	synthv1_fx.h \
 	synthv1_nsm.h \
 	synthv1_param.h \
+	synthv1_sched.h \
 	synthv1_reverb.h \
 	synthv1widget.h \
 	synthv1widget_env.h \
@@ -35,6 +36,7 @@ SOURCES = \
 	synthv1_wave.cpp \
 	synthv1_nsm.cpp \
 	synthv1_param.cpp \
+	synthv1_sched.cpp \
 	synthv1widget.cpp \
 	synthv1widget_env.cpp \
 	synthv1widget_filt.cpp \
