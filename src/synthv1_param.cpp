@@ -161,7 +161,7 @@ struct {
 };
 
 
-QString synthv1_param::paramName ( synthv1::ParamIndex index )
+const char *synthv1_param::paramName ( synthv1::ParamIndex index )
 {
 	return synthv1_default_params[index].name;
 }

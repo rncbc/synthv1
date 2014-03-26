@@ -24,8 +24,6 @@
 
 #include "synthv1.h"
 
-#include <QString>
-
 
 //-------------------------------------------------------------------------
 // synthv1_param - decl.
@@ -34,7 +32,7 @@
 namespace synthv1_param
 {
 	// Default parameter name/value helpers.
-	QString paramName(synthv1::ParamIndex index);
+	const char *paramName(synthv1::ParamIndex index);
 	float paramDefaultValue(synthv1::ParamIndex index);
 };
 

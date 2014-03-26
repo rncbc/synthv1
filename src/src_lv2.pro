@@ -74,5 +74,6 @@ unix {
 	QMAKE_CLEAN += $${TARGET_LV2} $${TARGET_LIB}
 }
 
+QT -= core
 QT -= gui
-QT += xml
+#QT += xml
