@@ -21,17 +21,18 @@
 
 #include "synthv1_sched.h"
 
-#include <pthread.h>
+#include <QThread>
+#include <QMutex>
+#include <QWaitCondition>
 
 #include <stdint.h>
-#include <string.h>
 
 
 //-------------------------------------------------------------------------
 // synthv1_sched_thread - worker/schedule thread decl.
 //
 
-class synthv1_sched_thread
+class synthv1_sched_thread : public QThread
 {
 public:
 
@@ -41,21 +42,13 @@ public:
 	// dtor.
 	~synthv1_sched_thread();
 
-	// real thread start executive.
-	void start();
-
 	// schedule processing and wake from wait condition.
 	void schedule(synthv1_sched *sched);
 
 protected:
 
 	// main thread executive.
-	void *run();
-
-	static void *run ( void *arg )
-	{
-		return static_cast<synthv1_sched_thread *> (arg)->run();
-	}
+	void run();
 
 private:
 
@@ -69,12 +62,11 @@ private:
 	volatile uint32_t m_iwrite;
 
 	// whether the thread is logically running.
-	volatile bool   m_running;
+	volatile bool m_running;
 
 	// thread synchronization objects.
-	pthread_t       m_thread;
-	pthread_mutex_t m_mutex;
-	pthread_cond_t  m_cond;
+	QMutex m_mutex;
+	QWaitCondition m_cond;
 };
 
 
@@ -87,7 +79,7 @@ static uint32_t              g_sched_refcount = 0;
 //
 
 // ctor.
-synthv1_sched_thread::synthv1_sched_thread ( uint32_t nsize )
+synthv1_sched_thread::synthv1_sched_thread ( uint32_t nsize ) : QThread()
 {
 	m_nsize = (4 << 1);
 	while (m_nsize < nsize)
@@ -101,9 +93,6 @@ synthv1_sched_thread::synthv1_sched_thread ( uint32_t nsize )
 	::memset(m_items, 0, m_nsize * sizeof(synthv1_sched *));
 
 	m_running = false;
-
-	pthread_mutex_init(&m_mutex, NULL);
-	pthread_cond_init(&m_cond, NULL);
 }
 
 
@@ -111,25 +100,15 @@ synthv1_sched_thread::synthv1_sched_thread ( uint32_t nsize )
 synthv1_sched_thread::~synthv1_sched_thread (void)
 {
 	// fake sync and wait 
-	if (m_running) {
-		pthread_mutex_lock(&m_mutex);
-		m_running = false;
-		pthread_cond_signal(&m_cond);
-		pthread_mutex_unlock(&m_mutex);
-		pthread_join(m_thread, NULL);
-	}
-
-	pthread_cond_destroy(&m_cond);
-	pthread_mutex_destroy(&m_mutex);
+	if (m_running && isRunning()) do {
+		if (m_mutex.tryLock()) {
+			m_running = false;
+			m_cond.wakeAll();
+			m_mutex.unlock();
+		}
+	} while (!wait(100));
 
 	delete [] m_items;
-}
-
-
-// real thread start executive.
-void synthv1_sched_thread::start (void)
-{
-	pthread_create(&m_thread, NULL, synthv1_sched_thread::run, this);
 }
 
 
@@ -144,17 +123,17 @@ void synthv1_sched_thread::schedule ( synthv1_sched *sched )
 		}
 	}
 
-	if (pthread_mutex_trylock(&m_mutex) == 0) {
-		pthread_cond_signal(&m_cond);
-		pthread_mutex_unlock(&m_mutex);
+	if (m_mutex.tryLock()) {
+		m_cond.wakeAll();
+		m_mutex.unlock();
 	}
 }
 
 
 // main thread executive.
-void *synthv1_sched_thread::run (void)
+void synthv1_sched_thread::run (void)
 {
-	pthread_mutex_lock(&m_mutex);
+	m_mutex.lock();
 
 	m_running = true;
 
@@ -171,11 +150,10 @@ void *synthv1_sched_thread::run (void)
 		}
 		m_iread = r;
 		// wait for sync...
-		pthread_cond_wait(&m_cond, &m_mutex);
+		m_cond.wait(&m_mutex);
 	}
 
-	pthread_mutex_unlock(&m_mutex);
-	return NULL;
+	m_mutex.unlock();
 }
 
 
