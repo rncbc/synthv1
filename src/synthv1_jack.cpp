@@ -314,6 +314,32 @@ void synthv1_jack::deactivate (void)
 
 void synthv1_jack::close (void)
 {
+
+#ifdef CONFIG_ALSA_MIDI
+	// close alsa sequencer client...
+	if (m_alsa_seq) {
+		if (m_alsa_thread) {
+			delete m_alsa_thread;
+			m_alsa_thread = NULL;
+		}
+		if (m_alsa_buffer) {
+			::jack_ringbuffer_free(m_alsa_buffer);
+			m_alsa_buffer = NULL;
+		}
+		if (m_alsa_decoder) {
+			snd_midi_event_free(m_alsa_decoder);
+			m_alsa_decoder = NULL;
+		}
+		if (m_alsa_port >= 0) {
+			snd_seq_delete_simple_port(m_alsa_seq, m_alsa_port);
+			m_alsa_port = -1;
+		}
+		snd_seq_close(m_alsa_seq);
+	//	m_alsa_client = -1;
+		m_alsa_seq = NULL;
+	}
+#endif
+
 	if (m_client == NULL)
 		return;
 
@@ -364,31 +390,6 @@ void synthv1_jack::close (void)
 	// close client
 	::jack_client_close(m_client);
 	m_client = NULL;
-
-#ifdef CONFIG_ALSA_MIDI
-	// close alsa sequencer client...
-	if (m_alsa_seq) {
-		if (m_alsa_thread) {
-			delete m_alsa_thread;
-			m_alsa_thread = NULL;
-		}
-		if (m_alsa_buffer) {
-			::jack_ringbuffer_free(m_alsa_buffer);
-			m_alsa_buffer = NULL;
-		}
-		if (m_alsa_decoder) {
-			snd_midi_event_free(m_alsa_decoder);
-			m_alsa_decoder = NULL;
-		}
-		if (m_alsa_port >= 0) {
-			snd_seq_delete_simple_port(m_alsa_seq, m_alsa_port);
-			m_alsa_port = -1;
-		}
-		snd_seq_close(m_alsa_seq);
-	//	m_alsa_client = -1;
-		m_alsa_seq = NULL;
-	}
-#endif
 }
 
 

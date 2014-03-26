@@ -84,7 +84,7 @@ synthv1_sched_thread::synthv1_sched_thread ( uint32_t nsize ) : QThread()
 	m_nsize = (4 << 1);
 	while (m_nsize < nsize)
 		m_nsize <<= 1;
-	m_nmask = (m_nmask - 1);
+	m_nmask = (m_nsize - 1);
 	m_items = new synthv1_sched * [m_nsize];
 
 	m_iread  = 0;
@@ -199,6 +199,7 @@ bool synthv1_sched::sync_wait (void)
 
 	return sync_wait;
 }
+
 
 // scheduled processor.
 void synthv1_sched::sync_process (void)
