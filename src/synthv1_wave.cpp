@@ -71,7 +71,7 @@ private:
 // ctor.
 synthv1_wave::synthv1_wave ( uint32_t nsize, uint16_t nover, uint16_t ntabs )
 	: m_nsize(nsize), m_nover(nover), m_ntabs(ntabs),
-		m_shape(Saw), m_width(1.0f), m_srate(44100.0f),
+		m_shape(Saw), m_width(1.0f), m_srate(44100.0f), m_srand(0),
 		m_min_freq(0.0f), m_max_freq(0.0f), m_ftab(0.0f), m_itab(0),
 		m_sched(NULL)
 {
@@ -192,13 +192,13 @@ void synthv1_wave::reset_noise (void)
 
 	float *frames = m_tables[m_ntabs];
 
-	::srand(long(this));
+	m_srand = uint32_t(w0);
 
 	float p = 0.0f;
 
 	for (uint32_t i = 0; i < m_nsize; ++i) {
 		if ((i % ihold) == 0)
-			p = (2.0f * float(::rand()) / float(RAND_MAX)) - 1.0f;
+			p = pseudo_randf();
 		frames[i] = p;
 	}
 

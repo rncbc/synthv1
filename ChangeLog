@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+- Once so called 'Noise' wave-shapes are now being made a lot
+  more deterministic, read idempotent ;).
 - Fully alias-free/band-limited wavetable oscillators are now
   in place, making it a better virtual-analog synthesizer (esp.
   for running sample-rates below 96KHz). (EXPERIMENTAL)
