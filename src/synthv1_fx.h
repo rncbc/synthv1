@@ -57,112 +57,110 @@ public:
 
 		// peaking, lowshelf and hishelf
 		if (type >= Peak) {
-			float amp   = ::powf(10.0f, (gain / 40.0f));
-			float omega = 2.0f * M_PI * freq / srate;
-			float tsin  = ::sinf(omega);
-			float tcos  = ::cosf(omega);
+			const float amp   = ::powf(10.0f, (gain / 40.0f));
+			const float omega = 2.0f * M_PI * freq / srate;
+			const float tsin  = ::sinf(omega);
+			const float tcos  = ::cosf(omega);
+			const float beta  = ::sqrtf(amp) / q;
 			if (bwq)
 				alpha = tsin * ::sinhf(::logf(2.0f) / 2.0f * q * omega / tsin);
 			else
 				alpha = tsin / (2.0f * q);
-
-			float beta = ::sqrtf(amp) / q;
-			// peaking
-			if (type == Peak) {
+			switch (type) {
+			case Peak:
+				// peaking
 				b0 =  1.0f + alpha * amp;
 				b1 = -2.0f * tcos;
 				b2 =  1.0f - alpha * amp;
 				a0 =  1.0f + alpha / amp;
 				a1 = -2.0f * tcos;
 				a2 =  1.0f - alpha / amp;
-			}
-			else
-			// lowshelf
-			if (type == LoShelf) {
+				break;
+			case LoShelf:
+				// low-shelf
 				b0 = amp * ((amp + 1.0f) - (amp - 1.0f) * tcos + beta * tsin);
 				b1 = 2.0f * amp *((amp - 1.0f) - (amp + 1.0f) * tcos);
 				b2 = amp * ((amp + 1.0f) - (amp - 1.0f) * tcos - beta * tsin);
 				a0 = (amp + 1.0f) + (amp - 1.0f) * tcos + beta * tsin;
 				a1 = -2.0f *((amp - 1.0f) + (amp + 1.0f) * tcos);
 				a2 = (amp + 1.0f) + (amp - 1.0f) * tcos - beta * tsin;
-			}
-			else
-			// hishelf
-			if (type == HiShelf) {
+				break;
+			case HiShelf:
+			default:
+				// high-shelf
 				b0 = amp * ((amp + 1.0f) + (amp - 1.0f) * tcos + beta * tsin);
 				b1 = -2.0f * amp * ((amp - 1.0f) + (amp + 1.0f) * tcos);
 				b2 = amp * ((amp + 1.0f) + (amp - 1.0f) * tcos - beta * tsin);
 				a0 = (amp + 1.0f) - (amp - 1.0f) * tcos + beta * tsin;
 				a1 = 2.0f * ((amp - 1.0f) - (amp + 1.0f) * tcos);
 				a2 = (amp + 1.0f) - (amp - 1.0f) * tcos - beta * tsin;
+				break;
 			}
 		} else {
 			// other filters
-			float omega	= 2.0f * M_PI * freq / srate;
-			float tsin	= ::sinf(omega);
-			float tcos	= ::cosf(omega);
+			const float omega = 2.0f * M_PI * freq / srate;
+			const float tsin  = ::sinf(omega);
+			const float tcos  = ::cosf(omega);
 			if (bwq)
 				alpha = tsin * ::sinhf(::logf(2.0f) / 2.0f * q * omega / tsin);
 			else
 				alpha = tsin / (2.0f * q);
-			// lowpass
-			if (type == Low) {
+			switch (type) {
+			case Low:
+				// low-pass
 				b0 = (1.0f - tcos) / 2.0f;
 				b1 =  1.0f - tcos;
 				b2 = (1.0f - tcos) / 2.0f;
 				a0 =  1.0f + alpha;
 				a1 = -2.0f * tcos;
 				a2 =  1.0f - alpha;
-			}
-			else
-			// hipass
-			if (type == High) {
+				break;
+			case High:
+				// high-pass
 				b0 = (1.0f + tcos) / 2.0f;
 				b1 = -1.0f - tcos;
 				b2 = (1.0f + tcos) / 2.0f;
 				a0 =  1.0f + alpha;
 				a1 = -2.0f * tcos;
 				a2 =  1.0f - alpha;
-			}
-			else
-			// bandpass csg
-			if (type == Band1) {
+				break;
+			case Band1:
+				// band-pass csg
 				b0 =  tsin / 2.0f;
 				b1 =  0.0f;
 				b2 = -tsin / 2.0f;
 				a0 =  1.0f + alpha;
 				a1 = -2.0f * tcos;
 				a2 =  1.0f - alpha;
-			}
-			else
-			// bandpass czpg
-			if (type == Band2) {
+				break;
+			case Band2:
+				// band-pass czpg
 				b0 =  alpha;
 				b1 =  0.0f;
 				b2 = -alpha;
 				a0 =  1.0f + alpha;
 				a1 = -2.0f * tcos;
 				a2 =  1.0f - alpha;
-			}
-			else
-			// notch
-			if (type == Notch) {
+				break;
+			case Notch:
+				// notch
 				b0 =  1.0f;
 				b1 = -2.0f * tcos;
 				b2 =  1.0f;
 				a0 =  1.0f + alpha;
 				a1 = -2.0f * tcos;
 				a2 =  1.0f - alpha;
-			}
-			else
-			// allpass
-			if (type == AllPass) {
+				break;
+			case AllPass:
+			default:
+				// all-pass
 				b0 =  1.0f - alpha;
 				b1 = -2.0f * tcos;
 				b2 =  1.0f + alpha;
 				a0 =  1.0f + alpha;
 				a1 = -2.0f * tcos;
 				a2 =  1.0f - alpha;
+				break;
 			}
 		}
 		// set filter coeffs
@@ -230,7 +228,7 @@ public:
 		m_attack  = ::expf(-1000.0f / (m_srate * 3.6f));
 		m_release = ::expf(-1000.0f / (m_srate * 150.0f));
 
-		// HOUSE eq.
+		// rock-da-house eq.
 		m_lo.reset(synthv1_fx_filter::Peak,      100.0f, m_srate, 1.0f, 6.0f);
 		m_mi.reset(synthv1_fx_filter::LoShelf,  1000.0f, m_srate, 1.0f, 3.0f);
 		m_hi.reset(synthv1_fx_filter::HiShelf, 10000.0f, m_srate, 1.0f, 4.0f);
