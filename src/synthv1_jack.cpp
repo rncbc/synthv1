@@ -45,7 +45,12 @@ public:
 		: QThread(), m_synth(synth), m_running(false) {}
 
 	~synthv1_alsa_thread()
-		{ m_running = false; wait(); }
+	{	// fake sync and wait
+		if (m_running && isRunning()) do {
+			m_running = false;
+		}
+		while (!wait(100));
+	}
 
 protected:
 
@@ -314,7 +319,6 @@ void synthv1_jack::deactivate (void)
 
 void synthv1_jack::close (void)
 {
-
 #ifdef CONFIG_ALSA_MIDI
 	// close alsa sequencer client...
 	if (m_alsa_seq) {

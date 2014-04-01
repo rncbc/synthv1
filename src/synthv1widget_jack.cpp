@@ -116,7 +116,7 @@ synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 synthv1widget_jack::~synthv1widget_jack (void)
 {
 	m_pSynth->deactivate();
-	m_pSynth->close();
+//	m_pSynth->close();
 }
 
 
