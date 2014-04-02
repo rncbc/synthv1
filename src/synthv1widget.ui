@@ -152,7 +152,7 @@
              <string>DCO1 Wave Bandlimit 1</string>
             </property>
             <property name="text">
-             <string>Bandlimit 1</string>
+             <string>Bandl.1</string>
             </property>
            </widget>
           </item>
@@ -189,7 +189,7 @@
              <string>DCO1 Wave Bandlimit 2</string>
             </property>
             <property name="text">
-             <string>Bandlimit 2</string>
+             <string>Bandl.2</string>
             </property>
            </widget>
           </item>
@@ -885,7 +885,7 @@
              <string>DCO2 Wave Bandlimit 1</string>
             </property>
             <property name="text">
-             <string>Bandlimit 1</string>
+             <string>Bandl.1</string>
             </property>
            </widget>
           </item>
@@ -922,7 +922,7 @@
              <string>DCO2 Wave Bandlimit 2</string>
             </property>
             <property name="text">
-             <string>Bandlimit 2</string>
+             <string>Bandl.2</string>
             </property>
            </widget>
           </item>
