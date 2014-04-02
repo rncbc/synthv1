@@ -117,6 +117,11 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	states << tr("Off");
 	states << tr("On");
 
+	m_ui.Dco1Bandl1Knob->insertItems(0, states);
+	m_ui.Dco1Bandl2Knob->insertItems(0, states);
+	m_ui.Dco2Bandl1Knob->insertItems(0, states);
+	m_ui.Dco2Bandl2Knob->insertItems(0, states);
+
 	m_ui.Dyn1CompressKnob->insertItems(0, states);
 	m_ui.Dyn1LimiterKnob->insertItems(0, states);
 
@@ -225,8 +230,10 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	// DCO1
 	setParamKnob(synthv1::DCO1_SHAPE1,  m_ui.Dco1Shape1Knob);
 	setParamKnob(synthv1::DCO1_WIDTH1,  m_ui.Dco1Width1Knob);
+	setParamKnob(synthv1::DCO1_BANDL1,  m_ui.Dco1Bandl1Knob);
 	setParamKnob(synthv1::DCO1_SHAPE2,  m_ui.Dco1Shape2Knob);
 	setParamKnob(synthv1::DCO1_WIDTH2,  m_ui.Dco1Width2Knob);
+	setParamKnob(synthv1::DCO1_BANDL2,  m_ui.Dco1Bandl2Knob);
 	setParamKnob(synthv1::DCO1_BALANCE, m_ui.Dco1BalanceKnob);
 	setParamKnob(synthv1::DCO1_DETUNE,  m_ui.Dco1DetuneKnob);
 	setParamKnob(synthv1::DCO1_PHASE,   m_ui.Dco1PhaseKnob);
@@ -429,8 +436,10 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	// DCO2
 	setParamKnob(synthv1::DCO2_SHAPE1,  m_ui.Dco2Shape1Knob);
 	setParamKnob(synthv1::DCO2_WIDTH1,  m_ui.Dco2Width1Knob);
+	setParamKnob(synthv1::DCO2_BANDL1,  m_ui.Dco2Bandl1Knob);
 	setParamKnob(synthv1::DCO2_SHAPE2,  m_ui.Dco2Shape2Knob);
 	setParamKnob(synthv1::DCO2_WIDTH2,  m_ui.Dco2Width2Knob);
+	setParamKnob(synthv1::DCO2_BANDL2,  m_ui.Dco2Bandl2Knob);
 	setParamKnob(synthv1::DCO2_BALANCE, m_ui.Dco2BalanceKnob);
 	setParamKnob(synthv1::DCO2_DETUNE,  m_ui.Dco2DetuneKnob);
 	setParamKnob(synthv1::DCO2_PHASE,   m_ui.Dco2PhaseKnob);

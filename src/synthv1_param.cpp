@@ -35,8 +35,10 @@ struct {
 
 	{ "DCO1_SHAPE1",    1.0f },
 	{ "DCO1_WIDTH1",    1.0f },
+	{ "DCO1_BANDL1",    0.0f },
 	{ "DCO1_SHAPE2",    1.0f },
 	{ "DCO1_WIDTH2",    1.0f },
+	{ "DCO1_BANDL2",    0.0f },
 	{ "DCO1_BALANCE",   0.0f },
 	{ "DCO1_DETUNE",    0.1f },
 	{ "DCO1_PHASE",     0.0f },
@@ -84,8 +86,10 @@ struct {
 
 	{ "DCO2_SHAPE1",    1.0f },
 	{ "DCO2_WIDTH1",    1.0f },
+	{ "DCO2_BANDL1",    0.0f },
 	{ "DCO2_SHAPE2",    1.0f },
 	{ "DCO2_WIDTH2",    1.0f },
+	{ "DCO2_BANDL2",    0.0f },
 	{ "DCO2_BALANCE",   0.0f },
 	{ "DCO2_DETUNE",    0.1f },
 	{ "DCO2_PHASE",     0.0f },

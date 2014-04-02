@@ -147,6 +147,16 @@
            </widget>
           </item>
           <item>
+           <widget class="synthv1widget_combo" name="Dco1Bandl1Knob">
+            <property name="toolTip">
+             <string>DCO1 Wave Bandlimit 1</string>
+            </property>
+            <property name="text">
+             <string>Bandlimit 1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="synthv1widget_wave" name="Dco1Wave2">
             <property name="toolTip">
              <string>DCO1 Wave 2</string>
@@ -170,6 +180,16 @@
             </property>
             <property name="text">
              <string>Width 2</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_combo" name="Dco1Bandl2Knob">
+            <property name="toolTip">
+             <string>DCO1 Wave Bandlimit 2</string>
+            </property>
+            <property name="text">
+             <string>Bandlimit 2</string>
             </property>
            </widget>
           </item>
@@ -860,6 +880,16 @@
            </widget>
           </item>
           <item>
+           <widget class="synthv1widget_combo" name="Dco2Bandl1Knob">
+            <property name="toolTip">
+             <string>DCO2 Wave Bandlimit 1</string>
+            </property>
+            <property name="text">
+             <string>Bandlimit 1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="synthv1widget_wave" name="Dco2Wave2">
             <property name="toolTip">
              <string>DCO2 Wave 2</string>
@@ -883,6 +913,16 @@
             </property>
             <property name="text">
              <string>Width 2</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_combo" name="Dco2Bandl2Knob">
+            <property name="toolTip">
+             <string>DCO2 Wave Bandlimit 2</string>
+            </property>
+            <property name="text">
+             <string>Bandlimit 2</string>
             </property>
            </widget>
           </item>

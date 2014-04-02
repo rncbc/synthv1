@@ -308,8 +308,10 @@ struct synthv1_dco
 {
 	float *shape1;
 	float *width1;
+	float *bandl1;
 	float *shape2;
 	float *width2;
+	float *bandl2;
 	float *balance;
 	float *detune;
 	float *phase;
@@ -1069,8 +1071,10 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	switch (index) {
 	case synthv1::DCO1_SHAPE1:    m_dco1.shape1      = pfParam; break;
 	case synthv1::DCO1_WIDTH1:    m_dco1.width1      = pfParam; break;
+	case synthv1::DCO1_BANDL1:    m_dco1.bandl1      = pfParam; break;
 	case synthv1::DCO1_SHAPE2:    m_dco1.shape2      = pfParam; break;
 	case synthv1::DCO1_WIDTH2:    m_dco1.width2      = pfParam; break;
+	case synthv1::DCO1_BANDL2:    m_dco1.bandl2      = pfParam; break;
 	case synthv1::DCO1_BALANCE:   m_dco1.balance     = pfParam; break;
 	case synthv1::DCO1_DETUNE:    m_dco1.detune      = pfParam; break;
 	case synthv1::DCO1_PHASE:     m_dco1.phase       = pfParam; break;
@@ -1116,8 +1120,10 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DEF1_MONO:      m_def1.mono        = pfParam; break;
 	case synthv1::DCO2_SHAPE1:    m_dco2.shape1      = pfParam; break;
 	case synthv1::DCO2_WIDTH1:    m_dco2.width1      = pfParam; break;
+	case synthv1::DCO2_BANDL1:    m_dco2.bandl1      = pfParam; break;
 	case synthv1::DCO2_SHAPE2:    m_dco2.shape2      = pfParam; break;
 	case synthv1::DCO2_WIDTH2:    m_dco2.width2      = pfParam; break;
+	case synthv1::DCO2_BANDL2:    m_dco2.bandl2      = pfParam; break;
 	case synthv1::DCO2_BALANCE:   m_dco2.balance     = pfParam; break;
 	case synthv1::DCO2_DETUNE:    m_dco2.detune      = pfParam; break;
 	case synthv1::DCO2_PHASE:     m_dco2.phase       = pfParam; break;
@@ -1200,8 +1206,10 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	switch (index) {
 	case synthv1::DCO1_SHAPE1:    pfParam = m_dco1.shape1;      break;
 	case synthv1::DCO1_WIDTH1:    pfParam = m_dco1.width1;      break;
+	case synthv1::DCO1_BANDL1:    pfParam = m_dco1.bandl1;      break;
 	case synthv1::DCO1_SHAPE2:    pfParam = m_dco1.shape2;      break;
 	case synthv1::DCO1_WIDTH2:    pfParam = m_dco1.width2;      break;
+	case synthv1::DCO1_BANDL2:    pfParam = m_dco1.bandl2;      break;
 	case synthv1::DCO1_BALANCE:   pfParam = m_dco1.balance;     break;
 	case synthv1::DCO1_DETUNE:    pfParam = m_dco1.detune;      break;
 	case synthv1::DCO1_PHASE:     pfParam = m_dco1.phase;       break;
@@ -1247,8 +1255,10 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DEF1_MONO:      pfParam = m_def1.mono;        break;
 	case synthv1::DCO2_SHAPE1:    pfParam = m_dco2.shape1;      break;
 	case synthv1::DCO2_WIDTH1:    pfParam = m_dco2.width1;      break;
+	case synthv1::DCO2_BANDL1:    pfParam = m_dco2.bandl1;      break;
 	case synthv1::DCO2_SHAPE2:    pfParam = m_dco2.shape2;      break;
 	case synthv1::DCO2_WIDTH2:    pfParam = m_dco2.width2;      break;
+	case synthv1::DCO2_BANDL2:    pfParam = m_dco2.bandl2;      break;
 	case synthv1::DCO2_BALANCE:   pfParam = m_dco2.balance;     break;
 	case synthv1::DCO2_DETUNE:    pfParam = m_dco2.detune;      break;
 	case synthv1::DCO2_PHASE:     pfParam = m_dco2.phase;       break;
@@ -1851,26 +1861,24 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 		updateEnvTimes_2();
 	}
 
-	if (int(*m_dco1.shape1) != int(dco1_wave1.shape())
-		|| *m_dco1.width1 != dco1_wave1.width())
-		dco1_wave1.reset(synthv1_wave::Shape(*m_dco1.shape1), *m_dco1.width1);
-	if (int(*m_dco1.shape2) != int(dco1_wave2.shape())
-		|| *m_dco1.width2 != dco1_wave2.width())
-		dco1_wave2.reset(synthv1_wave::Shape(*m_dco1.shape2), *m_dco1.width2);
+	dco1_wave1.reset_test(
+		synthv1_wave::Shape(*m_dco1.shape1),
+		*m_dco1.width1, *m_dco1.bandl1 > 0.0f);
+	dco1_wave2.reset_test(
+		synthv1_wave::Shape(*m_dco1.shape2),
+		*m_dco1.width2, *m_dco1.bandl2 > 0.0f);
 
-	if (int(*m_dco2.shape1) != int(dco2_wave1.shape())
-		|| *m_dco2.width1 != dco2_wave1.width())
-		dco2_wave1.reset(synthv1_wave::Shape(*m_dco2.shape1), *m_dco2.width1);
-	if (int(*m_dco2.shape2) != int(dco2_wave2.shape())
-		|| *m_dco2.width2 != dco2_wave2.width())
-		dco2_wave2.reset(synthv1_wave::Shape(*m_dco2.shape2), *m_dco2.width2);
+	dco2_wave1.reset_test(
+		synthv1_wave::Shape(*m_dco2.shape1),
+		*m_dco2.width1, *m_dco2.bandl1 > 0.0f);
+	dco2_wave2.reset_test(
+		synthv1_wave::Shape(*m_dco2.shape2),
+		*m_dco2.width2, *m_dco2.bandl2 > 0.0f);
 	
-	if (int(*m_lfo1.shape) != int(lfo1_wave.shape())
-		|| *m_lfo1.width != lfo1_wave.width())
-		lfo1_wave.reset(synthv1_wave::Shape(*m_lfo1.shape), *m_lfo1.width);
-	if (int(*m_lfo2.shape) != int(lfo2_wave.shape())
-		|| *m_lfo2.width != lfo2_wave.width())
-		lfo2_wave.reset(synthv1_wave::Shape(*m_lfo2.shape), *m_lfo2.width);
+	lfo1_wave.reset_test(
+		synthv1_wave::Shape(*m_lfo1.shape), *m_lfo1.width);
+	lfo2_wave.reset_test(
+		synthv1_wave::Shape(*m_lfo2.shape), *m_lfo2.width);
 
 	// per voice
 

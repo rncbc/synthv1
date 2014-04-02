@@ -75,6 +75,15 @@
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 7 ;
+		lv2:symbol "DCO1_BANDL1" ;
+		lv2:name "DCO1 Wave Bandlimit 1" ;
+		lv2:portProperty lv2:toggled ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	], [
+		a lv2:InputPort, lv2:ControlPort ;
+		lv2:index 8 ;
 		lv2:symbol "DCO1_SHAPE2" ;
 		lv2:name "DCO1 Wave Shape 2" ;
 		lv2:portProperty lv2:integer ;
@@ -87,7 +96,7 @@
 		lv2:maximum 3.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 8 ;
+		lv2:index 9 ;
 		lv2:symbol "DCO1_WIDTH2" ;
 		lv2:name "DCO1 Width 2" ;
 		lv2:default 1.0 ;
@@ -95,7 +104,16 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 9 ;
+		lv2:index 10 ;
+		lv2:symbol "DCO1_BANDL2" ;
+		lv2:name "DCO1 Wave Bandlimit 2" ;
+		lv2:portProperty lv2:toggled ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	], [
+		a lv2:InputPort, lv2:ControlPort ;
+		lv2:index 11 ;
 		lv2:symbol "DCO1_BALANCE" ;
 		lv2:name "DCO1 Balance" ;
 		lv2:default 0.0 ;
@@ -103,7 +121,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 10 ;
+		lv2:index 12 ;
 		lv2:symbol "DCO1_DETUNE" ;
 		lv2:name "DCO1 Detune" ;
 		lv2:default 0.1 ;
@@ -111,7 +129,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 11 ;
+		lv2:index 13 ;
 		lv2:symbol "DCO1_PHASE" ;
 		lv2:name "DCO1 Phase" ;
 		lv2:default 0.0 ;
@@ -119,7 +137,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 12 ;
+		lv2:index 14 ;
 		lv2:symbol "DCO1_OCTAVE" ;
 		lv2:name "DCO1 Octave" ;
 		lv2:default 0.0 ;
@@ -127,7 +145,7 @@
 		lv2:maximum 4.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 13 ;
+		lv2:index 15 ;
 		lv2:symbol "DCO1_TUNING" ;
 		lv2:name "DCO1 Tuning" ;
 		lv2:default 0.0 ;
@@ -135,7 +153,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 14 ;
+		lv2:index 16 ;
 		lv2:symbol "DCO1_GLIDE" ;
 		lv2:name "DCO1 Glide" ;
 		lv2:default 0.0 ;
@@ -143,7 +161,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 15 ;
+		lv2:index 17 ;
 		lv2:symbol "DCO1_ENVTIME" ;
 		lv2:name "DCO1 Env.Time" ;
 		lv2:default 0.5 ;
@@ -151,7 +169,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 16 ;
+		lv2:index 18 ;
 		lv2:symbol "DCF1_CUTOFF" ;
 		lv2:name "DCF1 Cutoff" ;
 		lv2:default 0.5 ;
@@ -159,7 +177,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 17 ;
+		lv2:index 19 ;
 		lv2:symbol "DCF1_RESO" ;
 		lv2:name "DCF1 Resonance" ;
 		lv2:default 0.0 ;
@@ -167,7 +185,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 18 ;
+		lv2:index 20 ;
 		lv2:symbol "DCF1_TYPE" ;
 		lv2:name "DCF1 Type" ;
 		lv2:portProperty lv2:integer ;
@@ -180,7 +198,7 @@
 		lv2:maximum 3.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 19 ;
+		lv2:index 21 ;
 		lv2:symbol "DCF1_SLOPE" ;
 		lv2:name "DCF1 Slope" ;
 		lv2:portProperty lv2:integer ;
@@ -191,7 +209,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 20 ;
+		lv2:index 22 ;
 		lv2:symbol "DCF1_ENVELOPE" ;
 		lv2:name "DCF1 Envelope" ;
 		lv2:default 1.0 ;
@@ -199,7 +217,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 21 ;
+		lv2:index 23 ;
 		lv2:symbol "DCF1_ATTACK" ;
 		lv2:name "DCF1 Attack" ;
 		lv2:default 0.0 ;
@@ -207,7 +225,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 22 ;
+		lv2:index 24 ;
 		lv2:symbol "DCF1_DECAY" ;
 		lv2:name "DCF1 Decay" ;
 		lv2:default 0.2 ;
@@ -215,7 +233,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 23 ;
+		lv2:index 25 ;
 		lv2:symbol "DCF1_SUSTAIN" ;
 		lv2:name "DCF1 Sustain" ;
 		lv2:default 0.5 ;
@@ -223,7 +241,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 24 ;
+		lv2:index 26 ;
 		lv2:symbol "DCF1_RELEASE" ;
 		lv2:name "DCF1 Release" ;
 		lv2:default 0.5 ;
@@ -231,7 +249,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 25 ;
+		lv2:index 27 ;
 		lv2:symbol "LFO1_SHAPE1" ;
 		lv2:name "LFO1 Wave Shape 1" ;
 		lv2:portProperty lv2:integer ;
@@ -244,7 +262,7 @@
 		lv2:maximum 3.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 26 ;
+		lv2:index 28 ;
 		lv2:symbol "LFO1_WIDTH" ;
 		lv2:name "LFO1 Wave Width" ;
 		lv2:default 1.0 ;
@@ -252,7 +270,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 27 ;
+		lv2:index 29 ;
 		lv2:symbol "LFO1_RATE" ;
 		lv2:name "LFO1 Rate" ;
 		lv2:default 0.5 ;
@@ -260,7 +278,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 28 ;
+		lv2:index 30 ;
 		lv2:symbol "LFO1_SWEEP" ;
 		lv2:name "LFO1 Sweep" ;
 		lv2:default 0.0 ;
@@ -268,7 +286,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 29 ;
+		lv2:index 31 ;
 		lv2:symbol "LFO1_PITCH" ;
 		lv2:name "LFO1 Pitch" ;
 		lv2:default 0.0 ;
@@ -276,7 +294,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 30 ;
+		lv2:index 32 ;
 		lv2:symbol "LFO1_CUTOFF" ;
 		lv2:name "LFO1 Cutoff" ;
 		lv2:default 0.0 ;
@@ -284,7 +302,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 31 ;
+		lv2:index 33 ;
 		lv2:symbol "LFO1_RESO" ;
 		lv2:name "LFO1 Resonance" ;
 		lv2:default 0.0 ;
@@ -292,7 +310,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 32 ;
+		lv2:index 34 ;
 		lv2:symbol "LFO1_PANNING" ;
 		lv2:name "LFO1 Panning" ;
 		lv2:default 0.0 ;
@@ -300,7 +318,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 33 ;
+		lv2:index 35 ;
 		lv2:symbol "LFO1_VOLUME" ;
 		lv2:name "LFO1 Volume" ;
 		lv2:default 0.0 ;
@@ -308,7 +326,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 34 ;
+		lv2:index 36 ;
 		lv2:symbol "LFO1_ATTACK" ;
 		lv2:name "LFO1 Attack" ;
 		lv2:default 0.0 ;
@@ -316,7 +334,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 35 ;
+		lv2:index 37 ;
 		lv2:symbol "LFO1_DECAY" ;
 		lv2:name "LFO1 Decay" ;
 		lv2:default 0.1 ;
@@ -324,7 +342,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 36 ;
+		lv2:index 38 ;
 		lv2:symbol "LFO1_SUSTAIN" ;
 		lv2:name "LFO1 Sustain" ;
 		lv2:default 1.0 ;
@@ -332,7 +350,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 37 ;
+		lv2:index 39 ;
 		lv2:symbol "LFO1_RELEASE" ;
 		lv2:name "LFO1 Release" ;
 		lv2:default 0.5 ;
@@ -340,7 +358,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 38 ;
+		lv2:index 40 ;
 		lv2:symbol "DCA1_VOLUME" ;
 		lv2:name "DCA1 Volume" ;
 		lv2:default 0.5 ;
@@ -348,7 +366,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 39 ;
+		lv2:index 41 ;
 		lv2:symbol "DCA1_ATTACK" ;
 		lv2:name "DCA1 Attack" ;
 		lv2:default 0.0 ;
@@ -356,7 +374,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 40 ;
+		lv2:index 42 ;
 		lv2:symbol "DCA1_DECAY" ;
 		lv2:name "DCA1 Decay" ;
 		lv2:default 0.1 ;
@@ -364,7 +382,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 41 ;
+		lv2:index 43 ;
 		lv2:symbol "DCA1_SUSTAIN" ;
 		lv2:name "DCA1 Sustain" ;
 		lv2:default 1.0 ;
@@ -372,7 +390,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 42 ;
+		lv2:index 44 ;
 		lv2:symbol "DCA1_RELEASE" ;
 		lv2:name "DCA1 Release" ;
 		lv2:default 0.1 ;
@@ -380,7 +398,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 43 ;
+		lv2:index 45 ;
 		lv2:symbol "OUT1_WIDTH" ;
 		lv2:name "OUT1 Stereo Width" ;
 		lv2:default 0.0 ;
@@ -388,7 +406,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 44 ;
+		lv2:index 46 ;
 		lv2:symbol "OUT1_PANNING" ;
 		lv2:name "OUT1 Panning" ;
 		lv2:default 0.0 ;
@@ -396,7 +414,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 45 ;
+		lv2:index 47 ;
 		lv2:symbol "OUT1_VOLUME" ;
 		lv2:name "OUT1 Volume" ;
 		lv2:default 0.5 ;
@@ -405,7 +423,7 @@
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 46 ;
+		lv2:index 48 ;
 		lv2:symbol "DEF1_PITCHBEND" ;
 		lv2:name "DEF1 Pitchbend" ;
 		lv2:default 0.2 ;
@@ -413,7 +431,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 47 ;
+		lv2:index 49 ;
 		lv2:symbol "DEF1_MODWHEEL" ;
 		lv2:name "DEF1 Modwheel" ;
 		lv2:default 0.2 ;
@@ -421,7 +439,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 48 ;
+		lv2:index 50 ;
 		lv2:symbol "DEF1_PRESSURE" ;
 		lv2:name "DEF1 Pressure" ;
 		lv2:default 0.2 ;
@@ -429,7 +447,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 49 ;
+		lv2:index 51 ;
 		lv2:symbol "DEF1_VELOCITY" ;
 		lv2:name "DEF1 Velocity" ;
 		lv2:default 0.2 ;
@@ -437,7 +455,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 50 ;
+		lv2:index 52 ;
 		lv2:symbol "DEF1_CHANNEL" ;
 		lv2:name "DEF1 Channel" ;
 		lv2:portProperty lv2:integer ;
@@ -446,7 +464,7 @@
 		lv2:maximum 16.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 51 ;
+		lv2:index 53 ;
 		lv2:symbol "DEF1_MONO" ;
 		lv2:name "DEF1 Mono" ;
 		lv2:portProperty lv2:toggled ;
@@ -456,7 +474,7 @@
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 52 ;
+		lv2:index 54 ;
 		lv2:symbol "DCO2_SHAPE1" ;
 		lv2:name "DCO2 Wave Shape 1" ;
 		lv2:portProperty lv2:integer ;
@@ -469,7 +487,7 @@
 		lv2:maximum 3.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 53 ;
+		lv2:index 55 ;
 		lv2:symbol "DCO2_WIDTH1" ;
 		lv2:name "DCO2 Wave Width 1" ;
 		lv2:default 1.0 ;
@@ -477,7 +495,16 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 54 ;
+		lv2:index 56 ;
+		lv2:symbol "DCO2_BANDL1" ;
+		lv2:name "DCO2 Wave Bandlimit 1" ;
+		lv2:portProperty lv2:toggled ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	], [
+		a lv2:InputPort, lv2:ControlPort ;
+		lv2:index 57 ;
 		lv2:symbol "DCO2_SHAPE2" ;
 		lv2:name "DCO2 Wave Shape 2" ;
 		lv2:portProperty lv2:integer ;
@@ -490,7 +517,7 @@
 		lv2:maximum 3.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 55 ;
+		lv2:index 58 ;
 		lv2:symbol "DCO2_WIDTH2" ;
 		lv2:name "DCO2 Wave Width 2" ;
 		lv2:default 1.0 ;
@@ -498,7 +525,16 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 56 ;
+		lv2:index 59 ;
+		lv2:symbol "DCO2_BANDL2" ;
+		lv2:name "DCO2 Wave Bandlimit 2" ;
+		lv2:portProperty lv2:toggled ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	], [
+		a lv2:InputPort, lv2:ControlPort ;
+		lv2:index 60 ;
 		lv2:symbol "DCO2_BALANCE" ;
 		lv2:name "DCO2 Balance" ;
 		lv2:default 0.0 ;
@@ -506,7 +542,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 57 ;
+		lv2:index 61 ;
 		lv2:symbol "DCO2_DETUNE" ;
 		lv2:name "DCO2 Detune" ;
 		lv2:default 0.1 ;
@@ -514,7 +550,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 58 ;
+		lv2:index 62 ;
 		lv2:symbol "DCO2_PHASE" ;
 		lv2:name "DCO2 Phase" ;
 		lv2:default 0.0 ;
@@ -522,7 +558,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 59 ;
+		lv2:index 63 ;
 		lv2:symbol "DCO2_OCTAVE" ;
 		lv2:name "DCO2 Octave" ;
 		lv2:default -2.0 ;
@@ -530,7 +566,7 @@
 		lv2:maximum 4.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 60 ;
+		lv2:index 64 ;
 		lv2:symbol "DCO2_TUNING" ;
 		lv2:name "DCO2 Tuning" ;
 		lv2:default 0.0 ;
@@ -538,7 +574,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 61 ;
+		lv2:index 65 ;
 		lv2:symbol "DCO2_GLIDE" ;
 		lv2:name "DCO2 Glide" ;
 		lv2:default 0.0 ;
@@ -546,7 +582,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 62 ;
+		lv2:index 66 ;
 		lv2:symbol "DCO2_ENVTIME" ;
 		lv2:name "DCO2 Env.Time" ;
 		lv2:default 0.5 ;
@@ -554,7 +590,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 63 ;
+		lv2:index 67 ;
 		lv2:symbol "DCF2_CUTOFF" ;
 		lv2:name "DCF2 Cutoff" ;
 		lv2:default 0.5 ;
@@ -562,7 +598,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 64 ;
+		lv2:index 68 ;
 		lv2:symbol "DCF2_RESO" ;
 		lv2:name "DCF2 Resonance" ;
 		lv2:default 0.0 ;
@@ -570,7 +606,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 65 ;
+		lv2:index 69 ;
 		lv2:symbol "DCF2_TYPE" ;
 		lv2:name "DCF2 Type" ;
 		lv2:portProperty lv2:integer ;
@@ -583,7 +619,7 @@
 		lv2:maximum 3.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 66 ;
+		lv2:index 70 ;
 		lv2:symbol "DCF2_SLOPE" ;
 		lv2:name "DCF2 Slope" ;
 		lv2:portProperty lv2:integer ;
@@ -594,7 +630,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 67 ;
+		lv2:index 71 ;
 		lv2:symbol "DCF2_ENVELOPE" ;
 		lv2:name "DCF2 Envelope" ;
 		lv2:default 1.0 ;
@@ -602,7 +638,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 68 ;
+		lv2:index 72 ;
 		lv2:symbol "DCF2_ATTACK" ;
 		lv2:name "DCF2 Attack" ;
 		lv2:default 0.0 ;
@@ -610,7 +646,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 69 ;
+		lv2:index 73 ;
 		lv2:symbol "DCF2_DECAY" ;
 		lv2:name "DCF2 Decay" ;
 		lv2:default 0.2 ;
@@ -618,7 +654,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 70 ;
+		lv2:index 74 ;
 		lv2:symbol "DCF2_SUSTAIN" ;
 		lv2:name "DCF2 Sustain" ;
 		lv2:default 0.5 ;
@@ -626,7 +662,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 71 ;
+		lv2:index 75 ;
 		lv2:symbol "DCF2_RELEASE" ;
 		lv2:name "DCF2 Release" ;
 		lv2:default 0.5 ;
@@ -634,7 +670,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 72 ;
+		lv2:index 76 ;
 		lv2:symbol "LFO2_SHAPE" ;
 		lv2:name "LFO2 Wave Shape" ;
 		lv2:portProperty lv2:integer ;
@@ -647,7 +683,7 @@
 		lv2:maximum 3.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 73 ;
+		lv2:index 77 ;
 		lv2:symbol "LFO2_WIDTH" ;
 		lv2:name "LFO2 Wave Width" ;
 		lv2:default 1.0 ;
@@ -655,7 +691,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 74 ;
+		lv2:index 78 ;
 		lv2:symbol "LFO2_RATE" ;
 		lv2:name "LFO2 Rate" ;
 		lv2:default 0.5 ;
@@ -663,7 +699,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 75 ;
+		lv2:index 79 ;
 		lv2:symbol "LFO2_SWEEP" ;
 		lv2:name "LFO2 Sweep" ;
 		lv2:default 0.0 ;
@@ -671,7 +707,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 76 ;
+		lv2:index 80 ;
 		lv2:symbol "LFO2_PITCH" ;
 		lv2:name "LFO2 Pitch" ;
 		lv2:default 0.0 ;
@@ -679,7 +715,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 77 ;
+		lv2:index 81 ;
 		lv2:symbol "LFO2_CUTOFF" ;
 		lv2:name "LFO2 Cutoff" ;
 		lv2:default 0.0 ;
@@ -687,7 +723,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 78 ;
+		lv2:index 82 ;
 		lv2:symbol "LFO2_RESO" ;
 		lv2:name "LFO2 Resonance" ;
 		lv2:default 0.0 ;
@@ -695,7 +731,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 79 ;
+		lv2:index 83 ;
 		lv2:symbol "LFO2_PANNING" ;
 		lv2:name "LFO2 Panning" ;
 		lv2:default 0.0 ;
@@ -703,7 +739,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 80 ;
+		lv2:index 84 ;
 		lv2:symbol "LFO2_VOLUME" ;
 		lv2:name "LFO2 Volume" ;
 		lv2:default 0.0 ;
@@ -711,7 +747,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 81 ;
+		lv2:index 85 ;
 		lv2:symbol "LFO2_ATTACK" ;
 		lv2:name "LFO2 Attack" ;
 		lv2:default 0.0 ;
@@ -719,7 +755,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 82 ;
+		lv2:index 86 ;
 		lv2:symbol "LFO2_DECAY" ;
 		lv2:name "LFO2 Decay" ;
 		lv2:default 0.1 ;
@@ -727,7 +763,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 83 ;
+		lv2:index 87 ;
 		lv2:symbol "LFO2_SUSTAIN" ;
 		lv2:name "LFO2 Sustain" ;
 		lv2:default 1.0 ;
@@ -735,7 +771,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 84 ;
+		lv2:index 88 ;
 		lv2:symbol "LFO2_RELEASE" ;
 		lv2:name "LFO2 Release" ;
 		lv2:default 0.5 ;
@@ -743,7 +779,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 85 ;
+		lv2:index 89 ;
 		lv2:symbol "DCA2_VOLUME" ;
 		lv2:name "DCA2 Volume" ;
 		lv2:default 0.5 ;
@@ -751,7 +787,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 86 ;
+		lv2:index 90 ;
 		lv2:symbol "DCA2_ATTACK" ;
 		lv2:name "DCA2 Attack" ;
 		lv2:default 0.0 ;
@@ -759,7 +795,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 87 ;
+		lv2:index 91 ;
 		lv2:symbol "DCA2_DECAY" ;
 		lv2:name "DCA2 Decay" ;
 		lv2:default 0.1 ;
@@ -767,7 +803,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 88 ;
+		lv2:index 92 ;
 		lv2:symbol "DCA2_SUSTAIN" ;
 		lv2:name "DCA2 Sustain" ;
 		lv2:default 1.0 ;
@@ -775,7 +811,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 89 ;
+		lv2:index 93 ;
 		lv2:symbol "DCA2_RELEASE" ;
 		lv2:name "DCA2 Release" ;
 		lv2:default 0.1 ;
@@ -783,7 +819,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 90 ;
+		lv2:index 94 ;
 		lv2:symbol "OUT2_WIDTH" ;
 		lv2:name "OUT2 Stereo Width" ;
 		lv2:default 0.0 ;
@@ -791,7 +827,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 91 ;
+		lv2:index 95 ;
 		lv2:symbol "OUT2_PANNING" ;
 		lv2:name "OUT2 Panning" ;
 		lv2:default 0.0 ;
@@ -799,7 +835,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 92 ;
+		lv2:index 96 ;
 		lv2:symbol "OUT2_VOLUME" ;
 		lv2:name "OUT2 Volume" ;
 		lv2:default 0.5 ;
@@ -808,7 +844,7 @@
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 93 ;
+		lv2:index 97 ;
 		lv2:symbol "DEF2_PITCHBEND" ;
 		lv2:name "DEF2 Pitchbend" ;
 		lv2:default 0.2 ;
@@ -816,7 +852,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 94 ;
+		lv2:index 98 ;
 		lv2:symbol "DEF2_MODWHEEL" ;
 		lv2:name "DEF2 Modwheel" ;
 		lv2:default 0.2 ;
@@ -824,7 +860,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 95 ;
+		lv2:index 99 ;
 		lv2:symbol "DEF2_PRESSURE" ;
 		lv2:name "DEF2 Pressure" ;
 		lv2:default 0.2 ;
@@ -832,7 +868,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 96 ;
+		lv2:index 100 ;
 		lv2:symbol "DEF2_VELOCITY" ;
 		lv2:name "DEF2 Velocity" ;
 		lv2:default 0.2 ;
@@ -840,7 +876,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 97 ;
+		lv2:index 101 ;
 		lv2:symbol "DEF2_CHANNEL" ;
 		lv2:name "DEF2 Channel" ;
 		lv2:portProperty lv2:integer ;
@@ -849,7 +885,7 @@
 		lv2:maximum 16.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 98 ;
+		lv2:index 102 ;
 		lv2:symbol "DEF2_MONO" ;
 		lv2:name "DEF2 Mono" ;
 		lv2:portProperty lv2:toggled ;
@@ -859,7 +895,7 @@
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 99 ;
+		lv2:index 103 ;
 		lv2:symbol "CHO1_WET" ;
 		lv2:name "Chorus Wet" ;
 		lv2:default 0.0 ;
@@ -867,7 +903,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 100 ;
+		lv2:index 104 ;
 		lv2:symbol "CHO1_DELAY" ;
 		lv2:name "Chorus Delay" ;
 		lv2:default 0.5 ;
@@ -875,7 +911,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 101 ;
+		lv2:index 105 ;
 		lv2:symbol "CHO1_FEEDB" ;
 		lv2:name "Chorus Feedback" ;
 		lv2:default 0.5 ;
@@ -883,7 +919,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 102 ;
+		lv2:index 106 ;
 		lv2:symbol "CHO1_RATE" ;
 		lv2:name "Chorus Rate" ;
 		lv2:default 0.5 ;
@@ -891,7 +927,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 103 ;
+		lv2:index 107 ;
 		lv2:symbol "CHO1_MOD" ;
 		lv2:name "Chorus Modulation" ;
 		lv2:default 0.5 ;
@@ -900,7 +936,7 @@
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 104 ;
+		lv2:index 108 ;
 		lv2:symbol "FLA1_WET" ;
 		lv2:name "Flanger Wet" ;
 		lv2:default 0.0 ;
@@ -908,7 +944,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 105 ;
+		lv2:index 109 ;
 		lv2:symbol "FLA1_DELAY" ;
 		lv2:name "Flanger Delay" ;
 		lv2:default 0.5 ;
@@ -916,7 +952,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 106 ;
+		lv2:index 110 ;
 		lv2:symbol "FLA1_FEEDB" ;
 		lv2:name "Flanger Feedback" ;
 		lv2:default 0.5 ;
@@ -924,7 +960,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 107 ;
+		lv2:index 111 ;
 		lv2:symbol "FLA1_DAFT" ;
 		lv2:name "Flanger Daft" ;
 		lv2:default 0.0 ;
@@ -933,7 +969,7 @@
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 108 ;
+		lv2:index 112 ;
 		lv2:symbol "PHA1_WET" ;
 		lv2:name "Phaser Wet" ;
 		lv2:default 0.0 ;
@@ -941,7 +977,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 109 ;
+		lv2:index 113 ;
 		lv2:symbol "PHA1_RATE" ;
 		lv2:name "Phaser Rate" ;
 		lv2:default 0.5 ;
@@ -949,7 +985,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 110 ;
+		lv2:index 114 ;
 		lv2:symbol "PHA1_FEEDB" ;
 		lv2:name "Phaser Feedback" ;
 		lv2:default 0.5 ;
@@ -957,7 +993,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 111 ;
+		lv2:index 115 ;
 		lv2:symbol "PHA1_DEPTH" ;
 		lv2:name "Phaser Depth" ;
 		lv2:default 0.5 ;
@@ -965,7 +1001,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 112 ;
+		lv2:index 116 ;
 		lv2:symbol "PHA1_DAFT" ;
 		lv2:name "Phaser Daft" ;
 		lv2:default 0.0 ;
@@ -974,7 +1010,7 @@
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 113 ;
+		lv2:index 117 ;
 		lv2:symbol "DEL1_WET" ;
 		lv2:name "Delay Wet" ;
 		lv2:default 0.0 ;
@@ -982,7 +1018,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 114 ;
+		lv2:index 118 ;
 		lv2:symbol "DEL1_DELAY" ;
 		lv2:name "Delay Delay" ;
 		lv2:default 0.5 ;
@@ -990,7 +1026,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 115 ;
+		lv2:index 119 ;
 		lv2:symbol "DEL1_FEEDB" ;
 		lv2:name "Delay Feedback" ;
 		lv2:default 0.5 ;
@@ -998,7 +1034,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 116 ;
+		lv2:index 120 ;
 		lv2:symbol "DEL1_BPM" ;
 		lv2:name "Delay BPM" ;
 		lv2:default 180.0 ;
@@ -1006,7 +1042,7 @@
 		lv2:maximum 360.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 117 ;
+		lv2:index 121 ;
 		lv2:symbol "DEL1_BPMSYNC" ;
 		lv2:name "Delay BPM (sync)" ;
 		lv2:portProperty lv2:toggled ;
@@ -1015,7 +1051,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 118 ;
+		lv2:index 122 ;
 		lv2:symbol "DEL1_BPMHOST" ;
 		lv2:name "Delay BPM (host)" ;
 		lv2:default 180.0 ;
@@ -1025,7 +1061,7 @@
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 119 ;
+		lv2:index 123 ;
 		lv2:symbol "REV1_WET" ;
 		lv2:name "Reverb Wet" ;
 		lv2:default 0.0 ;
@@ -1033,7 +1069,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 120 ;
+		lv2:index 124 ;
 		lv2:symbol "REV1_ROOM" ;
 		lv2:name "Reverb Room" ;
 		lv2:default 0.5 ;
@@ -1041,7 +1077,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 121 ;
+		lv2:index 125 ;
 		lv2:symbol "REV1_DAMP" ;
 		lv2:name "Reverb Damp" ;
 		lv2:default 0.5 ;
@@ -1049,7 +1085,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 122 ;
+		lv2:index 126 ;
 		lv2:symbol "REV1_FEEDB" ;
 		lv2:name "Reverb Feedback" ;
 		lv2:default 0.5 ;
@@ -1057,7 +1093,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 123 ;
+		lv2:index 127 ;
 		lv2:symbol "REV1_WIDTH" ;
 		lv2:name "Reverb Width" ;
 		lv2:default 0.0 ;
@@ -1066,7 +1102,7 @@
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 124 ;
+		lv2:index 128 ;
 		lv2:symbol "DYN1_COMPRESS" ;
 		lv2:name "Dynamic Compressor" ;
 		lv2:portProperty lv2:toggled ;
@@ -1075,7 +1111,7 @@
 		lv2:maximum 1.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 125 ;
+		lv2:index 129 ;
 		lv2:symbol "DYN1_LIMITER" ;
 		lv2:name "Dynamic Limiter" ;
 		lv2:portProperty lv2:toggled ;

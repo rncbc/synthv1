@@ -58,9 +58,16 @@ public:
 		{ return uint32_t(m_srate); }
 
 	// init.
-	void reset(Shape shape, float width = 1.0f);
+	void reset(Shape shape, float width, bool bandl = false);
 	// init.synch.
-	void reset_sync(Shape shape, float width);
+	void reset_sync(Shape shape, float width, bool bandl = false);
+
+	// init.test
+	void reset_test(Shape shape, float width, bool bandl = false)
+	{
+		if (shape != m_shape || width != m_width || bandl != m_bandl)
+			reset(shape, width, bandl);
+	}
 
 	// begin.
 	float start(float& phase, float pshift = 0.0f, float freq = 0.0f)
@@ -195,6 +202,8 @@ private:
 
 	Shape    m_shape;
 	float    m_width;
+	bool     m_bandl;
+
 	float    m_srate;
 	float  **m_tables;
 	float    m_phase0;

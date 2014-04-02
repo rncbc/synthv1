@@ -41,10 +41,11 @@ public:
 		m_wave(wave), m_shape(synthv1_wave::Pulse), m_width(1.0f) {}
 
 	// schedule reset.
-	void reset(synthv1_wave::Shape shape, float width)
+	void reset(synthv1_wave::Shape shape, float width, bool bandl)
 	{
 		m_shape = shape;
 		m_width = width;
+		m_bandl = bandl;
 
 		schedule();
 	}
@@ -52,7 +53,7 @@ public:
 	// process reset (virtual).
 	void process()
 	{
-		m_wave->reset_sync(m_shape, m_width);
+		m_wave->reset_sync(m_shape, m_width, m_bandl);
 	}
 
 private:
@@ -61,6 +62,7 @@ private:
 	synthv1_wave *m_wave;
 	synthv1_wave::Shape m_shape;
 	float m_width;
+	bool m_bandl;
 };
 
 
@@ -71,9 +73,10 @@ private:
 // ctor.
 synthv1_wave::synthv1_wave ( uint32_t nsize, uint16_t nover, uint16_t ntabs )
 	: m_nsize(nsize), m_nover(nover), m_ntabs(ntabs),
-		m_shape(Saw), m_width(1.0f), m_srate(44100.0f), m_srand(0),
-		m_min_freq(0.0f), m_max_freq(0.0f), m_ftab(0.0f), m_itab(0),
-		m_sched(NULL)
+		m_shape(Saw), m_width(1.0f), m_bandl(false),
+		m_srate(44100.0f), m_srand(0),
+		m_min_freq(0.0f), m_max_freq(0.0f),
+		m_ftab(0.0f), m_itab(0), m_sched(NULL)
 {
 	const uint16_t ntabs1 = m_ntabs + 1;
 
@@ -81,9 +84,9 @@ synthv1_wave::synthv1_wave ( uint32_t nsize, uint16_t nover, uint16_t ntabs )
 	for (uint16_t itab = 0; itab < ntabs1; ++itab)
 		m_tables[itab] = new float [m_nsize + 4];
 
-	reset(m_shape, m_width);
+	reset(m_shape, m_width, m_bandl);
 
-	if (ntabs > 0)
+	if (m_ntabs > 0)
 		m_sched = new synthv1_wave_sched(this);
 }
 
@@ -104,19 +107,21 @@ synthv1_wave::~synthv1_wave (void)
 
 
 // init.
-void synthv1_wave::reset ( Shape shape, float width )
+void synthv1_wave::reset ( Shape shape, float width, bool bandl )
 {
 	if (m_sched)
-		m_sched->reset(shape, width);
+		m_sched->reset(shape, width, bandl);
 	else
-		reset_sync(shape, width);
+		reset_sync(shape, width, bandl);
 }
 
 
-void synthv1_wave::reset_sync ( Shape shape, float width )
+void synthv1_wave::reset_sync ( Shape shape, float width, bool bandl )
 {
 	m_shape = shape;
-	m_width = width;;
+	m_width = width;
+
+	m_bandl = (m_ntabs > 0 ? bandl : false);
 
 	switch (m_shape) {
 	case Pulse:
@@ -140,40 +145,54 @@ void synthv1_wave::reset_sync ( Shape shape, float width )
 // init pulse table.
 void synthv1_wave::reset_pulse (void)
 {
-	for (uint16_t n = 0; n < m_ntabs; ++n)
-		reset_pulse_part(n, 1 << n);
+	if (m_bandl) {
+		for (uint16_t itab = 0; itab < m_ntabs; ++itab)
+			reset_pulse_part(itab, 1 << itab);
+	}
 
 	reset_pulse_part(m_ntabs, 0);
 
-	m_max_freq = (0.25f * m_srate);
-	m_min_freq = m_max_freq / float(1 << m_ntabs);
+	if (m_bandl) {
+		m_max_freq = (0.25f * m_srate);
+		m_min_freq = m_max_freq / float(1 << m_ntabs);
+	} else {
+		m_max_freq = (0.5f * m_srate);
+		m_min_freq = m_max_freq;
+	}
 }
 
 
 // init saw table.
 void synthv1_wave::reset_saw (void)
 {
-	for (uint16_t n = 0; n < m_ntabs; ++n)
-		reset_saw_part(n, 1 << n);
+	if (m_bandl) {
+		for (uint16_t itab = 0; itab < m_ntabs; ++itab)
+			reset_saw_part(itab, 1 << itab);
+	}
 
 	reset_saw_part(m_ntabs, 0);
 
-	m_max_freq = (0.25f * m_srate);
-	m_min_freq = m_max_freq / float(1 << m_ntabs);
+	if (m_bandl) {
+		m_max_freq = (0.25f * m_srate);
+		m_min_freq = m_max_freq / float(1 << m_ntabs);
+	} else {
+		m_max_freq = (0.5f * m_srate);
+		m_min_freq = m_max_freq;
+	}
 }
 
 
 // init sine table.
 void synthv1_wave::reset_sine (void)
 {
-	if (m_width < 1.0f) {
+	if (m_bandl && m_width < 1.0f) {
 		for (uint16_t itab = 0; itab < m_ntabs; ++itab)
 			reset_sine_part(itab);
 	}
 
 	reset_sine_part(m_ntabs);
 
-	if (m_width < 1.0f) {
+	if (m_bandl && m_width < 1.0f) {
 		m_max_freq = (0.25f * m_srate);
 		m_min_freq = m_max_freq / float(1 << m_ntabs);
 	} else {
