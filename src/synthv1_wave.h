@@ -50,6 +50,8 @@ public:
 		{ return m_shape; }
 	float width() const
 		{ return m_width; }
+	bool bandlimited() const
+		{ return m_bandl; }
 
 	// sample rate.
 	void setSampleRate(uint32_t iSampleRate)
