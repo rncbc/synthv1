@@ -69,6 +69,8 @@ private:
 
 	jack_client_t *m_client;
 
+	volatile bool m_activated;
+
 	jack_port_t **m_audio_ins;
 	jack_port_t **m_audio_outs;
 

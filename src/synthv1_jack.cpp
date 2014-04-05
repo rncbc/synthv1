@@ -114,6 +114,8 @@ synthv1_jack::synthv1_jack (void) : synthv1(2)
 {
 	m_client = NULL;
 
+	m_activated = false;
+
 	m_audio_ins = NULL;
 	m_audio_outs = NULL;
 
@@ -155,6 +157,9 @@ jack_client_t *synthv1_jack::client (void) const
 
 int synthv1_jack::process ( jack_nframes_t nframes )
 {
+	if (!m_activated)
+		return 0;
+
 	const uint16_t nchannels = channels();
 	float *ins[nchannels], *outs[nchannels];
 	for (uint16_t k = 0; k < nchannels; ++k) {
@@ -182,25 +187,27 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 
 #ifdef CONFIG_JACK_MIDI
 	void *midi_in = ::jack_port_get_buffer(m_midi_in, nframes);
-	uint32_t nevents = ::jack_midi_get_event_count(midi_in);
-	for (uint32_t n = 0; n < nevents; ++n) {
-		jack_midi_event_t event;
-		::jack_midi_event_get(&event, midi_in, n);
-		uint32_t nread = event.time - ndelta;
-		if (nread > 0) {
-			synthv1::process(ins, outs, nread);
-			for (uint16_t k = 0; k < nchannels; ++k) {
-				ins[k]  += nread;
-				outs[k] += nread;
+	if (midi_in) {
+		const uint32_t nevents = ::jack_midi_get_event_count(midi_in);
+		for (uint32_t n = 0; n < nevents; ++n) {
+			jack_midi_event_t event;
+			::jack_midi_event_get(&event, midi_in, n);
+			uint32_t nread = event.time - ndelta;
+			if (nread > 0) {
+				synthv1::process(ins, outs, nread);
+				for (uint16_t k = 0; k < nchannels; ++k) {
+					ins[k]  += nread;
+					outs[k] += nread;
+				}
 			}
+			ndelta = event.time;
+			synthv1::process_midi(event.buffer, event.size);
 		}
-		ndelta = event.time;
-		synthv1::process_midi(event.buffer, event.size);
 	}
 #endif
 #ifdef CONFIG_ALSA_MIDI
-	jack_nframes_t buffer_size = ::jack_get_buffer_size(m_client);
-	jack_nframes_t frame_time  = ::jack_last_frame_time(m_client);
+	const jack_nframes_t buffer_size = ::jack_get_buffer_size(m_client);
+	const jack_nframes_t frame_time  = ::jack_last_frame_time(m_client);
 	uint8_t event_buffer[1024];
 	jack_midi_event_t event;
 	while (::jack_ringbuffer_peek(m_alsa_buffer,
@@ -213,7 +220,7 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 		else
 			event_time = buffer_size - event_time;
 		if (event_time > ndelta) {
-			uint32_t nread = event_time - ndelta;
+			const uint32_t nread = event_time - ndelta;
 			if (nread > 0) {
 				synthv1::process(ins, outs, nread);
 				for (uint16_t k = 0; k < nchannels; ++k) {
@@ -306,14 +313,23 @@ void synthv1_jack::open ( const char *client_id )
 
 void synthv1_jack::activate (void)
 {
-	synthv1::reset();
-
-	if (m_client) ::jack_activate(m_client);
+	if (!m_activated) {
+		synthv1::reset();
+		if (m_client) {
+			::jack_activate(m_client);
+			m_activated = true;
+		}
+	}
 }
 
 void synthv1_jack::deactivate (void)
 {
-	if (m_client) ::jack_deactivate(m_client);
+	if (m_activated) {
+		if (m_client) {
+			::jack_deactivate(m_client);
+			m_activated = false;
+		}
+	}
 }
 
 
