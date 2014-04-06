@@ -326,8 +326,8 @@ void synthv1_jack::deactivate (void)
 {
 	if (m_activated) {
 		if (m_client) {
-			::jack_deactivate(m_client);
 			m_activated = false;
+			::jack_deactivate(m_client);
 		}
 	}
 }
