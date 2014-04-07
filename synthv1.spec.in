@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 14
+%define release 15
 
 %define _prefix	@ac_prefix@
 
@@ -69,6 +69,8 @@ BuildRequires:	liblo-devel
 %{_datadir}/icons/hicolor/scalable/mimetypes/application-x-%{name}*.svg
 
 %changelog
+* Mon Apr  7 2014 Rui Nuno Capela <rncbc@rncbc.org> 0.4.1
+- A proto-beta bis.
 * Thu Mar  6 2014 Rui Nuno Capela <rncbc@rncbc.org> 0.4.0
 - A proto-beta party.
 * Tue Dec 31 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.6

@@ -3,13 +3,14 @@ synthv1 - an old-school polyphonic synthesizer
 
 ChangeLog
 
-SVN TRUNK
+
+0.4.1  2014-04-07  A proto-beta bis.
 
 - Once so called 'Noise' wave-shapes are now being made a lot
   more deterministic, read idempotent ;).
 - Fully alias-free/band-limited wavetable oscillators are now
   in place, making it a better virtual-analog synthesizer (esp.
-  for running sample-rates below 96KHz). (EXPERIMENTAL)
+  for running sample-rates below 96KHz).
 - Late optimizations to basic wave-table oscillators.
 - Make sure the LV2 plugin back-end always builds first, before
   its respective LV2 UI front-end client.
