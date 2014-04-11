@@ -232,7 +232,7 @@ protected:
 		{
 			float *buf = tick();
 			float  out = *buf;
-			m_out = denormal((out * (1 - m_damp)) + (m_out * m_damp));
+			m_out = denormal(out * (1.0f - m_damp) + m_out * m_damp);
 			*buf = in + (m_out * m_feedb);
 			return out;
 		}
@@ -260,7 +260,7 @@ protected:
 		{
 			float *buf = tick();
 			float  out = *buf;
-			*buf = denormal(in + (out * m_feedb));
+			*buf = denormal(in + out * m_feedb);
 			return out - in;
 		}
 
@@ -271,7 +271,7 @@ protected:
 
 	static float denormal(float v)
 	{
-		union { float f; unsigned int w; } u;
+		union { float f; uint32_t w; } u;
 		u.f = v;
 		return (u.w & 0x7f800000) ? v : 0.0f;
 	}
