@@ -555,7 +555,9 @@ public:
 		// update coeffs
 		const float delay_min = 2.0f * 440.0f / m_srate;
 		const float delay_max = 2.0f * 4400.0f / m_srate;
-		const float lfo_inc = 2.0f * M_PI * rate / m_srate;
+		const float lfo_inc   = 2.0f * M_PI * rate / m_srate;
+		// anti-denormal noise
+		const float adenormal = 1E-14f * float(::rand());
 		// sweep...
 		for (uint32_t i = 0; i < nframes; ++i) {
 			// calculate and update phaser lfo
@@ -567,7 +569,7 @@ public:
 			if (m_lfo_phase >= 2.0f * M_PI)
 				m_lfo_phase -= 2.0f * M_PI;
 			// get input
-			m_out = denormal(in[i] + m_out * feedb);
+			m_out = in[i] + adenormal + m_out * feedb;
 			// update filter coeffs and calculate output
 			for (uint16_t n = 0; n < MAX_TAPS; ++n)
 				m_out = m_taps[n].output(m_out, delay);
@@ -576,20 +578,11 @@ public:
 		}
 	}
 
-	static const uint16_t MAX_TAPS = 6;
-
-protected:
-
-	static float denormal(float v)
-	{
-		union { float f; unsigned int w; } u;
-		u.f = v;
-		return (u.w & 0x7f800000) ? v : 0.0f;
-	}
-
 private:
 
 	float m_srate;
+
+	static const uint16_t MAX_TAPS = 6;
 
 	synthv1_fx_allpass m_taps[MAX_TAPS];
 
