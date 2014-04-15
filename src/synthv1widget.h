@@ -85,6 +85,8 @@ protected slots:
 	void bpmSyncChanged();
 
 	// Menu actions.
+	void helpUseNativeDialogs(bool bOn);
+
 	void helpAbout();
 	void helpAboutQt();
 

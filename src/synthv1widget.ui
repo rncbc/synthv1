@@ -95,6 +95,8 @@
         <property name="title">
          <string>&amp;Help</string>
         </property>
+        <addaction name="helpUseNativeDialogsAction"/>
+        <addaction name="separator"/>
         <addaction name="helpAboutAction"/>
         <addaction name="helpAboutQtAction"/>
        </widget>
@@ -2008,6 +2010,23 @@
     <widget class="synthv1widget_status" name="StatusBar" />
    </item>
   </layout>
+  <action name="helpUseNativeDialogsAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>&amp;Use native dialogs</string>
+   </property>
+   <property name="iconText" >
+    <string>Use native dialogs</string>
+   </property>
+   <property name="statusTip" >
+    <string>Whether to use desktop environment's native dialogs where applicable</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+  </action>
   <action name="helpAboutAction" >
    <property name="text" >
     <string>&amp;About...</string>

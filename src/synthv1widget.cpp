@@ -22,6 +22,8 @@
 #include "synthv1widget.h"
 #include "synthv1_param.h"
 
+#include "synthv1widget_config.h"
+
 #include <QDomDocument>
 #include <QTextStream>
 #include <QFileInfo>
@@ -705,7 +707,14 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	QObject::connect(m_ui.TabBar, SIGNAL(currentChanged(int)),
 		m_ui.StackedWidget, SLOT(setCurrentIndex(int)));
 
+	synthv1widget_config *pConfig = synthv1widget_config::getInstance();
+	if (pConfig)
+		m_ui.helpUseNativeDialogsAction->setChecked(pConfig->bUseNativeDialogs);
+
 	// Menu actions
+	QObject::connect(m_ui.helpUseNativeDialogsAction,
+		SIGNAL(triggered(bool)),
+		SLOT(helpUseNativeDialogs(bool)));
 	QObject::connect(m_ui.helpAboutAction,
 		SIGNAL(triggered(bool)),
 		SLOT(helpAbout()));
@@ -1064,6 +1073,16 @@ bool synthv1widget::queryClose (void)
 
 
 // Menu actions.
+void synthv1widget::helpUseNativeDialogs ( bool bOn )
+{
+	synthv1widget_config *pConfig = synthv1widget_config::getInstance();
+	if (pConfig) {
+		pConfig->bUseNativeDialogs = bOn;
+		pConfig->bDontUseNativeDialogs = !pConfig->bUseNativeDialogs;
+	}
+}
+
+
 void synthv1widget::helpAbout (void)
 {
 	// About...
@@ -1111,6 +1130,7 @@ void synthv1widget::helpAbout (void)
 
 	QMessageBox::about(this, tr("About") + " " SYNTHV1_TITLE, sText);
 }
+
 
 void synthv1widget::helpAboutQt (void)
 {
