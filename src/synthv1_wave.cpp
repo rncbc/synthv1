@@ -133,8 +133,11 @@ void synthv1_wave::reset_sync ( Shape shape, float width, bool bandl )
 	case Sine:
 		reset_sine();
 		break;
-	case Random:
+	case Rand:
 		reset_rand();
+		break;
+	case Noise:
+		reset_noise();
 		// thru...
 	default:
 		break;
@@ -142,17 +145,14 @@ void synthv1_wave::reset_sync ( Shape shape, float width, bool bandl )
 }
 
 
-// init pulse table.
+// init pulse tables.
 void synthv1_wave::reset_pulse (void)
 {
+	reset_pulse_part(m_ntabs);
+
 	if (m_bandl) {
 		for (uint16_t itab = 0; itab < m_ntabs; ++itab)
-			reset_pulse_part(itab, 1 << itab);
-	}
-
-	reset_pulse_part(m_ntabs, 0);
-
-	if (m_bandl) {
+			reset_pulse_part(itab);
 		m_max_freq = (0.25f * m_srate);
 		m_min_freq = m_max_freq / float(1 << m_ntabs);
 	} else {
@@ -162,17 +162,14 @@ void synthv1_wave::reset_pulse (void)
 }
 
 
-// init saw table.
+// init saw tables.
 void synthv1_wave::reset_saw (void)
 {
+	reset_saw_part(m_ntabs);
+
 	if (m_bandl) {
 		for (uint16_t itab = 0; itab < m_ntabs; ++itab)
-			reset_saw_part(itab, 1 << itab);
-	}
-
-	reset_saw_part(m_ntabs, 0);
-
-	if (m_bandl) {
+			reset_saw_part(itab);
 		m_max_freq = (0.25f * m_srate);
 		m_min_freq = m_max_freq / float(1 << m_ntabs);
 	} else {
@@ -182,17 +179,14 @@ void synthv1_wave::reset_saw (void)
 }
 
 
-// init sine table.
+// init sine tables.
 void synthv1_wave::reset_sine (void)
 {
-	if (m_bandl && m_width < 1.0f) {
-		for (uint16_t itab = 0; itab < m_ntabs; ++itab)
-			reset_sine_part(itab);
-	}
-
 	reset_sine_part(m_ntabs);
 
 	if (m_bandl && m_width < 1.0f) {
+		for (uint16_t itab = 0; itab < m_ntabs; ++itab)
+			reset_sine_part(itab);
 		m_max_freq = (0.25f * m_srate);
 		m_min_freq = m_max_freq / float(1 << m_ntabs);
 	} else {
@@ -202,17 +196,31 @@ void synthv1_wave::reset_sine (void)
 }
 
 
-// init random table.
+// init random tables.
 void synthv1_wave::reset_rand (void)
 {
-	reset_rand_part(m_ntabs, 0);	// must go first!
+	reset_rand_part(m_ntabs);
 
 	if (m_bandl) {
 		for (uint16_t itab = 0; itab < m_ntabs; ++itab)
-			reset_rand_part(itab, 1 << itab);
+			reset_rand_part(itab);
+		m_max_freq = (0.25f * m_srate);
+		m_min_freq = m_max_freq / float(1 << m_ntabs);
+	} else {
+		m_max_freq = (0.5f * m_srate);
+		m_min_freq = m_max_freq;
 	}
+}
+
+
+// init noise tables.
+void synthv1_wave::reset_noise (void)
+{
+	reset_noise_part(m_ntabs);
 
 	if (m_bandl) {
+		for (uint16_t itab = 0; itab < m_ntabs; ++itab)
+			reset_noise_part(itab);
 		m_max_freq = (0.25f * m_srate);
 		m_min_freq = m_max_freq / float(1 << m_ntabs);
 	} else {
@@ -223,8 +231,10 @@ void synthv1_wave::reset_rand (void)
 
 
 // init pulse partial table.
-void synthv1_wave::reset_pulse_part ( uint16_t itab, uint16_t nparts )
+void synthv1_wave::reset_pulse_part ( uint16_t itab )
 {
+	const uint16_t nparts = (itab < m_ntabs ? 1 << itab : 0);
+
 	const float p0 = float(m_nsize);
 	const float w2 = p0 * m_width * 0.5f + 0.001f;
 
@@ -256,8 +266,10 @@ void synthv1_wave::reset_pulse_part ( uint16_t itab, uint16_t nparts )
 
 
 // init saw partial table.
-void synthv1_wave::reset_saw_part ( uint16_t itab, uint16_t nparts )
+void synthv1_wave::reset_saw_part ( uint16_t itab )
 {
+	const uint16_t nparts = (itab < m_ntabs ? 1 << itab : 0);
+
 	const float p0 = float(m_nsize);
 	const float w0 = p0 * m_width;
 
@@ -329,8 +341,10 @@ void synthv1_wave::reset_sine_part ( uint16_t itab )
 
 
 // init random partial table.
-void synthv1_wave::reset_rand_part ( uint16_t itab, uint16_t nparts )
+void synthv1_wave::reset_rand_part ( uint16_t itab )
 {
+	const uint16_t nparts = (itab < m_ntabs ? 1 << itab : 0);
+
 	const float p0 = float(m_nsize);
 	const float w0 = p0 * m_width;
 	const uint32_t ihold = (uint32_t(p0 - w0) >> 3) + 1;
@@ -383,6 +397,26 @@ void synthv1_wave::reset_rand_part ( uint16_t itab, uint16_t nparts )
 
 	reset_filter(itab);
 	reset_normalize(itab);
+	reset_interp(itab);
+}
+
+
+// init random partial table.
+void synthv1_wave::reset_noise_part ( uint16_t itab )
+{
+	if (itab == m_ntabs) {
+		const float p0 = float(m_nsize);
+		const float w0 = p0 * m_width;
+		m_srand = uint32_t(w0);
+	}
+
+	float *frames = m_tables[itab];
+
+	for (uint32_t i = 0; i < m_nsize; ++i)
+		frames[i] = pseudo_randf();
+
+//	reset_filter(itab);
+//	reset_normalize(itab);
 	reset_interp(itab);
 }
 

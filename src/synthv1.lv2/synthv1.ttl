@@ -60,10 +60,11 @@
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "Sine"; rdf:value 2 ] ;
-		lv2:scalePoint [ rdfs:label "Random"; rdf:value 3 ] ;
+		lv2:scalePoint [ rdfs:label "Rand"; rdf:value 3 ] ;
+		lv2:scalePoint [ rdfs:label "Noise"; rdf:value 4 ] ;
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
-		lv2:maximum 3.0 ;
+		lv2:maximum 4.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 6 ;
@@ -90,10 +91,11 @@
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "Sine"; rdf:value 2 ] ;
-		lv2:scalePoint [ rdfs:label "Random"; rdf:value 3 ] ;
+		lv2:scalePoint [ rdfs:label "Rand"; rdf:value 3 ] ;
+		lv2:scalePoint [ rdfs:label "Noise"; rdf:value 4 ] ;
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
-		lv2:maximum 3.0 ;
+		lv2:maximum 4.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 9 ;
@@ -250,16 +252,17 @@
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 27 ;
-		lv2:symbol "LFO1_SHAPE1" ;
+		lv2:symbol "LFO1_SHAPE" ;
 		lv2:name "LFO1 Wave Shape 1" ;
 		lv2:portProperty lv2:integer ;
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "Sine"; rdf:value 2 ] ;
-		lv2:scalePoint [ rdfs:label "Random"; rdf:value 3 ] ;
+		lv2:scalePoint [ rdfs:label "Rand"; rdf:value 3 ] ;
+		lv2:scalePoint [ rdfs:label "Noise"; rdf:value 4 ] ;
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
-		lv2:maximum 3.0 ;
+		lv2:maximum 4.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 28 ;
@@ -481,10 +484,11 @@
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "Sine"; rdf:value 2 ] ;
-		lv2:scalePoint [ rdfs:label "Random"; rdf:value 3 ] ;
+		lv2:scalePoint [ rdfs:label "Rand"; rdf:value 3 ] ;
+		lv2:scalePoint [ rdfs:label "Noise"; rdf:value 4 ] ;
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
-		lv2:maximum 3.0 ;
+		lv2:maximum 4.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 55 ;
@@ -511,10 +515,11 @@
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "Sine"; rdf:value 2 ] ;
-		lv2:scalePoint [ rdfs:label "Random"; rdf:value 3 ] ;
+		lv2:scalePoint [ rdfs:label "Rand"; rdf:value 3 ] ;
+		lv2:scalePoint [ rdfs:label "Noise"; rdf:value 4 ] ;
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
-		lv2:maximum 3.0 ;
+		lv2:maximum 4.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 58 ;
@@ -677,10 +682,11 @@
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "Sine"; rdf:value 2 ] ;
-		lv2:scalePoint [ rdfs:label "Random"; rdf:value 3 ] ;
+		lv2:scalePoint [ rdfs:label "Rand"; rdf:value 3 ] ;
+		lv2:scalePoint [ rdfs:label "Noise"; rdf:value 4 ] ;
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
-		lv2:maximum 3.0 ;
+		lv2:maximum 4.0 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 77 ;

@@ -7,7 +7,9 @@ ChangeLog
 SVN TRUNK
 
 - Badly named 'Noise' wave-shape oscillators get their band-
-  limited treat option; re-labeled to 'Random'. (EXPERIMENTAL)
+  limited treat option and re-labeled as 'Rand'; also a brand
+  new wave-shape 'Noise' is then introduced (now for real :)).
+  (EXPERIMENTAL)
 - New user preference option, cf. Help/Use native dialogs.
 - An anti-denormal regression applied to the Phaser fx stage
   (affecting early proto-beta >= 0.4.0).

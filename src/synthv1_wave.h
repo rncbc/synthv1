@@ -37,7 +37,7 @@ class synthv1_wave
 public:
 
 	// shape.
-	enum Shape { Pulse = 0, Saw, Sine, Random };
+	enum Shape { Pulse = 0, Saw, Sine, Rand, Noise };
 
 	// ctor.
 	synthv1_wave(uint32_t nsize = 1024, uint16_t nover = 24, uint16_t ntabs = 8);
@@ -170,12 +170,12 @@ protected:
 	// init pulse tables.
 	void reset_pulse();
 	// init pulse partial table.
-	void reset_pulse_part(uint16_t itab, uint16_t nparts);
+	void reset_pulse_part(uint16_t itab);
 
 	// init saw tables.
 	void reset_saw();
 	// init saw partial table.
-	void reset_saw_part(uint16_t itab, uint16_t nparts);
+	void reset_saw_part(uint16_t itab);
 
 	// init sine tables.
 	void reset_sine();
@@ -185,7 +185,12 @@ protected:
 	// init random tables.
 	void reset_rand();
 	// init random partial table.
-	void reset_rand_part(uint16_t itab, uint16_t nparts);
+	void reset_rand_part(uint16_t itab);
+
+	// init noise tables.
+	void reset_noise();
+	// init noise partial table.
+	void reset_noise_part(uint16_t itab);
 
 	// post-processors.
 	void reset_filter(uint16_t itab);
@@ -196,7 +201,7 @@ protected:
 	uint32_t pseudo_srand ()
 		{ return (m_srand = (m_srand * 196314165) + 907633515); }
 	float pseudo_randf ()
-		{ return pseudo_srand() / float(1 << 16) - 1.0f; }
+		{ return pseudo_srand() / float(0x8000U << 16) - 1.0f; }
 
 private:
 

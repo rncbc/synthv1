@@ -86,7 +86,8 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	shapes << tr("Pulse");
 	shapes << tr("Saw");
 	shapes << tr("Sine");
-	shapes << tr("Random");
+	shapes << tr("Rand");
+	shapes << tr("Noise");
 
 	m_ui.Dco1Shape1Knob->insertItems(0, shapes);
 	m_ui.Dco1Shape2Knob->insertItems(0, shapes);
