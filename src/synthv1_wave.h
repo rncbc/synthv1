@@ -37,7 +37,7 @@ class synthv1_wave
 public:
 
 	// shape.
-	enum Shape { Pulse = 0, Saw, Sine, Noise };
+	enum Shape { Pulse = 0, Saw, Sine, Random };
 
 	// ctor.
 	synthv1_wave(uint32_t nsize = 1024, uint16_t nover = 24, uint16_t ntabs = 8);
@@ -182,8 +182,10 @@ protected:
 	// init sine partial table.
 	void reset_sine_part(uint16_t itab);
 
-	// init noise tables.
-	void reset_noise();
+	// init random tables.
+	void reset_rand();
+	// init random partial table.
+	void reset_rand_part(uint16_t itab, uint16_t nparts);
 
 	// post-processors.
 	void reset_filter(uint16_t itab);

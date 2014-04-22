@@ -68,9 +68,9 @@ void synthv1widget_wave::setWaveShape ( float fWaveShape )
 	int iWaveShape = int(fWaveShape);
 	if (iWaveShape != int(m_pWave->shape())) {
 		if (iWaveShape < int(synthv1_wave::Pulse))
-			iWaveShape = int(synthv1_wave::Noise);
+			iWaveShape = int(synthv1_wave::Random);
 		else
-		if (iWaveShape > int(synthv1_wave::Noise))
+		if (iWaveShape > int(synthv1_wave::Random))
 			iWaveShape = int(synthv1_wave::Pulse);
 		m_pWave->reset(synthv1_wave::Shape(iWaveShape), m_pWave->width());
 		update();

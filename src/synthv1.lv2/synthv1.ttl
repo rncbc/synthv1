@@ -60,7 +60,7 @@
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "Sine"; rdf:value 2 ] ;
-		lv2:scalePoint [ rdfs:label "Noise"; rdf:value 3 ] ;
+		lv2:scalePoint [ rdfs:label "Random"; rdf:value 3 ] ;
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 3.0 ;
@@ -90,7 +90,7 @@
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "Sine"; rdf:value 2 ] ;
-		lv2:scalePoint [ rdfs:label "Noise"; rdf:value 3 ] ;
+		lv2:scalePoint [ rdfs:label "Random"; rdf:value 3 ] ;
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 3.0 ;
@@ -256,7 +256,7 @@
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "Sine"; rdf:value 2 ] ;
-		lv2:scalePoint [ rdfs:label "Noise"; rdf:value 3 ] ;
+		lv2:scalePoint [ rdfs:label "Random"; rdf:value 3 ] ;
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 3.0 ;
@@ -481,7 +481,7 @@
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "Sine"; rdf:value 2 ] ;
-		lv2:scalePoint [ rdfs:label "Noise"; rdf:value 3 ] ;
+		lv2:scalePoint [ rdfs:label "Random"; rdf:value 3 ] ;
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 3.0 ;
@@ -511,7 +511,7 @@
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "Sine"; rdf:value 2 ] ;
-		lv2:scalePoint [ rdfs:label "Noise"; rdf:value 3 ] ;
+		lv2:scalePoint [ rdfs:label "Random"; rdf:value 3 ] ;
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 3.0 ;
@@ -677,7 +677,7 @@
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "Sine"; rdf:value 2 ] ;
-		lv2:scalePoint [ rdfs:label "Noise"; rdf:value 3 ] ;
+		lv2:scalePoint [ rdfs:label "Random"; rdf:value 3 ] ;
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 3.0 ;

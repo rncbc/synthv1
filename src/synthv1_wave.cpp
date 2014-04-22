@@ -133,8 +133,8 @@ void synthv1_wave::reset_sync ( Shape shape, float width, bool bandl )
 	case Sine:
 		reset_sine();
 		break;
-	case Noise:
-		reset_noise();
+	case Random:
+		reset_rand();
 		// thru...
 	default:
 		break;
@@ -202,31 +202,23 @@ void synthv1_wave::reset_sine (void)
 }
 
 
-// init noise table.
-void synthv1_wave::reset_noise (void)
+// init random table.
+void synthv1_wave::reset_rand (void)
 {
-	const float p0 = float(m_nsize);
-	const float w0 = p0 * m_width;
-	const uint32_t ihold = (uint32_t(p0 - w0) >> 3) + 1;
+	reset_rand_part(m_ntabs, 0);	// must go first!
 
-	float *frames = m_tables[m_ntabs];
-
-	m_srand = uint32_t(w0);
-
-	float p = 0.0f;
-
-	for (uint32_t i = 0; i < m_nsize; ++i) {
-		if ((i % ihold) == 0)
-			p = pseudo_randf();
-		frames[i] = p;
+	if (m_bandl) {
+		for (uint16_t itab = 0; itab < m_ntabs; ++itab)
+			reset_rand_part(itab, 1 << itab);
 	}
 
-	reset_filter(m_ntabs);
-	reset_normalize(m_ntabs);
-	reset_interp(m_ntabs);
-
-	m_max_freq = (0.5f * m_srate);
-	m_min_freq = m_max_freq;
+	if (m_bandl) {
+		m_max_freq = (0.25f * m_srate);
+		m_min_freq = m_max_freq / float(1 << m_ntabs);
+	} else {
+		m_max_freq = (0.5f * m_srate);
+		m_min_freq = m_max_freq;
+	}
 }
 
 
@@ -332,6 +324,65 @@ void synthv1_wave::reset_sine_part ( uint16_t itab )
 		reset_filter(itab);
 		reset_normalize(itab);
 	}
+	reset_interp(itab);
+}
+
+
+// init random partial table.
+void synthv1_wave::reset_rand_part ( uint16_t itab, uint16_t nparts )
+{
+	const float p0 = float(m_nsize);
+	const float w0 = p0 * m_width;
+	const uint32_t ihold = (uint32_t(p0 - w0) >> 3) + 1;
+
+	float *frames = m_tables[itab];
+
+	if (nparts > 0) {
+		const float *pntabs = m_tables[m_ntabs];
+		const uint32_t nholds = m_nsize / ihold;
+		const uint32_t ntabs2 = m_ntabs << itab;
+		uint32_t npart2 = nparts;
+		uint32_t nhold2 = nholds;
+		while (npart2 * nhold2 > ntabs2) {
+			if (npart2 > m_ntabs)
+				npart2 >>= 1;
+			else
+			if (nhold2 > m_ntabs)
+				nhold2 >>= 1;
+		}
+		const float wk = p0 / float(nhold2);
+		const float w2 = 0.5f * wk;
+		const float gibbs = 0.5f * M_PI / float(npart2);
+		for (uint32_t i = 0; i < m_nsize; ++i) {
+			const float p = float(i);
+			float sum = 0.0f;
+			for (uint32_t n = 0; n < npart2; ++n) {
+				const float gn = ::cosf(gibbs * float(n));
+				const float dn = float(n + 1) * M_PI;
+				const float wn = 2.0f * dn;
+				const float g2 = gn * gn / dn;
+				float pk = 0.0f;
+				for (uint32_t k = 0; k < nhold2; ++k) {
+					const float gk = g2 * pntabs[uint32_t(pk + w2)];
+					sum += gk * ::sinf(wn * (wk - p + pk) / p0);
+					sum += gk * ::sinf(wn * (p - p0 - pk) / p0);
+					pk  += wk;
+				}
+			}
+			frames[i] = 2.0f * sum;
+		}
+	} else {
+		m_srand = uint32_t(w0);
+		float phold = 0.0f;
+		for (uint32_t i = 0; i < m_nsize; ++i) {
+			if ((i % ihold) == 0)
+				phold = pseudo_randf();
+			frames[i] = phold;
+		}
+	}
+
+	reset_filter(itab);
+	reset_normalize(itab);
 	reset_interp(itab);
 }
 
