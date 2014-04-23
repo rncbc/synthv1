@@ -407,7 +407,7 @@ void synthv1_wave::reset_noise_part ( uint16_t itab )
 	if (itab == m_ntabs) {
 		const float p0 = float(m_nsize);
 		const float w0 = p0 * m_width;
-		m_srand = uint32_t(w0) ^ m_nsize;
+		m_srand = uint32_t(w0) ^ 0x9631; // magic!
 	}
 
 	float *frames = m_tables[itab];
