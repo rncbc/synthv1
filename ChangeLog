@@ -3,6 +3,10 @@ synthv1 - an old-school polyphonic synthesizer
 
 ChangeLog
 
+SVN TRUNK
+
+- Allow the build system to include an user specified LDFLAGS.
+
 
 0.4.2  2014-04-29  A pre-LAC frenzy beta.
 

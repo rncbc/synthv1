@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(synthv1, 0.4.2, rncbc@rncbc.org)
+AC_INIT(synthv1, 0.4.2.1, rncbc@rncbc.org)
 
 AC_CONFIG_SRCDIR(src/synthv1.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -135,6 +135,11 @@ AC_ARG_WITH(liblo,
 if test "x$ac_lv2" = "xno"; then
    ac_lv2_external_ui="no"
 fi
+
+
+# Honor user specified flags.
+ac_cflags=$CFLAGS
+ac_ldflags=$LDFLAGS
 
 
 # Checks for programs.
@@ -447,6 +452,9 @@ if test "x$ac_jack" = "xyes"; then
       AC_MSG_ERROR([*** JACK MIDI and ALSA MIDI support disabled.])
    fi
 fi
+
+AC_SUBST(ac_cflags)
+AC_SUBST(ac_ldflags)
 
 
 # Checks for typedefs, structures, and compiler characteristics.
