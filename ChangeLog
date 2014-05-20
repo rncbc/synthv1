@@ -5,6 +5,7 @@ ChangeLog
 
 SVN TRUNK
 
+- Disable band-limit option for 'Noise' oscillator wave-shapes.
 - Allow the build system to include an user specified LDFLAGS.
 
 

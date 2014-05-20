@@ -22,6 +22,8 @@
 #include "synthv1widget.h"
 #include "synthv1_param.h"
 
+#include "synthv1_wave.h"
+
 #include "synthv1widget_config.h"
 
 #include <QDomDocument>
@@ -812,6 +814,22 @@ void synthv1widget::updateParamEx ( synthv1::ParamIndex index, float fValue )
 	++m_iUpdate;
 
 	switch (index) {
+	case synthv1::DCO1_SHAPE1:
+		m_ui.Dco1Bandl1Knob->setEnabled(
+			synthv1_wave::Shape(int(fValue)) != synthv1_wave::Noise);
+		break;
+	case synthv1::DCO1_SHAPE2:
+		m_ui.Dco1Bandl2Knob->setEnabled(
+			synthv1_wave::Shape(int(fValue)) != synthv1_wave::Noise);
+		break;
+	case synthv1::DCO2_SHAPE1:
+		m_ui.Dco2Bandl1Knob->setEnabled(
+			synthv1_wave::Shape(int(fValue)) != synthv1_wave::Noise);
+		break;
+	case synthv1::DCO2_SHAPE2:
+		m_ui.Dco2Bandl2Knob->setEnabled(
+			synthv1_wave::Shape(int(fValue)) != synthv1_wave::Noise);
+		break;
 	case synthv1::DEL1_BPMSYNC:
 		if (fValue > 0.0f)
 			m_ui.Del1BpmKnob->setValue(0.0f);
