@@ -5,6 +5,7 @@ ChangeLog
 
 SVN TRUNK
 
+- A man page has beed added (re. stand-alone JACK client).
 - Disable band-limit option for 'Noise' oscillator wave-shapes.
 - Allow the build system to include an user specified LDFLAGS.
 

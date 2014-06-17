@@ -1,3 +1,4 @@
+prefix  = @ac_prefix@
 qmake = @ac_qmake@
 
 name = synthv1
@@ -87,6 +88,9 @@ sources_jack = \
 	src/$(name)widget_jack.cpp
 
 
+export mandir = @mandir@
+
+
 all:	@ac_all_targets@
 
 
@@ -114,8 +118,11 @@ install_lv2:	lv2 lv2ui
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_lv2).mak install
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_lv2ui).mak install
 
-install_jack:	jack
+install_jack:	jack $(name).1
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_jack).mak install
+	@install -d -v -m 0755 $(DESTDIR)$(mandir)/man1
+	@install -v -m 0644 $(name).1 $(DESTDIR)$(mandir)/man1
+	@gzip -vf $(DESTDIR)$(mandir)/man1/$(name).1
 
 
 uninstall_lv2:	lv2 lv2ui
@@ -124,6 +131,7 @@ uninstall_lv2:	lv2 lv2ui
 
 uninstall_jack:	jack
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_jack).mak uninstall
+	@rm -vf $(DESTDIR)$(mandir)/man1/$(name).*
 
 
 clean_lv2:	$(name_lv2).mak $(name_lv2ui).mak

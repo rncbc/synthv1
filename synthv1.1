@@ -1,0 +1,34 @@
+.TH SYNTHV1 "1" "June 17, 2014"
+.SH NAME
+synthv1 \- an old-school polyphonic synthesizer
+.SH SYNOPSIS
+.B synthv1_jack
+[\fIoptions\fR] [\fIpreset-file\fR]
+.SH DESCRIPTION
+This manual page documents briefly the
+.B synthv1_jack
+command.
+.PP
+\fBsynthv1\fP is an old-school 4-oscillator subtractive
+polyphonic synthesizer with stereo fx.
+.PP
+features:
+.IP
+a pure stand-alone JACK client with JACK-session,
+NSM and both JACK MIDI and ALSA MIDI input support;
+.IP
+a LV2 instrument plugin.
+URI: http://synthv1.sourceforge.net/lv2
+.SH OPTIONS
+.HP
+\fB\-h\fR, \fB\-\-help\fR
+.IP
+Show help about command line options
+.HP
+\fB\-v\fR, \fB\-\-version\fR
+.IP
+Show version information
+.SH FILES
+Configuration settings are stored in ~/.config/rncbc.org/synthv1.conf
+.SH AUTHOR
+synthv1 was written by Rui Nuno Capela.

@@ -60,6 +60,8 @@ BuildRequires:	liblo-devel
 %dir %{_datadir}/icons/hicolor/scalable
 %dir %{_datadir}/icons/hicolor/scalable/apps
 %dir %{_datadir}/icons/hicolor/scalable/mimetypes
+#dir %{_datadir}/man
+#dir %{_datadir}/man/man1
 %{_bindir}/%{name}_jack
 %{_datadir}/mime/packages/%{name}.xml
 %{_datadir}/applications/%{name}.desktop
@@ -67,6 +69,7 @@ BuildRequires:	liblo-devel
 %{_datadir}/icons/hicolor/32x32/mimetypes/application-x-%{name}*.png
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 %{_datadir}/icons/hicolor/scalable/mimetypes/application-x-%{name}*.svg
+%{_datadir}/man/man1/%{name}.1.gz
 
 %changelog
 * Tue Apr 29 2014 Rui Nuno Capela <rncbc@rncbc.org> 0.4.2
