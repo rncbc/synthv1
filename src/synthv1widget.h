@@ -28,8 +28,6 @@
 
 #include "synthv1.h"
 
-#include <QHash>
-
 
 //-------------------------------------------------------------------------
 // synthv1widget - decl.
@@ -97,6 +95,9 @@ protected:
 
 	// Reset swap params A/B group.
 	void resetSwapParams();
+
+	// Initialize all param/knob values.
+	void initParamValues();
 
 	// Reset all param/knob default values.
 	void resetParamValues();

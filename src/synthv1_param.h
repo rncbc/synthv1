@@ -24,6 +24,12 @@
 
 #include "synthv1.h"
 
+#include <QString>
+
+// forward decl.
+class QDomElement;
+class QDomDocument;
+
 
 //-------------------------------------------------------------------------
 // synthv1_param - decl.
@@ -31,6 +37,12 @@
 
 namespace synthv1_param
 {
+	// Preset serialization methods.
+	void loadPreset(synthv1 *pSynth,
+		const QString& sFilename);
+	void savePreset(synthv1 *pSynth,
+		const QString& sFilename);
+
 	// Default parameter name/value helpers.
 	const char *paramName(synthv1::ParamIndex index);
 	float paramDefaultValue(synthv1::ParamIndex index);

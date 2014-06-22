@@ -26,10 +26,6 @@
 
 #include "synthv1widget_config.h"
 
-#include <QDomDocument>
-#include <QTextStream>
-#include <QFileInfo>
-
 #include <QMessageBox>
 #include <QDir>
 
@@ -907,6 +903,28 @@ void synthv1widget::resetSwapParams (void)
 }
 
 
+// Initialize param values.
+void synthv1widget::initParamValues (void)
+{
+	resetSwapParams();
+
+	synthv1 *pSynth = instance();
+
+	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
+		synthv1::ParamIndex index = synthv1::ParamIndex(i);
+		float fValue = synthv1_param::paramDefaultValue(index);
+		const float *pfParamPort
+			= (pSynth ? pSynth->paramPort(index) : NULL);
+		if (pfParamPort)
+			fValue = *pfParamPort;
+		setParamValue(index, fValue, true);
+		updateParam(index, fValue);
+		updateParamEx(index, fValue);
+		m_params_ab[index] = fValue;
+	}
+}
+
+
 // Reset all param default values.
 void synthv1widget::resetParamValues (void)
 {
@@ -973,78 +991,19 @@ void synthv1widget::loadPreset ( const QString& sFilename )
 	if (pSynth == NULL)
 		return;
 
-	QFile file(sFilename);
-	if (!file.open(QIODevice::ReadOnly))
-		return;
-
-	static QHash<QString, synthv1::ParamIndex> s_hash;
-	if (s_hash.isEmpty()) {
-		for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
-			synthv1::ParamIndex index = synthv1::ParamIndex(i);
-			s_hash.insert(synthv1_param::paramName(index), index);
-		}
-	}
-
 	resetParamKnobs();
 	resetParamValues();
 
+	synthv1_param::loadPreset(pSynth, sFilename);
+
 	pSynth->reset();
 
-	const QFileInfo fi(sFilename);
-	const QDir currentDir(QDir::current());
-	QDir::setCurrent(fi.absolutePath());
+	const QString& sPreset
+		= QFileInfo(sFilename).completeBaseName();
 
-	QDomDocument doc(SYNTHV1_TITLE);
-	if (doc.setContent(&file)) {
-		QDomElement ePreset = doc.documentElement();
-		if (ePreset.tagName() == "preset"
-			&& ePreset.attribute("name") == fi.completeBaseName()) {
-			for (QDomNode nChild = ePreset.firstChild();
-					!nChild.isNull();
-						nChild = nChild.nextSibling()) {
-				QDomElement eChild = nChild.toElement();
-				if (eChild.isNull())
-					continue;
-				if (eChild.tagName() == "params") {
-					for (QDomNode nParam = eChild.firstChild();
-							!nParam.isNull();
-								nParam = nParam.nextSibling()) {
-						QDomElement eParam = nParam.toElement();
-						if (eParam.isNull())
-							continue;
-						if (eParam.tagName() == "param") {
-							synthv1::ParamIndex index = synthv1::ParamIndex(
-								eParam.attribute("index").toULong());
-							const QString& sName = eParam.attribute("name");
-							if (!sName.isEmpty()) {
-								if (!s_hash.contains(sName))
-									continue;
-								index = s_hash.value(sName);
-							}
-							float fValue = eParam.text().toFloat();
-						//--legacy support < 0.3.0.4 -- begin
-							if (index == synthv1::DEL1_BPM && fValue < 3.6f)
-								fValue *= 100.0f;
-						//--legacy support < 0.3.0.4 -- end.
-							setParamValue(index, fValue, true);
-							updateParam(index, fValue);
-							m_params_ab[index] = fValue;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	file.close();
-
-	const QString& sPreset = fi.completeBaseName();
 	m_ui.Preset->setPreset(sPreset);
-
 	m_ui.StatusBar->showMessage(tr("Load preset: %1").arg(sPreset), 5000);
 	updateDirtyPreset(false);
-
-	QDir::setCurrent(currentDir.absolutePath());
 }
 
 
@@ -1053,31 +1012,11 @@ void synthv1widget::savePreset ( const QString& sFilename )
 #ifdef CONFIG_DEBUG
 	qDebug("synthv1widget::savePreset(\"%s\")", sFilename.toUtf8().constData());
 #endif
-	const QString& sPreset = QFileInfo(sFilename).completeBaseName();
 
-	QDomDocument doc(SYNTHV1_TITLE);
-	QDomElement ePreset = doc.createElement("preset");
-	ePreset.setAttribute("name", sPreset);
-	ePreset.setAttribute("version", SYNTHV1_VERSION);
+	synthv1_param::savePreset(instance(), sFilename);
 
-	QDomElement eParams = doc.createElement("params");
-	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
-		QDomElement eParam = doc.createElement("param");
-		synthv1::ParamIndex index = synthv1::ParamIndex(i);
-		eParam.setAttribute("index", QString::number(i));
-		eParam.setAttribute("name", synthv1_param::paramName(index));
-		eParam.appendChild(
-			doc.createTextNode(QString::number(paramValue(index))));
-		eParams.appendChild(eParam);
-	}
-	ePreset.appendChild(eParams);
-	doc.appendChild(ePreset);
-
-	QFile file(sFilename);
-	if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-		QTextStream(&file) << doc.toString();
-		file.close();
-	}
+	const QString& sPreset
+		= QFileInfo(sFilename).completeBaseName();
 
 	m_ui.StatusBar->showMessage(tr("Save preset: %1").arg(sPreset), 5000);
 	updateDirtyPreset(false);

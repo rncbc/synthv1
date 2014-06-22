@@ -20,6 +20,11 @@
 *****************************************************************************/
 
 #include "synthv1_param.h"
+#include "synthv1_config.h"
+
+#include <QDomDocument>
+#include <QTextStream>
+#include <QDir>
 
 
 //-------------------------------------------------------------------------
@@ -174,6 +179,110 @@ const char *synthv1_param::paramName ( synthv1::ParamIndex index )
 float synthv1_param::paramDefaultValue ( synthv1::ParamIndex index )
 {
 	return synthv1_default_params[index].value;
+}
+
+
+// Preset serialization methods.
+void synthv1_param::loadPreset ( synthv1 *pSynth, const QString& sFilename )
+{
+	if (pSynth == NULL)
+		return;
+
+	QFile file(sFilename);
+	if (!file.open(QIODevice::ReadOnly))
+		return;
+
+	static QHash<QString, synthv1::ParamIndex> s_hash;
+	if (s_hash.isEmpty()) {
+		for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
+			synthv1::ParamIndex index = synthv1::ParamIndex(i);
+			s_hash.insert(synthv1_param::paramName(index), index);
+		}
+	}
+
+	const QFileInfo fi(sFilename);
+
+	QDomDocument doc(SYNTHV1_TITLE);
+	if (doc.setContent(&file)) {
+		QDomElement ePreset = doc.documentElement();
+		if (ePreset.tagName() == "preset"
+			&& ePreset.attribute("name") == fi.completeBaseName()) {
+			for (QDomNode nChild = ePreset.firstChild();
+					!nChild.isNull();
+						nChild = nChild.nextSibling()) {
+				QDomElement eChild = nChild.toElement();
+				if (eChild.isNull())
+					continue;
+				if (eChild.tagName() == "params") {
+					for (QDomNode nParam = eChild.firstChild();
+							!nParam.isNull();
+								nParam = nParam.nextSibling()) {
+						QDomElement eParam = nParam.toElement();
+						if (eParam.isNull())
+							continue;
+						if (eParam.tagName() == "param") {
+							synthv1::ParamIndex index = synthv1::ParamIndex(
+								eParam.attribute("index").toULong());
+							const QString& sName = eParam.attribute("name");
+							if (!sName.isEmpty()) {
+								if (!s_hash.contains(sName))
+									continue;
+								index = s_hash.value(sName);
+							}
+							float fParamValue = eParam.text().toFloat();
+						//--legacy support < 0.3.0.4 -- begin
+							if (index == synthv1::DEL1_BPM && fParamValue < 3.6f)
+								fParamValue *= 100.0f;
+						//--legacy support < 0.3.0.4 -- end.
+							float *pfParamPort = pSynth->paramPort(index);
+							if (pfParamPort)
+								*pfParamPort = fParamValue;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	file.close();
+}
+
+
+void synthv1_param::savePreset ( synthv1 *pSynth, const QString& sFilename )
+{
+	if (pSynth == NULL)
+		return;
+
+	const QString& sPreset
+		= QFileInfo(sFilename).completeBaseName();
+
+	QDomDocument doc(SYNTHV1_TITLE);
+	QDomElement ePreset = doc.createElement("preset");
+	ePreset.setAttribute("name", sPreset);
+	ePreset.setAttribute("version", SYNTHV1_VERSION);
+
+	QDomElement eParams = doc.createElement("params");
+	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
+		QDomElement eParam = doc.createElement("param");
+		synthv1::ParamIndex index = synthv1::ParamIndex(i);
+		eParam.setAttribute("index", QString::number(i));
+		eParam.setAttribute("name", synthv1_param::paramName(index));
+		const float *pfParamPort = pSynth->paramPort(index);
+		float fParamValue = 0.0f;
+		if (pfParamPort)
+			fParamValue = *pfParamPort;
+		eParam.appendChild(
+			doc.createTextNode(QString::number(fParamValue)));
+		eParams.appendChild(eParam);
+	}
+	ePreset.appendChild(eParams);
+	doc.appendChild(ePreset);
+
+	QFile file(sFilename);
+	if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+		QTextStream(&file) << doc.toString();
+		file.close();
+	}
 }
 
 
