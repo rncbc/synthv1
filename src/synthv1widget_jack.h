@@ -46,26 +46,6 @@ public:
 	// Constructor.
 	synthv1widget_jack(synthv1_jack *pSynth);
 
-	// Destructor.
-	~synthv1widget_jack();
-
-#ifdef CONFIG_JACK_SESSION
-
-	// JACK session self-notification.
-	void notifySessionEvent(void *pvSessionArg);
-
-signals:
-
-	// JACK session notify event.
-	void sessionNotify(void *);
-
-protected slots:
-
-	// JACK session event handler.
-	void sessionEvent(void *pvSessionArg);
-
-#endif	// CONFIG_JACK_SESSION
-
 #ifdef CONFIG_NSM
 
 protected slots:

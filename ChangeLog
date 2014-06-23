@@ -5,6 +5,9 @@ ChangeLog
 
 SVN TRUNK
 
+- First attempt to allow a headless stand-alone JACK client
+  application run mode, without a GUI, with option given as
+  command line argument (--no-gui). (EXPERIMENTAL)
 - A man page has beed added (re. stand-alone JACK client).
 - Disable band-limit option for 'Noise' oscillator wave-shapes.
 - Allow the build system to include an user specified LDFLAGS.

@@ -65,6 +65,11 @@ public:
 	void alsa_capture(snd_seq_event_t *ev);
 #endif
 
+#ifdef CONFIG_JACK_SESSION
+	// JACK session event handler.
+	void sessionEvent(void *pvSessionArg);
+#endif
+
 private:
 
 	jack_client_t *m_client;

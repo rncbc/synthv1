@@ -33,26 +33,6 @@
 #include <QCloseEvent>
 
 
-#ifdef CONFIG_JACK_SESSION
-
-#include <jack/session.h>
-
-//----------------------------------------------------------------------
-// qtractorAudioEngine_session_event -- JACK session event callabck
-//
-
-static void synthv1widget_jack_session_event (
-	jack_session_event_t *pSessionEvent, void *pvArg )
-{
-	synthv1widget_jack *pWidget
-		= static_cast<synthv1widget_jack *> (pvArg);
-
-	pWidget->notifySessionEvent(pSessionEvent);
-}
-
-#endif	// CONFIG_JACK_SESSION
-
-
 //-------------------------------------------------------------------------
 // synthv1widget_jack - impl.
 //
@@ -90,82 +70,10 @@ synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 	}
 #endif	// CONFIG_NSM
 
-	m_pSynth->open(SYNTHV1_TITLE);
-
-#ifdef CONFIG_JACK_SESSION
-	// JACK session event callback...
-	if (::jack_set_session_callback) {
-		::jack_set_session_callback(m_pSynth->client(),
-			synthv1widget_jack_session_event, this);
-		QObject::connect(this,
-			SIGNAL(sessionNotify(void *)),
-			SLOT(sessionEvent(void *)));
-	}
-#endif
-
 	// Initialize preset stuff...
 	// initPreset();
-	initParamValues();
-
-	// Activate client...
-	m_pSynth->activate();
+	updateParamValues();
 }
-
-
-// Destructor.
-synthv1widget_jack::~synthv1widget_jack (void)
-{
-	m_pSynth->deactivate();
-//	m_pSynth->close();
-}
-
-
-#ifdef CONFIG_JACK_SESSION
-
-// JACK session event handler.
-void synthv1widget_jack::notifySessionEvent ( void *pvSessionArg )
-{
-	emit sessionNotify(pvSessionArg);
-}
-
-void synthv1widget_jack::sessionEvent ( void *pvSessionArg )
-{
-	jack_session_event_t *pJackSessionEvent
-		= (jack_session_event_t *) pvSessionArg;
-
-#ifdef CONFIG_DEBUG
-	qDebug("synthv1widget_jack::sessionEvent()"
-		" type=%d client_uuid=\"%s\" session_dir=\"%s\"",
-		int(pJackSessionEvent->type),
-		pJackSessionEvent->client_uuid,
-		pJackSessionEvent->session_dir);
-#endif
-
-	bool bQuit = (pJackSessionEvent->type == JackSessionSaveAndQuit);
-
-	const QString sSessionDir
-		= QString::fromUtf8(pJackSessionEvent->session_dir);
-	const QString sSessionName
-		= QFileInfo(QFileInfo(sSessionDir).canonicalPath()).completeBaseName();
-	const QString sSessionFile = sSessionName + '.' + SYNTHV1_TITLE;
-
-	QStringList args;
-	args << QApplication::applicationFilePath();
-	args << QString("\"${SESSION_DIR}%1\"").arg(sSessionFile);
-
-	savePreset(QFileInfo(sSessionDir, sSessionFile).absoluteFilePath());
-
-	const QByteArray aCmdLine = args.join(" ").toUtf8();
-	pJackSessionEvent->command_line = ::strdup(aCmdLine.constData());
-
-	jack_session_reply(m_pSynth->client(), pJackSessionEvent);
-	jack_session_event_free(pJackSessionEvent);
-
-	if (bQuit)
-		close();
-}
-
-#endif	// CONFIG_JACK_SESSION
 
 
 // Synth engine accessor.

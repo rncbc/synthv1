@@ -904,7 +904,7 @@ void synthv1widget::resetSwapParams (void)
 
 
 // Initialize param values.
-void synthv1widget::initParamValues (void)
+void synthv1widget::updateParamValues (void)
 {
 	resetSwapParams();
 
@@ -995,6 +995,8 @@ void synthv1widget::loadPreset ( const QString& sFilename )
 	resetParamValues();
 
 	synthv1_param::loadPreset(pSynth, sFilename);
+
+	updateParamValues();
 
 	pSynth->reset();
 

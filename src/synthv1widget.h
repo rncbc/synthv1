@@ -97,7 +97,7 @@ protected:
 	void resetSwapParams();
 
 	// Initialize all param/knob values.
-	void initParamValues();
+	void updateParamValues();
 
 	// Reset all param/knob default values.
 	void resetParamValues();
