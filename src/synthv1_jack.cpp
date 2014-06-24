@@ -697,11 +697,10 @@ bool synthv1_application::setup (void)
 		else
 			m_pWidget->loadPreset(m_presets.first());
 		m_pWidget->show();
-	} else {
-		if (!m_presets.isEmpty())
-			synthv1_param::loadPreset(m_pSynth, m_presets.first());
-		m_pSynth->reset();
 	}
+	else
+	if (!m_presets.isEmpty())
+		synthv1_param::loadPreset(m_pSynth, m_presets.first());
 
 #ifdef CONFIG_NSM
 	// Check whether to participate into a NSM session...

@@ -998,8 +998,6 @@ void synthv1widget::loadPreset ( const QString& sFilename )
 
 	updateParamValues();
 
-	pSynth->reset();
-
 	const QString& sPreset
 		= QFileInfo(sFilename).completeBaseName();
 

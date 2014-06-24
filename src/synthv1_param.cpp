@@ -247,6 +247,8 @@ void synthv1_param::loadPreset ( synthv1 *pSynth, const QString& sFilename )
 	}
 
 	file.close();
+
+	pSynth->reset();
 }
 
 
