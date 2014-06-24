@@ -601,11 +601,18 @@ void synthv1_jack::sessionEvent ( void *pvSessionArg )
 #include <QApplication>
 #include <QTextStream>
 
+#ifdef CONFIG_NSM
+#include "synthv1_nsm.h"
+#endif
+
 
 // Constructor.
 synthv1_application::synthv1_application ( int& argc, char **argv )
 	: QObject(NULL), m_pApp(NULL), m_bGui(true),
 		m_pSynth(NULL), m_pWidget(NULL)
+	  #ifdef CONFIG_NSM
+		, m_pNsmClient(NULL)
+	  #endif
 {
 #ifdef Q_WS_X11
 	m_bGui = (::getenv("DISPLAY") != 0);
@@ -629,6 +636,9 @@ synthv1_application::synthv1_application ( int& argc, char **argv )
 // Destructor.
 synthv1_application::~synthv1_application (void)
 {
+#ifdef CONFIG_NSM
+	if (m_pNsmClient) delete m_pNsmClient;
+#endif
 	if (m_pWidget) delete m_pWidget;
 	if (m_pSynth) delete m_pSynth;
 	if (m_pApp) delete m_pApp;
@@ -693,6 +703,33 @@ bool synthv1_application::setup (void)
 		m_pSynth->reset();
 	}
 
+#ifdef CONFIG_NSM
+	// Check whether to participate into a NSM session...
+	const QString& nsm_url
+		= QString::fromLatin1(::getenv("NSM_URL"));
+	if (!nsm_url.isEmpty()) {
+		m_pNsmClient = new synthv1_nsm(nsm_url);
+		QObject::connect(m_pNsmClient,
+			SIGNAL(open()),
+			SLOT(openSession()));
+		QObject::connect(m_pNsmClient,
+			SIGNAL(save()),
+			SLOT(saveSession()));
+		QObject::connect(m_pNsmClient,
+			SIGNAL(show()),
+			SLOT(showSession()));
+		QObject::connect(m_pNsmClient,
+			SIGNAL(hide()),
+			SLOT(hideSession()));
+		QString caps(":switch:dirty:");
+		if (m_bGui)
+			caps += "optional-gui:";
+		m_pNsmClient->announce(SYNTHV1_TITLE, caps.toLatin1().constData());
+		if (m_pWidget)
+			m_pWidget->setNsmClient(m_pNsmClient);
+	}
+#endif	// CONFIG_NSM
+
 	return true;
 }
 
@@ -702,6 +739,120 @@ int synthv1_application::exec (void)
 {
 	return (setup() ? m_pApp->exec() : 1);
 }
+
+
+#ifdef CONFIG_NSM
+
+void synthv1_application::openSession (void)
+{
+	if (m_pSynth == NULL)
+		return;
+
+	if (m_pNsmClient == NULL)
+		return;
+
+	if (!m_pNsmClient->is_active())
+		return;
+
+#ifdef CONFIG_DEBUG
+	qDebug("synthv1_jack::openSession()");
+#endif
+
+	m_pSynth->deactivate();
+	m_pSynth->close();
+
+	const QString& client_id = m_pNsmClient->client_id();
+	const QString& path_name = m_pNsmClient->path_name();
+	const QString& display_name = m_pNsmClient->display_name();
+
+	m_pSynth->open(client_id.toUtf8().constData());
+	m_pSynth->activate();
+
+	const QDir dir(path_name);
+	if (!dir.exists())
+		dir.mkpath(path_name);
+
+	const QFileInfo fi(path_name, display_name + '.' + SYNTHV1_TITLE);
+	if (fi.exists()) {
+		const QString& sFilename = fi.absoluteFilePath();
+		if (m_pWidget) {
+			m_pWidget->loadPreset(sFilename);
+		} else {
+			synthv1_param::loadPreset(m_pSynth, sFilename);
+		}
+	}
+
+	m_pNsmClient->open_reply();
+	m_pNsmClient->dirty(false);
+
+	if (m_pWidget)
+		m_pNsmClient->visible(m_pWidget->isVisible());
+}
+
+void synthv1_application::saveSession (void)
+{
+	if (m_pSynth == NULL)
+		return;
+
+	if (m_pNsmClient == NULL)
+		return;
+
+	if (!m_pNsmClient->is_active())
+		return;
+
+#ifdef CONFIG_DEBUG
+	qDebug("synthv1_jack::saveSession()");
+#endif
+
+	const QString& path_name = m_pNsmClient->path_name();
+	const QString& display_name = m_pNsmClient->display_name();
+//	const QString& client_id = m_pNsmClient->client_id();
+	const QFileInfo fi(path_name, display_name + '.' + SYNTHV1_TITLE);
+
+	synthv1_param::savePreset(m_pSynth, fi.absoluteFilePath());
+
+	m_pNsmClient->save_reply();
+	m_pNsmClient->dirty(false);
+}
+
+
+void synthv1_application::showSession (void)
+{
+	if (m_pNsmClient == NULL)
+		return;
+
+	if (!m_pNsmClient->is_active())
+		return;
+
+#ifdef CONFIG_DEBUG
+	qDebug("synthv1_jack::showSession()");
+#endif
+
+	if (m_pWidget) {
+		m_pWidget->show();
+		m_pWidget->raise();
+		m_pWidget->activateWindow();
+	}
+}
+
+void synthv1_application::hideSession (void)
+{
+	if (m_pNsmClient == NULL)
+		return;
+
+	if (!m_pNsmClient->is_active())
+		return;
+
+#ifdef CONFIG_DEBUG
+	qDebug("synthv1_jack::hideSession()");
+#endif
+
+	if (m_pWidget)
+		m_pWidget->hide();
+}
+
+
+#endif	// CONFIG_NSM
 
 
 //-------------------------------------------------------------------------

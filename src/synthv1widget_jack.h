@@ -39,24 +39,15 @@ class synthv1_nsm;
 
 class synthv1widget_jack : public synthv1widget
 {
-	Q_OBJECT
-
 public:
 
 	// Constructor.
 	synthv1widget_jack(synthv1_jack *pSynth);
 
 #ifdef CONFIG_NSM
-
-protected slots:
-
-	// NSM callback slots.
-	void openSession();
-	void saveSession();
-
-	void hideSession();
-	void showSession();
-
+	// NSM client accessors.
+	void setNsmClient(synthv1_nsm *pNsmClient);
+	synthv1_nsm *nsmClient() const;
 #endif	// CONFIG_NSM
 
 protected:
@@ -74,11 +65,9 @@ protected:
 	void closeEvent(QCloseEvent *pCloseEvent);
 
 #ifdef CONFIG_NSM
-
 	// Optional GUI handlers.
 	void showEvent(QShowEvent *pShowEvent);
 	void hideEvent(QHideEvent *pHideEvent);
-
 #endif	// CONFIG_NSM
 
 private:
@@ -88,7 +77,6 @@ private:
 
 #ifdef CONFIG_NSM
 	synthv1_nsm *m_pNsmClient;
-	bool m_bNsmDirty;
 #endif
 };
 

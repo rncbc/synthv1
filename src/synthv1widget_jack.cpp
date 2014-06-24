@@ -41,35 +41,9 @@
 synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 	: synthv1widget(), m_pSynth(pSynth)
 	#ifdef CONFIG_NSM
-		, m_pNsmClient(NULL), m_bNsmDirty(false)
+		, m_pNsmClient(NULL)
 	#endif
 {
-#ifdef CONFIG_NSM
-	// Check whether to participate into a NSM session...
-	const QString& nsm_url
-		= QString::fromLatin1(::getenv("NSM_URL"));
-	if (!nsm_url.isEmpty()) {
-		m_pNsmClient = new synthv1_nsm(nsm_url);
-		QObject::connect(m_pNsmClient,
-			SIGNAL(open()),
-			SLOT(openSession()));
-		QObject::connect(m_pNsmClient,
-			SIGNAL(save()),
-			SLOT(saveSession()));
-		QObject::connect(m_pNsmClient,
-			SIGNAL(show()),
-			SLOT(showSession()));
-		QObject::connect(m_pNsmClient,
-			SIGNAL(hide()),
-			SLOT(hideSession()));
-		m_pNsmClient->announce(SYNTHV1_TITLE, ":switch:dirty:optional-gui:");
-		synthv1widget_config *pConfig = synthv1widget_config::getInstance();
-		if (pConfig)
-			pConfig->bDontUseNativeDialogs = true;
-		return;
-	}
-#endif	// CONFIG_NSM
-
 	// Initialize preset stuff...
 	// initPreset();
 	updateParamValues();
@@ -82,105 +56,22 @@ synthv1 *synthv1widget_jack::instance (void) const
 	return m_pSynth;
 }
 
-
 #ifdef CONFIG_NSM
 
-void synthv1widget_jack::openSession (void)
+// NSM client accessors.
+void synthv1widget_jack::setNsmClient ( synthv1_nsm *pNsmClient )
 {
-	if (m_pNsmClient == NULL)
-		return;
+	m_pNsmClient = pNsmClient;
 
-	if (!m_pNsmClient->is_active())
-		return;
-
-#ifdef CONFIG_DEBUG
-	qDebug("synthv1widget_jack::openSession()");
-#endif
-
-	m_pSynth->deactivate();
-	m_pSynth->close();
-
-	const QString& client_id = m_pNsmClient->client_id();
-	const QString& path_name = m_pNsmClient->path_name();
-	const QString& display_name = m_pNsmClient->display_name();
-
-	m_pSynth->open(client_id.toUtf8().constData());
-	m_pSynth->activate();
-
-	const QDir dir(path_name);
-	if (!dir.exists())
-		dir.mkpath(path_name);
-
-	const QFileInfo fi(path_name, display_name + '.' + SYNTHV1_TITLE);
-	if (fi.exists())
-		loadPreset(fi.absoluteFilePath());
-
-	m_bNsmDirty = false;
-
-	m_pNsmClient->open_reply();
-	m_pNsmClient->dirty(false);
-
-	m_pNsmClient->visible(QWidget::isVisible());
+	synthv1widget_config *pConfig = synthv1widget_config::getInstance();
+	if (pConfig)
+		pConfig->bDontUseNativeDialogs = true;
 }
 
-void synthv1widget_jack::saveSession (void)
+synthv1_nsm *synthv1widget_jack::nsmClient (void) const
 {
-	if (m_pNsmClient == NULL)
-		return;
-
-	if (!m_pNsmClient->is_active())
-		return;
-
-#ifdef CONFIG_DEBUG
-	qDebug("synthv1widget_jack::saveSession()");
-#endif
-
-	if (m_bNsmDirty) {
-		const QString& path_name = m_pNsmClient->path_name();
-		const QString& display_name = m_pNsmClient->display_name();
-	//	const QString& client_id = m_pNsmClient->client_id();
-		const QFileInfo fi(path_name, display_name + '.' + SYNTHV1_TITLE);
-		savePreset(fi.absoluteFilePath());
-		m_bNsmDirty = false;
-	}
-
-	m_pNsmClient->save_reply();
-	m_pNsmClient->dirty(false);
+	return m_pNsmClient;
 }
-
-
-void synthv1widget_jack::showSession (void)
-{
-	if (m_pNsmClient == NULL)
-		return;
-
-	if (!m_pNsmClient->is_active())
-		return;
-
-#ifdef CONFIG_DEBUG
-	qDebug("synthv1widget_jack::showSession()");
-#endif
-
-	QWidget::show();
-	QWidget::raise();
-	QWidget::activateWindow();
-}
-
-void synthv1widget_jack::hideSession (void)
-{
-	if (m_pNsmClient == NULL)
-		return;
-
-	if (!m_pNsmClient->is_active())
-		return;
-
-#ifdef CONFIG_DEBUG
-	qDebug("synthv1widget_jack::hideSession()");
-#endif
-
-	QWidget::hide();
-}
-
 
 #endif	// CONFIG_NSM
 
@@ -201,12 +92,8 @@ void synthv1widget_jack::updateDirtyPreset ( bool bDirtyPreset )
 	synthv1widget::updateDirtyPreset(bDirtyPreset);
 
 #ifdef CONFIG_NSM
-	if (m_pNsmClient && m_pNsmClient->is_active()) {
-		if (!m_bNsmDirty/* && bDirtyPreset*/) {
-			m_pNsmClient->dirty(true);
-			m_bNsmDirty = true;
-		}
-	}
+	if (m_pNsmClient && m_pNsmClient->is_active())
+		m_pNsmClient->dirty(bDirtyPreset);
 #endif
 }
 

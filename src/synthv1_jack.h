@@ -112,6 +112,11 @@ private:
 class QCoreApplication;
 class synthv1widget_jack;
 
+#ifdef CONFIG_NSM
+class synthv1_nsm;
+#endif
+
+
 class synthv1_application : public QObject
 {
 	Q_OBJECT
@@ -127,6 +132,19 @@ public:
 	// Facade method.
 	int exec();
 
+#ifdef CONFIG_NSM
+
+protected slots:
+
+	// NSM callback slots.
+	void openSession();
+	void saveSession();
+
+	void hideSession();
+	void showSession();
+
+#endif	// CONFIG_NSM
+
 protected:
 
 	// Argument parser method.
@@ -141,8 +159,13 @@ private:
 	QCoreApplication *m_pApp;
 	bool m_bGui;
 	QStringList m_presets;
+
 	synthv1_jack *m_pSynth;
 	synthv1widget_jack *m_pWidget;
+
+#ifdef CONFIG_NSM
+	synthv1_nsm *m_pNsmClient;
+#endif
 };
 
 
