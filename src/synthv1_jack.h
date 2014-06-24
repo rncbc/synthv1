@@ -100,6 +100,46 @@ private:
 };
 
 
+//-------------------------------------------------------------------------
+// synthv1_application -- Singleton application instance.
+//
+
+#include <QObject>
+#include <QStringList>
+
+
+// forward decls.
+class QCoreApplication;
+
+class synthv1_application : public QObject
+{
+	Q_OBJECT
+
+public:
+
+	// Constructor.
+	synthv1_application(int& argc, char **argv);
+
+	// Destructor.
+	~synthv1_application();
+
+	// Facade method.
+	int exec();
+
+protected:
+
+	// Argument parser method.
+	bool parse_args();
+
+private:
+
+	// Instance variables.
+	QCoreApplication *m_pApp;
+	bool m_bGui;
+	QStringList m_presets;
+};
+
+
 #endif// __synthv1_jack_h
 
 // end of synthv1_jack.h

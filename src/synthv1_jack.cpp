@@ -596,77 +596,48 @@ void synthv1_jack::sessionEvent ( void *pvSessionArg )
 // synthv1_application -- Singleton application instance.
 //
 
-#include <QApplication>
-
-
-class synthv1_application : public QObject
-{
-public:
-
-	// Constructor.
-	synthv1_application(int& argc, char **argv)
-		: QObject(NULL), m_bGui(true), m_pApp(NULL)
-	{
-	#ifdef Q_WS_X11
-		m_bGui = (::getenv("DISPLAY") != 0);
-	#endif
-		for (int i = 1; i < argc; ++i) {
-			const QString& sArg = QString::fromLocal8Bit(argv[i]);
-			if (sArg[0] != '-')
-				m_presets.append(sArg);
-			else
-			if (sArg == "-g" || sArg == "--no-gui")
-				m_bGui = false;
-		}
-
-		if (m_bGui)
-			m_pApp = new QApplication(argc, argv);
-		else
-			m_pApp = new QCoreApplication(argc, argv);
-	}
-
-	// Destructor.
-	~synthv1_application()
-		{ if (m_pApp) delete m_pApp; }
-
-	// Specific accessors.
-	QCoreApplication *app() const
-		{ return m_pApp; }
-	bool isGui() const
-		{ return m_bGui; }
-	const QStringList& presets() const
-		{ return m_presets; }
-
-	// Facade methods.
-	QStringList arguments() const
-		{ return (m_pApp ? m_pApp->arguments() : QStringList()); }
-	void quit()
-		{ if (m_pApp) m_pApp->quit(); }
-	int exec()
-		{ return (m_pApp ? m_pApp->exec() : -1); }
-
-private:
-
-	// Instance variables.
-	bool m_bGui;
-	QCoreApplication *m_pApp;
-	QStringList m_presets;
-};
-
-
-//-------------------------------------------------------------------------
-// main
-
 #include "synthv1widget_jack.h"
 
+#include <QApplication>
 #include <QTextStream>
 
 
+// Constructor.
+synthv1_application::synthv1_application ( int& argc, char **argv )
+	: QObject(NULL), m_pApp(NULL), m_bGui(true)
+{
+#ifdef Q_WS_X11
+	m_bGui = (::getenv("DISPLAY") != 0);
+#endif
+	for (int i = 1; i < argc; ++i) {
+		const QString& sArg = QString::fromLocal8Bit(argv[i]);
+		if (sArg[0] != '-')
+			m_presets.append(sArg);
+		else
+		if (sArg == "-g" || sArg == "--no-gui")
+			m_bGui = false;
+	}
 
-static bool parse_args ( const QStringList& args )
+	if (m_bGui)
+		m_pApp = new QApplication(argc, argv);
+	else
+		m_pApp = new QCoreApplication(argc, argv);
+}
+
+
+// Destructor.
+synthv1_application::~synthv1_application (void)
+{
+	if (m_pApp) delete m_pApp;
+}
+
+
+// Argument parser method.
+bool synthv1_application::parse_args (void)
 {
 	QTextStream out(stderr);
 
+	const QStringList& args = m_pApp->arguments();
 	QStringListIterator iter(args);
 	while (iter.hasNext()) {
 		const QString& sArg = iter.next();
@@ -693,35 +664,44 @@ static bool parse_args ( const QStringList& args )
 }
 
 
-int main ( int argc, char *argv[] )
+// Facade method.
+int synthv1_application::exec (void)
 {
-	Q_INIT_RESOURCE(synthv1);
+	if (m_pApp == NULL)
+		return -1;
 
-	synthv1_application app(argc, argv);
-
-	if (!parse_args(app.arguments())) {
-		app.quit();
+	if (!parse_args()) {
+		m_pApp->quit();
 		return 1;
 	}
 
 	synthv1_jack synth;
 
-	const QStringList& presets
-		= app.presets();
-
-	if (!app.isGui()) {
-		if (!presets.isEmpty())
-			synthv1_param::loadPreset(&synth, presets.first());
+	if (m_bGui) {
+		synthv1widget_jack w(&synth);
+		if (m_presets.isEmpty())
+			w.initPreset();
+		else
+			w.loadPreset(m_presets.first());
+		w.show();
+		return m_pApp->exec();
+	} else {
+		if (!m_presets.isEmpty())
+			synthv1_param::loadPreset(&synth, m_presets.first());
 		synth.reset();
-		return app.exec();
+		return m_pApp->exec();
 	}
+}
 
-	synthv1widget_jack w(&synth);
-	if (presets.isEmpty())
-		w.initPreset();
-	else
-		w.loadPreset(presets.first());
-	w.show();
+
+//-------------------------------------------------------------------------
+// main
+
+int main ( int argc, char *argv[] )
+{
+	Q_INIT_RESOURCE(synthv1);
+
+	synthv1_application app(argc, argv);
 
 	return app.exec();
 }

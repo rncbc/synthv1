@@ -19,8 +19,10 @@
 
 *****************************************************************************/
 
-#include "synthv1_param.h"
 #include "synthv1_config.h"
+#include "synthv1_param.h"
+
+#include <QHash>
 
 #include <QDomDocument>
 #include <QTextStream>
