@@ -604,7 +604,8 @@ void synthv1_jack::sessionEvent ( void *pvSessionArg )
 
 // Constructor.
 synthv1_application::synthv1_application ( int& argc, char **argv )
-	: QObject(NULL), m_pApp(NULL), m_bGui(true)
+	: QObject(NULL), m_pApp(NULL), m_bGui(true),
+		m_pSynth(NULL), m_pWidget(NULL)
 {
 #ifdef Q_WS_X11
 	m_bGui = (::getenv("DISPLAY") != 0);
@@ -628,6 +629,8 @@ synthv1_application::synthv1_application ( int& argc, char **argv )
 // Destructor.
 synthv1_application::~synthv1_application (void)
 {
+	if (m_pWidget) delete m_pWidget;
+	if (m_pSynth) delete m_pSynth;
 	if (m_pApp) delete m_pApp;
 }
 
@@ -664,33 +667,40 @@ bool synthv1_application::parse_args (void)
 }
 
 
-// Facade method.
-int synthv1_application::exec (void)
+// Startup methods.
+bool synthv1_application::setup (void)
 {
 	if (m_pApp == NULL)
-		return -1;
+		return false;
 
 	if (!parse_args()) {
 		m_pApp->quit();
-		return 1;
+		return false;
 	}
 
-	synthv1_jack synth;
+	m_pSynth = new synthv1_jack();
 
 	if (m_bGui) {
-		synthv1widget_jack w(&synth);
+		m_pWidget = new synthv1widget_jack(m_pSynth);
 		if (m_presets.isEmpty())
-			w.initPreset();
+			m_pWidget->initPreset();
 		else
-			w.loadPreset(m_presets.first());
-		w.show();
-		return m_pApp->exec();
+			m_pWidget->loadPreset(m_presets.first());
+		m_pWidget->show();
 	} else {
 		if (!m_presets.isEmpty())
-			synthv1_param::loadPreset(&synth, m_presets.first());
-		synth.reset();
-		return m_pApp->exec();
+			synthv1_param::loadPreset(m_pSynth, m_presets.first());
+		m_pSynth->reset();
 	}
+
+	return true;
+}
+
+
+// Facade method.
+int synthv1_application::exec (void)
+{
+	return (setup() ? m_pApp->exec() : 1);
 }
 
 
