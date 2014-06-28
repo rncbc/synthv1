@@ -60,21 +60,32 @@ unix {
 		}
 	}
 
-	TARGET_LV2UI = $${NAME}.lv2/$${TARGET}.so
+	TARGET_LV2UI = $${NAME}.lv2/$${TARGET}
 
-	!exists($${TARGET_LV2UI}) {
-		system(touch $${TARGET_LV2UI})
+	!exists($${TARGET_LV2UI}.so) {
+		system(touch $${TARGET_LV2UI}.so)
 	}
 
-	QMAKE_POST_LINK += $${QMAKE_COPY} -vp $(TARGET) $${TARGET_LV2UI}
+	!exists($${TARGET_LV2UI}.ttl) {
+		system(touch $${TARGET_LV2UI}.ttl)
+	}
+
+	QMAKE_POST_LINK += $${QMAKE_COPY} -vp $(TARGET) $${TARGET_LV2UI}.so
+
+	greaterThan(QT_MAJOR_VERSION, 4) {
+		QMAKE_POST_LINK += ;\
+			$${QMAKE_COPY} -vp $${TARGET_LV2UI}-qt5.ttl $${TARGET_LV2UI}.ttl
+	} else {
+		QMAKE_POST_LINK += ;\
+			$${QMAKE_COPY} -vp $${TARGET_LV2UI}-qt4.ttl $${TARGET_LV2UI}.ttl
+	}
 
 	INSTALLS += target
 
 	target.path  = $${LV2DIR}/$${NAME}.lv2
-	target.files = $${TARGET_LV2UI} \
-		$${NAME}.lv2/$${TARGET}.ttl
+	target.files = $${TARGET_LV2UI}.so $${TARGET_LV2UI}.ttl
 
-	QMAKE_CLEAN += $${TARGET_LV2UI}
+	QMAKE_CLEAN += $${TARGET_LV2UI}.so $${TARGET_LV2UI}.ttl
 
 	LIBS += -L$${NAME}.lv2 -l$${NAME} -Wl,-rpath,$${LV2DIR}/$${NAME}.lv2
 }

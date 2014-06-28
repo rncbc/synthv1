@@ -49,10 +49,10 @@ unix {
 		}
 	}
 
-	TARGET_LV2 = $${NAME}.lv2/$${TARGET}.so
+	TARGET_LV2 = $${NAME}.lv2/$${TARGET}
 
-	!exists($${TARGET_LV2}) {
-		system(touch $${TARGET_LV2})
+	!exists($${TARGET_LV2}.so) {
+		system(touch $${TARGET_LV2}.so)
 	}
 
 	TARGET_LIB = $${NAME}.lv2/lib$${TARGET}.a
@@ -61,17 +61,18 @@ unix {
 		system(touch $${TARGET_LIB})
 	}
 
-	QMAKE_POST_LINK += $${QMAKE_COPY} -vp $(TARGET) $${TARGET_LV2};\
-		rm -vf $${TARGET_LIB}; ar -r $${TARGET_LIB} $${TARGET_LV2}
+	QMAKE_POST_LINK += $${QMAKE_COPY} -vp $(TARGET) $${TARGET_LV2}.so;\
+		$${QMAKE_DEL_FILE} -vf $${TARGET_LIB};\
+		ar -r $${TARGET_LIB} $${TARGET_LV2}.so
 
 	INSTALLS += target
 
 	target.path  = $${LV2DIR}/$${NAME}.lv2
-	target.files = $${TARGET_LV2} \
-		$${NAME}.lv2/$${NAME}.ttl \
+	target.files = $${TARGET_LV2}.so \
+		$${TARGET_LV2}.ttl \
 		$${NAME}.lv2/manifest.ttl
 
-	QMAKE_CLEAN += $${TARGET_LV2} $${TARGET_LIB}
+	QMAKE_CLEAN += $${TARGET_LV2}.so $${TARGET_LIB}
 }
 
 QT -= gui
