@@ -5,6 +5,7 @@ ChangeLog
 
 SVN TRUNK
 
+- LV2 UI Idle and Show interfaces support added. (EXPERIMENTAL)
 - First attempt to allow a headless stand-alone JACK client
   application run mode, without a GUI, with option given as
   command line argument (--no-gui). (EXPERIMENTAL)

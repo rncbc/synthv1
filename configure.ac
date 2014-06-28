@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(synthv1, 0.4.2.11, rncbc@rncbc.org)
+AC_INIT(synthv1, 0.4.2.12, rncbc@rncbc.org)
 
 AC_CONFIG_SRCDIR(src/synthv1.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -59,6 +59,17 @@ AC_ARG_ENABLE(lv2-external-ui,
   AC_HELP_STRING([--enable-lv2-external-ui], [enable LV2 plug-in External UI support (default=yes)]),
   [ac_lv2_external_ui="$enableval"],
   [ac_lv2_external_ui="yes"])
+
+AC_ARG_ENABLE(lv2-ui-idle,
+  AC_HELP_STRING([--enable-lv2-ui-idle], [enable LV2 UI Idle interface support (default=yes)]),
+  [ac_lv2_ui_idle="$enableval"],
+  [ac_lv2_ui_idle="yes"])
+
+AC_ARG_ENABLE(lv2-ui-show,
+  AC_HELP_STRING([--enable-lv2-ui-show], [enable LV2 UI Show interface support (default=yes)]),
+  [ac_lv2_ui_show="$enableval"],
+  [ac_lv2_ui_show="yes"])
+
 
 # Enable liblo availability.
 AC_ARG_ENABLE(liblo,
@@ -134,6 +145,8 @@ AC_ARG_WITH(liblo,
 # Check for LV2 support.
 if test "x$ac_lv2" = "xno"; then
    ac_lv2_external_ui="no"
+   ac_lv2_ui_idle="no"
+   ac_lv2_ui_show="no"
 fi
 
 
@@ -403,6 +416,8 @@ fi
 
 if test "x$ac_lv2" = "xno"; then
    lv2_external_ui="no"
+   ac_lv2_ui_idle="no"
+   ac_lv2_ui_show="no"
 fi
 
 if test "x$ac_lv2_external_ui" = "xyes"; then
@@ -414,6 +429,38 @@ if test "x$ac_lv2_external_ui" = "xyes"; then
       ac_lv2_incpath="lv2 $ac_lv2_incpath"
    else
       AC_MSG_WARN([*** LV2 External UI extension will be disabled.])
+   fi
+fi
+
+if test "x$ac_lv2_ui_idle" = "xyes"; then
+   AC_CACHE_CHECK([for LV2 UI Idle interface],
+      ac_cv_lv2_ui_idle, [
+      AC_TRY_LINK([#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"], [
+         // Checking for LV2 UI Idle interface...
+         LV2UI_Idle_Interface idle;
+      ], ac_cv_lv2_ui_idle="yes", ac_cv_lv2_ui_idle="no")
+   ])
+   ac_lv2_ui_idle=$ac_cv_lv2_ui_idle
+   if test "x$ac_lv2_ui_idle" = "xyes"; then
+      AC_DEFINE(CONFIG_LV2_UI_IDLE, 1, [Define if LV2 UI Idle interface support is available.])
+   else
+      AC_MSG_WARN([*** LV2 UI Idle interface support will be disabled.])
+   fi
+fi
+
+if test "x$ac_lv2_ui_show" = "xyes"; then
+   AC_CACHE_CHECK([for LV2 UI Show interface],
+      ac_cv_lv2_ui_show, [
+      AC_TRY_LINK([#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"], [
+         // Checking for LV2 UI Show interface...
+         LV2UI_Show_Interface show;
+      ], ac_cv_lv2_ui_show="yes", ac_cv_lv2_ui_show="no")
+   ])
+   ac_lv2_ui_show=$ac_cv_lv2_ui_show
+   if test "x$ac_lv2_ui_show" = "xyes"; then
+      AC_DEFINE(CONFIG_LV2_UI_SHOW, 1, [Define if LV2 UI Show interface support is available.])
+   else
+      AC_MSG_WARN([*** LV2 UI Show interface support will be disabled.])
    fi
 fi
 
@@ -478,6 +525,8 @@ echo "  JACK MIDI support  . . . . . . . . . . . . . . . .: $ac_jack_midi"
 echo "  ALSA MIDI support  . . . . . . . . . . . . . . . .: $ac_alsa_midi"
 echo "  LV2 plug-in build  . . . . . . . . . . . . . . . .: $ac_lv2"
 echo "  LV2 plug-in External UI support  . . . . . . . . .: $ac_lv2_external_ui"
+echo "  LV2 plug-in UI Idle interface support  . . . . . .: $ac_lv2_ui_idle"
+echo "  LV2 plug-in UI Show interface support  . . . . . .: $ac_lv2_ui_show"
 echo "  OSC service support (liblo)  . . . . . . . . . . .: $ac_liblo"
 echo "  NSM (Non Session Management) support . . . . . . .: $ac_nsm"
 echo

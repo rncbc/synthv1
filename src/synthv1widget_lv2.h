@@ -60,6 +60,10 @@ public:
 	const LV2_External_UI_Host *externalHost() const;
 #endif
 
+#ifdef CONFIG_LV2_UI_IDLE
+	bool isIdleClosed() const;
+#endif
+
 protected:
 
 	// Synth engine accessor.
@@ -68,9 +72,8 @@ protected:
 	// Param methods.
 	void updateParam(synthv1::ParamIndex index, float fValue) const;
 
-#ifdef CONFIG_LV2_EXTERNAL_UI
+	// Close event handler.
 	void closeEvent(QCloseEvent *pCloseEvent);
-#endif
 
 private:
 
@@ -85,6 +88,9 @@ private:
 
 #ifdef CONFIG_LV2_EXTERNAL_UI
 	LV2_External_UI_Host *m_external_host;
+#endif
+#ifdef CONFIG_LV2_UI_IDLE
+	bool m_bIdleClosed;
 #endif
 };
 
