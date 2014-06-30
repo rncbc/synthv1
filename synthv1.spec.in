@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 16
+%define release 17
 
 %define _prefix	@ac_prefix@
 
@@ -72,6 +72,8 @@ BuildRequires:	liblo-devel
 %{_datadir}/man/man1/%{name}.1.gz
 
 %changelog
+* Mon Jun 30 2014 Rui Nuno Capela <rncbc@rncbc.org> 0.5.0
+- Officially beta now.
 * Tue Apr 29 2014 Rui Nuno Capela <rncbc@rncbc.org> 0.4.2
 - A pre-LAC frenzy beta.
 * Mon Apr  7 2014 Rui Nuno Capela <rncbc@rncbc.org> 0.4.1
