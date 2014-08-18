@@ -1,7 +1,7 @@
 // synthv1_lv2.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -21,8 +21,8 @@
 
 #include "synthv1_lv2.h"
 
-#include "lv2/lv2plug.in/ns/ext/urid/urid.h"
 #include "lv2/lv2plug.in/ns/ext/midi/midi.h"
+#include "lv2/lv2plug.in/ns/ext/time/time.h"
 #include "lv2/lv2plug.in/ns/ext/atom/util.h"
 
 
@@ -34,7 +34,8 @@ synthv1_lv2::synthv1_lv2 (
 	double sample_rate, const LV2_Feature *const *host_features )
 	: synthv1(2, uint32_t(sample_rate))
 {
-	m_midi_event_type = 0;
+	::memset(&m_urids, 0, sizeof(m_urids));
+
 	m_atom_sequence = NULL;
 
 	for (int i = 0; host_features[i]; ++i) {
@@ -42,7 +43,17 @@ synthv1_lv2::synthv1_lv2 (
 			LV2_URID_Map *urid_map
 				= (LV2_URID_Map *) host_features[i]->data;
 			if (urid_map) {
-				m_midi_event_type = urid_map->map(
+				m_urids.atom_Blank = urid_map->map(
+					urid_map->handle, LV2_ATOM__Blank);
+				m_urids.atom_Object = urid_map->map(
+					urid_map->handle, LV2_ATOM__Object);
+				m_urids.atom_Float = urid_map->map(
+					urid_map->handle, LV2_ATOM__Float);
+				m_urids.time_Position = urid_map->map(
+					urid_map->handle, LV2_TIME__Position);
+				m_urids.time_beatsPerMinute = urid_map->map(
+					urid_map->handle, LV2_TIME__beatsPerMinute);
+				m_urids.midi_MidiEvent = urid_map->map(
 					urid_map->handle, LV2_MIDI__MidiEvent);
 				break;
 			}
@@ -102,9 +113,11 @@ void synthv1_lv2::run ( uint32_t nframes )
 
 	if (m_atom_sequence) {
 		LV2_ATOM_SEQUENCE_FOREACH(m_atom_sequence, event) {
-			if (event && event->body.type == m_midi_event_type) {
+			if (event == NULL)
+				continue;
+			if (event->body.type == m_urids.midi_MidiEvent) {
 				uint8_t *data = (uint8_t *) LV2_ATOM_BODY(&event->body);
-				uint32_t nread = event->time.frames - ndelta;
+				const uint32_t nread = event->time.frames - ndelta;
 				if (nread > 0) {
 					process(ins, outs, nread);
 					for (uint16_t k = 0; k < nchannels; ++k) {
@@ -114,6 +127,25 @@ void synthv1_lv2::run ( uint32_t nframes )
 				}
 				ndelta = event->time.frames;
 				process_midi(data, event->body.size);
+			}
+			else
+			if (event->body.type == m_urids.atom_Blank ||
+				event->body.type == m_urids.atom_Object) {
+				const LV2_Atom_Object *object
+					= (LV2_Atom_Object *) &event->body;
+				if (object->body.otype == m_urids.time_Position) {
+					LV2_Atom *bpm = NULL;
+					lv2_atom_object_get(object,
+						m_urids.time_beatsPerMinute, &bpm, NULL);
+					if (bpm && bpm->type == m_urids.atom_Float) {
+						float *pBpmSync = paramPort(synthv1::DEL1_BPMSYNC);
+						if (pBpmSync && *pBpmSync > 0.0f) {
+							float *pBpm = paramPort(synthv1::DEL1_BPM);
+							if (pBpm)
+								*pBpm = ((LV2_Atom_Float *) bpm)->body;
+						}
+					}
+				}
 			}
 		}
 	//	m_atom_sequence = NULL;

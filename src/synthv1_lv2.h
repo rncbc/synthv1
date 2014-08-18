@@ -1,7 +1,7 @@
 // synthv1_lv2.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@
 #include "synthv1.h"
 
 #include "lv2.h"
+#include "lv2/lv2plug.in/ns/ext/urid/urid.h"
 #include "lv2/lv2plug.in/ns/ext/atom/atom.h"
 
 #define SYNTHV1_LV2_URI "http://synthv1.sourceforge.net/lv2"
@@ -62,7 +63,16 @@ public:
 
 private:
 
-	uint32_t m_midi_event_type;
+	struct lv2_urids
+	{
+		LV2_URID atom_Blank;
+		LV2_URID atom_Object;
+		LV2_URID atom_Float;
+		LV2_URID time_Position;
+		LV2_URID time_beatsPerMinute;
+		LV2_URID midi_MidiEvent;
+
+	} m_urids;
 
 	LV2_Atom_Sequence *m_atom_sequence;
 
