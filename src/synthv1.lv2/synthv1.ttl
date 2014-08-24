@@ -253,7 +253,7 @@
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 27 ;
 		lv2:symbol "LFO1_SHAPE" ;
-		lv2:name "LFO1 Wave Shape 1" ;
+		lv2:name "LFO1 Wave Shape" ;
 		lv2:portProperty lv2:integer ;
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
