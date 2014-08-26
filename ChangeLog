@@ -6,6 +6,8 @@ ChangeLog
 
 SVN TRUNK
 
+- Stand-alone JACK client ports outrageously renamed from a
+  zero based numbering scheme into a plus one natural one.
 - Experimental LV2 Time/position atom-event support (Delay BPM).
 
 

@@ -299,11 +299,11 @@ void synthv1_jack::open ( const char *client_id )
 
 	char port_name[32];
 	for (uint16_t k = 0; k < nchannels; ++k) {
-		::snprintf(port_name, sizeof(port_name), "in_%d", k);
+		::snprintf(port_name, sizeof(port_name), "in_%d", k + 1);
 		m_audio_ins[k] = ::jack_port_register(m_client,
 			port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
 		m_ins[k] = NULL;
-		::snprintf(port_name, sizeof(port_name), "out_%d", k);
+		::snprintf(port_name, sizeof(port_name), "out_%d", k + 1);
 		m_audio_outs[k] = ::jack_port_register(m_client,
 			port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
 		m_outs[k] = NULL;
