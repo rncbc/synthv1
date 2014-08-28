@@ -232,10 +232,10 @@ void synthv1_param::loadPreset ( synthv1 *pSynth, const QString& sFilename )
 								index = s_hash.value(sName);
 							}
 							float fParamValue = eParam.text().toFloat();
-						//--legacy support < 0.3.0.4 -- begin
+						#if 0 //--legacy support < 0.3.0.4 -- begin...
 							if (index == synthv1::DEL1_BPM && fParamValue < 3.6f)
 								fParamValue *= 100.0f;
-						//--legacy support < 0.3.0.4 -- end.
+						#endif//--legacy support < 0.3.0.4 -- end.
 							float *pfParamPort = pSynth->paramPort(index);
 							if (pfParamPort)
 								*pfParamPort = fParamValue;
