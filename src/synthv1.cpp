@@ -1793,7 +1793,10 @@ void synthv1_impl::reset (void)
 		*m_del.bpm *= 100.0f;
 #endif//--legacy support < 0.3.0.4 -- end.
 
-	m_vol1.reset(m_out1.volume, m_dca1.volume, &m_ctl1.volume, &m_aux1.volume);
+	// make sure dangling states aren't...
+	m_del.bpmsync0 = *m_del.bpmsync;
+
+m_vol1.reset(m_out1.volume, m_dca1.volume, &m_ctl1.volume, &m_aux1.volume);
 	m_pan1.reset(m_out1.panning, &m_ctl1.panning, &m_aux1.panning);
 	m_wid1.reset(m_out1.width);
 
