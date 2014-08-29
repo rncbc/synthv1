@@ -116,18 +116,23 @@ public:
 	// Constructor.
 	synthv1widget_spin(QWidget *pParent = 0);
 
+	// Virtual accessors.
 	void setMaximum(float fMaximum);
 	void setMinimum(float fMinimum);
-
-	void setSpecialValueText(const QString& sText);
-	QString specialValueText() const;
 
 	QString valueText() const;
 	float value() const;
 
+	// Specialized accessors.
+	void setSpecialValueText(const QString& sText);
+	QString specialValueText() const;
+
+	void setDecimals(int iDecimals);
+	int decimals() const;
+
 public slots:
 
-	// Virtual accessors.
+	// Virtual accessor.
 	void setValue(float fValue, bool bDefault = false);
 
 protected slots:
@@ -154,12 +159,13 @@ public:
 	// Constructor.
 	synthv1widget_combo(QWidget *pParent = 0);
 
-	// Accessors.
-	void insertItems(int iIndex, const QStringList& items);
-	void clear();
-
+	// Virtual accessors.
 	QString valueText() const;
 	float value() const;
+
+	// Specialized accessors.
+	void insertItems(int iIndex, const QStringList& items);
+	void clear();
 
 public slots:
 
