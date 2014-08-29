@@ -197,16 +197,16 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 			::jack_port_get_buffer(m_audio_outs[k], nframes));
 	}
 
-	const float *bpm_sync = synthv1::paramPort(synthv1::DEL1_BPMSYNC);
-	if (bpm_sync && *bpm_sync > 0.0f) {
-		float *bpm_port = synthv1::paramPort(synthv1::DEL1_BPM);
-		if (bpm_port) {
+	const float *bpmsync = paramPort(synthv1::DEL1_BPMSYNC);
+	if (bpmsync && *bpmsync > 0.0f) {
+		float *bpmhost = paramPort(synthv1::DEL1_BPMHOST);
+		if (bpmhost) {
 			jack_position_t pos;
 			jack_transport_query(m_client, &pos);
 			if (pos.valid & JackPositionBBT) {
 				const float bpm = float(pos.beats_per_minute);
-				if (::fabs(*bpm_port - bpm) > 0.01f)
-					*bpm_port = bpm;
+				if (::fabs(*bpmhost - bpm) > 0.01f)
+					*bpmhost = bpm;
 			}
 		}
 	}

@@ -88,7 +88,7 @@ QString synthv1widget_knob::text (void) const
 
 void synthv1widget_knob::setValue ( float fValue, bool bDefault )
 {
-	bool bDialBlock = m_pDial->blockSignals(true);
+	const bool bDialBlock = m_pDial->blockSignals(true);
 
 	m_pDial->setValue(scaleFromValue(fValue));
 
@@ -252,7 +252,7 @@ synthv1widget_spin::synthv1widget_spin ( QWidget *pParent )
 
 void synthv1widget_spin::setValue ( float fValue, bool bDefault )
 {
-	bool bSpinBlock = m_pSpinBox->blockSignals(true);
+	const bool bSpinBlock = m_pSpinBox->blockSignals(true);
 
 	m_pSpinBox->setValue(scaleFromValue(fValue));
 	synthv1widget_knob::setValue(fValue, bDefault);
@@ -321,9 +321,9 @@ synthv1widget_combo::synthv1widget_combo ( QWidget *pParent )
 
 void synthv1widget_combo::setValue ( float fValue, bool bDefault )
 {
-	bool bComboBlock = m_pComboBox->blockSignals(true);
+	const bool bComboBlock = m_pComboBox->blockSignals(true);
 
-	int iValue = iroundf(fValue);
+	const int iValue = iroundf(fValue);
 	m_pComboBox->setCurrentIndex(iValue);
 	synthv1widget_knob::setValue(float(iValue), bDefault);
 
@@ -365,7 +365,8 @@ void synthv1widget_combo::comboBoxValueChanged ( int iComboValue )
 // Reimplemented mouse-wheel stepping.
 void synthv1widget_combo::wheelEvent ( QWheelEvent *pWheelEvent )
 {
-	int delta = (pWheelEvent->delta() / 120);
+	const int delta
+		= (pWheelEvent->delta() / 120);
 	if (delta) {
 		float fValue = value() + float(delta);
 		if (fValue < minimum())

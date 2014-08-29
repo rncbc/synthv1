@@ -919,7 +919,7 @@ void synthv1widget::updateParamValues (void)
 			fValue = *pfParamPort;
 		setParamValue(index, fValue, true);
 		updateParam(index, fValue);
-		updateParamEx(index, fValue);
+	//	updateParamEx(index, fValue);
 		m_params_ab[index] = fValue;
 	}
 }

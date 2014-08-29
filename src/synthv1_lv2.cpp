@@ -25,6 +25,8 @@
 #include "lv2/lv2plug.in/ns/ext/time/time.h"
 #include "lv2/lv2plug.in/ns/ext/atom/util.h"
 
+#include <math.h>
+
 
 //-------------------------------------------------------------------------
 // synthv1_lv2 - impl.
@@ -134,15 +136,18 @@ void synthv1_lv2::run ( uint32_t nframes )
 				const LV2_Atom_Object *object
 					= (LV2_Atom_Object *) &event->body;
 				if (object->body.otype == m_urids.time_Position) {
-					LV2_Atom *bpm = NULL;
+					LV2_Atom *atom = NULL;
 					lv2_atom_object_get(object,
-						m_urids.time_beatsPerMinute, &bpm, NULL);
-					if (bpm && bpm->type == m_urids.atom_Float) {
-						float *pBpmSync = paramPort(synthv1::DEL1_BPMSYNC);
-						if (pBpmSync && *pBpmSync > 0.0f) {
-							float *pBpm = paramPort(synthv1::DEL1_BPM);
-							if (pBpm)
-								*pBpm = ((LV2_Atom_Float *) bpm)->body;
+						m_urids.time_beatsPerMinute, &atom, NULL);
+					if (atom && atom->type == m_urids.atom_Float) {
+						const float *bpmsync = paramPort(synthv1::DEL1_BPMSYNC);
+						if (bpmsync && *bpmsync > 0.0f) {
+							float *bpmhost = paramPort(synthv1::DEL1_BPMHOST);
+							if (bpmhost) {
+								const float bpm	= ((LV2_Atom_Float *) atom)->body;
+								if (::fabs(*bpmhost - bpm) > 0.01f)
+									*bpmhost = bpm;
+							}
 						}
 					}
 				}
