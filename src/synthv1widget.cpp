@@ -221,8 +221,9 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 
 	// Effects (delay BPM)
 	m_ui.Del1BpmKnob->setScale(1.0f);
-	m_ui.Del1BpmKnob->setMinimum(3.6f);
+	m_ui.Del1BpmKnob->setMinimum(0.0f);
 	m_ui.Del1BpmKnob->setMaximum(360.0f);
+	m_ui.Del1BpmKnob->setSingleStep(10.0f);
 
 	// Reverb (stereo-)width limits.
 	m_ui.Rev1WidthKnob->setMinimum(-1.0f);

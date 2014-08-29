@@ -149,16 +149,16 @@ void synthv1widget_wave::paintEvent ( QPaintEvent *pPaintEvent )
 // Drag/move curve.
 void synthv1widget_wave::dragCurve ( const QPoint& pos )
 {
-	int h  = height();
-	int w  = width();
+	const int h  = height();
+	const int w  = width();
 
-	int dx = (pos.x() - m_posDrag.x());
-	int dy = (pos.y() - m_posDrag.y());
+	const int dx = (pos.x() - m_posDrag.x());
+	const int dy = (pos.y() - m_posDrag.y());
 
 	if (dx || dy) {
-		int x = int(waveWidth() * float(w));
+		const int x = int(waveWidth() * float(w));
 		setWaveWidth(float(x + dx) / float(w));
-		int h2 = (h >> 1);
+		const int h2 = (h >> 1);
 		m_iDragShape += dy;
 		if (m_iDragShape > +h2) {
 			setWaveShape(waveShape() - 1);
@@ -220,14 +220,14 @@ void synthv1widget_wave::mouseDoubleClickEvent ( QMouseEvent *pMouseEvent )
 
 void synthv1widget_wave::wheelEvent ( QWheelEvent *pWheelEvent )
 {
-	int delta = (pWheelEvent->delta() / 60);
+	const int delta = (pWheelEvent->delta() / 60);
 
 	if (pWheelEvent->modifiers() & (Qt::ShiftModifier | Qt::ControlModifier)) {
 		setWaveShape(waveShape() + (delta < 0 ? -1 : +1));
 	} else {
-		int w2 = (width() >> 1);
-		int x = int(waveWidth() * float(w2));
-		setWaveWidth(float(x + delta) / float(w2));
+		const float w2 = float(width() >> 1);
+		const int x = int(waveWidth() * w2);
+		setWaveWidth(float(x + delta) / w2);
 	}
 }
 

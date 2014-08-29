@@ -27,7 +27,7 @@
 // Forward declarations.
 class QLabel;
 class QDial;
-class QSpinBox;
+class QDoubleSpinBox;
 class QComboBox;
 
 
@@ -47,8 +47,6 @@ public:
 	void setText(const QString& sText);
 	QString text() const;
 
-	float value() const;
-
 	virtual void setMaximum(float fMaximum);
 	float maximum() const;
 
@@ -63,6 +61,7 @@ public:
 	float defaultValue() const;
 
 	virtual QString valueText() const;
+	virtual float value() const;
 
 	void setScale(float fScale);
 	float scale() const;
@@ -87,8 +86,8 @@ protected:
 	void mousePressEvent(QMouseEvent *pMouseEvent);
 
 	// Scale/value converters.
-	int scaleFromValue(float fValue) const;
-	float valueFromScale(int iScale) const;
+	float scaleFromValue(float fValue) const;
+	float valueFromScale(float fScale) const;
 
 private:
 
@@ -123,6 +122,9 @@ public:
 	void setSpecialValueText(const QString& sText);
 	QString specialValueText() const;
 
+	QString valueText() const;
+	float value() const;
+
 public slots:
 
 	// Virtual accessors.
@@ -131,12 +133,12 @@ public slots:
 protected slots:
 
 	// Change slot.
-	void spinBoxValueChanged(int);
+	void spinBoxValueChanged(double);
 
 private:
 
 	// Widget members.
-	QSpinBox *m_pSpinBox;
+	QDoubleSpinBox *m_pSpinBox;
 };
 
 
@@ -157,6 +159,7 @@ public:
 	void clear();
 
 	QString valueText() const;
+	float value() const;
 
 public slots:
 
