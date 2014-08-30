@@ -137,6 +137,15 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	const QString& sAuto = tr("Auto");
 	m_ui.Del1BpmKnob->setSpecialValueText(sAuto);
 
+	// Wave integer widths.
+	m_ui.Dco1Width1Knob->setDecimals(0);
+	m_ui.Dco1Width2Knob->setDecimals(0);
+	m_ui.Dco2Width1Knob->setDecimals(0);
+	m_ui.Dco2Width2Knob->setDecimals(0);
+
+	m_ui.Lfo1WidthKnob->setDecimals(0);
+	m_ui.Lfo2WidthKnob->setDecimals(0);
+
 	// DCO octave limits.
 	m_ui.Dco1OctaveKnob->setMinimum(-4.0f);
 	m_ui.Dco1OctaveKnob->setMaximum(+4.0f);
@@ -221,9 +230,9 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 
 	// Effects (delay BPM)
 	m_ui.Del1BpmKnob->setScale(1.0f);
-	m_ui.Del1BpmKnob->setMinimum(0.0f);
+	m_ui.Del1BpmKnob->setMinimum(3.6f);
 	m_ui.Del1BpmKnob->setMaximum(360.0f);
-	m_ui.Del1BpmKnob->setSingleStep(10.0f);
+	m_ui.Del1BpmKnob->setSingleStep(1.0f);
 
 	// Reverb (stereo-)width limits.
 	m_ui.Rev1WidthKnob->setMinimum(-1.0f);

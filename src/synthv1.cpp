@@ -1789,7 +1789,7 @@ void synthv1_impl::allSoundOff (void)
 
 void synthv1_impl::reset (void)
 {
-#if 0//--legacy support < 0.3.0.4
+#if 1//--legacy support < 0.3.0.4
 	if (*m_del.bpm < 3.6f)
 		*m_del.bpm *= 100.0f;
 #endif

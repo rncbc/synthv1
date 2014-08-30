@@ -53,7 +53,7 @@ public:
 	virtual void setMinimum(float fMinimum);
 	float minimum() const;
 
-	void setSingleStep(float fSingleStep);
+	virtual void setSingleStep(float fSingleStep);
 	float singleStep() const;
 
 	void resetDefaultValue();
@@ -119,6 +119,8 @@ public:
 	// Virtual accessors.
 	void setMaximum(float fMaximum);
 	void setMinimum(float fMinimum);
+
+	void setSingleStep(float fSingleStep);
 
 	QString valueText() const;
 	float value() const;

@@ -232,7 +232,7 @@ void synthv1_param::loadPreset ( synthv1 *pSynth, const QString& sFilename )
 								index = s_hash.value(sName);
 							}
 							float fParamValue = eParam.text().toFloat();
-						#if 0//--legacy support < 0.3.0.4
+						#if 1//--legacy support < 0.3.0.4
 							if (index == synthv1::DEL1_BPM && fParamValue < 3.6f)
 								fParamValue *= 100.0f;
 						#endif

@@ -56,7 +56,6 @@ synthv1widget_knob::synthv1widget_knob ( QWidget *pParent ) : QWidget(pParent)
 	resetDefaultValue();
 
 	m_pLabel->setAlignment(Qt::AlignCenter);
-	m_pDial->setSingleStep(10);
 	m_pDial->setNotchesVisible(true);
 	m_pDial->setMaximumSize(QSize(48, 42));
 
@@ -79,6 +78,7 @@ void synthv1widget_knob::setText ( const QString& sText )
 {
 	m_pLabel->setText(sText);
 }
+
 
 QString synthv1widget_knob::text (void) const
 {
@@ -112,6 +112,7 @@ void synthv1widget_knob::setValue ( float fValue, bool bDefault )
 	m_pDial->blockSignals(bDialBlock);
 }
 
+
 float synthv1widget_knob::value (void) const
 {
 	return valueFromScale(m_pDial->value());
@@ -129,6 +130,7 @@ void synthv1widget_knob::setMaximum ( float fMaximum )
 	m_pDial->setMaximum(scaleFromValue(fMaximum));
 }
 
+
 float synthv1widget_knob::maximum (void) const
 {
 	return valueFromScale(m_pDial->maximum());
@@ -139,6 +141,7 @@ void synthv1widget_knob::setMinimum ( float fMinimum )
 {
 	m_pDial->setMinimum(scaleFromValue(fMinimum));
 }
+
 
 float synthv1widget_knob::minimum (void) const
 {
@@ -152,11 +155,13 @@ void synthv1widget_knob::resetDefaultValue (void)
 	m_iDefaultValue = 0;
 }
 
+
 void synthv1widget_knob::setDefaultValue ( float fDefaultValue )
 {
 	m_fDefaultValue = fDefaultValue;
 	m_iDefaultValue++;
 }
+
 
 float synthv1widget_knob::defaultValue (void) const
 {
@@ -168,6 +173,7 @@ void synthv1widget_knob::setSingleStep ( float fSingleStep )
 {
 	m_pDial->setSingleStep(scaleFromValue(fSingleStep));
 }
+
 
 float synthv1widget_knob::singleStep (void) const
 {
@@ -202,7 +208,10 @@ void synthv1widget_knob::dialValueChanged ( int iDialValue )
 void synthv1widget_knob::setScale ( float fScale )
 {
 	m_fScale = fScale;
+
+	m_pDial->setNotchTarget(valueFromScale(33.3f));
 }
+
 
 float synthv1widget_knob::scale (void) const
 {
@@ -215,6 +224,7 @@ float synthv1widget_knob::scaleFromValue ( float fValue ) const
 {
 	return (m_fScale * fValue);
 }
+
 
 float synthv1widget_knob::valueFromScale ( float fScale ) const
 {
@@ -278,6 +288,13 @@ void synthv1widget_spin::setMinimum ( float fMinimum )
 }
 
 
+void synthv1widget_spin::setSingleStep ( float fSingleStep )
+{
+	m_pSpinBox->setSingleStep(fSingleStep);
+	synthv1widget_knob::setSingleStep(fSingleStep);
+}
+
+
 QString synthv1widget_spin::valueText (void) const
 {
 	return QString::number(m_pSpinBox->value());
@@ -303,6 +320,7 @@ void synthv1widget_spin::setSpecialValueText ( const QString& sText )
 	m_pSpinBox->setSpecialValueText(sText);
 }
 
+
 QString synthv1widget_spin::specialValueText (void) const
 {
 	return m_pSpinBox->specialValueText();
@@ -314,10 +332,7 @@ void synthv1widget_spin::setDecimals ( int iDecimals )
 {
 	m_pSpinBox->setDecimals(iDecimals);
 
-	const float fSingleStep
-		= ::powf(10.0f, - float(iDecimals));
-	m_pSpinBox->setSingleStep(fSingleStep);
-	synthv1widget_knob::setSingleStep(fSingleStep);
+	setSingleStep(::powf(10.0f, - float(iDecimals)));
 }
 
 int synthv1widget_spin::decimals (void) const
@@ -390,6 +405,7 @@ void synthv1widget_combo::insertItems ( int iIndex, const QStringList& items )
 		setSingleStep(1.0f);
 	}
 }
+
 
 void synthv1widget_combo::clear (void)
 {
