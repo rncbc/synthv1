@@ -129,6 +129,8 @@ public:
 	void setSpecialValueText(const QString& sText);
 	QString specialValueText() const;
 
+	bool isSpecialValue() const;
+
 	void setDecimals(int iDecimals);
 	int decimals() const;
 
