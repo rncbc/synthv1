@@ -2023,9 +2023,6 @@
    <property name="statusTip" >
     <string>Whether to use desktop environment's native dialogs where applicable</string>
    </property>
-   <property name="shortcut" >
-    <string/>
-   </property>
   </action>
   <action name="helpAboutAction" >
    <property name="text" >
@@ -2037,9 +2034,6 @@
    <property name="statusTip" >
     <string>Show information about this application program</string>
    </property>
-   <property name="shortcut" >
-    <string/>
-   </property>
   </action>
   <action name="helpAboutQtAction" >
    <property name="text" >
@@ -2050,9 +2044,6 @@
    </property>
    <property name="statusTip" >
     <string>Show information about the Qt toolkit</string>
-   </property>
-   <property name="shortcut" >
-    <string/>
    </property>
   </action>
  </widget>
