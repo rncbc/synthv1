@@ -297,13 +297,13 @@ void synthv1widget_spin::setSingleStep ( float fSingleStep )
 
 QString synthv1widget_spin::valueText (void) const
 {
-	return QString::number(m_pSpinBox->value());
+	return QString::number(value());
 }
 
 
 float synthv1widget_spin::value (void) const
 {
-	return float(m_pSpinBox->value());
+	return valueFromScale(m_pSpinBox->value());
 }
 
 

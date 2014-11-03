@@ -4,6 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+SVN TRUNK
+
+- Fixed parameters A/B comparison swap. (EXPERIMENTAL)
+
+
 0.5.1  2014-09-12  One second official beta.
 
 - One decimal digit added to all scalar parameters and knobs.
