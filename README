@@ -74,7 +74,7 @@ installation:
 
   - if checking out from svn, prepare configure script with
 
-    make -f Makefile.svn
+    make -f Makefile.git
 
 
 acknowledgements:

@@ -4,7 +4,7 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-SVN TRUNK
+GIT HEAD
 
 - Fixed parameters A/B comparison swap. (EXPERIMENTAL)
 
