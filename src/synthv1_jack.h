@@ -23,6 +23,7 @@
 #define __synthv1_jack_h
 
 #include "synthv1.h"
+#include "synthv1_config.h"
 
 #include <jack/jack.h>
 
@@ -71,6 +72,8 @@ public:
 #endif
 
 private:
+
+	synthv1_config m_config;
 
 	jack_client_t *m_client;
 

@@ -23,6 +23,7 @@
 #define __synthv1_lv2_h
 
 #include "synthv1.h"
+#include "synthv1_config.h"
 
 #include "lv2.h"
 #include "lv2/lv2plug.in/ns/ext/urid/urid.h"
@@ -62,6 +63,8 @@ public:
 	void deactivate();
 
 private:
+
+	synthv1_config m_config;
 
 	struct lv2_urids
 	{

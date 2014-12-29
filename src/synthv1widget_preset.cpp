@@ -109,13 +109,6 @@ synthv1widget_preset::synthv1widget_preset ( QWidget *pParent )
 }
 
 
-// Preset group path name.
-QString synthv1widget_preset::presetGroup (void) const
-{
-	return "/Presets/";
-}
-
-
 // Preset name/text accessors.
 void synthv1widget_preset::clearPreset (void)
 {
@@ -204,9 +197,7 @@ void synthv1widget_preset::loadPreset ( const QString& sPreset )
 
 	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig) {
-		pConfig->beginGroup(presetGroup());
-		emit loadPresetFile(pConfig->value(sPreset).toString());
-		pConfig->endGroup();
+		emit loadPresetFile(pConfig->presetFile(sPreset));
 		++m_iInitPreset;
 		pConfig->sPreset = sPreset;
 	//	setPreset(sPreset);
@@ -264,9 +255,7 @@ void synthv1widget_preset::openPreset (void)
 		QFileInfo fi(sFilename);
 		if (fi.exists() && queryPreset()) {
 			const QString& sPreset = fi.completeBaseName();
-			pConfig->beginGroup(presetGroup());
-			pConfig->setValue(sPreset, sFilename);
-			pConfig->endGroup();
+			pConfig->setPresetFile(sPreset, sFilename);
 			emit loadPresetFile(sFilename);
 			++m_iInitPreset;
 			pConfig->sPreset = sPreset;
@@ -337,9 +326,7 @@ void synthv1widget_preset::savePreset ( const QString& sPreset )
 		if (QFileInfo(sFilename).suffix() != sExt)
 			sFilename += '.' + sExt;
 		emit savePresetFile(sFilename);
-		pConfig->beginGroup(presetGroup());
-		pConfig->setValue(sPreset, sFilename);
-		pConfig->endGroup();
+		pConfig->setPresetFile(sPreset, sFilename);
 		++m_iInitPreset;
 		pConfig->sPreset = sPreset;
 		pConfig->sPresetDir = QFileInfo(sFilename).absolutePath();
@@ -370,12 +357,7 @@ void synthv1widget_preset::deletePreset (void)
 		== QMessageBox::Cancel)
 		return;
 
-	pConfig->beginGroup(presetGroup());
-	const QString& sFilename = pConfig->value(sPreset).toString();
-	if (QFileInfo(sFilename).exists())
-		QFile(sFilename).remove();
-	pConfig->remove(sPreset);
-	pConfig->endGroup();
+	pConfig->removePreset(sPreset);
 
 	clearPreset();
 	refreshPreset();
@@ -411,16 +393,12 @@ void synthv1widget_preset::refreshPreset (void)
 	m_pComboBox->clear();
 	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig) {
-		pConfig->beginGroup(presetGroup());
-		const QStringList& list = pConfig->childKeys();
-		QStringListIterator iter(list);
+		QStringListIterator iter(pConfig->presetList());
 		while (iter.hasNext()) {
 			const QString& sPreset = iter.next();
-			if (QFileInfo(pConfig->value(sPreset).toString()).exists())
-				m_pComboBox->addItem(icon, sPreset);
+			m_pComboBox->addItem(icon, sPreset);
 		}
 		m_pComboBox->model()->sort(0);
-		pConfig->endGroup();
 	}
 
 	const int iIndex = m_pComboBox->findText(sOldPreset);

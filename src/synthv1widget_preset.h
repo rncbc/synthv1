@@ -75,8 +75,6 @@ protected slots:
 
 protected:
 
-	QString presetGroup() const;
-
 	void loadPreset(const QString&);
 	void savePreset(const QString&);
 

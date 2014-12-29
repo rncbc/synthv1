@@ -19,8 +19,6 @@
 
 *****************************************************************************/
 
-#include "synthv1_config.h"
-
 #include "synthv1_jack.h"
 #include "synthv1_param.h"
 

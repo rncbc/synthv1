@@ -21,6 +21,8 @@
 
 #include "synthv1_config.h"
 
+#include <QFileInfo>
+
 
 //-------------------------------------------------------------------------
 // synthv1_config - Prototype settings structure (pseudo-singleton).
@@ -51,6 +53,57 @@ synthv1_config::~synthv1_config (void)
 	save();
 
 	g_pSettings = NULL;
+}
+
+
+// Preset utility methods.
+QString synthv1_config::presetGroup (void) const
+{
+	return "/Presets/";
+}
+
+
+QString synthv1_config::presetFile ( const QString& sPreset )
+{
+	QSettings::beginGroup(presetGroup());
+	const QString sPresetFile(QSettings::value(sPreset).toString());
+	QSettings::endGroup();
+	return sPresetFile;
+}
+
+
+void synthv1_config::setPresetFile (
+	const QString& sPreset, const QString& sPresetFile )
+{
+	QSettings::beginGroup(presetGroup());
+	QSettings::setValue(sPreset, sPresetFile);
+	QSettings::endGroup();
+}
+
+
+void synthv1_config::removePreset ( const QString& sPreset )
+{
+	QSettings::beginGroup(presetGroup());
+	const QString& sPresetFile = QSettings::value(sPreset).toString();
+	if (QFileInfo(sPresetFile).exists())
+		QFile(sPresetFile).remove();
+	QSettings::remove(sPreset);
+	QSettings::endGroup();
+}
+
+
+QStringList synthv1_config::presetList (void)
+{
+	QStringList list;
+	QSettings::beginGroup(presetGroup());
+	QStringListIterator iter(QSettings::childKeys());
+	while (iter.hasNext()) {
+		const QString& sPreset = iter.next();
+		if (QFileInfo(QSettings::value(sPreset).toString()).exists())
+			list.append(sPreset);
+	}
+	QSettings::endGroup();
+	return list;
 }
 
 

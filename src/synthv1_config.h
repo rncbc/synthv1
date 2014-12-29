@@ -65,11 +65,20 @@ public:
 	// Singleton instance accessor.
 	static synthv1_config *getInstance();
 
+	// Preset utility methods.
+	QString presetFile(const QString& sPreset);
+	void setPresetFile(const QString& sPreset, const QString& sPresetFile);
+	void removePreset(const QString& sPreset);
+	QStringList presetList();
+
 protected:
 
 	// Explicit I/O methods.
 	void load();
 	void save();
+
+	// Preset group path.
+	QString presetGroup() const;
 
 private:
 
