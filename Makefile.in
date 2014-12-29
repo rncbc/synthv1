@@ -21,13 +21,13 @@ headers = \
 
 sources = \
 	src/$(name).cpp \
+	src/$(name)_config.cpp \
 	src/$(name)_wave.cpp \
 	src/$(name)_param.cpp \
 	src/$(name)_sched.cpp
 
 headers_ui = \
 	src/$(name)widget.h \
-	src/$(name)widget_config.h \
 	src/$(name)widget_env.h \
 	src/$(name)widget_filt.h \
 	src/$(name)widget_knob.h \
@@ -36,7 +36,6 @@ headers_ui = \
 
 sources_ui = \
 	src/$(name)widget.cpp \
-	src/$(name)widget_config.cpp \
 	src/$(name)widget_env.cpp \
 	src/$(name)widget_filt.cpp \
 	src/$(name)widget_knob.cpp \

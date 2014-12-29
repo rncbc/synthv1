@@ -63,7 +63,7 @@ void synthv1widget_jack::setNsmClient ( synthv1_nsm *pNsmClient )
 {
 	m_pNsmClient = pNsmClient;
 
-	synthv1widget_config *pConfig = synthv1widget_config::getInstance();
+	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig)
 		pConfig->bDontUseNativeDialogs = true;
 }

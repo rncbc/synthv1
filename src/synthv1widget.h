@@ -24,7 +24,7 @@
 
 #include "ui_synthv1widget.h"
 
-#include "synthv1widget_config.h"
+#include "synthv1_config.h"
 
 #include "synthv1.h"
 
@@ -117,7 +117,7 @@ private:
 	// Instance variables.
 	Ui::synthv1widget m_ui;
 
-	synthv1widget_config m_config;
+	synthv1_config m_config;
 
 	QHash<synthv1::ParamIndex, synthv1widget_knob *> m_paramKnobs;
 	QHash<synthv1widget_knob *, synthv1::ParamIndex> m_knobParams;

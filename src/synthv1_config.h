@@ -33,6 +33,51 @@
 
 #define SYNTHV1_DOMAIN	"rncbc.org"
 
+
+//-------------------------------------------------------------------------
+// synthv1_config - Prototype settings class (singleton).
+//
+
+#include <QSettings>
+#include <QStringList>
+
+
+class synthv1_config : public QSettings
+{
+public:
+
+	// Constructor.
+	synthv1_config();
+
+	// Default destructor.
+	~synthv1_config();
+
+	// Default options...
+	QString sPreset;
+	QString sPresetDir;
+
+	// Special persistent options.
+	bool bUseNativeDialogs;
+
+	// Run-time special non-persistent options.
+	bool bDontUseNativeDialogs;
+
+	// Singleton instance accessor.
+	static synthv1_config *getInstance();
+
+protected:
+
+	// Explicit I/O methods.
+	void load();
+	void save();
+
+private:
+
+	// The singleton instance.
+	static synthv1_config *g_pSettings;
+};
+
+
 #endif	// __synthv1_config_h
 
 // end of synthv1_config.h

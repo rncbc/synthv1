@@ -27,11 +27,11 @@ HEADERS = \
 	synthv1widget_knob.h \
 	synthv1widget_preset.h \
 	synthv1widget_status.h \
-	synthv1widget_config.h \
 	synthv1widget_jack.h
 
 SOURCES = \
 	synthv1.cpp \
+	synthv1_config.cpp \
 	synthv1_jack.cpp \
 	synthv1_wave.cpp \
 	synthv1_nsm.cpp \
@@ -44,7 +44,6 @@ SOURCES = \
 	synthv1widget_knob.cpp \
 	synthv1widget_preset.cpp \
 	synthv1widget_status.cpp \
-	synthv1widget_config.cpp \
 	synthv1widget_jack.cpp
 
 FORMS = \

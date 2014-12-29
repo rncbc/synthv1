@@ -21,7 +21,7 @@
 
 #include "synthv1widget_preset.h"
 
-#include "synthv1widget_config.h"
+#include "synthv1_config.h"
 
 #include <QHBoxLayout>
 
@@ -121,7 +121,7 @@ void synthv1widget_preset::clearPreset (void)
 {
 	++m_iInitPreset;
 
-	synthv1widget_config *pConfig = synthv1widget_config::getInstance();
+	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig)
 		pConfig->sPreset.clear();
 
@@ -150,7 +150,7 @@ bool synthv1widget_preset::queryPreset (void)
 	if (m_iInitPreset == 0)
 		return true;
 
-	synthv1widget_config *pConfig = synthv1widget_config::getInstance();
+	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig == NULL)
 		return false;
 
@@ -202,7 +202,7 @@ void synthv1widget_preset::loadPreset ( const QString& sPreset )
 	if (sPreset.isEmpty())
 		return;
 
-	synthv1widget_config *pConfig = synthv1widget_config::getInstance();
+	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig) {
 		pConfig->beginGroup(presetGroup());
 		emit loadPresetFile(pConfig->value(sPreset).toString());
@@ -231,7 +231,7 @@ void synthv1widget_preset::newPreset (void)
 
 void synthv1widget_preset::openPreset (void)
 {
-	synthv1widget_config *pConfig = synthv1widget_config::getInstance();
+	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig == NULL)
 		return;
 
@@ -290,7 +290,7 @@ void synthv1widget_preset::savePreset ( const QString& sPreset )
 	if (sPreset.isEmpty())
 		return;
 
-	synthv1widget_config *pConfig = synthv1widget_config::getInstance();
+	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig == NULL)
 		return;
 
@@ -356,7 +356,7 @@ void synthv1widget_preset::deletePreset (void)
 	if (sPreset.isEmpty())
 		return;
 
-	synthv1widget_config *pConfig = synthv1widget_config::getInstance();
+	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig == NULL)
 		return;
 
@@ -409,7 +409,7 @@ void synthv1widget_preset::refreshPreset (void)
 	const QString sOldPreset = m_pComboBox->currentText();
 	const QIcon icon(":/images/synthv1_preset.png");
 	m_pComboBox->clear();
-	synthv1widget_config *pConfig = synthv1widget_config::getInstance();
+	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig) {
 		pConfig->beginGroup(presetGroup());
 		const QStringList& list = pConfig->childKeys();
@@ -438,7 +438,7 @@ void synthv1widget_preset::refreshPreset (void)
 // Preset control.
 void synthv1widget_preset::initPreset (void)
 {
-	synthv1widget_config *pConfig = synthv1widget_config::getInstance();
+	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig && !pConfig->sPreset.isEmpty())
 		loadPreset(pConfig->sPreset);
 	else

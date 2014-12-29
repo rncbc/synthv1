@@ -24,6 +24,7 @@ HEADERS = \
 SOURCES = \
 	synthv1.cpp \
 	synthv1_lv2.cpp \
+	synthv1_config.cpp \
 	synthv1_wave.cpp \
 	synthv1_param.cpp \
 	synthv1_sched.cpp

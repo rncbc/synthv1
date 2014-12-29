@@ -1,4 +1,4 @@
-// synthv1widget_config.cpp
+// synthv1_config.cpp
 //
 /****************************************************************************
    Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
@@ -19,24 +19,24 @@
 
 *****************************************************************************/
 
-#include "synthv1widget_config.h"
+#include "synthv1_config.h"
 
 
 //-------------------------------------------------------------------------
-// synthv1widget_config - Prototype settings structure (pseudo-singleton).
+// synthv1_config - Prototype settings structure (pseudo-singleton).
 //
 
 // Singleton instance accessor (static).
-synthv1widget_config *synthv1widget_config::g_pSettings = NULL;
+synthv1_config *synthv1_config::g_pSettings = NULL;
 
-synthv1widget_config *synthv1widget_config::getInstance (void)
+synthv1_config *synthv1_config::getInstance (void)
 {
 	return g_pSettings;
 }
 
 
 // Constructor.
-synthv1widget_config::synthv1widget_config (void)
+synthv1_config::synthv1_config (void)
 	: QSettings(SYNTHV1_DOMAIN, SYNTHV1_TITLE)
 {
 	g_pSettings = this;
@@ -46,7 +46,7 @@ synthv1widget_config::synthv1widget_config (void)
 
 
 // Default destructor.
-synthv1widget_config::~synthv1widget_config (void)
+synthv1_config::~synthv1_config (void)
 {
 	save();
 
@@ -55,7 +55,7 @@ synthv1widget_config::~synthv1widget_config (void)
 
 
 // Explicit I/O methods.
-void synthv1widget_config::load (void)
+void synthv1_config::load (void)
 {
 	QSettings::beginGroup("/Default");
 	sPreset = QSettings::value("/Preset").toString();
@@ -70,7 +70,7 @@ void synthv1widget_config::load (void)
 }
 
 
-void synthv1widget_config::save (void)
+void synthv1_config::save (void)
 {
 	QSettings::beginGroup("/Program");
 	QSettings::setValue("/Version", SYNTHV1_VERSION);
@@ -89,4 +89,4 @@ void synthv1widget_config::save (void)
 }
 
 
-// end of synthv1widget_config.cpp
+// end of synthv1_config.cpp
