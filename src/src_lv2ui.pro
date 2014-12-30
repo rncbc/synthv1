@@ -22,7 +22,6 @@ HEADERS = \
 	synthv1widget_lv2.h
 
 SOURCES = \
-	synthv1_config.cpp \
 	synthv1_param.cpp \
 	synthv1widget.cpp \
 	synthv1widget_env.cpp \
