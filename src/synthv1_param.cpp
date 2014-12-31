@@ -19,8 +19,8 @@
 
 *****************************************************************************/
 
-#include "synthv1_config.h"
 #include "synthv1_param.h"
+#include "synthv1_config.h"
 
 #include <QHash>
 
@@ -190,7 +190,21 @@ void synthv1_param::loadPreset ( synthv1 *pSynth, const QString& sFilename )
 	if (pSynth == NULL)
 		return;
 
-	QFile file(sFilename);
+	QFileInfo fi(sFilename);
+	if (!fi.exists()) {
+		synthv1_config *pConfig = synthv1_config::getInstance();
+		if (pConfig) {
+			const QString& sPresetFile
+				= pConfig->presetFile(sFilename);
+			if (sPresetFile.isEmpty())
+				return;
+			fi.setFile(sPresetFile);
+			if (!fi.exists())
+				return;
+		}
+	}
+
+	QFile file(fi.filePath());
 	if (!file.open(QIODevice::ReadOnly))
 		return;
 
@@ -201,8 +215,6 @@ void synthv1_param::loadPreset ( synthv1 *pSynth, const QString& sFilename )
 			s_hash.insert(synthv1_param::paramName(index), index);
 		}
 	}
-
-	const QFileInfo fi(sFilename);
 
 	QDomDocument doc(SYNTHV1_TITLE);
 	if (doc.setContent(&file)) {
@@ -257,12 +269,11 @@ void synthv1_param::savePreset ( synthv1 *pSynth, const QString& sFilename )
 	if (pSynth == NULL)
 		return;
 
-	const QString& sPreset
-		= QFileInfo(sFilename).completeBaseName();
+	const QFileInfo fi(sFilename);
 
 	QDomDocument doc(SYNTHV1_TITLE);
 	QDomElement ePreset = doc.createElement("preset");
-	ePreset.setAttribute("name", sPreset);
+	ePreset.setAttribute("name", fi.completeBaseName());
 	ePreset.setAttribute("version", SYNTHV1_VERSION);
 
 	QDomElement eParams = doc.createElement("params");
@@ -282,7 +293,7 @@ void synthv1_param::savePreset ( synthv1 *pSynth, const QString& sFilename )
 	ePreset.appendChild(eParams);
 	doc.appendChild(ePreset);
 
-	QFile file(sFilename);
+	QFile file(fi.filePath());
 	if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
 		QTextStream(&file) << doc.toString();
 		file.close();
