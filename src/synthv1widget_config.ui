@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>rncbc aka Rui Nuno Capela</author>
+ <comment>synthv1 - An old-school polyphonic synthesizer
+
+  Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program; if not, write to the Free Software Foundation, Inc.,
+  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+ </comment>
+ <class>synthv1widget_config</class>
+ <widget class="QDialog" name="synthv1widget_config">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>480</width>
+    <height>320</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Configure - synthv1</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="synthv1.qrc">:/images/synthv1.png</iconset>
+  </property>
+  <layout class="QVBoxLayout">
+   <item>
+    <widget class="QTabWidget" name="TabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="ProgramsTab">
+      <attribute name="title">
+       <string>&amp;Programs</string>
+      </attribute>
+      <attribute name="toolTip">
+       <string>Programs</string>
+      </attribute>
+      <layout class="QVBoxLayout">
+       <item>
+        <layout class="QHBoxLayout">
+         <item>
+          <widget class="QToolButton" name="ProgramsAddBankToolButton">
+           <property name="toolTip">
+            <string>Add bank</string>
+           </property>
+           <property name="text">
+            <string>Add &amp;Bank</string>
+           </property>
+           <property name="icon">
+            <iconset resource="synthv1.qrc">:/images/presetBank.png</iconset>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="ProgramsAddItemToolButton">
+           <property name="toolTip">
+            <string>Add program</string>
+           </property>
+           <property name="text">
+            <string>&amp;Add Program</string>
+           </property>
+           <property name="icon">
+            <iconset resource="synthv1.qrc">:/images/synthv1_preset.png</iconset>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QToolButton" name="ProgramsEditToolButton">
+           <property name="toolTip">
+            <string>Edit bank/program</string>
+           </property>
+           <property name="text">
+            <string>&amp;Edit</string>
+           </property>
+           <property name="icon">
+            <iconset resource="synthv1.qrc">:/images/presetEdit.png</iconset>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QToolButton" name="ProgramsDeleteToolButton">
+           <property name="toolTip">
+            <string>Delete bank/program</string>
+           </property>
+           <property name="text">
+            <string>&amp;Delete</string>
+           </property>
+           <property name="icon">
+            <iconset resource="synthv1.qrc">:/images/presetDelete.png</iconset>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="synthv1widget_programs" name="ProgramsTreeWidget">
+         <property name="toolTip">
+          <string>Programs</string>
+         </property>
+         <property name="uniformRowHeights">
+          <bool>true</bool>
+         </property>
+         <property name="allColumnsShowFocus">
+          <bool>true</bool>
+         </property>
+         <property name="headerHidden">
+          <bool>true</bool>
+         </property>
+         <property name="columnCount">
+          <number>2</number>
+         </property>
+         <column>
+          <property name="text">
+           <string notr="true">1</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string notr="true">2</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="OptionsTab">
+      <attribute name="title">
+       <string>&amp;Options</string>
+      </attribute>
+      <attribute name="toolTip">
+       <string>Options</string>
+      </attribute>
+      <layout class="QVBoxLayout">
+       <item>
+        <widget class="QCheckBox" name="UseNativeDialogsCheckBox">
+         <property name="toolTip">
+          <string>Whether to use desktop environment's native dialogs where applicable</string>
+         </property>
+         <property name="text">
+          <string>Use desktop environment &amp;native dialogs</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="DialogButtonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="8" margin="8"/>
+ <customwidgets>
+  <customwidget>
+   <class>synthv1widget_programs</class>
+   <extends>QTreeWidget</extends>
+   <header>synthv1widget_programs.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>ProgramsAddBankToolButton</tabstop>
+  <tabstop>ProgramsAddItemToolButton</tabstop>
+  <tabstop>ProgramsEditToolButton</tabstop>
+  <tabstop>ProgramsDeleteToolButton</tabstop>
+  <tabstop>ProgramsTreeWidget</tabstop>
+  <tabstop>UseNativeDialogsCheckBox</tabstop>
+  <tabstop>DialogButtonBox</tabstop>
+ </tabstops>
+ <resources>
+  <include location="synthv1.qrc"/>
+ </resources>
+ <connections/>
+</ui>

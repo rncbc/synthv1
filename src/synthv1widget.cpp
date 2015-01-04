@@ -1,7 +1,7 @@
 // synthv1widget.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -23,6 +23,8 @@
 #include "synthv1_param.h"
 
 #include "synthv1_wave.h"
+
+#include "synthv1widget_config.h"
 
 #include <QMessageBox>
 #include <QDir>
@@ -714,14 +716,10 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	QObject::connect(m_ui.TabBar, SIGNAL(currentChanged(int)),
 		m_ui.StackedWidget, SLOT(setCurrentIndex(int)));
 
-	synthv1_config *pConfig = synthv1_config::getInstance();
-	if (pConfig)
-		m_ui.helpUseNativeDialogsAction->setChecked(pConfig->bUseNativeDialogs);
-
 	// Menu actions
-	QObject::connect(m_ui.helpUseNativeDialogsAction,
+	QObject::connect(m_ui.helpConfigureAction,
 		SIGNAL(triggered(bool)),
-		SLOT(helpUseNativeDialogs(bool)));
+		SLOT(helpConfigure()));
 	QObject::connect(m_ui.helpAboutAction,
 		SIGNAL(triggered(bool)),
 		SLOT(helpAbout()));
@@ -1039,13 +1037,16 @@ bool synthv1widget::queryClose (void)
 
 
 // Menu actions.
-void synthv1widget::helpUseNativeDialogs ( bool bOn )
+void synthv1widget::helpConfigure (void)
 {
-	synthv1_config *pConfig = synthv1_config::getInstance();
-	if (pConfig) {
-		pConfig->bUseNativeDialogs = bOn;
-		pConfig->bDontUseNativeDialogs = !pConfig->bUseNativeDialogs;
-	}
+	synthv1 *pSynth = instance();
+	if (pSynth == NULL)
+		return;
+
+	synthv1widget_config form(this);
+	// TODO: Set programs database...
+//	form.setPrograms(pSynth->programs());
+	form.exec();
 }
 
 

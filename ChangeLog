@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- New Help/Configure dialog is introduced for editing the also
+  new MIDI bank/programs interface and user preference options
+  as well (new home of the old Help/Use native dialogs option).
 - Preparations for MIDI bank-select/program-change support, as
   patch presets or programs. (EXPERIMENTAL)
 - Presets may now be specified by base name, as an alternative

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>rncbc aka Rui Nuno Capela</author>
- <comment>synthv1 - An almost virtual-analog polyphonic synthesizer
+ <comment>synthv1 - An old-school polyphonic synthesizer
 
-  Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+  Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -95,8 +95,8 @@
         <property name="title">
          <string>&amp;Help</string>
         </property>
-        <addaction name="helpUseNativeDialogsAction"/>
-        <addaction name="separator"/>
+		<addaction name="helpConfigureAction"/>
+		<addaction name="separator"/>
         <addaction name="helpAboutAction"/>
         <addaction name="helpAboutQtAction"/>
        </widget>
@@ -2010,18 +2010,15 @@
     <widget class="synthv1widget_status" name="StatusBar" />
    </item>
   </layout>
-  <action name="helpUseNativeDialogsAction" >
-   <property name="checkable" >
-    <bool>true</bool>
-   </property>
+  <action name="helpConfigureAction" >
    <property name="text" >
-    <string>&amp;Use native dialogs</string>
+	<string>&amp;Configure...</string>
    </property>
    <property name="iconText" >
-    <string>Use native dialogs</string>
+	<string>Configure</string>
    </property>
    <property name="statusTip" >
-    <string>Whether to use desktop environment's native dialogs where applicable</string>
+	<string>Configure options</string>
    </property>
   </action>
   <action name="helpAboutAction" >
