@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- Preparations for MIDI bank-select/program-change support, as
+  patch presets or programs. (EXPERIMENTAL)
 - Presets may now be specified by base name, as an alternative
   to the complete preset file-path on command line argument (re.
   stand-alone JACK client).

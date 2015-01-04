@@ -19,6 +19,7 @@ HEADERS = \
 	synthv1widget_knob.h \
 	synthv1widget_preset.h \
 	synthv1widget_status.h \
+	synthv1widget_programs.h \
 	synthv1widget_lv2.h
 
 SOURCES = \
@@ -30,10 +31,12 @@ SOURCES = \
 	synthv1widget_knob.cpp \
 	synthv1widget_preset.cpp \
 	synthv1widget_status.cpp \
+	synthv1widget_programs.cpp \
 	synthv1widget_lv2.cpp
 
 FORMS = \
 	synthv1widget.ui
+
 
 RESOURCES += synthv1.qrc
 

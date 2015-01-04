@@ -1,7 +1,7 @@
 // synthv1_config.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -20,6 +20,7 @@
 *****************************************************************************/
 
 #include "synthv1_config.h"
+#include "synthv1_programs.h"
 
 #include <QFileInfo>
 
@@ -104,6 +105,128 @@ QStringList synthv1_config::presetList (void)
 	}
 	QSettings::endGroup();
 	return list;
+}
+
+
+// Programs utility methods.
+QString synthv1_config::programsGroup (void) const
+{
+	return "/Programs";
+}
+
+QString synthv1_config::bankPrefix (void) const
+{
+	return "/Bank_";
+}
+
+QString synthv1_config::currentGroup (void) const
+{
+	return "/Current";
+}
+
+
+void synthv1_config::loadPrograms ( synthv1_programs *pPrograms )
+{
+	pPrograms->clear_banks();
+
+	QSettings::beginGroup(programsGroup());
+
+	const QStringList& bank_keys = QSettings::childKeys();
+	QStringListIterator bank_iter(bank_keys);
+	while (bank_iter.hasNext()) {
+		const QString& bank_key = bank_iter.next();
+		uint16_t bank_id = bank_key.toInt();
+		const QString& bank_name
+			= QSettings::value(bank_key).toString();
+		synthv1_programs::Bank *pBank = pPrograms->add_bank(bank_id, bank_name);
+		QSettings::beginGroup(bankPrefix() + bank_key);
+		const QStringList& prog_keys = QSettings::childKeys();
+		QStringListIterator prog_iter(prog_keys);
+		while (prog_iter.hasNext()) {
+			const QString& prog_key = prog_iter.next();
+			uint16_t prog_id = prog_key.toInt();
+			const QString& prog_name
+				= QSettings::value(prog_key).toString();
+			pBank->add_prog(prog_id, prog_name);
+		}
+		QSettings::endGroup();
+	}
+
+	QSettings::endGroup();
+}
+
+
+void synthv1_config::savePrograms ( synthv1_programs *pPrograms )
+{
+	clearPrograms();
+
+	QSettings::beginGroup(programsGroup());
+
+	const synthv1_programs::Banks& banks = pPrograms->banks();
+	synthv1_programs::Banks::ConstIterator bank_iter = banks.constBegin();
+	const synthv1_programs::Banks::ConstIterator& bank_end = banks.constEnd();
+	for ( ; bank_iter != bank_end; ++bank_iter) {
+		synthv1_programs::Bank *pBank = bank_iter.value();
+		const QString& bank_key = QString::number(pBank->id());
+		const QString& bank_name = pBank->name();
+		QSettings::setValue(bank_key, bank_name);
+		QSettings::beginGroup(bankPrefix() + bank_key);
+		const synthv1_programs::Progs& progs = pBank->progs();
+		synthv1_programs::Progs::ConstIterator prog_iter = progs.constBegin();
+		const synthv1_programs::Progs::ConstIterator& prog_end = progs.constEnd();
+		for ( ; prog_iter != prog_end; ++prog_iter) {
+			synthv1_programs::Prog *pProg = prog_iter.value();
+			const QString& prog_key = QString::number(pProg->id());
+			const QString& prog_name = pProg->name();
+			QSettings::setValue(prog_key, prog_name);
+		}
+		QSettings::endGroup();
+	}
+
+	QSettings::endGroup();
+}
+
+
+void synthv1_config::clearPrograms (void)
+{
+	QSettings::beginGroup(programsGroup());
+
+	const QStringList& bank_keys = QSettings::childKeys();
+	QStringListIterator bank_iter(bank_keys);
+	while (bank_iter.hasNext()) {
+		const QString& bank_key = bank_iter.next();
+		QSettings::beginGroup(bankPrefix() + bank_key);
+		const QStringList& prog_keys = QSettings::childKeys();
+		QStringListIterator prog_iter(prog_keys);
+		while (prog_iter.hasNext()) {
+			const QString& prog_key = prog_iter.next();
+			QSettings::remove(prog_key);
+		}
+		QSettings::endGroup();
+		QSettings::remove(bank_key);
+	}
+
+	QSettings::endGroup();
+}
+
+
+void synthv1_config::loadProgramsCurrent ( synthv1_programs *pPrograms )
+{
+	QSettings::beginGroup(currentGroup());
+	pPrograms->set_current_bank(QSettings::value("/Bank", 0).toInt());
+	pPrograms->set_current_prog(QSettings::value("/Prog", 0).toInt());
+	QSettings::endGroup();
+}
+
+
+void synthv1_config::saveProgramsCurrent ( synthv1_programs *pPrograms )
+{
+	QSettings::beginGroup(currentGroup());
+	synthv1_programs::Bank *pBank = pPrograms->current_bank();
+	synthv1_programs::Prog *pProg = pPrograms->current_prog();
+	QSettings::setValue("/Bank", (pBank ? pBank->id() : 0));
+	QSettings::setValue("/Prog", (pProg ? pProg->id() : 0));
+	QSettings::endGroup();
 }
 
 

@@ -1,7 +1,7 @@
 // synthv1_config.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@
 
 #define SYNTHV1_SUBTITLE     "an old-school polyphonic synthesizer."
 #define SYNTHV1_WEBSITE      "http://synthv1.sourceforge.net"
-#define SYNTHV1_COPYRIGHT    "Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved."
+#define SYNTHV1_COPYRIGHT    "Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved."
 
 #define SYNTHV1_DOMAIN	"rncbc.org"
 
@@ -40,6 +40,9 @@
 
 #include <QSettings>
 #include <QStringList>
+
+// forward decls.
+class synthv1_programs;
 
 
 class synthv1_config : public QSettings
@@ -71,6 +74,13 @@ public:
 	void removePreset(const QString& sPreset);
 	QStringList presetList();
 
+	// Programs utility methods.
+	void loadPrograms(synthv1_programs *pPrograms);
+	void savePrograms(synthv1_programs *pPrograms);
+
+	void loadProgramsCurrent(synthv1_programs *pPrograms);
+	void saveProgramsCurrent(synthv1_programs *pPrograms);
+
 protected:
 
 	// Explicit I/O methods.
@@ -79,6 +89,13 @@ protected:
 
 	// Preset group path.
 	QString presetGroup() const;
+
+	// Banks programs group path.
+	QString programsGroup() const;
+	QString bankPrefix() const;
+	QString currentGroup() const;
+
+	void clearPrograms();
 
 private:
 

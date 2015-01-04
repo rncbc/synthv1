@@ -17,9 +17,10 @@ HEADERS = \
 	synthv1_list.h \
 	synthv1_fx.h \
 	synthv1_nsm.h \
+	synthv1_reverb.h \
 	synthv1_param.h \
 	synthv1_sched.h \
-	synthv1_reverb.h \
+	synthv1_programs.h \
 	synthv1widget.h \
 	synthv1widget_env.h \
 	synthv1widget_filt.h \
@@ -27,6 +28,7 @@ HEADERS = \
 	synthv1widget_knob.h \
 	synthv1widget_preset.h \
 	synthv1widget_status.h \
+	synthv1widget_programs.h \
 	synthv1widget_jack.h
 
 SOURCES = \
@@ -37,6 +39,7 @@ SOURCES = \
 	synthv1_nsm.cpp \
 	synthv1_param.cpp \
 	synthv1_sched.cpp \
+	synthv1_programs.cpp \
 	synthv1widget.cpp \
 	synthv1widget_env.cpp \
 	synthv1widget_filt.cpp \
@@ -44,10 +47,12 @@ SOURCES = \
 	synthv1widget_knob.cpp \
 	synthv1widget_preset.cpp \
 	synthv1widget_status.cpp \
+	synthv1widget_programs.cpp \
 	synthv1widget_jack.cpp
 
 FORMS = \
 	synthv1widget.ui
+
 
 RESOURCES += synthv1.qrc
 
