@@ -734,7 +734,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	// Special sample update notifications (eg. reverse)
 	QObject::connect(m_sched_notifier,
 		SIGNAL(notify(int)),
-		SLOT(updateNotify(int)));
+		SLOT(updateSchedNotify(int)));
 
 	// Epilog.
 	// QWidget::adjustSize();
@@ -1046,14 +1046,14 @@ bool synthv1widget::queryClose (void)
 
 
 // Notification updater.
-void synthv1widget::updateNotify ( int stype )
+void synthv1widget::updateSchedNotify ( int stype )
 {
 	synthv1 *pSynth = instance();
 	if (pSynth == NULL)
 		return;
 
 #ifdef CONFIG_DEBUG_0
-	qDebug("samplv1widget::updateNotify(%d)", stype);
+	qDebug("samplv1widget::updateSchedNotify(%d)", stype);
 #endif
 
 	switch (synthv1_sched::Type(stype)) {

@@ -87,7 +87,7 @@ protected slots:
 	void bpmSyncChanged();
 
 	// Schedule notification updater.
-	void updateNotify(int stype);
+	void updateSchedNotify(int stype);
 
 	// Menu actions.
 	void helpConfigure();
