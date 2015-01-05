@@ -1,7 +1,7 @@
 // synthv1_wave.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ class synthv1_wave_sched : public synthv1_sched
 public:
 
 	// ctor.
-	synthv1_wave_sched (synthv1_wave *wave)	: synthv1_sched(),
+	synthv1_wave_sched (synthv1_wave *wave)	: synthv1_sched(Wave),
 		m_wave(wave), m_shape(synthv1_wave::Pulse), m_width(1.0f) {}
 
 	// schedule reset.

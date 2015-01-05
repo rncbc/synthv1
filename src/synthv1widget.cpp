@@ -733,8 +733,8 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 
 	// Special sample update notifications (eg. reverse)
 	QObject::connect(m_sched_notifier,
-		SIGNAL(notify()),
-		SLOT(updateNotify()));
+		SIGNAL(notify(int)),
+		SLOT(updateNotify(int)));
 
 	// Epilog.
 	// QWidget::adjustSize();
@@ -1046,20 +1046,29 @@ bool synthv1widget::queryClose (void)
 
 
 // Notification updater.
-void synthv1widget::updateNotify (void)
+void synthv1widget::updateNotify ( int stype )
 {
-#ifdef CONFIG_DEBUG
-	qDebug("samplv1widget::updateNotify()");
+	synthv1 *pSynth = instance();
+	if (pSynth == NULL)
+		return;
+
+#ifdef CONFIG_DEBUG_0
+	qDebug("samplv1widget::updateNotify(%d)", stype);
 #endif
 
-	synthv1 *pSynth = instance();
-	if (pSynth) {
+	switch (synthv1_sched::Type(stype)) {
+	case synthv1_sched::Programs: {
 		synthv1_programs *pPrograms = pSynth->programs();
 		synthv1_programs::Prog *pProg = pPrograms->current_prog();
 		if (pProg) {
 			m_ui.Preset->setPreset(pProg->name());
 			updateParamValues();
 		}
+		break;
+	}
+	case synthv1_sched::Wave:
+	default:
+		break;
 	}
 }
 

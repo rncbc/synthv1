@@ -1,7 +1,7 @@
 // synthv1_sched.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -35,8 +35,11 @@ class synthv1_sched
 {
 public:
 
+	// plausible sched types.
+	enum Type { Wave, Programs };
+
 	// ctor.
-	synthv1_sched();
+	synthv1_sched(Type stype);
 
 	// virtual dtor.
 	virtual ~synthv1_sched();
@@ -54,11 +57,13 @@ public:
 	virtual void process() = 0;
 
 	// signal broadcast (static).
-	static void sync_notify();
+	static void sync_notify(Type stype);
 
 private:
 
 	// instance variables.
+	Type m_stype;
+
 	volatile bool m_sync_wait;
 };
 
@@ -82,11 +87,11 @@ public:
 	~synthv1_sched_notifier();
 
 	// signal notifier.
-	void sync_notify();
+	void sync_notify(synthv1_sched::Type stype);
 
 signals:
 
-	void notify();
+	void notify(int stype);
 };
 
 

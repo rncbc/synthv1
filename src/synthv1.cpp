@@ -753,7 +753,7 @@ public:
 
 	// ctor.
 	synthv1_programs_sched (synthv1 *pSynth)
-		: synthv1_sched(), m_pSynth(pSynth), m_prog_id(0) {}
+		: synthv1_sched(Programs), m_pSynth(pSynth), m_prog_id(0) {}
 
 	// schedule reset.
 	void set_current_prog(uint16_t prog_id)
