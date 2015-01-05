@@ -1,7 +1,7 @@
 // synthv1_jack.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -23,7 +23,6 @@
 #define __synthv1_jack_h
 
 #include "synthv1.h"
-#include "synthv1_config.h"
 
 #include <jack/jack.h>
 
@@ -72,8 +71,6 @@ public:
 #endif
 
 private:
-
-	synthv1_config m_config;
 
 	jack_client_t *m_client;
 

@@ -1056,8 +1056,10 @@ void synthv1widget::updateNotify (void)
 	if (pSynth) {
 		synthv1_programs *pPrograms = pSynth->programs();
 		synthv1_programs::Prog *pProg = pPrograms->current_prog();
-		if (pProg)
+		if (pProg) {
 			m_ui.Preset->setPreset(pProg->name());
+			updateParamValues();
+		}
 	}
 }
 

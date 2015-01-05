@@ -29,6 +29,7 @@
 #include "synthv1_fx.h"
 #include "synthv1_reverb.h"
 
+#include "synthv1_config.h"
 #include "synthv1_programs.h"
 #include "synthv1_sched.h"
 #include "synthv1_param.h"
@@ -892,6 +893,8 @@ private:
 
 	synthv1_reverb m_reverb;
 
+	synthv1_config m_config;
+
 	synthv1_programs       m_programs;
 	synthv1_programs_sched m_programs_sched;
 };
@@ -965,6 +968,10 @@ synthv1_impl::synthv1_impl (
 	m_del.bpmsync0 = 0.0f;
 	m_del.bpm0 = 0;
 
+	// load programs database...
+	m_config.loadPrograms(&m_programs);
+//	m_config.loadProgramsCurrent(&m_programs);
+
 	// number of channels
 	setChannels(iChannels);
 
@@ -985,6 +992,10 @@ synthv1_impl::synthv1_impl (
 
 synthv1_impl::~synthv1_impl (void)
 {
+	// save programs database...
+	m_config.savePrograms(&m_programs);
+	m_config.saveProgramsCurrent(&m_programs);
+
 	// deallocate voice pool.
 	for (int i = 0; i < MAX_VOICES; ++i)
 		delete m_voices[i];

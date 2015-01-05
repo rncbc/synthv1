@@ -117,10 +117,8 @@ void synthv1widget_config::setPrograms ( synthv1_programs *pPrograms )
 	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig && m_pPrograms) {
 		// Load programs.
-		pConfig->loadPrograms(m_pPrograms);
 		m_ui.ProgramsTreeWidget->loadPrograms(m_pPrograms);
 		// Load current selected program, if any...
-		pConfig->loadProgramsCurrent(m_pPrograms);
 		m_ui.ProgramsTreeWidget->loadProgramsCurrent(m_pPrograms);
 	}
 
@@ -264,10 +262,8 @@ void synthv1widget_config::accept (void)
 	if (m_iDirtyPrograms > 0 && pConfig && m_pPrograms) {
 		// Save programs...
 		m_ui.ProgramsTreeWidget->savePrograms(m_pPrograms);
-		pConfig->savePrograms(m_pPrograms);
 		// Save program selection...
 		m_ui.ProgramsTreeWidget->saveProgramsCurrent(m_pPrograms);
-		pConfig->saveProgramsCurrent(m_pPrograms);
 		// Reset dirty flag.
 		m_iDirtyPrograms = 0;
 	}
