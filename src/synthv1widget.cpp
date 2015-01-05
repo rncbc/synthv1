@@ -23,6 +23,7 @@
 #include "synthv1_param.h"
 
 #include "synthv1_wave.h"
+#include "synthv1_sched.h"
 
 #include "synthv1widget_config.h"
 
@@ -60,6 +61,9 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 #endif
 
 	m_ui.setupUi(this);
+
+	// Init sched notifier.
+	m_sched_notifier = new synthv1_sched_notifier(this);
 
 	// Init swapable params A/B to default.
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i)
@@ -727,6 +731,11 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		SIGNAL(triggered(bool)),
 		SLOT(helpAboutQt()));
 
+	// Special sample update notifications (eg. reverse)
+	QObject::connect(m_sched_notifier,
+		SIGNAL(notify()),
+		SLOT(updateNotify()));
+
 	// Epilog.
 	// QWidget::adjustSize();
 
@@ -1036,6 +1045,23 @@ bool synthv1widget::queryClose (void)
 }
 
 
+// Notification updater.
+void synthv1widget::updateNotify (void)
+{
+#ifdef CONFIG_DEBUG
+	qDebug("samplv1widget::updateNotify()");
+#endif
+
+	synthv1 *pSynth = instance();
+	if (pSynth) {
+		synthv1_programs *pPrograms = pSynth->programs();
+		synthv1_programs::Prog *pProg = pPrograms->current_prog();
+		if (pProg)
+			m_ui.Preset->setPreset(pProg->name());
+	}
+}
+
+
 // Menu actions.
 void synthv1widget::helpConfigure (void)
 {
@@ -1044,8 +1070,9 @@ void synthv1widget::helpConfigure (void)
 		return;
 
 	synthv1widget_config form(this);
-	// TODO: Set programs database...
-//	form.setPrograms(pSynth->programs());
+
+	// Set programs database...
+	form.setPrograms(pSynth->programs());
 	form.exec();
 }
 

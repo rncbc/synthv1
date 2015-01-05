@@ -29,6 +29,10 @@
 #include "synthv1.h"
 
 
+// forward decls.
+class synthv1_sched_notifier;
+
+
 //-------------------------------------------------------------------------
 // synthv1widget - decl.
 //
@@ -82,6 +86,9 @@ protected slots:
 	// Delay BPM change.
 	void bpmSyncChanged();
 
+	// Schedule notification updater.
+	void updateNotify();
+
 	// Menu actions.
 	void helpConfigure();
 
@@ -116,6 +123,8 @@ private:
 
 	// Instance variables.
 	Ui::synthv1widget m_ui;
+
+	synthv1_sched_notifier *m_sched_notifier;
 
 	QHash<synthv1::ParamIndex, synthv1widget_knob *> m_paramKnobs;
 	QHash<synthv1widget_knob *, synthv1::ParamIndex> m_knobParams;

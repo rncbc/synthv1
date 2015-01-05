@@ -1,7 +1,7 @@
 // synthv1.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -27,8 +27,11 @@
 #include "synthv1_list.h"
 
 #include "synthv1_fx.h"
-
 #include "synthv1_reverb.h"
+
+#include "synthv1_programs.h"
+#include "synthv1_sched.h"
+#include "synthv1_param.h"
 
 
 #ifdef CONFIG_DEBUG_0
@@ -741,13 +744,50 @@ struct synthv1_voice : public synthv1_list<synthv1_voice>
 };
 
 
+// programs scheduled thread
+
+class synthv1_programs_sched : public synthv1_sched
+{
+public:
+
+	// ctor.
+	synthv1_programs_sched (synthv1 *pSynth)
+		: synthv1_sched(), m_pSynth(pSynth), m_prog_id(0) {}
+
+	// schedule reset.
+	void set_current_prog(uint16_t prog_id)
+	{
+		m_prog_id = prog_id;
+
+		schedule();
+	}
+
+	// process reset (virtual).
+	void process()
+	{
+		synthv1_programs *pPrograms = m_pSynth->programs();
+		pPrograms->set_current_prog(m_prog_id);
+		synthv1_programs::Prog *pProg = pPrograms->current_prog();
+		if (pProg)
+			synthv1_param::loadPreset(m_pSynth, pProg->name());
+	}
+
+private:
+
+	// instance variables.
+	synthv1 *m_pSynth;
+
+	uint16_t m_prog_id;
+};
+
+
 // polyphonic synth implementation
 
 class synthv1_impl
 {
 public:
 
-	synthv1_impl(uint16_t iChannels, uint32_t iSampleRate);
+	synthv1_impl(synthv1 *pSynth, uint16_t iChannels, uint32_t iSampleRate);
 
 	~synthv1_impl();
 
@@ -759,6 +799,8 @@ public:
 
 	void setParamPort(synthv1::ParamIndex index, float *pfParam = 0);
 	float *paramPort(synthv1::ParamIndex index);
+
+	synthv1_programs *programs();
 
 	void process_midi(uint8_t *data, uint32_t size);
 	void process(float **ins, float **outs, uint32_t nframes);
@@ -849,6 +891,9 @@ private:
 	synthv1_fx_comp    *m_comp;
 
 	synthv1_reverb m_reverb;
+
+	synthv1_programs       m_programs;
+	synthv1_programs_sched m_programs_sched;
 };
 
 
@@ -880,7 +925,9 @@ synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
 
 // engine constructor
 
-synthv1_impl::synthv1_impl ( uint16_t iChannels, uint32_t iSampleRate )
+synthv1_impl::synthv1_impl (
+	synthv1 *pSynth, uint16_t iChannels, uint32_t iSampleRate )
+	: m_programs_sched(pSynth)
 {
 	// max env. stage length (default)
 	m_dco1.envtime0 = m_dco2.envtime0 = 0.0001f * MAX_ENV_MSECS;
@@ -1360,6 +1407,10 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 	const int status = (data[0] & 0xf0);
 	const int key    = (data[1] & 0x7f);
 
+	// program change
+	if (status == 0xc0)
+		m_programs_sched.set_current_prog(key);
+	else
 	if (status == 0xd0) {
 		// channel aftertouch
 		const float pre = float(key) / 127.0f;
@@ -1577,6 +1628,10 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 	// control change
 	else if (status == 0xb0) {
 		switch (key) {
+		case 0x00:
+			// bank-select MSB (cc#0)
+			m_programs.set_current_bank_msb(value);
+			break;
 		case 0x01: {
 			// modulation wheel (cc#1)
 			const float mod = float(value) / 127.0f;
@@ -1598,6 +1653,10 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 			if (on2) m_ctl2.panning = pan;
 			break;
 		}
+		case 0x20:
+			// bank-select LSB (cc#32)
+			m_programs.set_current_bank_lsb(value);
+			break;
 		case 0x40:
 			// sustain/damper pedal (cc#64)
 			if (on1) {
@@ -1782,6 +1841,14 @@ void synthv1_impl::allSoundOff (void)
 
 	m_reverb.setSampleRate(m_iSampleRate);
 	m_reverb.reset();
+}
+
+
+// programs accessor
+
+synthv1_programs *synthv1_impl::programs (void)
+{
+	return &m_programs;
 }
 
 
@@ -2126,13 +2193,14 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 }
 
 
+
 //-------------------------------------------------------------------------
 // synthv1 - decl.
 //
 
 synthv1::synthv1 ( uint16_t iChannels, uint32_t iSampleRate )
 {
-	m_pImpl = new synthv1_impl(iChannels, iSampleRate);
+	m_pImpl = new synthv1_impl(this, iChannels, iSampleRate);
 }
 
 
@@ -2193,6 +2261,14 @@ void synthv1::process_midi ( uint8_t *data, uint32_t size )
 void synthv1::process ( float **ins, float **outs, uint32_t nframes )
 {
 	m_pImpl->process(ins, outs, nframes);
+}
+
+
+// programs accessor
+
+synthv1_programs *synthv1::programs (void) const
+{
+	return m_pImpl->programs();
 }
 
 
