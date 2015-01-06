@@ -1381,7 +1381,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 
 	// program change
 	if (status == 0xc0)
-		m_programs.set_current_prog(key);
+		m_programs.prog_change(key);
 	else
 	if (status == 0xd0) {
 		// channel aftertouch
@@ -1602,7 +1602,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 		switch (key) {
 		case 0x00:
 			// bank-select MSB (cc#0)
-			m_programs.set_current_bank_msb(value);
+			m_programs.bank_select_msb(value);
 			break;
 		case 0x01: {
 			// modulation wheel (cc#1)
@@ -1627,7 +1627,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 		}
 		case 0x20:
 			// bank-select LSB (cc#32)
-			m_programs.set_current_bank_lsb(value);
+			m_programs.bank_select_lsb(value);
 			break;
 		case 0x40:
 			// sustain/damper pedal (cc#64)
@@ -1820,8 +1820,8 @@ void synthv1_impl::allSoundOff (void)
 
 void synthv1_impl::selectProgram ( uint16_t bank_id, uint16_t prog_id )
 {
-	m_programs.set_current_bank(bank_id);
-	m_programs.set_current_prog(prog_id);
+	m_programs.bank_select(bank_id);
+	m_programs.prog_change(prog_id);
 }
 
 
