@@ -21,14 +21,18 @@
 
 #include "synthv1_programs.h"
 
+#include "synthv1_sched.h"
+#include "synthv1_param.h"
+
 
 //-------------------------------------------------------------------------
 // synthv1_programs - Bank/programs database class (singleton).
 //
 
 // ctor.
-synthv1_programs::synthv1_programs (void)
-	: m_bank_msb(0), m_bank_lsb(0), m_bank(0), m_prog(0)
+synthv1_programs::synthv1_programs ( synthv1 *pSynth )
+	: m_sched(new Sched(pSynth)),
+		m_bank_msb(0), m_bank_lsb(0), m_bank(0), m_prog(0)
 {
 }
 
@@ -37,6 +41,8 @@ synthv1_programs::synthv1_programs (void)
 synthv1_programs::~synthv1_programs (void)
 {
 	clear_banks();
+
+	delete m_sched;
 }
 
 
@@ -157,6 +163,8 @@ void synthv1_programs::set_current_prog ( uint16_t prog_id )
 {
 	m_bank = find_bank(current_bank_id());
 	m_prog = (m_bank ? m_bank->find_prog(prog_id) : 0);
+
+	if (m_prog) m_sched->schedule();
 }
 
 

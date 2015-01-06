@@ -31,8 +31,6 @@
 
 #include "synthv1_config.h"
 #include "synthv1_programs.h"
-#include "synthv1_sched.h"
-#include "synthv1_param.h"
 
 
 #ifdef CONFIG_DEBUG_0
@@ -745,43 +743,6 @@ struct synthv1_voice : public synthv1_list<synthv1_voice>
 };
 
 
-// programs scheduled thread
-
-class synthv1_programs_sched : public synthv1_sched
-{
-public:
-
-	// ctor.
-	synthv1_programs_sched (synthv1 *pSynth)
-		: synthv1_sched(Programs), m_pSynth(pSynth), m_prog_id(0) {}
-
-	// schedule reset.
-	void set_current_prog(uint16_t prog_id)
-	{
-		m_prog_id = prog_id;
-
-		schedule();
-	}
-
-	// process reset (virtual).
-	void process()
-	{
-		synthv1_programs *pPrograms = m_pSynth->programs();
-		pPrograms->set_current_prog(m_prog_id);
-		synthv1_programs::Prog *pProg = pPrograms->current_prog();
-		if (pProg)
-			synthv1_param::loadPreset(m_pSynth, pProg->name());
-	}
-
-private:
-
-	// instance variables.
-	synthv1 *m_pSynth;
-
-	uint16_t m_prog_id;
-};
-
-
 // polyphonic synth implementation
 
 class synthv1_impl
@@ -854,6 +815,9 @@ protected:
 
 private:
 
+	synthv1_config   m_config;
+	synthv1_programs m_programs;
+
 	uint16_t m_iChannels;
 	uint32_t m_iSampleRate;
 
@@ -894,11 +858,6 @@ private:
 	synthv1_fx_comp    *m_comp;
 
 	synthv1_reverb m_reverb;
-
-	synthv1_config m_config;
-
-	synthv1_programs       m_programs;
-	synthv1_programs_sched m_programs_sched;
 };
 
 
@@ -932,7 +891,7 @@ synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
 
 synthv1_impl::synthv1_impl (
 	synthv1 *pSynth, uint16_t iChannels, uint32_t iSampleRate )
-	: m_programs_sched(pSynth)
+	: m_programs(pSynth)
 {
 	// max env. stage length (default)
 	m_dco1.envtime0 = m_dco2.envtime0 = 0.0001f * MAX_ENV_MSECS;
@@ -1422,7 +1381,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 
 	// program change
 	if (status == 0xc0)
-		m_programs_sched.set_current_prog(key);
+		m_programs.set_current_prog(key);
 	else
 	if (status == 0xd0) {
 		// channel aftertouch
@@ -1862,7 +1821,7 @@ void synthv1_impl::allSoundOff (void)
 void synthv1_impl::selectProgram ( uint16_t bank_id, uint16_t prog_id )
 {
 	m_programs.set_current_bank(bank_id);
-	m_programs_sched.set_current_prog(prog_id);
+	m_programs.set_current_prog(prog_id);
 }
 
 

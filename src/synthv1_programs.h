@@ -22,10 +22,10 @@
 #ifndef __synthv1_programs_h
 #define __synthv1_programs_h
 
-#include <QMap>
-#include <QString>
+#include "synthv1_sched.h"
+#include "synthv1_param.h"
 
-#include <stdint.h>
+#include <QMap>
 
 
 //-------------------------------------------------------------------------
@@ -37,7 +37,7 @@ class synthv1_programs
 public:
 
 	// ctor.
-	synthv1_programs();
+	synthv1_programs(synthv1 *pSynth);
 
 	// dtor.
 	~synthv1_programs();
@@ -110,15 +110,42 @@ protected:
 
 	uint16_t current_bank_id() const;
 
+	// current bank/prog. scheduled thread
+	class Sched : public synthv1_sched
+	{
+	public:
+
+		// ctor.
+		Sched (synthv1 *pSynth)
+			: synthv1_sched(Programs), m_pSynth(pSynth) {}
+
+		// process reset (virtual).
+		void process()
+		{
+			synthv1_programs *pPrograms = m_pSynth->programs();
+			synthv1_programs::Prog *pProg = pPrograms->current_prog();
+			if (pProg)
+				synthv1_param::loadPreset(m_pSynth, pProg->name());
+		}
+
+	private:
+
+		// instance variables.
+		synthv1 *m_pSynth;
+	};
+
 private:
 
-	Banks m_banks;
+	// instance variables.
+	Sched *m_sched;
 
 	uint8_t m_bank_msb;
 	uint8_t m_bank_lsb;
 
 	Bank *m_bank;
 	Prog *m_prog;
+
+	Banks m_banks;
 };
 
 
