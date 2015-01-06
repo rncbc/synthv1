@@ -116,6 +116,9 @@ protected:
 	// Update local tied widgets.
 	void updateParamEx(synthv1::ParamIndex index, float fValue);
 
+	// Preset status updater.
+	void updateLoadPreset(const QString& sPreset);
+
 	// Dirty flag (overridable virtual) methods.
 	virtual void updateDirtyPreset(bool bDirtyPreset);
 

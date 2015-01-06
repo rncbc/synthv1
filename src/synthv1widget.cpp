@@ -1011,14 +1011,7 @@ void synthv1widget::loadPreset ( const QString& sFilename )
 
 	synthv1_param::loadPreset(pSynth, sFilename);
 
-	updateParamValues();
-
-	const QString& sPreset
-		= QFileInfo(sFilename).completeBaseName();
-
-	m_ui.Preset->setPreset(sPreset);
-	m_ui.StatusBar->showMessage(tr("Load preset: %1").arg(sPreset), 5000);
-	updateDirtyPreset(false);
+	updateLoadPreset(QFileInfo(sFilename).completeBaseName());
 }
 
 
@@ -1045,6 +1038,17 @@ bool synthv1widget::queryClose (void)
 }
 
 
+// Preset status updater.
+void synthv1widget::updateLoadPreset ( const QString& sPreset )
+{
+	updateParamValues();
+
+	m_ui.Preset->setPreset(sPreset);
+	m_ui.StatusBar->showMessage(tr("Load preset: %1").arg(sPreset), 5000);
+	updateDirtyPreset(false);
+}
+
+
 // Notification updater.
 void synthv1widget::updateSchedNotify ( int stype )
 {
@@ -1060,10 +1064,7 @@ void synthv1widget::updateSchedNotify ( int stype )
 	case synthv1_sched::Programs: {
 		synthv1_programs *pPrograms = pSynth->programs();
 		synthv1_programs::Prog *pProg = pPrograms->current_prog();
-		if (pProg) {
-			m_ui.Preset->setPreset(pProg->name());
-			updateParamValues();
-		}
+		if (pProg) updateLoadPreset(pProg->name());
 		break;
 	}
 	case synthv1_sched::Wave:
