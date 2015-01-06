@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(synthv1, 0.5.1.7, rncbc@rncbc.org)
+AC_INIT(synthv1, 0.5.1.8, rncbc@rncbc.org)
 
 AC_CONFIG_SRCDIR(src/synthv1.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -69,6 +69,11 @@ AC_ARG_ENABLE(lv2-ui-show,
   AC_HELP_STRING([--enable-lv2-ui-show], [enable LV2 UI Show interface support (default=yes)]),
   [ac_lv2_ui_show="$enableval"],
   [ac_lv2_ui_show="yes"])
+
+AC_ARG_ENABLE(lv2-programs,
+  AC_HELP_STRING([--enable-lv2-programs], [enable LV2 plug-in Programs support (default=yes)]),
+  [ac_lv2_programs="$enableval"],
+  [ac_lv2_programs="yes"])
 
 
 # Enable liblo availability.
@@ -140,14 +145,6 @@ AC_ARG_WITH(lv2,
 AC_ARG_WITH(liblo,
   AC_HELP_STRING([--with-liblo=PATH], [use alternate liblo path]),
   [ac_with_paths="$ac_with_paths $withval"])
-
-
-# Check for LV2 support.
-if test "x$ac_lv2" = "xno"; then
-   ac_lv2_external_ui="no"
-   ac_lv2_ui_idle="no"
-   ac_lv2_ui_show="no"
-fi
 
 
 # Honor user specified flags.
@@ -418,6 +415,7 @@ if test "x$ac_lv2" = "xno"; then
    lv2_external_ui="no"
    ac_lv2_ui_idle="no"
    ac_lv2_ui_show="no"
+   ac_lv2_programs="no"
 fi
 
 if test "x$ac_lv2_external_ui" = "xyes"; then
@@ -461,6 +459,14 @@ if test "x$ac_lv2_ui_show" = "xyes"; then
       AC_DEFINE(CONFIG_LV2_UI_SHOW, 1, [Define if LV2 UI Show interface support is available.])
    else
       AC_MSG_WARN([*** LV2 UI Show interface support will be disabled.])
+   fi
+fi
+if test "x$ac_lv2_programs" = "xyes"; then
+   AC_CHECK_HEADER(lv2_programs.h, [ac_lv2_programs="yes"], [ac_lv2_programs="no"])
+   if test "x$ac_lv2_programs" = "xyes"; then
+      AC_DEFINE(CONFIG_LV2_PROGRAMS, 1, [Define if LV2 Programs extension is available.])
+   else
+      AC_MSG_WARN([*** LV2 Programs extension will be disabled.])
    fi
 fi
 
@@ -527,6 +533,7 @@ echo "  LV2 plug-in build  . . . . . . . . . . . . . . . .: $ac_lv2"
 echo "  LV2 plug-in External UI support  . . . . . . . . .: $ac_lv2_external_ui"
 echo "  LV2 plug-in UI Idle interface support  . . . . . .: $ac_lv2_ui_idle"
 echo "  LV2 plug-in UI Show interface support  . . . . . .: $ac_lv2_ui_show"
+echo "  LV2 plug-in Programs support . . . . . . . . . . .: $ac_lv2_programs"
 echo "  OSC service support (liblo)  . . . . . . . . . . .: $ac_liblo"
 echo "  NSM (Non Session Management) support . . . . . . .: $ac_nsm"
 echo

@@ -801,6 +801,8 @@ public:
 	void setParamPort(synthv1::ParamIndex index, float *pfParam = 0);
 	float *paramPort(synthv1::ParamIndex index);
 
+	void selectProgram(uint16_t bank_id, uint16_t prog_id);
+
 	synthv1_programs *programs();
 
 	void process_midi(uint8_t *data, uint32_t size);
@@ -1857,6 +1859,13 @@ void synthv1_impl::allSoundOff (void)
 
 // programs accessor
 
+void synthv1_impl::selectProgram ( uint16_t bank_id, uint16_t prog_id )
+{
+	m_programs.set_current_bank(bank_id);
+	m_programs_sched.set_current_prog(prog_id);
+}
+
+
 synthv1_programs *synthv1_impl::programs (void)
 {
 	return &m_programs;
@@ -2276,6 +2285,12 @@ void synthv1::process ( float **ins, float **outs, uint32_t nframes )
 
 
 // programs accessor
+
+void synthv1::selectProgram ( uint16_t bank_id, uint16_t prog_id )
+{
+	m_pImpl->selectProgram(bank_id, prog_id);
+}
+
 
 synthv1_programs *synthv1::programs (void) const
 {

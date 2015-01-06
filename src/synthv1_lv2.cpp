@@ -25,6 +25,10 @@
 #include "lv2/lv2plug.in/ns/ext/time/time.h"
 #include "lv2/lv2plug.in/ns/ext/atom/util.h"
 
+#ifdef CONFIG_LV2_PROGRAMS
+#include "lv2_programs.h"
+#endif
+
 #include <math.h>
 
 
@@ -225,8 +229,65 @@ static void synthv1_lv2_cleanup ( LV2_Handle instance )
 }
 
 
-static const void *synthv1_lv2_extension_data ( const char * )
+#ifdef CONFIG_LV2_PROGRAMS
+
+#include "synthv1_programs.h"
+
+static const LV2_Program_Descriptor *synthv1_lv2_programs_get_program (
+	LV2_Handle instance, uint32_t index )
 {
+	synthv1_lv2 *pPlugin = static_cast<synthv1_lv2 *> (instance);
+	if (pPlugin) {
+		static LV2_Program_Descriptor s_program;
+		static QByteArray s_aProgramName;
+		synthv1_programs *pPrograms = pPlugin->programs();
+		const synthv1_programs::Banks& banks = pPrograms->banks();
+		synthv1_programs::Banks::ConstIterator bank_iter = banks.constBegin();
+		const synthv1_programs::Banks::ConstIterator& bank_end = banks.constEnd();
+		for (uint32_t i = 0; bank_iter != bank_end; ++bank_iter) {
+			synthv1_programs::Bank *pBank = bank_iter.value();
+			const synthv1_programs::Progs& progs = pBank->progs();
+			synthv1_programs::Progs::ConstIterator prog_iter = progs.constBegin();
+			const synthv1_programs::Progs::ConstIterator& prog_end = progs.constEnd();
+			for ( ; prog_iter != prog_end; ++prog_iter, ++i) {
+				synthv1_programs::Prog *pProg = prog_iter.value();
+				if (i >= index) {
+					s_aProgramName = pProg->name().toUtf8();
+					s_program.bank = pBank->id();
+					s_program.program = pProg->id();
+					s_program.name = s_aProgramName.constData();
+					return &s_program;
+				}
+			}
+		}
+	}
+
+	return NULL;
+}
+
+static void synthv1_lv2_programs_select_program (
+	LV2_Handle instance, uint32_t bank, uint32_t program )
+{
+	synthv1_lv2 *pPlugin = static_cast<synthv1_lv2 *> (instance);
+	if (pPlugin)
+		pPlugin->selectProgram(bank, program);
+}
+
+static const LV2_Programs_Interface synthv1_lv2_programs_interface =
+{
+	synthv1_lv2_programs_get_program,
+	synthv1_lv2_programs_select_program,
+};
+
+#endif	// CONFIG_LV2_PROGRAMS
+
+static const void *synthv1_lv2_extension_data ( const char *uri )
+{
+#ifdef CONFIG_LV2_PROGRAMS
+	if (::strcmp(uri, LV2_PROGRAMS__Interface) == 0)
+		return (void *) &synthv1_lv2_programs_interface;
+	else
+#endif
     return NULL;
 }
 
