@@ -60,6 +60,7 @@ public:
 	QString sPresetDir;
 
 	// Special persistent options.
+	bool bProgramsPreview;
 	bool bUseNativeDialogs;
 
 	// Run-time special non-persistent options.

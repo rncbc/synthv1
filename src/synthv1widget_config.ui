@@ -173,6 +173,16 @@
          </column>
         </widget>
        </item>
+       <item>
+        <widget class="QCheckBox" name="ProgramsPreviewCheckBox" >
+         <property name="toolTip" >
+          <string>Whether to preview the current selected program</string>
+         </property>
+         <property name="text" >
+          <string>Preview current program</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="OptionsTab">

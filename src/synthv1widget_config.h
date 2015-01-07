@@ -56,8 +56,8 @@ protected slots:
 	void programsDeleteItem();
 
 	// janitor slots.
-	void programsCurrentChanged(QTreeWidgetItem *, QTreeWidgetItem *);
-	void programsDoubleClicked(QTreeWidgetItem *, int);
+	void programsCurrentChanged();
+	void programsActivated();
 	void programsContextMenuRequested(const QPoint&);
 
 	void programsChanged();

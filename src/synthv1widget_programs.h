@@ -79,7 +79,7 @@ public:
 	void loadPrograms(synthv1_programs *pPrograms);
 	void savePrograms(synthv1_programs *pPrograms);
 
-	void selectPrograms(synthv1_programs *pPrograms);
+	void selectProgram(synthv1_programs *pPrograms);
 
 public slots:
 
