@@ -762,8 +762,6 @@ public:
 	void setParamPort(synthv1::ParamIndex index, float *pfParam = 0);
 	float *paramPort(synthv1::ParamIndex index);
 
-	void selectProgram(uint16_t bank_id, uint16_t prog_id);
-
 	synthv1_programs *programs();
 
 	void process_midi(uint8_t *data, uint32_t size);
@@ -931,7 +929,6 @@ synthv1_impl::synthv1_impl (
 
 	// load programs database...
 	m_config.loadPrograms(&m_programs);
-//	m_config.loadProgramsCurrent(&m_programs);
 
 	// number of channels
 	setChannels(iChannels);
@@ -953,9 +950,11 @@ synthv1_impl::synthv1_impl (
 
 synthv1_impl::~synthv1_impl (void)
 {
-	// save programs database...
+#if 0
+	// DO NOT save programs database here:
+	// prevent multi-instance clash...
 	m_config.savePrograms(&m_programs);
-	m_config.saveProgramsCurrent(&m_programs);
+#endif
 
 	// deallocate voice pool.
 	for (int i = 0; i < MAX_VOICES; ++i)
@@ -1818,13 +1817,6 @@ void synthv1_impl::allSoundOff (void)
 
 // programs accessor
 
-void synthv1_impl::selectProgram ( uint16_t bank_id, uint16_t prog_id )
-{
-	m_programs.bank_select(bank_id);
-	m_programs.prog_change(prog_id);
-}
-
-
 synthv1_programs *synthv1_impl::programs (void)
 {
 	return &m_programs;
@@ -2244,12 +2236,6 @@ void synthv1::process ( float **ins, float **outs, uint32_t nframes )
 
 
 // programs accessor
-
-void synthv1::selectProgram ( uint16_t bank_id, uint16_t prog_id )
-{
-	m_pImpl->selectProgram(bank_id, prog_id);
-}
-
 
 synthv1_programs *synthv1::programs (void) const
 {

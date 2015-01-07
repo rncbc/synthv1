@@ -118,8 +118,8 @@ void synthv1widget_config::setPrograms ( synthv1_programs *pPrograms )
 	if (pConfig && m_pPrograms) {
 		// Load programs.
 		m_ui.ProgramsTreeWidget->loadPrograms(m_pPrograms);
-		// Load current selected program, if any...
-		m_ui.ProgramsTreeWidget->loadProgramsCurrent(m_pPrograms);
+		// Selected current program, if any...
+		m_ui.ProgramsTreeWidget->selectPrograms(m_pPrograms);
 	}
 
 	// Reset Dialog dirty flags.
@@ -262,8 +262,7 @@ void synthv1widget_config::accept (void)
 	if (m_iDirtyPrograms > 0 && pConfig && m_pPrograms) {
 		// Save programs...
 		m_ui.ProgramsTreeWidget->savePrograms(m_pPrograms);
-		// Save program selection...
-		m_ui.ProgramsTreeWidget->saveProgramsCurrent(m_pPrograms);
+		pConfig->savePrograms(m_pPrograms);
 		// Reset dirty flag.
 		m_iDirtyPrograms = 0;
 	}
@@ -272,6 +271,7 @@ void synthv1widget_config::accept (void)
 		// Save options...
 		pConfig->bUseNativeDialogs = m_ui.UseNativeDialogsCheckBox->isChecked();
 		pConfig->bDontUseNativeDialogs = !pConfig->bUseNativeDialogs;
+		pConfig->save();
 		// Reset dirty flag.
 		m_iDirtyOptions = 0;
 	}

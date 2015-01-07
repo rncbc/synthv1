@@ -292,7 +292,7 @@ void synthv1widget_programs::savePrograms ( synthv1_programs *pPrograms )
 }
 
 
-void synthv1widget_programs::loadProgramsCurrent ( synthv1_programs *pPrograms )
+void synthv1widget_programs::selectPrograms ( synthv1_programs *pPrograms )
 {
 	synthv1_programs::Bank *pBank = pPrograms->current_bank();
 	if (pBank == NULL)
@@ -318,22 +318,6 @@ void synthv1widget_programs::loadProgramsCurrent ( synthv1_programs *pPrograms )
 				}
 			}
 			break;
-		}
-	}
-}
-
-
-void synthv1widget_programs::saveProgramsCurrent ( synthv1_programs *pPrograms )
-{
-	const QList<QTreeWidgetItem *>& selectedItems
-		= QTreeWidget::selectedItems();
-	if (!selectedItems.isEmpty()) {
-		QTreeWidgetItem *pProgItem = selectedItems.first();
-		QTreeWidgetItem *pBankItem = pProgItem->parent();
-		if (pBankItem) {
-			const uint16_t bank_id = pBankItem->data(0, Qt::UserRole).toInt();
-			const uint16_t prog_id = pProgItem->data(0, Qt::UserRole).toInt();
-			pPrograms->select_program(bank_id, prog_id);
 		}
 	}
 }

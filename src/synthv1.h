@@ -187,8 +187,6 @@ public:
 	void setParamPort(ParamIndex index, float *pfParam);
 	float *paramPort(ParamIndex index) const;
 
-	void selectProgram(uint16_t bank_id, uint16_t prog_id);
-
 	synthv1_programs *programs() const;
 
 	void reset();

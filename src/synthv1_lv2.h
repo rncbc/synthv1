@@ -32,6 +32,12 @@
 #define SYNTHV1_LV2_PREFIX SYNTHV1_LV2_URI "#"
 
 
+#ifdef CONFIG_LV2_PROGRAMS
+#include "lv2_programs.h"
+#include <QByteArray>
+#endif
+
+
 //-------------------------------------------------------------------------
 // synthv1_lv2 - decl.
 //
@@ -61,6 +67,11 @@ public:
 	void activate();
 	void deactivate();
 
+#ifdef CONFIG_LV2_PROGRAMS
+	const LV2_Program_Descriptor *get_program(uint32_t index);
+	void select_program(uint32_t bank, uint32_t program);
+#endif
+
 private:
 
 	struct lv2_urids
@@ -78,6 +89,11 @@ private:
 
 	float **m_ins;
 	float **m_outs;
+
+#ifdef CONFIG_LV2_PROGRAMS
+	LV2_Program_Descriptor m_program;
+	QByteArray m_aProgramName;
+#endif
 };
 
 
