@@ -152,7 +152,7 @@ bool synthv1widget_preset::queryPreset (void)
 		return false;
 
 	if (m_iDirtyPreset > 0) {
-		const QString& sPreset = pConfig->sPreset;
+		const QString sPreset(pConfig->sPreset);
 		if (sPreset.isEmpty()) {
 			if (QMessageBox::warning(this,
 				tr("Warning") + " - " SYNTHV1_TITLE,

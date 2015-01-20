@@ -273,7 +273,6 @@ void synthv1widget_config::accept (void)
 		pConfig->bProgramsPreview = m_ui.ProgramsPreviewCheckBox->isChecked();
 		pConfig->bUseNativeDialogs = m_ui.UseNativeDialogsCheckBox->isChecked();
 		pConfig->bDontUseNativeDialogs = !pConfig->bUseNativeDialogs;
-		pConfig->save();
 		// Reset dirty flag.
 		m_iDirtyOptions = 0;
 	}

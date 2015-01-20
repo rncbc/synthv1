@@ -51,11 +51,8 @@ synthv1_config::synthv1_config (void)
 // Default destructor.
 synthv1_config::~synthv1_config (void)
 {
-#if 0
-	// DO NOT save config here:
-	// prevent multi-instance clash...
 	save();
-#endif
+
 	g_pSettings = NULL;
 }
 
