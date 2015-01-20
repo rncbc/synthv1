@@ -1,7 +1,7 @@
 // synthv1widget_knob.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -99,7 +99,7 @@ void synthv1widget_knob::setValue ( float fValue, bool bDefault )
 	}
 	else
 	if (QWidget::isEnabled()
-		&& ::fabs(fValue - m_fDefaultValue) > 0.001f) {
+		&& ::fabs(fValue - m_fDefaultValue) > 0.0001f) {
 		pal.setColor(QPalette::Base,
 			(pal.window().color().value() < 0x7f
 				? QColor(Qt::darkYellow).darker()
