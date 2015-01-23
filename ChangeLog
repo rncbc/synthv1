@@ -4,7 +4,7 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.6.0  2014-01-23  A third official beta.
 
 - MIDI bank-select/program-changes is now supported, for patch,
   preset and/or instrument program control. (EXPERIMENTAL)
