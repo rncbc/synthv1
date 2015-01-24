@@ -4,6 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Fixed a Qt5 FTBFS re. QHeaderView::set[Section]ResizeMode().
+
+
 0.6.0  2014-01-23  A third official beta.
 
 - MIDI bank-select/program-changes is now supported, for patch,

@@ -202,7 +202,11 @@ synthv1widget_programs::synthv1widget_programs ( QWidget *pParent )
 	QTreeWidget::setSelectionMode(QAbstractItemView::SingleSelection);
 
 	QHeaderView *pHeaderView = QTreeWidget::header();
+#if QT_VERSION < 0x050000
 	pHeaderView->setResizeMode(QHeaderView::ResizeToContents);
+#else
+	pHeaderView->setSectionResizeMode(QHeaderView::ResizeToContents);
+#endif
 	pHeaderView->hide();
 
 	QTreeWidget::setItemDelegate(new synthv1widget_programs_item_delegate(this));
