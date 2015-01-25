@@ -1,7 +1,7 @@
 // synthv1widget_env.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -163,6 +163,8 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 	grad.setColorAt(0.0f, rgbLite);
 	grad.setColorAt(1.0f, Qt::black);
 
+	painter.setRenderHint(QPainter::Antialiasing, true);
+
 	painter.setBrush(grad);
 	painter.drawPath(path);
 
@@ -183,6 +185,8 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 		.arg(int(100.0f * sustain()))
 		.arg(int(100.0f * release())));
 #endif
+
+	painter.setRenderHint(QPainter::Antialiasing, false);
 
 	painter.end();
 

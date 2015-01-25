@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Envelope and filter now rendered with anti-aliased lines.
 - Fixed a Qt5 FTBFS re. QHeaderView::set[Section]ResizeMode().
 
 
