@@ -189,6 +189,9 @@ public:
 
 	synthv1_programs *programs() const;
 
+	void setParamValue(ParamIndex index, float fValue);
+	float paramValue(ParamIndex index) const;
+
 	void reset();
 
 protected:

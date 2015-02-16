@@ -781,21 +781,18 @@ void synthv1widget::setParamValue (
 
 float synthv1widget::paramValue ( synthv1::ParamIndex index ) const
 {
-	float fParamValue = 0.0f;
+	float fValue = 0.0f;
 
 	synthv1widget_knob *pKnob = paramKnob(index);
 	if (pKnob) {
-		fParamValue = pKnob->value();
+		fValue = pKnob->value();
 	} else {
 		synthv1 *pSynth = instance();
-		if (pSynth) {
-			const float *pParamPort = pSynth->paramPort(index);
-			if (pParamPort)
-				fParamValue = *pParamPort;
-		}
+		if (pSynth)
+			fValue = pSynth->paramValue(index);
 	}
 
-	return fParamValue;
+	return fValue;
 }
 
 
@@ -927,11 +924,9 @@ void synthv1widget::updateParamValues (void)
 
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
 		synthv1::ParamIndex index = synthv1::ParamIndex(i);
-		float fValue = synthv1_param::paramDefaultValue(index);
-		const float *pfParamPort
-			= (pSynth ? pSynth->paramPort(index) : NULL);
-		if (pfParamPort)
-			fValue = *pfParamPort;
+		const float fValue = (pSynth
+			? pSynth->paramValue(index)
+			: synthv1_param::paramDefaultValue(index));
 		setParamValue(index, fValue, true);
 		updateParam(index, fValue);
 	//	updateParamEx(index, fValue);
@@ -1162,13 +1157,10 @@ void synthv1widget::bpmSyncChanged (void)
 	++m_iUpdate;
 	synthv1 *pSynth = instance();
 	if (pSynth) {
-		float *pBpmSync = pSynth->paramPort(synthv1::DEL1_BPMSYNC);
-		if (pBpmSync) {
-			const bool bBpmSync0 = (*pBpmSync > 0.0f);
-			const bool bBpmSync1 = m_ui.Del1BpmKnob->isSpecialValue();
-			if ((bBpmSync1 && !bBpmSync0) || (!bBpmSync1 && bBpmSync0))
-				*pBpmSync = (bBpmSync1 ? 1.0f : 0.0f);
-		}
+		const bool bBpmSync0 = (pSynth->paramValue(synthv1::DEL1_BPMSYNC) > 0.0f);
+		const bool bBpmSync1 = m_ui.Del1BpmKnob->isSpecialValue();
+		if ((bBpmSync1 && !bBpmSync0) || (!bBpmSync1 && bBpmSync0))
+			pSynth->setParamValue(synthv1::DEL1_BPMSYNC, (bBpmSync1 ? 1.0f : 0.0f));
 	}
 	--m_iUpdate;
 }

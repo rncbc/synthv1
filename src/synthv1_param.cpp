@@ -243,14 +243,12 @@ void synthv1_param::loadPreset ( synthv1 *pSynth, const QString& sFilename )
 									continue;
 								index = s_hash.value(sName);
 							}
-							float fParamValue = eParam.text().toFloat();
+							float fValue = eParam.text().toFloat();
 						#if 1//--legacy support < 0.3.0.4
-							if (index == synthv1::DEL1_BPM && fParamValue < 3.6f)
-								fParamValue *= 100.0f;
+							if (index == synthv1::DEL1_BPM && fValue < 3.6f)
+								fValue *= 100.0f;
 						#endif
-							float *pfParamPort = pSynth->paramPort(index);
-							if (pfParamPort)
-								*pfParamPort = fParamValue;
+							pSynth->setParamValue(index, fValue);
 						}
 					}
 				}
@@ -282,12 +280,8 @@ void synthv1_param::savePreset ( synthv1 *pSynth, const QString& sFilename )
 		synthv1::ParamIndex index = synthv1::ParamIndex(i);
 		eParam.setAttribute("index", QString::number(i));
 		eParam.setAttribute("name", synthv1_param::paramName(index));
-		const float *pfParamPort = pSynth->paramPort(index);
-		float fParamValue = 0.0f;
-		if (pfParamPort)
-			fParamValue = *pfParamPort;
-		eParam.appendChild(
-			doc.createTextNode(QString::number(fParamValue)));
+		const float fValue = pSynth->paramValue(index);
+		eParam.appendChild(doc.createTextNode(QString::number(fValue)));
 		eParams.appendChild(eParam);
 	}
 	ePreset.appendChild(eParams);

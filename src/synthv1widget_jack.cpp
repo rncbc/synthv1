@@ -80,9 +80,7 @@ synthv1_nsm *synthv1widget_jack::nsmClient (void) const
 void synthv1widget_jack::updateParam (
 	synthv1::ParamIndex index, float fValue ) const
 {
-	float *pParamPort = m_pSynth->paramPort(index);
-	if (pParamPort)
-		*pParamPort = fValue;
+	m_pSynth->setParamValue(index, fValue);
 }
 
 

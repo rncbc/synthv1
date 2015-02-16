@@ -760,7 +760,10 @@ public:
 	uint32_t sampleRate() const;
 
 	void setParamPort(synthv1::ParamIndex index, float *pfParam = 0);
-	float *paramPort(synthv1::ParamIndex index);
+	float *paramPort(synthv1::ParamIndex index) const;
+
+	void setParamValue(synthv1::ParamIndex index, float fValue);
+	float paramValue(synthv1::ParamIndex index) const;
 
 	synthv1_programs *programs();
 
@@ -1218,7 +1221,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 }
 
 
-float *synthv1_impl::paramPort ( synthv1::ParamIndex index )
+float *synthv1_impl::paramPort ( synthv1::ParamIndex index ) const
 {
 	float *pfParam= 0;
 
@@ -1352,6 +1355,21 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	}
 
 	return pfParam;
+}
+
+
+void synthv1_impl::setParamValue ( synthv1::ParamIndex index, float fValue )
+{
+	float *pfParamPort = paramPort(index);
+	if (pfParamPort)
+		*pfParamPort = fValue;
+}
+
+
+float synthv1_impl::paramValue ( synthv1::ParamIndex index ) const
+{
+	float *pfParamPort = paramPort(index);
+	return (pfParamPort ? *pfParamPort : 0.0f);
 }
 
 
@@ -2213,6 +2231,17 @@ void synthv1::setParamPort ( ParamIndex index, float *pfParam )
 float *synthv1::paramPort ( ParamIndex index ) const
 {
 	return m_pImpl->paramPort(index);
+}
+
+
+void synthv1::setParamValue ( ParamIndex index, float fValue )
+{
+	m_pImpl->setParamValue(index, fValue);
+}
+
+float synthv1::paramValue ( ParamIndex index ) const
+{
+	return m_pImpl->paramValue(index);
 }
 
 
