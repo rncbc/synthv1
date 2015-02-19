@@ -10,6 +10,8 @@ include(src_lv2.pri)
 
 HEADERS = \
 	config.h \
+	synthv1.h \
+	synthv1_lv2.h \
 	synthv1_config.h \
 	synthv1_param.h \
 	synthv1widget.h \
@@ -24,7 +26,6 @@ HEADERS = \
 	synthv1widget_lv2.h
 
 SOURCES = \
-	synthv1_param.cpp \
 	synthv1widget.cpp \
 	synthv1widget_env.cpp \
 	synthv1widget_filt.cpp \
