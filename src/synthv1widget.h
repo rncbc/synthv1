@@ -26,7 +26,7 @@
 
 #include "synthv1_config.h"
 
-#include "synthv1.h"
+#include "synthv1_ui.h"
 
 
 // forward decls.
@@ -98,7 +98,7 @@ protected slots:
 protected:
 
 	// Synth engine accessor.
-	virtual synthv1 *instance() const = 0;
+	virtual synthv1_ui *ui_instance() const = 0;
 
 	// Reset swap params A/B group.
 	void resetSwapParams();

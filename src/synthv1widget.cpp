@@ -787,9 +787,9 @@ float synthv1widget::paramValue ( synthv1::ParamIndex index ) const
 	if (pKnob) {
 		fValue = pKnob->value();
 	} else {
-		synthv1 *pSynth = instance();
-		if (pSynth)
-			fValue = pSynth->paramValue(index);
+		synthv1_ui *pSynthUi = ui_instance();
+		if (pSynthUi)
+			fValue = pSynthUi->paramValue(index);
 	}
 
 	return fValue;
@@ -853,11 +853,11 @@ void synthv1widget::updateParamEx ( synthv1::ParamIndex index, float fValue )
 // Reset all param knobs to default values.
 void synthv1widget::resetParams (void)
 {
-	synthv1 *pSynth = instance();
-	if (pSynth == NULL)
+	synthv1_ui *pSynthUi = ui_instance();
+	if (pSynthUi == NULL)
 		return;
 
-	pSynth->reset();
+	pSynthUi->reset();
 
 	resetSwapParams();
 
@@ -920,12 +920,12 @@ void synthv1widget::updateParamValues (void)
 {
 	resetSwapParams();
 
-	synthv1 *pSynth = instance();
+	synthv1_ui *pSynthUi = ui_instance();
 
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
 		synthv1::ParamIndex index = synthv1::ParamIndex(i);
-		const float fValue = (pSynth
-			? pSynth->paramValue(index)
+		const float fValue = (pSynthUi
+			? pSynthUi->paramValue(index)
 			: synthv1_param::paramDefaultValue(index));
 		setParamValue(index, fValue, true);
 		updateParam(index, fValue);
@@ -997,14 +997,14 @@ void synthv1widget::loadPreset ( const QString& sFilename )
 	qDebug("synthv1widget::loadPreset(\"%s\")", sFilename.toUtf8().constData());
 #endif
 
-	synthv1 *pSynth = instance();
-	if (pSynth == NULL)
+	synthv1_ui *pSynthUi = ui_instance();
+	if (pSynthUi == NULL)
 		return;
 
 	resetParamKnobs();
 	resetParamValues();
 
-	synthv1_param::loadPreset(pSynth, sFilename);
+	synthv1_param::loadPreset(pSynthUi, sFilename);
 
 	updateLoadPreset(QFileInfo(sFilename).completeBaseName());
 }
@@ -1016,7 +1016,7 @@ void synthv1widget::savePreset ( const QString& sFilename )
 	qDebug("synthv1widget::savePreset(\"%s\")", sFilename.toUtf8().constData());
 #endif
 
-	synthv1_param::savePreset(instance(), sFilename);
+	synthv1_param::savePreset(ui_instance(), sFilename);
 
 	const QString& sPreset
 		= QFileInfo(sFilename).completeBaseName();
@@ -1047,8 +1047,8 @@ void synthv1widget::updateLoadPreset ( const QString& sPreset )
 // Notification updater.
 void synthv1widget::updateSchedNotify ( int stype )
 {
-	synthv1 *pSynth = instance();
-	if (pSynth == NULL)
+	synthv1_ui *pSynthUi = ui_instance();
+	if (pSynthUi == NULL)
 		return;
 
 #ifdef CONFIG_DEBUG_0
@@ -1057,7 +1057,7 @@ void synthv1widget::updateSchedNotify ( int stype )
 
 	switch (synthv1_sched::Type(stype)) {
 	case synthv1_sched::Programs: {
-		synthv1_programs *pPrograms = pSynth->programs();
+		synthv1_programs *pPrograms = pSynthUi->programs();
 		synthv1_programs::Prog *pProg = pPrograms->current_prog();
 		if (pProg) updateLoadPreset(pProg->name());
 		break;
@@ -1072,14 +1072,14 @@ void synthv1widget::updateSchedNotify ( int stype )
 // Menu actions.
 void synthv1widget::helpConfigure (void)
 {
-	synthv1 *pSynth = instance();
-	if (pSynth == NULL)
+	synthv1_ui *pSynthUi = ui_instance();
+	if (pSynthUi == NULL)
 		return;
 
 	synthv1widget_config form(this);
 
 	// Set programs database...
-	form.setPrograms(pSynth->programs());
+	form.setPrograms(pSynthUi->programs());
 	form.exec();
 }
 
@@ -1155,12 +1155,12 @@ void synthv1widget::bpmSyncChanged (void)
 		return;
 
 	++m_iUpdate;
-	synthv1 *pSynth = instance();
-	if (pSynth) {
-		const bool bBpmSync0 = (pSynth->paramValue(synthv1::DEL1_BPMSYNC) > 0.0f);
+	synthv1_ui *pSynthUi = ui_instance();
+	if (pSynthUi) {
+		const bool bBpmSync0 = (pSynthUi->paramValue(synthv1::DEL1_BPMSYNC) > 0.0f);
 		const bool bBpmSync1 = m_ui.Del1BpmKnob->isSpecialValue();
 		if ((bBpmSync1 && !bBpmSync0) || (!bBpmSync1 && bBpmSync0))
-			pSynth->setParamValue(synthv1::DEL1_BPMSYNC, (bBpmSync1 ? 1.0f : 0.0f));
+			pSynthUi->setParamValue(synthv1::DEL1_BPMSYNC, (bBpmSync1 ? 1.0f : 0.0f));
 	}
 	--m_iUpdate;
 }

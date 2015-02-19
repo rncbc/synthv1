@@ -38,8 +38,8 @@
 //
 
 // Constructor.
-synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
-	: synthv1widget(), m_pSynth(pSynth)
+synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynthUi )
+	: synthv1widget(), m_pSynthUi(pSynthUi)
 	#ifdef CONFIG_NSM
 		, m_pNsmClient(NULL)
 	#endif
@@ -51,9 +51,9 @@ synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 
 
 // Synth engine accessor.
-synthv1 *synthv1widget_jack::instance (void) const
+synthv1_ui *synthv1widget_jack::ui_instance (void) const
 {
-	return m_pSynth;
+	return m_pSynthUi;
 }
 
 #ifdef CONFIG_NSM
@@ -80,7 +80,7 @@ synthv1_nsm *synthv1widget_jack::nsmClient (void) const
 void synthv1widget_jack::updateParam (
 	synthv1::ParamIndex index, float fValue ) const
 {
-	m_pSynth->setParamValue(index, fValue);
+	m_pSynthUi->setParamValue(index, fValue);
 }
 
 

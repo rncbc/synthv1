@@ -22,7 +22,7 @@
 #ifndef __synthv1_jack_h
 #define __synthv1_jack_h
 
-#include "synthv1.h"
+#include "synthv1_ui.h"
 
 #include <jack/jack.h>
 
@@ -39,7 +39,7 @@ class synthv1_alsa_thread;
 // synthv1_jack - decl.
 //
 
-class synthv1_jack : public synthv1
+class synthv1_jack : public synthv1_ui
 {
 public:
 
@@ -71,6 +71,8 @@ public:
 #endif
 
 private:
+
+	synthv1 *m_synth;
 
 	jack_client_t *m_client;
 

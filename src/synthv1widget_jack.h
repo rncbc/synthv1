@@ -53,7 +53,7 @@ public:
 protected:
 
 	// Synth engine accessor.
-	synthv1 *instance() const;
+	synthv1_ui *ui_instance() const;
 
 	// Param port method.
 	void updateParam(synthv1::ParamIndex index, float fValue) const;
@@ -73,7 +73,7 @@ protected:
 private:
 
 	// Instance variables.
-	synthv1_jack *m_pSynth;
+	synthv1_jack *m_pSynthUi;
 
 #ifdef CONFIG_NSM
 	synthv1_nsm *m_pNsmClient;

@@ -34,8 +34,10 @@
 
 synthv1_lv2::synthv1_lv2 (
 	double sample_rate, const LV2_Feature *const *host_features )
-	: synthv1(2, uint32_t(sample_rate))
+	: synthv1_ui(new synthv1(2, uint32_t(sample_rate)))
 {
+	m_synth = synthv1_ui::instance();
+
 	::memset(&m_urids, 0, sizeof(m_urids));
 
 	m_atom_sequence = NULL;
@@ -62,7 +64,7 @@ synthv1_lv2::synthv1_lv2 (
 		}
 	}
 
-	const uint16_t nchannels = channels();
+	const uint16_t nchannels = m_synth->channels();
 	m_ins  = new float * [nchannels];
 	m_outs = new float * [nchannels];
 	for (uint16_t k = 0; k < nchannels; ++k)
@@ -74,6 +76,8 @@ synthv1_lv2::~synthv1_lv2 (void)
 {
 	delete [] m_outs;
 	delete [] m_ins;
+
+	delete m_synth;
 }
 
 
@@ -96,7 +100,7 @@ void synthv1_lv2::connect_port ( uint32_t port, void *data )
 		m_outs[1] = (float *) data;
 		break;
 	default:
-		setParamPort(ParamIndex(port - ParamBase), (float *) data);
+		m_synth->setParamPort(synthv1::ParamIndex(port - ParamBase), (float *) data);
 		break;
 	}
 }
@@ -104,7 +108,7 @@ void synthv1_lv2::connect_port ( uint32_t port, void *data )
 
 void synthv1_lv2::run ( uint32_t nframes )
 {
-	const uint16_t nchannels = channels();
+	const uint16_t nchannels = m_synth->channels();
 	float *ins[nchannels], *outs[nchannels];
 	for (uint16_t k = 0; k < nchannels; ++k) {
 		ins[k]  = m_ins[k];
@@ -121,14 +125,14 @@ void synthv1_lv2::run ( uint32_t nframes )
 				uint8_t *data = (uint8_t *) LV2_ATOM_BODY(&event->body);
 				const uint32_t nread = event->time.frames - ndelta;
 				if (nread > 0) {
-					process(ins, outs, nread);
+					m_synth->process(ins, outs, nread);
 					for (uint16_t k = 0; k < nchannels; ++k) {
 						ins[k]  += nread;
 						outs[k] += nread;
 					}
 				}
 				ndelta = event->time.frames;
-				process_midi(data, event->body.size);
+				m_synth->process_midi(data, event->body.size);
 			}
 			else
 			if (event->body.type == m_urids.atom_Blank ||
@@ -156,7 +160,7 @@ void synthv1_lv2::run ( uint32_t nframes )
 	//	m_atom_sequence = NULL;
 	}
 
-	process(ins, outs, nframes - ndelta);
+	m_synth->process(ins, outs, nframes - ndelta);
 }
 
 
@@ -178,7 +182,7 @@ void synthv1_lv2::deactivate (void)
 
 const LV2_Program_Descriptor *synthv1_lv2::get_program ( uint32_t index )
 {
-	synthv1_programs *pPrograms = synthv1::programs();
+	synthv1_programs *pPrograms = programs();
 	const synthv1_programs::Banks& banks = pPrograms->banks();
 	synthv1_programs::Banks::ConstIterator bank_iter = banks.constBegin();
 	const synthv1_programs::Banks::ConstIterator& bank_end = banks.constEnd();
@@ -204,7 +208,7 @@ const LV2_Program_Descriptor *synthv1_lv2::get_program ( uint32_t index )
 
 void synthv1_lv2::select_program ( uint32_t bank, uint32_t program )
 {
-	synthv1::programs()->select_program(bank, program);
+	programs()->select_program(bank, program);
 }
 
 #endif	// CONFIG_LV2_PROGRAMS

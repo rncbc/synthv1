@@ -11,6 +11,7 @@ include(src_lv2.pri)
 HEADERS = \
 	config.h \
 	synthv1.h \
+	synthv1_ui.h \
 	synthv1_lv2.h \
 	synthv1_config.h \
 	synthv1_wave.h \
@@ -24,6 +25,7 @@ HEADERS = \
 
 SOURCES = \
 	synthv1.cpp \
+	synthv1_ui.cpp \
 	synthv1_lv2.cpp \
 	synthv1_config.cpp \
 	synthv1_wave.cpp \

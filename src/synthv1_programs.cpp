@@ -177,8 +177,10 @@ void synthv1_programs::process_program (
 	m_bank = find_bank(bank_id);
 	m_prog = (m_bank ? m_bank->find_prog(prog_id) : 0);
 
-	if (m_prog)
-		synthv1_param::loadPreset(pSynth, m_prog->name());
+	if (m_prog) {
+		synthv1_ui ui(pSynth);
+		synthv1_param::loadPreset(&ui, m_prog->name());
+	}
 }
 
 

@@ -1,4 +1,4 @@
-// synthv1_param.h
+// synthv1_ui.cpp
 //
 /****************************************************************************
    Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
@@ -19,36 +19,45 @@
 
 *****************************************************************************/
 
-#ifndef __synthv1_param_h
-#define __synthv1_param_h
-
 #include "synthv1_ui.h"
-
-#include <QString>
-
-// forward decl.
-class QDomElement;
-class QDomDocument;
 
 
 //-------------------------------------------------------------------------
-// synthv1_param - decl.
+// synthv1_ui - decl.
 //
 
-namespace synthv1_param
+synthv1_ui::synthv1_ui ( synthv1 *pSynth ) : m_pSynth(pSynth)
 {
-	// Preset serialization methods.
-	void loadPreset(synthv1_ui *pSynthUi,
-		const QString& sFilename);
-	void savePreset(synthv1_ui *pSynthUi,
-		const QString& sFilename);
-
-	// Default parameter name/value helpers.
-	const char *paramName(synthv1::ParamIndex index);
-	float paramDefaultValue(synthv1::ParamIndex index);
-};
+}
 
 
-#endif	// __synthv1_param_h
+synthv1 *synthv1_ui::instance (void) const
+{
+	return m_pSynth;
+}
 
-// end of synthv1_param.h
+
+void synthv1_ui::setParamValue ( synthv1::ParamIndex index, float fValue )
+{
+	m_pSynth->setParamValue(index, fValue);
+}
+
+float synthv1_ui::paramValue ( synthv1::ParamIndex index ) const
+{
+	return m_pSynth->paramValue(index);
+}
+
+
+synthv1_programs *synthv1_ui::programs (void) const
+{
+	return m_pSynth->programs();
+}
+
+
+void synthv1_ui::reset (void)
+{
+	return m_pSynth->reset();
+}
+
+
+// end of synthv1_ui.cpp

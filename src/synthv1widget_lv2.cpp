@@ -1,7 +1,7 @@
 // synthv1widget_lv2.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -33,9 +33,9 @@
 // synthv1widget_lv2 - impl.
 //
 
-synthv1widget_lv2::synthv1widget_lv2 ( synthv1_lv2 *pSynth,
+synthv1widget_lv2::synthv1widget_lv2 ( synthv1_lv2 *pSynthUi,
 	LV2UI_Controller controller, LV2UI_Write_Function write_function )
-	: synthv1widget(), m_pSynth(pSynth)
+	: synthv1widget(), m_pSynthUi(pSynthUi)
 {
 	m_controller = controller;
 	m_write_function = write_function;
@@ -55,9 +55,9 @@ synthv1widget_lv2::synthv1widget_lv2 ( synthv1_lv2 *pSynth,
 
 
 // Synth engine accessor.
-synthv1 *synthv1widget_lv2::instance (void) const
+synthv1_ui *synthv1widget_lv2::ui_instance (void) const
 {
-	return m_pSynth;
+	return m_pSynthUi;
 }
 
 

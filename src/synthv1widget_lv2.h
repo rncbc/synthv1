@@ -1,7 +1,7 @@
 // synthv1widget_lv2.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -67,7 +67,7 @@ public:
 protected:
 
 	// Synth engine accessor.
-	synthv1 *instance() const;
+	synthv1_ui *ui_instance() const;
 
 	// Param methods.
 	void updateParam(synthv1::ParamIndex index, float fValue) const;
@@ -78,7 +78,7 @@ protected:
 private:
 
 	// Instance variables.
-	synthv1_lv2 *m_pSynth;
+	synthv1_lv2 *m_pSynthUi;
 
 	// Instance variables.
 	LV2UI_Controller     m_controller;

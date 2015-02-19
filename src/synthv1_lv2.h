@@ -22,7 +22,7 @@
 #ifndef __synthv1_lv2_h
 #define __synthv1_lv2_h
 
-#include "synthv1.h"
+#include "synthv1_ui.h"
 
 #include "lv2.h"
 #include "lv2/lv2plug.in/ns/ext/urid/urid.h"
@@ -42,7 +42,7 @@
 // synthv1_lv2 - decl.
 //
 
-class synthv1_lv2 : public synthv1
+class synthv1_lv2 : public synthv1_ui
 {
 public:
 
@@ -73,6 +73,8 @@ public:
 #endif
 
 private:
+
+	synthv1 *m_synth;
 
 	struct lv2_urids
 	{

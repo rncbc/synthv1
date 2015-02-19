@@ -1,4 +1,4 @@
-// synthv1_param.h
+// synthv1_ui.h
 //
 /****************************************************************************
    Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
@@ -19,36 +19,39 @@
 
 *****************************************************************************/
 
-#ifndef __synthv1_param_h
-#define __synthv1_param_h
+#ifndef __synthv1_ui_h
+#define __synthv1_ui_h
 
-#include "synthv1_ui.h"
-
-#include <QString>
-
-// forward decl.
-class QDomElement;
-class QDomDocument;
+#include "synthv1.h"
 
 
 //-------------------------------------------------------------------------
-// synthv1_param - decl.
+// synthv1_ui - decl.
 //
 
-namespace synthv1_param
+class synthv1_ui
 {
-	// Preset serialization methods.
-	void loadPreset(synthv1_ui *pSynthUi,
-		const QString& sFilename);
-	void savePreset(synthv1_ui *pSynthUi,
-		const QString& sFilename);
+public:
 
-	// Default parameter name/value helpers.
-	const char *paramName(synthv1::ParamIndex index);
-	float paramDefaultValue(synthv1::ParamIndex index);
+	synthv1_ui(synthv1 *pSynth);
+
+	void setParamValue(synthv1::ParamIndex index, float fValue);
+	float paramValue(synthv1::ParamIndex index) const;
+
+	synthv1_programs *programs() const;
+
+	void reset();
+
+protected:
+
+	synthv1 *instance() const;
+
+private:
+
+	synthv1 *m_pSynth;
 };
 
 
-#endif	// __synthv1_param_h
+#endif// __synthv1_ui_h
 
-// end of synthv1_param.h
+// end of synthv1_ui.h
