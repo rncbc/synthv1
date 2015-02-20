@@ -22,7 +22,7 @@
 #ifndef __synthv1_jack_h
 #define __synthv1_jack_h
 
-#include "synthv1_ui.h"
+#include "synthv1.h"
 
 #include <jack/jack.h>
 
@@ -39,7 +39,7 @@ class synthv1_alsa_thread;
 // synthv1_jack - decl.
 //
 
-class synthv1_jack : public synthv1_ui
+class synthv1_jack : public synthv1
 {
 public:
 
@@ -72,8 +72,6 @@ public:
 
 private:
 
-	synthv1 *m_synth;
-
 	jack_client_t *m_client;
 
 	volatile bool m_activated;
@@ -103,7 +101,7 @@ private:
 
 
 //-------------------------------------------------------------------------
-// synthv1_application -- Singleton application instance.
+// synthv1_jack_application -- Singleton application instance.
 //
 
 #include <QObject>
@@ -119,17 +117,17 @@ class synthv1_nsm;
 #endif
 
 
-class synthv1_application : public QObject
+class synthv1_jack_application : public QObject
 {
 	Q_OBJECT
 
 public:
 
 	// Constructor.
-	synthv1_application(int& argc, char **argv);
+	synthv1_jack_application(int& argc, char **argv);
 
 	// Destructor.
-	~synthv1_application();
+	~synthv1_jack_application();
 
 	// Facade method.
 	int exec();

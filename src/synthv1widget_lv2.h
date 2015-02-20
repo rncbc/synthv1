@@ -49,9 +49,14 @@ class synthv1widget_lv2 : public synthv1widget
 {
 public:
 
+	// Constructor.
 	synthv1widget_lv2(synthv1_lv2 *pSynth,
 		LV2UI_Controller controller, LV2UI_Write_Function write_function);
 
+	// Destructor.
+	~synthv1widget_lv2();
+
+	// LV2 port event dispatcher.
 	void port_event(uint32_t port_index,
 		uint32_t buffer_size, uint32_t format, const void *buffer);
 
@@ -78,7 +83,7 @@ protected:
 private:
 
 	// Instance variables.
-	synthv1_lv2 *m_pSynthUi;
+	synthv1_ui *m_pSynthUi;
 
 	// Instance variables.
 	LV2UI_Controller     m_controller;

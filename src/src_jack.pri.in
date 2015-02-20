@@ -2,6 +2,7 @@
 #
 
 PREFIX  = @ac_prefix@
+LIBDIR  = @ac_libdir@
 CONFIG += @ac_debug@
 
 INCLUDEPATH = @ac_jack_incpath@

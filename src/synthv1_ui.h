@@ -35,16 +35,14 @@ public:
 
 	synthv1_ui(synthv1 *pSynth);
 
+	synthv1 *instance() const;
+
 	void setParamValue(synthv1::ParamIndex index, float fValue);
 	float paramValue(synthv1::ParamIndex index) const;
 
 	synthv1_programs *programs() const;
 
 	void reset();
-
-protected:
-
-	synthv1 *instance() const;
 
 private:
 

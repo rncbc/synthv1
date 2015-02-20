@@ -137,10 +137,8 @@ static void synthv1_jack_session_event (
 // synthv1_jack - impl.
 //
 
-synthv1_jack::synthv1_jack (void) : synthv1_ui(new synthv1(2))
+synthv1_jack::synthv1_jack (void) : synthv1(2)
 {
-	m_synth = synthv1_ui::instance();
-
 	m_client = NULL;
 
 	m_activated = false;
@@ -175,8 +173,6 @@ synthv1_jack::~synthv1_jack (void)
 {
 	deactivate();
 	close();
-
-	delete m_synth;
 }
 
 
@@ -191,7 +187,7 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 	if (!m_activated)
 		return 0;
 
-	const uint16_t nchannels = m_synth->channels();
+	const uint16_t nchannels = synthv1::channels();
 	float *ins[nchannels], *outs[nchannels];
 	for (uint16_t k = 0; k < nchannels; ++k) {
 		ins[k]  = static_cast<float *> (
@@ -225,14 +221,14 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 			::jack_midi_event_get(&event, midi_in, n);
 			uint32_t nread = event.time - ndelta;
 			if (nread > 0) {
-				m_synth->process(ins, outs, nread);
+				synthv1::process(ins, outs, nread);
 				for (uint16_t k = 0; k < nchannels; ++k) {
 					ins[k]  += nread;
 					outs[k] += nread;
 				}
 			}
 			ndelta = event.time;
-			m_synth->process_midi(event.buffer, event.size);
+			synthv1::process_midi(event.buffer, event.size);
 		}
 	}
 #endif
@@ -253,7 +249,7 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 		if (event_time > ndelta) {
 			const uint32_t nread = event_time - ndelta;
 			if (nread > 0) {
-				m_synth->process(ins, outs, nread);
+				synthv1::process(ins, outs, nread);
 				for (uint16_t k = 0; k < nchannels; ++k) {
 					ins[k]  += nread;
 					outs[k] += nread;
@@ -263,11 +259,11 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 		}
 		::jack_ringbuffer_read_advance(m_alsa_buffer, sizeof(event));
 		::jack_ringbuffer_read(m_alsa_buffer, (char *) event_buffer, event.size);
-		m_synth->process_midi(event_buffer, event.size);
+		synthv1::process_midi(event_buffer, event.size);
 	}
 #endif // CONFIG_ALSA_MIDI
 
-	m_synth->process(ins, outs, nframes - ndelta);
+	synthv1::process(ins, outs, nframes - ndelta);
 
 	return 0;
 }
@@ -279,7 +275,7 @@ void synthv1_jack::open ( const char *client_id )
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
 		synthv1::ParamIndex index = synthv1::ParamIndex(i);
 		m_params[i] = synthv1_param::paramDefaultValue(index);
-		m_synth->setParamPort(index, &m_params[i]);
+		synthv1::setParamPort(index, &m_params[i]);
 	}
 
 	// open client
@@ -288,11 +284,11 @@ void synthv1_jack::open ( const char *client_id )
 		return;
 
 	// set sample rate
-	m_synth->setSampleRate(jack_get_sample_rate(m_client));
-//	m_synth->reset();
+	synthv1::setSampleRate(jack_get_sample_rate(m_client));
+//	synthv1::reset();
 
 	// register audio ports & buffers
-	uint16_t nchannels = m_synth->channels();
+	uint16_t nchannels = synthv1::channels();
 
 	m_audio_ins  = new jack_port_t * [nchannels];
 	m_audio_outs = new jack_port_t * [nchannels];
@@ -356,7 +352,7 @@ void synthv1_jack::open ( const char *client_id )
 void synthv1_jack::activate (void)
 {
 	if (!m_activated) {
-		m_synth->reset();
+		synthv1::reset();
 		if (m_client) {
 			::jack_activate(m_client);
 			m_activated = true;
@@ -414,7 +410,7 @@ void synthv1_jack::close (void)
 #endif
 
 	// unregister audio ports
-	const uint16_t nchannels = m_synth->channels();
+	const uint16_t nchannels = synthv1::channels();
 
 	for (uint16_t k = 0; k < nchannels; ++k) {
 		if (m_audio_outs && m_audio_outs[k]) {
@@ -596,7 +592,7 @@ void synthv1_jack::sessionEvent ( void *pvSessionArg )
 
 
 //-------------------------------------------------------------------------
-// synthv1_application -- Singleton application instance.
+// synthv1_jack_application -- Singleton application instance.
 //
 
 #include "synthv1widget_jack.h"
@@ -610,7 +606,7 @@ void synthv1_jack::sessionEvent ( void *pvSessionArg )
 
 
 // Constructor.
-synthv1_application::synthv1_application ( int& argc, char **argv )
+synthv1_jack_application::synthv1_jack_application ( int& argc, char **argv )
 	: QObject(NULL), m_pApp(NULL), m_bGui(true),
 		m_pSynth(NULL), m_pWidget(NULL)
 	  #ifdef CONFIG_NSM
@@ -637,7 +633,7 @@ synthv1_application::synthv1_application ( int& argc, char **argv )
 
 
 // Destructor.
-synthv1_application::~synthv1_application (void)
+synthv1_jack_application::~synthv1_jack_application (void)
 {
 #ifdef CONFIG_NSM
 	if (m_pNsmClient) delete m_pNsmClient;
@@ -649,7 +645,7 @@ synthv1_application::~synthv1_application (void)
 
 
 // Argument parser method.
-bool synthv1_application::parse_args (void)
+bool synthv1_jack_application::parse_args (void)
 {
 	QTextStream out(stderr);
 
@@ -681,7 +677,7 @@ bool synthv1_application::parse_args (void)
 
 
 // Startup methods.
-bool synthv1_application::setup (void)
+bool synthv1_jack_application::setup (void)
 {
 	if (m_pApp == NULL)
 		return false;
@@ -737,7 +733,7 @@ bool synthv1_application::setup (void)
 
 
 // Facade method.
-int synthv1_application::exec (void)
+int synthv1_jack_application::exec (void)
 {
 	return (setup() ? m_pApp->exec() : 1);
 }
@@ -745,7 +741,7 @@ int synthv1_application::exec (void)
 
 #ifdef CONFIG_NSM
 
-void synthv1_application::openSession (void)
+void synthv1_jack_application::openSession (void)
 {
 	if (m_pSynth == NULL)
 		return;
@@ -791,7 +787,7 @@ void synthv1_application::openSession (void)
 		m_pNsmClient->visible(m_pWidget->isVisible());
 }
 
-void synthv1_application::saveSession (void)
+void synthv1_jack_application::saveSession (void)
 {
 	if (m_pSynth == NULL)
 		return;
@@ -818,7 +814,7 @@ void synthv1_application::saveSession (void)
 }
 
 
-void synthv1_application::showSession (void)
+void synthv1_jack_application::showSession (void)
 {
 	if (m_pNsmClient == NULL)
 		return;
@@ -837,7 +833,7 @@ void synthv1_application::showSession (void)
 	}
 }
 
-void synthv1_application::hideSession (void)
+void synthv1_jack_application::hideSession (void)
 {
 	if (m_pNsmClient == NULL)
 		return;
@@ -864,7 +860,7 @@ int main ( int argc, char *argv[] )
 {
 	Q_INIT_RESOURCE(synthv1);
 
-	synthv1_application app(argc, argv);
+	synthv1_jack_application app(argc, argv);
 
 	return app.exec();
 }

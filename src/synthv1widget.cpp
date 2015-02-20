@@ -997,14 +997,12 @@ void synthv1widget::loadPreset ( const QString& sFilename )
 	qDebug("synthv1widget::loadPreset(\"%s\")", sFilename.toUtf8().constData());
 #endif
 
-	synthv1_ui *pSynthUi = ui_instance();
-	if (pSynthUi == NULL)
-		return;
-
 	resetParamKnobs();
 	resetParamValues();
 
-	synthv1_param::loadPreset(pSynthUi, sFilename);
+	synthv1_ui *pSynthUi = ui_instance();
+	if (pSynthUi)
+		synthv1_param::loadPreset(pSynthUi->instance(), sFilename);
 
 	updateLoadPreset(QFileInfo(sFilename).completeBaseName());
 }
@@ -1016,7 +1014,9 @@ void synthv1widget::savePreset ( const QString& sFilename )
 	qDebug("synthv1widget::savePreset(\"%s\")", sFilename.toUtf8().constData());
 #endif
 
-	synthv1_param::savePreset(ui_instance(), sFilename);
+	synthv1_ui *pSynthUi = ui_instance();
+	if (pSynthUi)
+		synthv1_param::savePreset(pSynthUi->instance(), sFilename);
 
 	const QString& sPreset
 		= QFileInfo(sFilename).completeBaseName();

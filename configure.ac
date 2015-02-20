@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(synthv1, 0.6.0.4, rncbc@rncbc.org)
+AC_INIT(synthv1, 0.6.0.5, rncbc@rncbc.org)
 
 AC_CONFIG_SRCDIR(src/synthv1.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -12,6 +12,7 @@ if test "x$ac_prefix" = "xNONE"; then
     ac_prefix=$ac_default_prefix
 fi
 AC_SUBST(ac_prefix)
+AC_DEFINE_UNQUOTED(CONFIG_PREFIX, ["$ac_prefix"], [Default installation prefix.]) 
 
 # Set default library/plugin prefix.
 if test "x$exec_prefix" = "xNONE"; then

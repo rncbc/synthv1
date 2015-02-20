@@ -185,9 +185,9 @@ float synthv1_param::paramDefaultValue ( synthv1::ParamIndex index )
 
 
 // Preset serialization methods.
-void synthv1_param::loadPreset ( synthv1_ui *pSynthUi, const QString& sFilename )
+void synthv1_param::loadPreset ( synthv1 *pSynth, const QString& sFilename )
 {
-	if (pSynthUi == NULL)
+	if (pSynth == NULL)
 		return;
 
 	QFileInfo fi(sFilename);
@@ -248,7 +248,7 @@ void synthv1_param::loadPreset ( synthv1_ui *pSynthUi, const QString& sFilename 
 							if (index == synthv1::DEL1_BPM && fValue < 3.6f)
 								fValue *= 100.0f;
 						#endif
-							pSynthUi->setParamValue(index, fValue);
+							pSynth->setParamValue(index, fValue);
 						}
 					}
 				}
@@ -258,13 +258,13 @@ void synthv1_param::loadPreset ( synthv1_ui *pSynthUi, const QString& sFilename 
 
 	file.close();
 
-	pSynthUi->reset();
+	pSynth->reset();
 }
 
 
-void synthv1_param::savePreset ( synthv1_ui *pSynthUi, const QString& sFilename )
+void synthv1_param::savePreset ( synthv1 *pSynth, const QString& sFilename )
 {
-	if (pSynthUi == NULL)
+	if (pSynth == NULL)
 		return;
 
 	const QFileInfo fi(sFilename);
@@ -280,7 +280,7 @@ void synthv1_param::savePreset ( synthv1_ui *pSynthUi, const QString& sFilename 
 		synthv1::ParamIndex index = synthv1::ParamIndex(i);
 		eParam.setAttribute("index", QString::number(i));
 		eParam.setAttribute("name", synthv1_param::paramName(index));
-		const float fValue = pSynthUi->paramValue(index);
+		const float fValue = pSynth->paramValue(index);
 		eParam.appendChild(doc.createTextNode(QString::number(fValue)));
 		eParams.appendChild(eParam);
 	}

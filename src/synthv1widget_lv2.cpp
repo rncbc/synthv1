@@ -33,10 +33,12 @@
 // synthv1widget_lv2 - impl.
 //
 
-synthv1widget_lv2::synthv1widget_lv2 ( synthv1_lv2 *pSynthUi,
+synthv1widget_lv2::synthv1widget_lv2 ( synthv1_lv2 *pSynth,
 	LV2UI_Controller controller, LV2UI_Write_Function write_function )
-	: synthv1widget(), m_pSynthUi(pSynthUi)
+	: synthv1widget()
 {
+	m_pSynthUi = new synthv1_ui(pSynth);
+
 	m_controller = controller;
 	m_write_function = write_function;
 
@@ -51,6 +53,13 @@ synthv1widget_lv2::synthv1widget_lv2 ( synthv1_lv2 *pSynthUi,
 		m_params_def[i] = true;
 
 	clearPreset();
+}
+
+
+// Destructor.
+synthv1widget_lv2::~synthv1widget_lv2 (void)
+{
+	delete m_pSynthUi;
 }
 
 
@@ -107,6 +116,7 @@ void synthv1widget_lv2::closeEvent ( QCloseEvent *pCloseEvent )
 }
 
 
+// LV2 port event dispatcher.
 void synthv1widget_lv2::port_event ( uint32_t port_index,
 	uint32_t buffer_size, uint32_t format, const void *buffer )
 {

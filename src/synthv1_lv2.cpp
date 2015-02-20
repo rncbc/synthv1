@@ -34,10 +34,8 @@
 
 synthv1_lv2::synthv1_lv2 (
 	double sample_rate, const LV2_Feature *const *host_features )
-	: synthv1_ui(new synthv1(2, uint32_t(sample_rate)))
+	: synthv1(2, uint32_t(sample_rate))
 {
-	m_synth = synthv1_ui::instance();
-
 	::memset(&m_urids, 0, sizeof(m_urids));
 
 	m_atom_sequence = NULL;
@@ -64,7 +62,7 @@ synthv1_lv2::synthv1_lv2 (
 		}
 	}
 
-	const uint16_t nchannels = m_synth->channels();
+	const uint16_t nchannels = synthv1::channels();
 	m_ins  = new float * [nchannels];
 	m_outs = new float * [nchannels];
 	for (uint16_t k = 0; k < nchannels; ++k)
@@ -76,8 +74,6 @@ synthv1_lv2::~synthv1_lv2 (void)
 {
 	delete [] m_outs;
 	delete [] m_ins;
-
-	delete m_synth;
 }
 
 
@@ -100,7 +96,7 @@ void synthv1_lv2::connect_port ( uint32_t port, void *data )
 		m_outs[1] = (float *) data;
 		break;
 	default:
-		m_synth->setParamPort(synthv1::ParamIndex(port - ParamBase), (float *) data);
+		synthv1::setParamPort(synthv1::ParamIndex(port - ParamBase), (float *) data);
 		break;
 	}
 }
@@ -108,7 +104,7 @@ void synthv1_lv2::connect_port ( uint32_t port, void *data )
 
 void synthv1_lv2::run ( uint32_t nframes )
 {
-	const uint16_t nchannels = m_synth->channels();
+	const uint16_t nchannels = synthv1::channels();
 	float *ins[nchannels], *outs[nchannels];
 	for (uint16_t k = 0; k < nchannels; ++k) {
 		ins[k]  = m_ins[k];
@@ -125,14 +121,14 @@ void synthv1_lv2::run ( uint32_t nframes )
 				uint8_t *data = (uint8_t *) LV2_ATOM_BODY(&event->body);
 				const uint32_t nread = event->time.frames - ndelta;
 				if (nread > 0) {
-					m_synth->process(ins, outs, nread);
+					synthv1::process(ins, outs, nread);
 					for (uint16_t k = 0; k < nchannels; ++k) {
 						ins[k]  += nread;
 						outs[k] += nread;
 					}
 				}
 				ndelta = event->time.frames;
-				m_synth->process_midi(data, event->body.size);
+				synthv1::process_midi(data, event->body.size);
 			}
 			else
 			if (event->body.type == m_urids.atom_Blank ||
@@ -144,13 +140,13 @@ void synthv1_lv2::run ( uint32_t nframes )
 					lv2_atom_object_get(object,
 						m_urids.time_beatsPerMinute, &atom, NULL);
 					if (atom && atom->type == m_urids.atom_Float) {
-						const float bpm_sync = paramValue(synthv1::DEL1_BPMSYNC);
+						const float bpm_sync = synthv1::paramValue(synthv1::DEL1_BPMSYNC);
 						if (bpm_sync > 0.0f) {
-							const float bpm_host = paramValue(synthv1::DEL1_BPMHOST);
+							const float bpm_host = synthv1::paramValue(synthv1::DEL1_BPMHOST);
 							if (bpm_host > 0.0f) {
 								const float bpm	= ((LV2_Atom_Float *) atom)->body;
 								if (::fabs(bpm_host - bpm) > 0.01f)
-									setParamValue(synthv1::DEL1_BPMHOST, bpm);
+									synthv1::setParamValue(synthv1::DEL1_BPMHOST, bpm);
 							}
 						}
 					}
@@ -160,19 +156,19 @@ void synthv1_lv2::run ( uint32_t nframes )
 	//	m_atom_sequence = NULL;
 	}
 
-	m_synth->process(ins, outs, nframes - ndelta);
+	synthv1::process(ins, outs, nframes - ndelta);
 }
 
 
 void synthv1_lv2::activate (void)
 {
-	reset();
+	synthv1::reset();
 }
 
 
 void synthv1_lv2::deactivate (void)
 {
-	reset();
+	synthv1::reset();
 }
 
 
@@ -182,7 +178,7 @@ void synthv1_lv2::deactivate (void)
 
 const LV2_Program_Descriptor *synthv1_lv2::get_program ( uint32_t index )
 {
-	synthv1_programs *pPrograms = programs();
+	synthv1_programs *pPrograms = synthv1::programs();
 	const synthv1_programs::Banks& banks = pPrograms->banks();
 	synthv1_programs::Banks::ConstIterator bank_iter = banks.constBegin();
 	const synthv1_programs::Banks::ConstIterator& bank_end = banks.constEnd();
@@ -208,7 +204,7 @@ const LV2_Program_Descriptor *synthv1_lv2::get_program ( uint32_t index )
 
 void synthv1_lv2::select_program ( uint32_t bank, uint32_t program )
 {
-	programs()->select_program(bank, program);
+	synthv1::programs()->select_program(bank, program);
 }
 
 #endif	// CONFIG_LV2_PROGRAMS

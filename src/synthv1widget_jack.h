@@ -44,6 +44,9 @@ public:
 	// Constructor.
 	synthv1widget_jack(synthv1_jack *pSynth);
 
+	// Destructor.
+	~synthv1widget_jack();
+
 #ifdef CONFIG_NSM
 	// NSM client accessors.
 	void setNsmClient(synthv1_nsm *pNsmClient);
@@ -73,7 +76,8 @@ protected:
 private:
 
 	// Instance variables.
-	synthv1_jack *m_pSynthUi;
+	synthv1     *m_pSynth;
+	synthv1_ui  *m_pSynthUi;
 
 #ifdef CONFIG_NSM
 	synthv1_nsm *m_pNsmClient;

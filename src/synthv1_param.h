@@ -22,7 +22,7 @@
 #ifndef __synthv1_param_h
 #define __synthv1_param_h
 
-#include "synthv1_ui.h"
+#include "synthv1.h"
 
 #include <QString>
 
@@ -38,9 +38,9 @@ class QDomDocument;
 namespace synthv1_param
 {
 	// Preset serialization methods.
-	void loadPreset(synthv1_ui *pSynthUi,
+	void loadPreset(synthv1 *pSynth,
 		const QString& sFilename);
-	void savePreset(synthv1_ui *pSynthUi,
+	void savePreset(synthv1 *pSynth,
 		const QString& sFilename);
 
 	// Default parameter name/value helpers.

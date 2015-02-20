@@ -38,15 +38,25 @@
 //
 
 // Constructor.
-synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynthUi )
-	: synthv1widget(), m_pSynthUi(pSynthUi)
+synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
+	: synthv1widget(), m_pSynth(pSynth)
 	#ifdef CONFIG_NSM
 		, m_pNsmClient(NULL)
 	#endif
 {
+	// Initialize (user) interface stuff...
+	m_pSynthUi = new synthv1_ui(m_pSynth);
+
 	// Initialize preset stuff...
 	// initPreset();
 	updateParamValues();
+}
+
+
+// Destructor.
+synthv1widget_jack::~synthv1widget_jack (void)
+{
+	delete m_pSynthUi;
 }
 
 
