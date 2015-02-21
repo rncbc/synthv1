@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- Introducing a brand new user preference on eye-candy: cf.Help
+  /Configure.../Options/Custom style theme.
 - Envelope and filter now rendered with anti-aliased lines.
 - Fixed a Qt5 FTBFS re. QHeaderView::set[Section]ResizeMode().
 

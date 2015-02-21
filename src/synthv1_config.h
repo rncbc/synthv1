@@ -66,6 +66,9 @@ public:
 	// Run-time special non-persistent options.
 	bool bDontUseNativeDialogs;
 
+	// Custom widget style theme.
+	QString sCustomStyleTheme;
+
 	// Singleton instance accessor.
 	static synthv1_config *getInstance();
 

@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(synthv1, 0.6.0.5, rncbc@rncbc.org)
+AC_INIT(synthv1, 0.6.0.6, rncbc@rncbc.org)
 
 AC_CONFIG_SRCDIR(src/synthv1.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -20,6 +20,7 @@ if test "x$exec_prefix" = "xNONE"; then
 fi
 eval ac_libdir=$libdir
 AC_SUBST(ac_libdir)
+AC_DEFINE_UNQUOTED(CONFIG_LIBDIR, ["$ac_libdir"], [Default library path.])
 
 # Enable debugging argument option.
 AC_ARG_ENABLE(debug,

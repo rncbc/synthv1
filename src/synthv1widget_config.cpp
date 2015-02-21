@@ -26,6 +26,8 @@
 
 #include <QMenu>
 
+#include <QStyleFactory>
+
 
 //----------------------------------------------------------------------------
 // synthv1widget_config -- UI wrapper form.
@@ -38,11 +40,21 @@ synthv1widget_config::synthv1widget_config (
 	// Setup UI struct...
 	m_ui.setupUi(this);
 
+	// Custom style themes...
+	//m_ui.CustomStyleThemeComboBox->clear();
+	//m_ui.CustomStyleThemeComboBox->addItem(tr("(default)"));
+	m_ui.CustomStyleThemeComboBox->addItems(QStyleFactory::keys());
+
 	// Setup options...
 	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig) {
 		m_ui.ProgramsPreviewCheckBox->setChecked(pConfig->bProgramsPreview);
 		m_ui.UseNativeDialogsCheckBox->setChecked(pConfig->bUseNativeDialogs);
+		int iCustomStyleTheme = 0;
+		if (!pConfig->sCustomStyleTheme.isEmpty())
+			iCustomStyleTheme = m_ui.CustomStyleThemeComboBox->findText(
+				pConfig->sCustomStyleTheme);
+		m_ui.CustomStyleThemeComboBox->setCurrentIndex(iCustomStyleTheme);
 	}
 
 	// Signal/slots connections...
@@ -82,6 +94,9 @@ synthv1widget_config::synthv1widget_config (
 		SLOT(optionsChanged()));
 	QObject::connect(m_ui.UseNativeDialogsCheckBox,
 		SIGNAL(toggled(bool)),
+		SLOT(optionsChanged()));
+	QObject::connect(m_ui.CustomStyleThemeComboBox,
+		SIGNAL(activated(int)),
 		SLOT(optionsChanged()));
 
 	// Dialog commands...
@@ -273,6 +288,18 @@ void synthv1widget_config::accept (void)
 		pConfig->bProgramsPreview = m_ui.ProgramsPreviewCheckBox->isChecked();
 		pConfig->bUseNativeDialogs = m_ui.UseNativeDialogsCheckBox->isChecked();
 		pConfig->bDontUseNativeDialogs = !pConfig->bUseNativeDialogs;
+		const QString sOldCustomStyleTheme = pConfig->sCustomStyleTheme;
+		if (m_ui.CustomStyleThemeComboBox->currentIndex() > 0)
+			pConfig->sCustomStyleTheme = m_ui.CustomStyleThemeComboBox->currentText();
+		else
+			pConfig->sCustomStyleTheme.clear();
+		// Show restart needed message...
+		if (pConfig->sCustomStyleTheme != sOldCustomStyleTheme) {
+			QMessageBox::information(this,
+				tr("Information") + " - " SYNTHV1_TITLE,
+				tr("Some settings may be only effective\n"
+				"next time you start this application."));
+		}
 		// Reset dirty flag.
 		m_iDirtyOptions = 0;
 	}
