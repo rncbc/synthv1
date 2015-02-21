@@ -30,22 +30,6 @@
 #include <QMessageBox>
 #include <QDir>
 
-#include <QStyleFactory>
-
-#ifndef CONFIG_LIBDIR
-#if defined(__x86_64__)
-#define CONFIG_LIBDIR CONFIG_PREFIX "/lib64"
-#else
-#define CONFIG_LIBDIR CONFIG_PREFIX "/lib"
-#endif
-#endif
-
-#if QT_VERSION < 0x050000
-#define CONFIG_PLUGINSDIR CONFIG_LIBDIR "/qt4/plugins"
-#else
-#define CONFIG_PLUGINSDIR CONFIG_LIBDIR "/qt5/plugins"
-#endif
-
 
 //-------------------------------------------------------------------------
 // synthv1widget - impl.
@@ -56,15 +40,6 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	: QWidget(pParent, wflags)
 {
 	Q_INIT_RESOURCE(synthv1);
-
-	// Special style paths...
-	if (QDir(CONFIG_PLUGINSDIR).exists())
-		QApplication::addLibraryPath(CONFIG_PLUGINSDIR);
-
-	// Custom style theme...
-	synthv1_config *pConfig = synthv1_config::getInstance();
-	if (pConfig && !pConfig->sCustomStyleTheme.isEmpty())
-		QApplication::setStyle(QStyleFactory::create(pConfig->sCustomStyleTheme));
 
 #if QT_VERSION >= 0x050000
 	// HACK: Dark themes grayed/disabled color group fix...

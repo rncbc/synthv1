@@ -32,6 +32,22 @@
 
 #include <QCloseEvent>
 
+#include <QStyleFactory>
+
+#ifndef CONFIG_LIBDIR
+#if defined(__x86_64__)
+#define CONFIG_LIBDIR CONFIG_PREFIX "/lib64"
+#else
+#define CONFIG_LIBDIR CONFIG_PREFIX "/lib"
+#endif
+#endif
+
+#if QT_VERSION < 0x050000
+#define CONFIG_PLUGINSDIR CONFIG_LIBDIR "/qt4/plugins"
+#else
+#define CONFIG_PLUGINSDIR CONFIG_LIBDIR "/qt5/plugins"
+#endif
+
 
 //-------------------------------------------------------------------------
 // synthv1widget_jack - impl.
@@ -44,6 +60,15 @@ synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 		, m_pNsmClient(NULL)
 	#endif
 {
+	// Special style paths...
+	if (QDir(CONFIG_PLUGINSDIR).exists())
+		QApplication::addLibraryPath(CONFIG_PLUGINSDIR);
+
+	// Custom style theme...
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig && !pConfig->sCustomStyleTheme.isEmpty())
+		QApplication::setStyle(QStyleFactory::create(pConfig->sCustomStyleTheme));
+
 	// Initialize (user) interface stuff...
 	m_pSynthUi = new synthv1_ui(m_pSynth);
 
