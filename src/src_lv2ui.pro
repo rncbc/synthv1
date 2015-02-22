@@ -13,6 +13,7 @@ HEADERS = \
 	synthv1.h \
 	synthv1_ui.h \
 	synthv1_lv2.h \
+	synthv1_lv2ui.h \
 	synthv1_config.h \
 	synthv1_param.h \
 	synthv1widget.h \
@@ -27,6 +28,7 @@ HEADERS = \
 	synthv1widget_lv2.h
 
 SOURCES = \
+	synthv1_lv2ui.cpp \
 	synthv1widget.cpp \
 	synthv1widget_env.cpp \
 	synthv1widget_filt.cpp \

@@ -23,22 +23,7 @@
 #define __synthv1widget_lv2_h
 
 #include "synthv1widget.h"
-
-#include "lv2.h"
-#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
-
-
-#define SYNTHV1_LV2UI_URI SYNTHV1_LV2_PREFIX "ui"
-
-
-// Forward decls.
-class synthv1_lv2;
-
-
-#ifdef CONFIG_LV2_EXTERNAL_UI
-#include "lv2_external_ui.h"
-#define SYNTHV1_LV2UI_EXTERNAL_URI SYNTHV1_LV2_PREFIX "ui_external"
-#endif
+#include "synthv1_lv2ui.h"
 
 
 //-------------------------------------------------------------------------
@@ -83,11 +68,7 @@ protected:
 private:
 
 	// Instance variables.
-	synthv1_ui *m_pSynthUi;
-
-	// Instance variables.
-	LV2UI_Controller     m_controller;
-	LV2UI_Write_Function m_write_function;
+	synthv1_lv2ui *m_pSynthUi;
 
 	bool m_params_def[synthv1::NUM_PARAMS];
 
