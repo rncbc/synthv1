@@ -140,7 +140,7 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 	QPolygon poly(6);
 	QPainterPath path;
 
-	int iType = int(m_fType);
+	const int iType = int(m_fType);
 	// Low, Notch
 	if (iType == 0 || iType == 3) {
 		if (iType == 3) x -= w8;
@@ -227,16 +227,16 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 // Drag/move curve.
 void synthv1widget_filt::dragCurve ( const QPoint& pos )
 {
-	int h  = height();
-	int w  = width();
+	const int h  = height();
+	const int w  = width();
 
-	int dx = (pos.x() - m_posDrag.x());
-	int dy = (pos.y() - m_posDrag.y());
+	const int dx = (pos.x() - m_posDrag.x());
+	const int dy = (pos.y() - m_posDrag.y());
 
 	if (dx || dy) {
-		int h2 = (h >> 1);
-		int x = int(cutoff() * float(w));
-		int y = int(reso() * float(h2));
+		const int h2 = (h >> 1);
+		const int x = int(cutoff() * float(w));
+		const int y = int(reso() * float(h2));
 		setCutoff(float(x + dx) / float(w));
 		setReso(float(y - dy) / float(h2));
 		m_posDrag = pos;
@@ -280,15 +280,15 @@ void synthv1widget_filt::mouseReleaseEvent ( QMouseEvent *pMouseEvent )
 
 void synthv1widget_filt::wheelEvent ( QWheelEvent *pWheelEvent )
 {
-	int delta = (pWheelEvent->delta() / 60);
+	const int delta = (pWheelEvent->delta() / 60);
 
 	if (pWheelEvent->modifiers() & (Qt::ShiftModifier | Qt::ControlModifier)) {
-		int h2 = (height() >> 1);
-		int y = int(reso() * float(h2));
+		const int h2 = (height() >> 1);
+		const int y = int(reso() * float(h2));
 		setReso(float(y + delta) / float(h2));
 	} else {
-		int w2 = (width() >> 1);
-		int x = int(cutoff() * float(w2));
+		const int w2 = (width() >> 1);
+		const int x = int(cutoff() * float(w2));
 		setCutoff(float(x + delta) / float(w2));
 	}
 }

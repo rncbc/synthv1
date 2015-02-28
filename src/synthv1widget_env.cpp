@@ -222,15 +222,16 @@ int synthv1widget_env::nodeIndex ( const QPoint& pos ) const
 
 void synthv1widget_env::dragNode ( const QPoint& pos )
 {
-	int h  = height();
-	int w  = width();
+	const int h  = height();
+	const int w  = width();
 
-	int w4 = (w - 12) >> 2;
+	const int w4 = (w - 12) >> 2;
 
-	int x, dx = (pos.x() - m_posDrag.x());
-	int y, dy = (pos.y() - m_posDrag.y());
+	const int dx = (pos.x() - m_posDrag.x());
+	const int dy = (pos.y() - m_posDrag.y());
 
 	if (dx || dy) {
+		int x, y;
 		switch (m_iDragNode) {
 		case 2: // Attack
 			x = int(attack() * float(w4));
@@ -261,7 +262,7 @@ void synthv1widget_env::mousePressEvent ( QMouseEvent *pMouseEvent )
 {
 	if (pMouseEvent->button() == Qt::LeftButton) {
 		const QPoint& pos = pMouseEvent->pos();
-		int iDragNode = nodeIndex(pos);
+		const int iDragNode = nodeIndex(pos);
 		if (iDragNode >= 0) {
 			switch (iDragNode) {
 			case 2: // Attack
