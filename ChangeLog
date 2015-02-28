@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Improved envelope widget nodes click-and-drag precision.
 - Introducing a brand new user preference on eye-candy: cf.Help
   /Configure.../Options/Custom style theme (applies to the JACK
   stand-alone client only though).
