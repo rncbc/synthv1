@@ -5,9 +5,13 @@
 
 @prefix lv2:     <http://lv2plug.in/ns/lv2core#> .
 @prefix lv2ui:   <http://lv2plug.in/ns/extensions/ui#> .
+@prefix lv2urid: <http://lv2plug.in/ns/ext/urid#> .
 @prefix lv2atom: <http://lv2plug.in/ns/ext/atom#> .
 @prefix lv2midi: <http://lv2plug.in/ns/ext/midi#> .
 @prefix lv2time: <http://lv2plug.in/ns/ext/time#> .
+@prefix lv2pg:   <http://lv2plug.in/ns/ext/port-groups#> .
+
+@prefix synthv1_lv2: <http://synthv1.sourceforge.net/lv2#> .
 
 <http://synthv1.sourceforge.net/lv2>
 	a lv2:Plugin, lv2:InstrumentPlugin ;
@@ -17,10 +21,9 @@
 		foaf:homepage <http://www.rncbc.org> ;
 		foaf:mbox <mailto:rncbc@rncbc.org> ;
 	] ;
-	lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
+	lv2:requiredFeature lv2urid:map ;
 	lv2:optionalFeature lv2:hardRTCapable ;
-	lv2ui:ui <http://synthv1.sourceforge.net/lv2#ui> ,
-			 <http://synthv1.sourceforge.net/lv2#ui_external> ;
+	lv2ui:ui synthv1_lv2:ui, synthv1_lv2:ui_external ;
 	lv2:port [
 		a lv2:InputPort, lv2atom:AtomPort ;
 		lv2atom:bufferType lv2atom:Sequence ;
@@ -65,6 +68,7 @@
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 4.0 ;
+		lv2pg:group synthv1_lv2:101_DCO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 6 ;
@@ -73,6 +77,7 @@
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:101_DCO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 7 ;
@@ -82,6 +87,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:101_DCO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 8 ;
@@ -96,6 +102,7 @@
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 4.0 ;
+		lv2pg:group synthv1_lv2:101_DCO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 9 ;
@@ -104,6 +111,7 @@
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:101_DCO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 10 ;
@@ -113,6 +121,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:101_DCO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 11 ;
@@ -121,6 +130,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:101_DCO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 12 ;
@@ -129,6 +139,7 @@
 		lv2:default 0.1 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:101_DCO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 13 ;
@@ -137,6 +148,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:101_DCO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 14 ;
@@ -145,6 +157,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -4.0 ;
 		lv2:maximum 4.0 ;
+		lv2pg:group synthv1_lv2:101_DCO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 15 ;
@@ -153,6 +166,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:101_DCO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 16 ;
@@ -161,6 +175,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:101_DCO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 17 ;
@@ -169,6 +184,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:101_DCO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 18 ;
@@ -177,6 +193,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:102_DCF1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 19 ;
@@ -185,6 +202,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:102_DCF1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 20 ;
@@ -198,6 +216,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 3.0 ;
+		lv2pg:group synthv1_lv2:102_DCF1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 21 ;
@@ -209,6 +228,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:102_DCF1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 22 ;
@@ -217,6 +237,7 @@
 		lv2:default 1.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:102_DCF1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 23 ;
@@ -225,6 +246,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:102_DCF1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 24 ;
@@ -233,6 +255,7 @@
 		lv2:default 0.2 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:102_DCF1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 25 ;
@@ -241,6 +264,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:102_DCF1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 26 ;
@@ -249,6 +273,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:102_DCF1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 27 ;
@@ -263,6 +288,7 @@
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 4.0 ;
+		lv2pg:group synthv1_lv2:103_LFO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 28 ;
@@ -271,6 +297,7 @@
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:103_LFO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 29 ;
@@ -279,6 +306,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:103_LFO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 30 ;
@@ -287,6 +315,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:103_LFO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 31 ;
@@ -295,6 +324,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:103_LFO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 32 ;
@@ -303,6 +333,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:103_LFO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 33 ;
@@ -311,6 +342,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:103_LFO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 34 ;
@@ -319,6 +351,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:103_LFO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 35 ;
@@ -327,6 +360,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:103_LFO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 36 ;
@@ -335,6 +369,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:103_LFO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 37 ;
@@ -343,6 +378,7 @@
 		lv2:default 0.1 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:103_LFO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 38 ;
@@ -351,6 +387,7 @@
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:103_LFO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 39 ;
@@ -359,6 +396,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:103_LFO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 40 ;
@@ -367,6 +405,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:104_DCA1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 41 ;
@@ -375,6 +414,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:104_DCA1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 42 ;
@@ -383,6 +423,7 @@
 		lv2:default 0.1 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:104_DCA1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 43 ;
@@ -391,6 +432,7 @@
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:104_DCA1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 44 ;
@@ -399,6 +441,7 @@
 		lv2:default 0.1 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:104_DCA1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 45 ;
@@ -407,6 +450,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:105_OUT1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 46 ;
@@ -415,6 +459,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:105_OUT1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 47 ;
@@ -423,6 +468,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:105_OUT1 ;
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
@@ -432,6 +478,7 @@
 		lv2:default 0.2 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:106_DEF1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 49 ;
@@ -440,6 +487,7 @@
 		lv2:default 0.2 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:106_DEF1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 50 ;
@@ -448,6 +496,7 @@
 		lv2:default 0.2 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:106_DEF1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 51 ;
@@ -456,6 +505,7 @@
 		lv2:default 0.2 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:106_DEF1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 52 ;
@@ -465,6 +515,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 16.0 ;
+		lv2pg:group synthv1_lv2:106_DEF1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 53 ;
@@ -474,6 +525,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:106_DEF1 ;
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
@@ -489,6 +541,7 @@
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 4.0 ;
+		lv2pg:group synthv1_lv2:201_DCO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 55 ;
@@ -497,6 +550,7 @@
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:201_DCO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 56 ;
@@ -506,6 +560,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:201_DCO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 57 ;
@@ -520,6 +575,7 @@
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 4.0 ;
+		lv2pg:group synthv1_lv2:201_DCO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 58 ;
@@ -528,6 +584,7 @@
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:201_DCO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 59 ;
@@ -537,6 +594,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:201_DCO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 60 ;
@@ -545,6 +603,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:201_DCO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 61 ;
@@ -553,6 +612,7 @@
 		lv2:default 0.1 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:201_DCO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 62 ;
@@ -561,6 +621,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:201_DCO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 63 ;
@@ -569,6 +630,7 @@
 		lv2:default -2.0 ;
 		lv2:minimum -4.0 ;
 		lv2:maximum 4.0 ;
+		lv2pg:group synthv1_lv2:201_DCO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 64 ;
@@ -577,6 +639,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:201_DCO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 65 ;
@@ -585,6 +648,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:201_DCO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 66 ;
@@ -593,6 +657,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:201_DCO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 67 ;
@@ -601,6 +666,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:202_DCF2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 68 ;
@@ -609,6 +675,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:202_DCF2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 69 ;
@@ -622,6 +689,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 3.0 ;
+		lv2pg:group synthv1_lv2:202_DCF2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 70 ;
@@ -633,6 +701,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:202_DCF2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 71 ;
@@ -641,6 +710,7 @@
 		lv2:default 1.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:202_DCF2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 72 ;
@@ -649,6 +719,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:202_DCF2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 73 ;
@@ -657,6 +728,7 @@
 		lv2:default 0.2 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:202_DCF2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 74 ;
@@ -665,6 +737,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:202_DCF2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 75 ;
@@ -673,6 +746,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:202_DCF2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 76 ;
@@ -687,6 +761,7 @@
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 4.0 ;
+		lv2pg:group synthv1_lv2:203_LFO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 77 ;
@@ -695,6 +770,7 @@
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:203_LFO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 78 ;
@@ -703,6 +779,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:203_LFO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 79 ;
@@ -711,6 +788,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:203_LFO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 80 ;
@@ -719,6 +797,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:203_LFO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 81 ;
@@ -727,6 +806,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:203_LFO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 82 ;
@@ -735,6 +815,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:203_LFO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 83 ;
@@ -743,6 +824,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:203_LFO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 84 ;
@@ -751,6 +833,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:203_LFO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 85 ;
@@ -759,6 +842,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:203_LFO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 86 ;
@@ -767,6 +851,7 @@
 		lv2:default 0.1 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:203_LFO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 87 ;
@@ -775,6 +860,7 @@
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:203_LFO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 88 ;
@@ -783,6 +869,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:203_LFO2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 89 ;
@@ -791,6 +878,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:204_DCA2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 90 ;
@@ -799,6 +887,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:204_DCA2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 91 ;
@@ -807,6 +896,7 @@
 		lv2:default 0.1 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:204_DCA2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 92 ;
@@ -815,6 +905,7 @@
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:204_DCA2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 93 ;
@@ -823,6 +914,7 @@
 		lv2:default 0.1 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:204_DCA2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 94 ;
@@ -831,6 +923,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:205_OUT2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 95 ;
@@ -839,6 +932,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:205_OUT2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 96 ;
@@ -847,6 +941,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:205_OUT2 ;
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
@@ -856,6 +951,7 @@
 		lv2:default 0.2 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:206_DEF2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 98 ;
@@ -864,6 +960,7 @@
 		lv2:default 0.2 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:206_DEF2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 99 ;
@@ -872,6 +969,7 @@
 		lv2:default 0.2 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:206_DEF2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 100 ;
@@ -880,6 +978,7 @@
 		lv2:default 0.2 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:206_DEF2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 101 ;
@@ -889,6 +988,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 16.0 ;
+		lv2pg:group synthv1_lv2:206_DEF2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 102 ;
@@ -898,6 +998,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:206_DEF2 ;
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
@@ -907,6 +1008,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:301_CHO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 104 ;
@@ -915,6 +1017,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:301_CHO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 105 ;
@@ -923,6 +1026,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:301_CHO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 106 ;
@@ -931,6 +1035,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:301_CHO1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 107 ;
@@ -939,6 +1044,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:301_CHO1 ;
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
@@ -948,6 +1054,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:302_FLA1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 109 ;
@@ -956,6 +1063,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:302_FLA1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 110 ;
@@ -964,6 +1072,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:302_FLA1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 111 ;
@@ -972,6 +1081,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:302_FLA1 ;
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
@@ -981,6 +1091,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:303_PHA1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 113 ;
@@ -989,6 +1100,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:303_PHA1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 114 ;
@@ -997,6 +1109,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:303_PHA1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 115 ;
@@ -1005,6 +1118,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:303_PHA1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 116 ;
@@ -1013,6 +1127,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:303_PHA1 ;
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
@@ -1022,6 +1137,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:304_DEL1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 118 ;
@@ -1030,6 +1146,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:304_DEL1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 119 ;
@@ -1038,6 +1155,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:304_DEL1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 120 ;
@@ -1046,6 +1164,7 @@
 		lv2:default 180.0 ;
 		lv2:minimum 3.6 ;
 		lv2:maximum 360.0 ;
+		lv2pg:group synthv1_lv2:304_DEL1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 121 ;
@@ -1055,6 +1174,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:304_DEL1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 122 ;
@@ -1064,6 +1184,7 @@
 		lv2:minimum 3.6 ;
 		lv2:maximum 360.0 ;
 		lv2:designation lv2time:beatsPerMinute ;
+		lv2pg:group synthv1_lv2:304_DEL1 ;
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
@@ -1073,6 +1194,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:305_REV1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 124 ;
@@ -1081,6 +1203,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:305_REV1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 125 ;
@@ -1089,6 +1212,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:305_REV1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 126 ;
@@ -1097,6 +1221,7 @@
 		lv2:default 0.5 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:305_REV1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 127 ;
@@ -1105,6 +1230,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum -1.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:305_REV1 ;
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
@@ -1115,6 +1241,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:306_DYN1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 129 ;
@@ -1124,4 +1251,95 @@
 		lv2:default 1.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:306_DYN1 ;
 	] .
+
+synthv1_lv2:101_DCO1
+	a lv2pg:InputGroup;
+	lv2:name "Synth 1 - DCO1" ;
+	lv2:symbol "DCO1" .
+
+synthv1_lv2:102_DCF1
+	a lv2pg:InputGroup;
+	lv2:name "Synth 1 - DCF1" ;
+	lv2:symbol "DCF1" .
+
+synthv1_lv2:103_LFO1
+	a lv2pg:InputGroup;
+	lv2:name "Synth 1 - LFO1" ;
+	lv2:symbol "LFO1" .
+
+synthv1_lv2:104_DCA1
+	a lv2pg:InputGroup;
+	lv2:name "Synth 1 - DCA1" ;
+	lv2:symbol "104_DCA1" .
+
+synthv1_lv2:105_OUT1
+	a lv2pg:InputGroup;
+	lv2:name "Synth 1 - OUT1" ;
+	lv2:symbol "OUT1" .
+
+synthv1_lv2:106_DEF1
+	a lv2pg:InputGroup;
+	lv2:name "Synth 1 - DEF1" ;
+	lv2:symbol "DEF1" .
+
+synthv1_lv2:201_DCO2
+	a lv2pg:InputGroup;
+	lv2:name "Synth 2 - DCO2" ;
+	lv2:symbol "DCO2" .
+
+synthv1_lv2:202_DCF2
+	a lv2pg:InputGroup;
+	lv2:name "Synth 2 - DCF2" ;
+	lv2:symbol "DCF2" .
+
+synthv1_lv2:203_LFO2
+	a lv2pg:InputGroup;
+	lv2:name "Synth 2 - LFO2" ;
+	lv2:symbol "LFO2" .
+
+synthv1_lv2:204_DCA2
+	a lv2pg:InputGroup;
+	lv2:name "Synth 2 - DCA2" ;
+	lv2:symbol "DCA2" .
+
+synthv1_lv2:205_OUT2
+	a lv2pg:InputGroup;
+	lv2:name "Synth 2 - OUT2" ;
+	lv2:symbol "OUT2" .
+
+synthv1_lv2:206_DEF2
+	a lv2pg:InputGroup;
+	lv2:name "Synth 2 - DEF2" ;
+	lv2:symbol "DEF2" .
+
+synthv1_lv2:301_CHO1
+	a lv2pg:InputGroup;
+	lv2:name "Effects - Chorus" ;
+	lv2:symbol "CHO1" .
+
+synthv1_lv2:302_FLA1
+	a lv2pg:InputGroup;
+	lv2:name "Effects - Flanger" ;
+	lv2:symbol "FLA1" .
+
+synthv1_lv2:303_PHA1
+	a lv2pg:InputGroup;
+	lv2:name "Effects - Phaser" ;
+	lv2:symbol "PHA1" .
+
+synthv1_lv2:304_DEL1
+	a lv2pg:InputGroup;
+	lv2:name "Effects - Delay" ;
+	lv2:symbol "DEL1" .
+
+synthv1_lv2:305_REV1
+	a lv2pg:InputGroup;
+	lv2:name "Effects - Reverb" ;
+	lv2:symbol "REV1" .
+
+synthv1_lv2:306_DYN1
+	a lv2pg:InputGroup;
+	lv2:name "Effects - Dynamic" ;
+	lv2:symbol "DYN1" .
