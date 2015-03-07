@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Added application description as freedesktop.org's AppData.
 - Introducing LV2 port-groups (as proposed by Amadeus Folego aka.
   badosu, thanks). (EXPERIMENTAL)
 - Improved envelope widget nodes click-and-drag precision.
