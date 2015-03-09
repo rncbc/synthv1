@@ -4,11 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.6.1  2015-03-09  A fourth official beta.
 
 - Added application description as freedesktop.org's AppData.
 - Introducing LV2 port-groups (as proposed by Amadeus Folego aka.
-  badosu, thanks). (EXPERIMENTAL)
+  badosu, thanks).
 - Improved envelope widget nodes click-and-drag precision.
 - Introducing a brand new user preference on eye-candy: cf.Help
   /Configure.../Options/Custom style theme (applies to the JACK
