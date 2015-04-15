@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(synthv1, 0.6.1, rncbc@rncbc.org)
+AC_INIT(synthv1, 0.6.1.1, rncbc@rncbc.org)
 
 AC_CONFIG_SRCDIR(src/synthv1.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -247,7 +247,7 @@ if test "x$ac_qt4" = "xyes"; then
    AC_CACHE_CHECK([for Qt library version >= 4.4],
       ac_cv_qtversion, [
       AC_TRY_LINK([#include "QtCore/qglobal.h"], [
-         #if QT_VERSION < 0x040400
+         #if QT_VERSION < 0x040400 || QT_VERSION >= 0x050000
          #error Qt library 4.4 or greater required.
          #endif
       ], ac_cv_qtversion="yes", [
@@ -261,7 +261,7 @@ if test "x$ac_qt5" = "xyes"; then
    AC_CACHE_CHECK([for Qt library version >= 5.1],
       ac_cv_qtversion, [
       AC_TRY_LINK([#include "QtCore/qglobal.h"], [
-         #if QT_VERSION < 0x050100
+         #if QT_VERSION < 0x050100 || QT_VERSION >= 0x060000
          #error Qt library 5.1 or greater required.
          #endif
       ], ac_cv_qtversion="yes", [

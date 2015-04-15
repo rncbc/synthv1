@@ -4,6 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Fixed for some strict tests for Qt4 vs. Qt5 configure builds.
+
+
 0.6.1  2015-03-09  A fourth official beta.
 
 - Added application description as freedesktop.org's AppData.
