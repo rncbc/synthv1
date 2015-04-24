@@ -23,12 +23,59 @@
 #define __synthv1widget_knob_h
 
 #include <QWidget>
+#include <QDial>
+
 
 // Forward declarations.
 class QLabel;
-class QDial;
 class QDoubleSpinBox;
 class QComboBox;
+
+
+//-------------------------------------------------------------------------
+// synthv1widget_dial - A better QDial widget.
+
+class synthv1widget_dial : public QDial
+{
+	Q_OBJECT
+
+public:
+
+	// Constructor.
+	synthv1widget_dial(QWidget *pParent = 0);
+
+	// Dial mode behavior:
+	// DefaultMode - default (old) QDial behavior.
+	// LinearMode  - proportionally to distance in one ortogonal axis.
+	// AngularMode - angularly relative to widget center.
+	enum DialMode { DefaultMode = 0, LinearMode, AngularMode };
+
+	// Set knob dial mode behavior.
+	static void setDialMode(DialMode dialMode);
+	static DialMode dialMode();
+
+protected:
+
+	// Mouse angle determination.
+	float mouseAngle(const QPoint& pos);
+
+	// Alternate mouse behavior event handlers.
+	void mousePressEvent(QMouseEvent *pMouseEvent);
+	void mouseMoveEvent(QMouseEvent *pMouseEvent);
+	void mouseReleaseEvent(QMouseEvent *pMouseEvent);
+
+private:
+
+	// Alternate mouse behavior tracking.
+	bool   m_bMousePressed;
+	QPoint m_posMouse;
+
+	// Just for more precission on the movement
+	float m_fLastDragValue;
+
+	// Knob dial mode behavior.
+	static DialMode g_dialMode;
+};
 
 
 //-------------------------------------------------------------------------
@@ -93,7 +140,8 @@ private:
 
 	// Widget members.
 	QLabel *m_pLabel;
-	QDial  *m_pDial;
+
+	synthv1widget_dial *m_pDial;
 
 	// Default value.
 	float m_fDefaultValue;

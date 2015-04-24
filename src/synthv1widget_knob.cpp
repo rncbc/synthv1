@@ -22,7 +22,6 @@
 #include "synthv1widget_knob.h"
 
 #include <QLabel>
-#include <QDial>
 #include <QSpinBox>
 #include <QComboBox>
 
@@ -38,6 +37,105 @@ inline int iroundf(float x) { return int(x < 0.0f ? x - 0.5f : x + 0.5f); }
 
 
 //-------------------------------------------------------------------------
+// synthv1widget_dial - A better QDial widget.
+
+synthv1widget_dial::DialMode
+synthv1widget_dial::g_dialMode = synthv1widget_dial::DefaultMode;
+
+// Set knob dial mode behavior.
+void synthv1widget_dial::setDialMode ( DialMode dialMode )
+	{ g_dialMode = dialMode; }
+
+synthv1widget_dial::DialMode synthv1widget_dial::dialMode (void)
+	{ return g_dialMode; }
+
+
+// Constructor.
+synthv1widget_dial::synthv1widget_dial ( QWidget *pParent )
+	: QDial(pParent), m_bMousePressed(false), m_fLastDragValue(0.0f)
+{
+}
+
+
+// Mouse angle determination.
+float synthv1widget_dial::mouseAngle ( const QPoint& pos )
+{
+	const float dx = pos.x() - (width() >> 1);
+	const float dy = (height() >> 1) - pos.y();
+	return 180.0f * ::atan2f(dx, dy) / float(M_PI);
+}
+
+
+// Alternate mouse behavior event handlers.
+void synthv1widget_dial::mousePressEvent ( QMouseEvent *pMouseEvent )
+{
+	if (g_dialMode == DefaultMode) {
+		QDial::mousePressEvent(pMouseEvent);
+	} else if (pMouseEvent->button() == Qt::LeftButton) {
+		m_bMousePressed = true;
+		m_posMouse = pMouseEvent->pos();
+		m_fLastDragValue = float(value());
+		emit sliderPressed();
+	}
+}
+
+
+void synthv1widget_dial::mouseMoveEvent ( QMouseEvent *pMouseEvent )
+{
+	if (g_dialMode == DefaultMode) {
+		QDial::mouseMoveEvent(pMouseEvent);
+		return;
+	}
+
+	if (!m_bMousePressed)
+		return;
+
+	const QPoint& pos = pMouseEvent->pos();
+	const int dx = pos.x() - m_posMouse.x();
+	const int dy = pos.y() - m_posMouse.y();
+	float fAngleDelta =  mouseAngle(pos) - mouseAngle(m_posMouse);
+	int iNewValue = value();
+
+	switch (g_dialMode)	{
+	case LinearMode:
+		iNewValue = int(m_fLastDragValue) + dx - dy;
+		break;
+	case AngularMode:
+	default:
+		// Forget about the drag origin to be robust on full rotations
+		if (fAngleDelta > +180.0f) fAngleDelta -= 360.0f;
+		else
+		if (fAngleDelta < -180.0f) fAngleDelta += 360.0f;
+		m_fLastDragValue += float(maximum() - minimum()) * fAngleDelta / 270.0f;
+		if (m_fLastDragValue > float(maximum()))
+			m_fLastDragValue = float(maximum());
+		else
+		if (m_fLastDragValue < float(minimum()))
+			m_fLastDragValue = float(minimum());
+		m_posMouse = pos;
+		iNewValue = int(m_fLastDragValue + 0.5f);
+		break;
+	}
+
+	setValue(iNewValue);
+	update();
+
+	emit sliderMoved(value());
+}
+
+
+void synthv1widget_dial::mouseReleaseEvent ( QMouseEvent *pMouseEvent )
+{
+	if (g_dialMode == DefaultMode
+		&& pMouseEvent->button() != Qt::MidButton) {
+		QDial::mouseReleaseEvent(pMouseEvent);
+	} else if (m_bMousePressed) {
+		m_bMousePressed = false;
+	}
+}
+
+
+//-------------------------------------------------------------------------
 // synthv1widget_knob - Custom composite widget.
 //
 
@@ -49,7 +147,7 @@ synthv1widget_knob::synthv1widget_knob ( QWidget *pParent ) : QWidget(pParent)
 	QWidget::setFont(font2);
 
 	m_pLabel = new QLabel();
-	m_pDial  = new QDial();
+	m_pDial  = new synthv1widget_dial();
 
 	m_fScale = 100.0f;
 

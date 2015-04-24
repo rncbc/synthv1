@@ -736,6 +736,13 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		SIGNAL(notify(int)),
 		SLOT(updateSchedNotify(int)));
 
+	// General knob/dial  behavior init...
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig) {
+		synthv1widget_dial::setDialMode(
+			synthv1widget_dial::DialMode(pConfig->iKnobDialMode));
+	}
+
 	// Epilog.
 	// QWidget::adjustSize();
 

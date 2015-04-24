@@ -20,6 +20,7 @@
 *****************************************************************************/
 
 #include "synthv1widget_config.h"
+#include "synthv1widget_knob.h"
 
 #include <QPushButton>
 #include <QMessageBox>
@@ -50,6 +51,7 @@ synthv1widget_config::synthv1widget_config (
 	if (pConfig) {
 		m_ui.ProgramsPreviewCheckBox->setChecked(pConfig->bProgramsPreview);
 		m_ui.UseNativeDialogsCheckBox->setChecked(pConfig->bUseNativeDialogs);
+		m_ui.KnobDialModeComboBox->setCurrentIndex(pConfig->iKnobDialMode);
 		int iCustomStyleTheme = 0;
 		if (!pConfig->sCustomStyleTheme.isEmpty())
 			iCustomStyleTheme = m_ui.CustomStyleThemeComboBox->findText(
@@ -94,6 +96,9 @@ synthv1widget_config::synthv1widget_config (
 		SLOT(optionsChanged()));
 	QObject::connect(m_ui.UseNativeDialogsCheckBox,
 		SIGNAL(toggled(bool)),
+		SLOT(optionsChanged()));
+	QObject::connect(m_ui.KnobDialModeComboBox,
+		SIGNAL(activated(int)),
 		SLOT(optionsChanged()));
 	QObject::connect(m_ui.CustomStyleThemeComboBox,
 		SIGNAL(activated(int)),
@@ -288,6 +293,9 @@ void synthv1widget_config::accept (void)
 		pConfig->bProgramsPreview = m_ui.ProgramsPreviewCheckBox->isChecked();
 		pConfig->bUseNativeDialogs = m_ui.UseNativeDialogsCheckBox->isChecked();
 		pConfig->bDontUseNativeDialogs = !pConfig->bUseNativeDialogs;
+		pConfig->iKnobDialMode = m_ui.KnobDialModeComboBox->currentIndex();
+		synthv1widget_dial::setDialMode(
+			synthv1widget_dial::DialMode(pConfig->iKnobDialMode));
 		const QString sOldCustomStyleTheme = pConfig->sCustomStyleTheme;
 		if (m_ui.CustomStyleThemeComboBox->currentIndex() > 0)
 			pConfig->sCustomStyleTheme = m_ui.CustomStyleThemeComboBox->currentText();

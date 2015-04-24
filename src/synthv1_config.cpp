@@ -212,6 +212,7 @@ void synthv1_config::load (void)
 	QSettings::beginGroup("/Default");
 	sPreset = QSettings::value("/Preset").toString();
 	sPresetDir = QSettings::value("/PresetDir").toString();
+	iKnobDialMode = QSettings::value("/KnobDialMode", 0).toInt();
 	QSettings::endGroup();
 
 	QSettings::beginGroup("/Dialogs");
@@ -236,6 +237,7 @@ void synthv1_config::save (void)
 	QSettings::beginGroup("/Default");
 	QSettings::setValue("/Preset", sPreset);
 	QSettings::setValue("/PresetDir", sPresetDir);
+	QSettings::setValue("/KnobDialMode", iKnobDialMode);
 	QSettings::endGroup();
 
 	QSettings::beginGroup("/Dialogs");

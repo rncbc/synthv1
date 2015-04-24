@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- Custom knob/dial behavior mode optionss are now introduced:
+  linear and angular (aka. radial) as far to avoid abrupt
+  changes on first mouse click (still the default behavior).
 - Fixed for some strict tests for Qt4 vs. Qt5 configure builds.
 
 
