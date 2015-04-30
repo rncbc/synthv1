@@ -4,7 +4,7 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.6.2  2015-04-30  A fifth official beta.
 
 - Custom knob/dial behavior mode options are now introduced:
   linear and angular (aka. radial) as far to avoid abrupt
