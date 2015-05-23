@@ -115,7 +115,7 @@ AC_ARG_ENABLE(qt5,
 
 
 # Standard installation base dirs.
-ac_with_paths="/usr /usr/local"
+ac_with_paths="/usr/local /usr"
 
 # Set for alternate Qt4/5 installation dir.
 AC_ARG_WITH(qt4,
@@ -194,10 +194,11 @@ if test "x$ac_qt5" = "xyes"; then
    ac_qtdirs="qt5 $ac_qtdirs"
 fi
 
-ac_topdirs="/usr/share /usr/lib"
+ac_topdirs="/usr/local /usr"
+ac_subdirs="lib"
 
 if test "x$ac_arch" = "xx86_64"; then
-   ac_topdirs="$ac_topdirs /usr/lib64"
+   ac_subdirs="$ac_subdirs lib64"
 fi
 
 if test "x$ac_arch" = "xx86_64" -o "x$ac_qt5" = "xyes"; then
@@ -206,10 +207,12 @@ if test "x$ac_arch" = "xx86_64" -o "x$ac_qt5" = "xyes"; then
 fi
 
 for X in $ac_topdirs; do
-  for Y in $ac_qtdirs; do
-    if test -d $X/$Y/bin; then
-      ac_with_paths="$X/$Y $ac_with_paths"
-    fi
+  for Y in share $ac_subdirs; do
+    for Z in $ac_qtdirs; do
+      if test -d $X/$Y/$Z/bin; then
+         ac_with_paths="$X/$Y/$Z $ac_with_paths"
+      fi
+    done
   done
 done
 
@@ -219,9 +222,6 @@ for X in $ac_with_paths; do
   if test -d $X/bin; then
     ac_path="$X/bin:$ac_path"
   fi
-# if test -x $X/qmake; then
-#   ac_path="$X:$ac_path"
-# fi
   if test -d $X/include; then
     for Y in $ac_qtdirs; do
       if test -d $X/include/$Y; then
@@ -234,14 +234,12 @@ for X in $ac_with_paths; do
     CPPFLAGS="$CPPFLAGS -I$X/include"
     ac_incpath="$ac_incpath $X/include"
   fi
-  if test "x$ac_arch" = "xx86_64" -a -d $X/lib64; then
-    LIBS="-L$X/lib64 $LIBS"
-    ac_libs="-L$X/lib64 $ac_libs"
-  fi
-  if test -d $X/lib; then
-    LIBS="-L$X/lib $LIBS"
-    ac_libs="-L$X/lib $ac_libs"
-  fi
+  for Y in $ac_subdirs; do
+    if test -d $X/$Y; then
+       LIBS="$LIBS -L$X/$Y"
+       ac_libs="$ac_libs -L$X/$Y"
+    fi
+  done
 done
 
 
