@@ -38,9 +38,9 @@ requirements:
 
   mandatory,
 
-  - Qt4 (core, gui, xml), C++ class library and tools for
-    crossplatform development and internationalization
-    http://qt-project.org/
+  - Qt framework, C++ class library and tools for
+    cross-platform application and UI development
+    http://qt.io/
 
   optional (opted-in at build time),
 
