@@ -766,6 +766,7 @@ public:
 	void setParamValue(synthv1::ParamIndex index, float fValue);
 	float paramValue(synthv1::ParamIndex index) const;
 
+	synthv1_control *control();
 	synthv1_programs *programs();
 
 	void process_midi(uint8_t *data, uint32_t size);
@@ -894,7 +895,7 @@ synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
 
 synthv1_impl::synthv1_impl (
 	synthv1 *pSynth, uint16_t iChannels, uint32_t iSampleRate )
-	: m_programs(pSynth)
+	: m_control(pSynth), m_programs(pSynth)
 {
 	// max env. stage length (default)
 	m_dco1.envtime0 = m_dco2.envtime0 = 0.0001f * MAX_ENV_MSECS;
@@ -1843,6 +1844,14 @@ void synthv1_impl::allSoundOff (void)
 }
 
 
+// controllers accessor
+
+synthv1_control *synthv1_impl::control (void)
+{
+	return &m_control;
+}
+
+
 // programs accessor
 
 synthv1_programs *synthv1_impl::programs (void)
@@ -2271,6 +2280,14 @@ void synthv1::process_midi ( uint8_t *data, uint32_t size )
 void synthv1::process ( float **ins, float **outs, uint32_t nframes )
 {
 	m_pImpl->process(ins, outs, nframes);
+}
+
+
+// controllers accessor
+
+synthv1_control *synthv1::control (void) const
+{
+	return m_pImpl->control();
 }
 
 

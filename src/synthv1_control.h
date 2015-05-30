@@ -22,6 +22,10 @@
 #ifndef __synthv1_control_h
 #define __synthv1_control_h
 
+#include "synthv1_param.h"
+
+#include <QHash>
+
 
 //-------------------------------------------------------------------------
 // synthv1_control - Controller processs class.
@@ -32,7 +36,7 @@ class synthv1_control
 public:
 
 	// ctor.
-	synthv1_control();
+	synthv1_control(synthv1 *pSynth);
 
 	// dtor.
 	~synthv1_control();
@@ -48,7 +52,35 @@ public:
 		unsigned short value;
 	};
 
-	// controller methods.
+	// controller hash key.
+	struct Key
+	{
+		unsigned char  status;
+		unsigned short param;
+
+		Key (const Event& event)
+			: status(event.status), param(event.param) {}
+
+		// hash key comparator.
+		bool operator== (const Key& key) const
+			{ return (key.status == status) && (key.param == param); }
+	};
+
+	typedef QHash<Key, int> Map;
+
+	// controller map methods.
+	const Map& map() const { return m_map; }
+
+	int find_controller(const Key& key) const
+		{ return m_map.value(key, -1); }
+	void add_controller(const Key& key, int index)
+		{ m_map.insert(key, index); }
+	void remove__controller(const Key& key)
+		{ m_map.remove(key); }
+
+	void clear() { m_map.clear(); }
+
+	// controller queue methods.
 	void process_enqueue(
 		unsigned short channel,
 		unsigned short param,
@@ -68,7 +100,19 @@ private:
 	class Impl;
 
 	Impl *m_pImpl;
+
+	synthv1 *m_pSynth;
+
+	// Controllers map.
+	Map m_map;
 };
+
+
+// hash key function.
+inline uint qHash ( const synthv1_control::Key& key )
+{
+	return qHash(key.status ^ key.param);
+}
 
 
 #endif	// __synthv1_control_h

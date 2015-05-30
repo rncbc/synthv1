@@ -522,9 +522,9 @@ private:
 // synthv1_control - impl.
 //
 
-synthv1_control::synthv1_control (void)
+synthv1_control::synthv1_control ( synthv1 *pSynth )
+	: m_pImpl(new synthv1_control::Impl()), m_pSynth(pSynth)
 {
-	m_pImpl = new synthv1_control::Impl();
 }
 
 
@@ -534,6 +534,7 @@ synthv1_control::~synthv1_control (void)
 }
 
 
+// controller queue methods.
 void synthv1_control::process_enqueue (
 	unsigned short channel, unsigned short param, unsigned short value )
 {
@@ -563,7 +564,17 @@ void synthv1_control::process_dequeue (void)
 
 void synthv1_control::process_event ( const Event& event )
 {
+	const Key key(event);
+	const int index = find_controller(key);
+	if (index < 0)
+		return;
+
 	// TODO: process controller event...
+	float fValue = float(event.value) / 127.0f;
+	if (Type(key.status & 0xf0) != CC)
+		fValue /= 127.0f;
+
+	m_pSynth->setParamValue(synthv1::ParamIndex(index), fValue);
 }
 
 

@@ -28,6 +28,7 @@
 
 // forward declarations
 class synthv1_impl;
+class synthv1_control;
 class synthv1_programs;
 
 
@@ -187,6 +188,7 @@ public:
 	void setParamPort(ParamIndex index, float *pfParam);
 	float *paramPort(ParamIndex index) const;
 
+	synthv1_control *control() const;
 	synthv1_programs *programs() const;
 
 	void setParamValue(ParamIndex index, float fValue);
