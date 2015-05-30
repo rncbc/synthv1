@@ -248,13 +248,13 @@ public:
 
 	void clear() { m_read = m_write = 0; }
 
-	bool push ( unsigned long time, int port,
-		unsigned char status, unsigned short param, unsigned short value )
+	bool push (
+		unsigned char status,
+		unsigned short param,
+		unsigned short value )
 	{
 		synthv1_control::Event event;
 
-		event.time   = time;
-		event.port   = port;
 		event.status = status;
 		event.param  = param;
 		event.value  = value;
@@ -338,12 +338,11 @@ public:
 		const unsigned short channel = (event.status & 0x0f);
 
 		if (event.param == RPN_MSB) {
-			xrpn_item& item = get_item(event.port, channel);
+			xrpn_item& item = get_item(channel);
 			if (item.is_param_msb()
 				|| (item.is_any() && item.type() != synthv1_control::RPN))
 				enqueue(item);
 			if (item.type() == synthv1_control::None) {
-				item.set_time(event.time);
 				item.set_status(synthv1_control::RPN | channel);
 				++m_count;
 			}
@@ -352,12 +351,11 @@ public:
 		}
 		else
 		if (event.param == RPN_LSB) {
-			xrpn_item& item = get_item(event.port, channel);
+			xrpn_item& item = get_item(channel);
 			if (item.is_param_lsb()
 				|| (item.is_any() && item.type() != synthv1_control::RPN))
 				enqueue(item);
 			if (item.type() == synthv1_control::None) {
-				item.set_time(event.time);
 				item.set_status(synthv1_control::RPN | channel);
 				++m_count;
 			}
@@ -366,12 +364,11 @@ public:
 		}
 		else
 		if (event.param == NRPN_MSB) {
-			xrpn_item& item = get_item(event.port, channel);
+			xrpn_item& item = get_item(channel);
 			if (item.is_param_msb()
 				|| (item.is_any() && item.type() != synthv1_control::NRPN))
 				enqueue(item);
 			if (item.type() == synthv1_control::None) {
-				item.set_time(event.time);
 				item.set_status(synthv1_control::NRPN | channel);
 				++m_count;
 			}
@@ -380,12 +377,11 @@ public:
 		}
 		else
 		if (event.param == NRPN_LSB) {
-			xrpn_item& item = get_item(event.port, channel);
+			xrpn_item& item = get_item(channel);
 			if (item.is_param_lsb()
 				|| (item.is_any() && item.type() != synthv1_control::NRPN))
 				enqueue(item);
 			if (item.type() == synthv1_control::None) {
-				item.set_time(event.time);
 				item.set_status(synthv1_control::NRPN | channel);
 				++m_count;
 			}
@@ -394,7 +390,7 @@ public:
 		}
 		else
 		if (event.param == DATA_MSB) {
-			xrpn_item& item = get_item(event.port, channel);
+			xrpn_item& item = get_item(channel);
 			if (item.type() == synthv1_control::None)
 				return false;
 			if (item.is_value_msb()
@@ -410,7 +406,7 @@ public:
 		}
 		else
 		if (event.param == DATA_LSB) {
-			xrpn_item& item = get_item(event.port, channel);
+			xrpn_item& item = get_item(channel);
 			if (item.type() == synthv1_control::None)
 				return false;
 			if (item.is_value_lsb()
@@ -426,14 +422,13 @@ public:
 		}
 		else
 		if (event.param > CC14_MSB_MIN && event.param < CC14_MSB_MAX) {
-			xrpn_item& item = get_item(event.port, channel);
+			xrpn_item& item = get_item(channel);
 			if (item.is_param_msb() || item.is_value_msb()
 				|| (item.is_any() && item.type() != synthv1_control::CC14)
 				|| (item.type() == synthv1_control::CC14
 					&& item.param_lsb() != event.param + CC14_LSB_MIN))
 				enqueue(item);
 			if (item.type() == synthv1_control::None) {
-				item.set_time(event.time);
 				item.set_status(synthv1_control::CC14 | channel);
 				++m_count;
 			}
@@ -445,14 +440,13 @@ public:
 		}
 		else
 		if (event.param > CC14_LSB_MIN && event.param < CC14_LSB_MAX) {
-			xrpn_item& item = get_item(event.port, channel);
+			xrpn_item& item = get_item(channel);
 			if (item.is_param_lsb() || item.is_value_lsb()
 				|| (item.is_any() && item.type() != synthv1_control::CC14)
 				|| (item.type() == synthv1_control::CC14
 					&& item.param_msb() != event.param - CC14_LSB_MIN))
 				enqueue(item);
 			if (item.type() == synthv1_control::None) {
-				item.set_time(event.time);
 				item.set_status(synthv1_control::CC14 | channel);
 				++m_count;
 			}
@@ -468,57 +462,47 @@ public:
 
 protected:
 
-	xrpn_item& get_item ( int port, unsigned short channel )
-	{
-		xrpn_item& item = m_cache[(port << 4) | channel];
-		item.set_port(port);
-		return item;
-	}
+	xrpn_item& get_item ( unsigned short channel )
+		{ return m_cache[channel]; }
 
 	void enqueue ( xrpn_item& item )
 	{
 		if (item.type() == synthv1_control::None)
 			return;
 
-		const unsigned long time = item.time();
-		const int port = item.port();
-
 		if (item.type() == synthv1_control::CC14) {
 			if (item.is_14bit()) {
-				m_queue.push(time, port, item.status(),
-					item.param_msb(), item.value());
+				m_queue.push(item.status(), item.param_msb(), item.value());
 			} else  {
 				const unsigned char status = synthv1_control::CC | item.channel();
 				if (item.is_value_msb())
-					m_queue.push(time, port, status,
-						item.param_msb(), item.value_msb());
+					m_queue.push(status, item.param_msb(), item.value_msb());
 				if (item.is_value_lsb())
-					m_queue.push(time, port, status,
-						item.param_lsb(), item.value_lsb());
+					m_queue.push(status, item.param_lsb(), item.value_lsb());
 			}
 		}
 		else
 		if (item.is_ready()) {
-			m_queue.push(time, port, item.status(), item.param(), item.value());
+			m_queue.push(item.status(), item.param(), item.value());
 		} else {
 			const unsigned char status = synthv1_control::CC | item.channel();
 			if (item.type() == synthv1_control::RPN) {
 				if (item.is_param_msb())
-					m_queue.push(time, port, status, RPN_MSB, item.param_msb());
+					m_queue.push(status, RPN_MSB, item.param_msb());
 				if (item.is_param_lsb())
-					m_queue.push(time, port, status, RPN_LSB, item.param_lsb());
+					m_queue.push(status, RPN_LSB, item.param_lsb());
 			}
 			else
 			if (item.type() == synthv1_control::NRPN) {
 				if (item.is_param_msb())
-					m_queue.push(time, port, status, NRPN_MSB, item.param_msb());
+					m_queue.push(status, NRPN_MSB, item.param_msb());
 				if (item.is_param_lsb())
-					m_queue.push(time, port, status, NRPN_LSB, item.param_lsb());
+					m_queue.push(status, NRPN_LSB, item.param_lsb());
 			}
 			if (item.is_value_msb())
-				m_queue.push(time, port, status, DATA_MSB, item.value_msb());
+				m_queue.push(status, DATA_MSB, item.value_msb());
 			if (item.is_value_lsb())
-				m_queue.push(time, port, status, DATA_LSB, item.value_lsb());
+				m_queue.push(status, DATA_LSB, item.value_lsb());
 		}
 
 		item.clear();
@@ -550,21 +534,36 @@ synthv1_control::~synthv1_control (void)
 }
 
 
-bool synthv1_control::isPending (void) const
+void synthv1_control::process_enqueue (
+	unsigned short channel, unsigned short param, unsigned short value )
 {
-	return m_pImpl->is_pending();
+	Event event;
+
+	event.status = CC | (channel & 0x0f);
+	event.param  = param;
+	event.value  = value;
+
+	if (m_pImpl->process(event))
+		return;
+
+	process_event(event);
 }
 
 
-bool synthv1_control::process ( const synthv1_control::Event& event )
+void synthv1_control::process_dequeue (void)
 {
-	return m_pImpl->process(event);
+	Event event;
+
+	while (m_pImpl->is_pending()) {
+		if (m_pImpl->dequeue(event))
+			process_event(event);
+	}
 }
 
 
-bool synthv1_control::dequeue ( synthv1_control::Event& event )
+void synthv1_control::process_event ( const Event& event )
 {
-	return m_pImpl->dequeue(event);
+	// TODO: process controller event...
 }
 
 

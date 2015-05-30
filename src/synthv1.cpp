@@ -30,6 +30,7 @@
 #include "synthv1_reverb.h"
 
 #include "synthv1_config.h"
+#include "synthv1_control.h"
 #include "synthv1_programs.h"
 
 
@@ -817,6 +818,7 @@ protected:
 private:
 
 	synthv1_config   m_config;
+	synthv1_control  m_control;
 	synthv1_programs m_programs;
 
 	uint16_t m_iChannels;
@@ -1674,6 +1676,8 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 			if (on2) allNotesOff_2();
 			break;
 		}
+		// process controller...
+		m_control.process_enqueue(channel, key, value);
 	}
 	// pitch bend
 	else if (status == 0xe0) {
@@ -1681,6 +1685,12 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 		if (on1) m_ctl1.pitchbend = synthv1_pow2f(*m_def1.pitchbend * pitchbend);
 		if (on2) m_ctl2.pitchbend = synthv1_pow2f(*m_def2.pitchbend * pitchbend);
 	}
+	else
+	// flush controllers...
+	m_control.flush();
+
+	// process pending controllers...
+	m_control.process_dequeue();
 }
 
 

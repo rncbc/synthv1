@@ -40,22 +40,27 @@ public:
 	// controller types,
 	enum Type { None = 0, CC = 0xb0, RPN = 0x10, NRPN = 0x20, CC14 = 0x30 };
 
-	// controller event,
+	// controller events.
 	struct Event
 	{
-		unsigned long  time;
-		int            port;
 		unsigned char  status;
 		unsigned short param;
 		unsigned short value;
 	};
 
-	bool isPending() const;
+	// controller methods.
+	void process_enqueue(
+		unsigned short channel,
+		unsigned short param,
+		unsigned short value);
 
-	bool process(const Event& event);
-	bool dequeue(Event& event);
+	void process_dequeue();
 
 	void flush();
+
+protected:
+
+	void process_event(const Event& event);
 
 private:
 
@@ -63,7 +68,6 @@ private:
 	class Impl;
 
 	Impl *m_pImpl;
-
 };
 
 
