@@ -22,6 +22,7 @@ HEADERS = \
 	synthv1_param.h \
 	synthv1_sched.h \
 	synthv1_programs.h \
+	synthv1_control.h \
 	synthv1widget.h \
 	synthv1widget_env.h \
 	synthv1widget_filt.h \
@@ -43,6 +44,7 @@ SOURCES = \
 	synthv1_param.cpp \
 	synthv1_sched.cpp \
 	synthv1_programs.cpp \
+	synthv1_control.cpp \
 	synthv1widget.cpp \
 	synthv1widget_env.cpp \
 	synthv1widget_filt.cpp \

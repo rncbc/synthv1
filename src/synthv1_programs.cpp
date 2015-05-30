@@ -21,9 +21,6 @@
 
 #include "synthv1_programs.h"
 
-#include "synthv1_sched.h"
-#include "synthv1_param.h"
-
 
 //-------------------------------------------------------------------------
 // synthv1_programs - Bank/programs database class (singleton).

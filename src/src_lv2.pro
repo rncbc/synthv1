@@ -21,7 +21,8 @@ HEADERS = \
 	synthv1_reverb.h \
 	synthv1_param.h \
 	synthv1_sched.h \
-	synthv1_programs.h
+	synthv1_programs.h \
+	synthv1_control.h
 
 SOURCES = \
 	synthv1.cpp \
@@ -31,7 +32,8 @@ SOURCES = \
 	synthv1_wave.cpp \
 	synthv1_param.cpp \
 	synthv1_sched.cpp \
-	synthv1_programs.cpp
+	synthv1_programs.cpp \
+	synthv1_control.cpp
 
 
 unix {
