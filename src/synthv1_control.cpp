@@ -211,7 +211,7 @@ public:
 		{ resize(size); }
 
 	~xrpn_queue () { if (m_events) delete [] m_events; }
-	
+
 	void resize ( unsigned int size )
 	{
 		unsigned int new_size = 4; // must be a power-of-2...
@@ -247,7 +247,7 @@ public:
 	}
 
 	void clear() { m_read = m_write = 0; }
- 
+
 	bool push ( unsigned long time, int port,
 		unsigned char status, unsigned short param, unsigned short value )
 	{
@@ -279,7 +279,7 @@ public:
 		const unsigned int r = m_read;
 		if (r == m_write)
 			return false;
-		event = m_events[r]; 
+		event = m_events[r];
 		m_read = (r + 1) & m_mask;
 		return true;
 	}
@@ -287,7 +287,7 @@ public:
 	bool is_pending () const
 		{ return (m_read != m_write); }
 
- 	unsigned int count() const
+	unsigned int count() const
 	{
 		if (m_write < m_read)
 			return (m_write + m_size - m_read) & m_mask;
