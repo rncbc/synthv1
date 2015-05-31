@@ -30,7 +30,7 @@
 #include "synthv1_reverb.h"
 
 #include "synthv1_config.h"
-#include "synthv1_control.h"
+#include "synthv1_controls.h"
 #include "synthv1_programs.h"
 
 
@@ -766,7 +766,7 @@ public:
 	void setParamValue(synthv1::ParamIndex index, float fValue);
 	float paramValue(synthv1::ParamIndex index) const;
 
-	synthv1_control *control();
+	synthv1_controls *controls();
 	synthv1_programs *programs();
 
 	void process_midi(uint8_t *data, uint32_t size);
@@ -819,7 +819,7 @@ protected:
 private:
 
 	synthv1_config   m_config;
-	synthv1_control  m_control;
+	synthv1_controls m_controls;
 	synthv1_programs m_programs;
 
 	uint16_t m_iChannels;
@@ -895,7 +895,7 @@ synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
 
 synthv1_impl::synthv1_impl (
 	synthv1 *pSynth, uint16_t iChannels, uint32_t iSampleRate )
-	: m_control(pSynth), m_programs(pSynth)
+	: m_controls(pSynth), m_programs(pSynth)
 {
 	// max env. stage length (default)
 	m_dco1.envtime0 = m_dco2.envtime0 = 0.0001f * MAX_ENV_MSECS;
@@ -1678,7 +1678,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 			break;
 		}
 		// process controller...
-		m_control.process_enqueue(channel, key, value);
+		m_controls.process_enqueue(channel, key, value);
 	}
 	// pitch bend
 	else if (status == 0xe0) {
@@ -1688,10 +1688,10 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 	}
 	else
 	// flush controllers...
-	m_control.flush();
+	m_controls.flush();
 
 	// process pending controllers...
-	m_control.process_dequeue();
+	m_controls.process_dequeue();
 }
 
 
@@ -1846,9 +1846,9 @@ void synthv1_impl::allSoundOff (void)
 
 // controllers accessor
 
-synthv1_control *synthv1_impl::control (void)
+synthv1_controls *synthv1_impl::controls (void)
 {
-	return &m_control;
+	return &m_controls;
 }
 
 
@@ -2285,9 +2285,9 @@ void synthv1::process ( float **ins, float **outs, uint32_t nframes )
 
 // controllers accessor
 
-synthv1_control *synthv1::control (void) const
+synthv1_controls *synthv1::controls (void) const
 {
-	return m_pImpl->control();
+	return m_pImpl->controls();
 }
 
 

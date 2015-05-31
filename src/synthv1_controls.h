@@ -1,4 +1,4 @@
-// synthv1_control.h
+// synthv1_controls.h
 //
 /****************************************************************************
    Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
@@ -19,8 +19,8 @@
 
 *****************************************************************************/
 
-#ifndef __synthv1_control_h
-#define __synthv1_control_h
+#ifndef __synthv1_controls_h
+#define __synthv1_controls_h
 
 #include "synthv1_param.h"
 
@@ -28,18 +28,18 @@
 
 
 //-------------------------------------------------------------------------
-// synthv1_control - Controller processs class.
+// synthv1_controls - Controller processs class.
 //
 
-class synthv1_control
+class synthv1_controls
 {
 public:
 
 	// ctor.
-	synthv1_control(synthv1 *pSynth);
+	synthv1_controls(synthv1 *pSynth);
 
 	// dtor.
-	~synthv1_control();
+	~synthv1_controls();
 
 	// controller types,
 	enum Type { None = 0, CC = 0xb0, RPN = 0x10, NRPN = 0x20, CC14 = 0x30 };
@@ -55,15 +55,16 @@ public:
 	// controller hash key.
 	struct Key
 	{
-		unsigned char  status;
-		unsigned short param;
-
+		Key () : status(0), param(0) {}
 		Key (const Event& event)
 			: status(event.status), param(event.param) {}
 
 		// hash key comparator.
 		bool operator== (const Key& key) const
 			{ return (key.status == status) && (key.param == param); }
+
+		unsigned char  status;
+		unsigned short param;
 	};
 
 	typedef QHash<Key, int> Map;
@@ -71,11 +72,11 @@ public:
 	// controller map methods.
 	const Map& map() const { return m_map; }
 
-	int find_controller(const Key& key) const
+	int find_control(const Key& key) const
 		{ return m_map.value(key, -1); }
-	void add_controller(const Key& key, int index)
+	void add_control(const Key& key, int index)
 		{ m_map.insert(key, index); }
-	void remove__controller(const Key& key)
+	void remove__control(const Key& key)
 		{ m_map.remove(key); }
 
 	void clear() { m_map.clear(); }
@@ -89,6 +90,10 @@ public:
 	void process_dequeue();
 
 	void flush();
+
+	// text utilities.
+	static Type typeFromText(const QString& sText);
+	static QString textFromType(Type ctype);
 
 protected:
 
@@ -109,12 +114,12 @@ private:
 
 
 // hash key function.
-inline uint qHash ( const synthv1_control::Key& key )
+inline uint qHash ( const synthv1_controls::Key& key )
 {
 	return qHash(key.status ^ key.param);
 }
 
 
-#endif	// __synthv1_control_h
+#endif	// __synthv1_controls_h
 
-// end of synthv1_control.h
+// end of synthv1_controls.h

@@ -22,7 +22,7 @@ HEADERS = \
 	synthv1_param.h \
 	synthv1_sched.h \
 	synthv1_programs.h \
-	synthv1_control.h
+	synthv1_controls.h
 
 SOURCES = \
 	synthv1.cpp \
@@ -33,7 +33,7 @@ SOURCES = \
 	synthv1_param.cpp \
 	synthv1_sched.cpp \
 	synthv1_programs.cpp \
-	synthv1_control.cpp
+	synthv1_controls.cpp
 
 
 unix {
