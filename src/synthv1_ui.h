@@ -40,6 +40,7 @@ public:
 	void setParamValue(synthv1::ParamIndex index, float fValue);
 	float paramValue(synthv1::ParamIndex index) const;
 
+	synthv1_controls *controls() const;
 	synthv1_programs *programs() const;
 
 	void reset();

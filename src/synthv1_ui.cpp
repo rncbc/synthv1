@@ -48,6 +48,12 @@ float synthv1_ui::paramValue ( synthv1::ParamIndex index ) const
 }
 
 
+synthv1_controls *synthv1_ui::controls (void) const
+{
+	return m_pSynth->controls();
+}
+
+
 synthv1_programs *synthv1_ui::programs (void) const
 {
 	return m_pSynth->programs();

@@ -60,6 +60,23 @@ synthv1widget_config::synthv1widget_config (
 	}
 
 	// Signal/slots connections...
+	QObject::connect(m_ui.ControlsAddItemToolButton,
+		SIGNAL(clicked()),
+		SLOT(controlsAddItem()));
+	QObject::connect(m_ui.ControlsEditToolButton,
+		SIGNAL(clicked()),
+		SLOT(controlsEditItem()));
+	QObject::connect(m_ui.ControlsDeleteToolButton,
+		SIGNAL(clicked()),
+		SLOT(controlsDeleteItem()));
+
+	QObject::connect(m_ui.ControlsTreeWidget,
+		SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
+		SLOT(controlsCurrentChanged()));
+	QObject::connect(m_ui.ControlsTreeWidget,
+		SIGNAL(itemChanged(QTreeWidgetItem *, int)),
+		SLOT(controlsChanged()));
+
 	QObject::connect(m_ui.ProgramsAddBankToolButton,
 		SIGNAL(clicked()),
 		SLOT(programsAddBankItem()));
@@ -84,8 +101,12 @@ synthv1widget_config::synthv1widget_config (
 		SLOT(programsActivated()));
 
 	// Custom context menu...
+	m_ui.ControlsTreeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 	m_ui.ProgramsTreeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 
+	QObject::connect(m_ui.ControlsTreeWidget,
+		SIGNAL(customContextMenuRequested(const QPoint&)),
+		SLOT(controlsContextMenuRequested(const QPoint&)));
 	QObject::connect(m_ui.ProgramsTreeWidget,
 		SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(programsContextMenuRequested(const QPoint&)));
@@ -112,10 +133,12 @@ synthv1widget_config::synthv1widget_config (
 		SIGNAL(rejected()),
 		SLOT(reject()));
 
-	// Programs database.
+	// Controllers, Programs database.
+	m_pControls = NULL;
 	m_pPrograms = NULL;
 
 	// Dialog dirty flags.
+	m_iDirtyControls = 0;
 	m_iDirtyPrograms = 0;
 	m_iDirtyOptions  = 0;
 
@@ -130,10 +153,107 @@ synthv1widget_config::~synthv1widget_config (void)
 }
 
 
+// controllers accessors.
+void synthv1widget_config::setControls ( synthv1_controls *pControls )
+{
+	m_pControls = pControls;
+
+	// Load controllers database...
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig && m_pControls)
+		m_ui.ControlsTreeWidget->loadControls(m_pControls);
+
+	// Reset dialog dirty flags.
+	m_iDirtyControls = 0;
+
+	stabilize();
+}
+
+
+synthv1_controls *synthv1widget_config::controls (void) const
+{
+	return m_pControls;
+}
+
+
+// controllers command slots.
+void synthv1widget_config::controlsAddItem (void)
+{
+	m_ui.ControlsTreeWidget->addControlItem();
+
+	controlsChanged();
+}
+
+
+void synthv1widget_config::controlsEditItem (void)
+{
+	QTreeWidgetItem *pItem = m_ui.ControlsTreeWidget->currentItem();
+	if (pItem)
+		m_ui.ControlsTreeWidget->editItem(pItem, 0);
+
+	controlsChanged();
+}
+
+
+void synthv1widget_config::controlsDeleteItem (void)
+{
+	QTreeWidgetItem *pItem = m_ui.ControlsTreeWidget->currentItem();
+	if (pItem)
+		delete pItem;
+
+	controlsChanged();
+}
+
+
+// controllers janitorial slots.
+void synthv1widget_config::controlsCurrentChanged (void)
+{
+	stabilize();
+}
+
+
+void synthv1widget_config::controlsContextMenuRequested ( const QPoint& pos )
+{
+	QTreeWidgetItem *pItem = m_ui.ControlsTreeWidget->currentItem();
+
+	QMenu menu(this);
+	QAction *pAction;
+
+	bool bEnabled = (m_pControls != NULL);
+
+	pAction = menu.addAction(QIcon(":/images/synthv1_preset.png"),
+		tr("&Add Controller"), this, SLOT(controlsAddItem()));
+	pAction->setEnabled(bEnabled);
+
+	menu.addSeparator();
+
+	bEnabled = bEnabled && (pItem != NULL);
+
+	pAction = menu.addAction(QIcon(":/images/presetEdit.png"),
+		tr("&Edit"), this, SLOT(controlsEditItem()));
+	pAction->setEnabled(bEnabled);
+
+	menu.addSeparator();
+
+	pAction = menu.addAction(QIcon(":/images/presetDelete.png"),
+		tr("&Delete"), this, SLOT(controlsDeleteItem()));
+	pAction->setEnabled(bEnabled);
+
+	menu.exec(m_ui.ControlsTreeWidget->mapToGlobal(pos));
+}
+
+
+void synthv1widget_config::controlsChanged (void)
+{
+	++m_iDirtyControls;
+
+	stabilize();
+}
+
+
 // programs accessors.
 void synthv1widget_config::setPrograms ( synthv1_programs *pPrograms )
 {
-	// Programs database.
 	m_pPrograms = pPrograms;
 
 	// Load programs database...
@@ -141,7 +261,7 @@ void synthv1widget_config::setPrograms ( synthv1_programs *pPrograms )
 	if (pConfig && m_pPrograms)
 		m_ui.ProgramsTreeWidget->loadPrograms(m_pPrograms);
 
-	// Reset Dialog dirty flags.
+	// Reset dialog dirty flags.
 	m_iDirtyPrograms = 0;
 
 	stabilize();
@@ -154,7 +274,7 @@ synthv1_programs *synthv1widget_config::programs (void) const
 }
 
 
-// command slots.
+// programs command slots.
 void synthv1widget_config::programsAddBankItem (void)
 {
 	m_ui.ProgramsTreeWidget->addBankItem();
@@ -191,7 +311,7 @@ void synthv1widget_config::programsDeleteItem (void)
 }
 
 
-// janitor slots.
+// programs janitor slots.
 void synthv1widget_config::programsCurrentChanged (void)
 {
 	stabilize();
@@ -211,8 +331,8 @@ void synthv1widget_config::programsContextMenuRequested ( const QPoint& pos )
 		tr("Add &Bank"), this, SLOT(programsAddBankItem()));
 	pAction->setEnabled(bEnabled);
 
-	pAction = menu.addAction(QIcon(":/images/presetItem.png"),
-		tr("Add &Program"), this, SLOT(programsAddItem()));
+	pAction = menu.addAction(QIcon(":/images/synthv1_preset.png"),
+		tr("&Add Program"), this, SLOT(programsAddItem()));
 	pAction->setEnabled(bEnabled);
 
 	menu.addSeparator();
@@ -250,6 +370,7 @@ void synthv1widget_config::programsActivated (void)
 }
 
 
+// options slot.
 void synthv1widget_config::optionsChanged (void)
 {
 	++m_iDirtyOptions;
@@ -261,16 +382,23 @@ void synthv1widget_config::optionsChanged (void)
 // stabilizer.
 void synthv1widget_config::stabilize (void)
 {
-	QTreeWidgetItem *pItem = m_ui.ProgramsTreeWidget->currentItem();
+	QTreeWidgetItem *pItem = m_ui.ControlsTreeWidget->currentItem();
+	bool bEnabled = (m_pControls != NULL);
+	m_ui.ControlsAddItemToolButton->setEnabled(bEnabled);
+	bEnabled = bEnabled && (pItem != NULL);
+	m_ui.ControlsEditToolButton->setEnabled(bEnabled);
+	m_ui.ControlsDeleteToolButton->setEnabled(bEnabled);
 
-	bool bEnabled = (m_pPrograms != NULL);
+	pItem = m_ui.ProgramsTreeWidget->currentItem();
+	bEnabled = (m_pPrograms != NULL);
 	m_ui.ProgramsAddBankToolButton->setEnabled(bEnabled);
 	m_ui.ProgramsAddItemToolButton->setEnabled(bEnabled);
 	bEnabled = bEnabled && (pItem != NULL);
 	m_ui.ProgramsEditToolButton->setEnabled(bEnabled);
 	m_ui.ProgramsDeleteToolButton->setEnabled(bEnabled);
 
-	const bool bValid = (m_iDirtyPrograms > 0 || m_iDirtyOptions > 0);
+	const bool bValid
+		= (m_iDirtyControls > 0 || m_iDirtyPrograms > 0 || m_iDirtyOptions > 0);
 	m_ui.DialogButtonBox->button(QDialogButtonBox::Ok)->setEnabled(bValid);
 }
 
@@ -279,6 +407,14 @@ void synthv1widget_config::stabilize (void)
 void synthv1widget_config::accept (void)
 {
 	synthv1_config *pConfig = synthv1_config::getInstance();
+
+	if (m_iDirtyControls > 0 && pConfig && m_pControls) {
+		// Save programs...
+		m_ui.ControlsTreeWidget->saveControls(m_pControls);
+		pConfig->saveControls(m_pControls);
+		// Reset dirty flag.
+		m_iDirtyControls = 0;
+	}
 
 	if (m_iDirtyPrograms > 0 && pConfig && m_pPrograms) {
 		// Save programs...
@@ -322,7 +458,7 @@ void synthv1widget_config::reject (void)
 	bool bReject = true;
 
 	// Check if there's any pending changes...
-	if (m_iDirtyPrograms > 0 || m_iDirtyOptions > 0) {
+	if (m_iDirtyControls > 0 || m_iDirtyPrograms > 0 || m_iDirtyOptions > 0) {
 		QMessageBox::StandardButtons buttons
 			= QMessageBox::Discard | QMessageBox::Cancel;
 		if (m_ui.DialogButtonBox->button(QDialogButtonBox::Ok)->isEnabled())

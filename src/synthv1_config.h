@@ -43,6 +43,7 @@
 
 // forward decls.
 class synthv1_programs;
+class synthv1_controls;
 
 
 class synthv1_config : public QSettings
@@ -84,6 +85,10 @@ public:
 	void loadPrograms(synthv1_programs *pPrograms);
 	void savePrograms(synthv1_programs *pPrograms);
 
+	// Controllers utility methods.
+	void loadControls(synthv1_controls *pControls);
+	void saveControls(synthv1_controls *pControls);
+
 protected:
 
 	// Preset group path.
@@ -94,6 +99,12 @@ protected:
 	QString bankPrefix() const;
 
 	void clearPrograms();
+
+	// Controllers group path.
+	QString controlsGroup() const;
+	QString controlPrefix() const;
+
+	void clearControls();
 
 	// Explicit I/O methods.
 	void load();

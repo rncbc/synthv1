@@ -25,6 +25,7 @@
 #include "ui_synthv1widget_config.h"
 
 #include "synthv1_programs.h"
+#include "synthv1_controls.h"
 #include "synthv1_config.h"
 
 
@@ -43,6 +44,10 @@ public:
 	// dtor.
 	~synthv1widget_config();
 
+	// controllers accessors.
+	void setControls(synthv1_controls *pControls);
+	synthv1_controls *controls() const;
+
 	// programs accessors.
 	void setPrograms(synthv1_programs *pPrograms);
 	synthv1_programs *programs() const;
@@ -50,16 +55,24 @@ public:
 protected slots:
 
 	// command slots.
+	void controlsAddItem();
+	void controlsEditItem();
+	void controlsDeleteItem();
+
 	void programsAddBankItem();
 	void programsAddItem();
 	void programsEditItem();
 	void programsDeleteItem();
 
-	// janitor slots.
+	// janitorial slots.
+	void controlsCurrentChanged();
+	void controlsContextMenuRequested(const QPoint&);
+
 	void programsCurrentChanged();
 	void programsActivated();
 	void programsContextMenuRequested(const QPoint&);
 
+	void controlsChanged();
 	void programsChanged();
 	void optionsChanged();
 
@@ -77,10 +90,14 @@ private:
 	// UI struct.
 	Ui::synthv1widget_config m_ui;
 
+	// Controllers database.
+	synthv1_controls *m_pControls;
+
 	// Programs database.
 	synthv1_programs *m_pPrograms;
 
 	// Dialog dirty flag.
+	int m_iDirtyControls;
 	int m_iDirtyPrograms;
 	int m_iDirtyOptions;
 };

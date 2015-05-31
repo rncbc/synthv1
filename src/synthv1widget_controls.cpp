@@ -271,7 +271,7 @@ void synthv1widget_controls::loadControls ( synthv1_controls *pControls )
 		pItem->setText(1, synthv1_controls::textFromType(
 			synthv1_controls::Type(key.status & 0xf0)));
 		pItem->setText(2, QString::number(key.param));
-		pItem->setText(2, synthv1_param::paramName(index));
+		pItem->setText(3, synthv1_param::paramName(index));
 		pItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 		items.append(pItem);
 	}
@@ -294,8 +294,7 @@ void synthv1widget_controls::saveControls ( synthv1_controls *pControls )
 		synthv1_controls::Key key;
 		key.status = ctype | (channel & 0x0f);
 		key.param = pItem->text(2).toInt();
-		const int index = pItem->text(3).toInt();
-		pControls->add_control(key, index);
+		pControls->add_control(key, pItem->text(3).toInt());
 	}
 }
 

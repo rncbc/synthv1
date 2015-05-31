@@ -1085,8 +1085,10 @@ void synthv1widget::helpConfigure (void)
 
 	synthv1widget_config form(this);
 
-	// Set programs database...
+	// Set controllers&&programs database...
+	form.setControls(pSynthUi->controls());
 	form.setPrograms(pSynthUi->programs());
+
 	form.exec();
 }
 

@@ -21,6 +21,7 @@
 
 #include "synthv1_config.h"
 #include "synthv1_programs.h"
+#include "synthv1_controls.h"
 
 #include <QFileInfo>
 
@@ -200,6 +201,83 @@ void synthv1_config::clearPrograms (void)
 		}
 		QSettings::endGroup();
 		QSettings::remove(bank_key);
+	}
+
+	QSettings::endGroup();
+}
+
+
+// Programs utility methods.
+QString synthv1_config::controlsGroup (void) const
+{
+	return "/Controllers";
+}
+
+QString synthv1_config::controlPrefix (void) const
+{
+	return "/Control";
+}
+
+
+void synthv1_config::loadControls ( synthv1_controls *pControls )
+{
+	pControls->clear();
+
+	QSettings::beginGroup(controlsGroup());
+
+	const QStringList& keys = QSettings::childKeys();
+	QStringListIterator iter(keys);
+	while (iter.hasNext()) {
+		const QString& sKey = '/' + iter.next();
+		const QStringList& clist = sKey.split('_');
+		if (clist.at(0) == controlPrefix()) {
+			const unsigned short channel = clist.at(1).toInt() - 1;
+			const synthv1_controls::Type ctype
+				= synthv1_controls::typeFromText(clist.at(2));
+			synthv1_controls::Key key;
+			key.status = ctype | (channel & 0x0f);
+			key.param = clist.at(3).toInt();
+			pControls->add_control(key, QSettings::value(sKey).toInt());
+		}
+	}
+
+	QSettings::endGroup();
+}
+
+
+void synthv1_config::saveControls ( synthv1_controls *pControls )
+{
+	clearControls();
+
+	QSettings::beginGroup(controlsGroup());
+
+	const synthv1_controls::Map& map = pControls->map();
+	synthv1_controls::Map::ConstIterator iter = map.constBegin();
+	const synthv1_controls::Map::ConstIterator& iter_end = map.constEnd();
+	for ( ; iter != iter_end; ++iter) {
+		const synthv1_controls::Key& key = iter.key();
+		QString sKey = controlPrefix();
+		sKey += '_' + QString::number((key.status & 0x0f) + 1);
+		sKey += '_' + synthv1_controls::textFromType(
+			synthv1_controls::Type(key.status & 0xf0));
+		sKey += '_' + QString::number(key.param);
+		QSettings::setValue(sKey, iter.value());
+	}
+
+	QSettings::endGroup();
+	QSettings::sync();
+}
+
+
+void synthv1_config::clearControls (void)
+{
+	QSettings::beginGroup(controlsGroup());
+
+	const QStringList& keys = QSettings::childKeys();
+	QStringListIterator iter(keys);
+	while (iter.hasNext()) {
+		const QString& key = iter.next();
+		QSettings::remove(key);
 	}
 
 	QSettings::endGroup();
