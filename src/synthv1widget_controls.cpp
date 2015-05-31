@@ -68,19 +68,15 @@ QWidget *synthv1widget_controls_item_delegate::createEditor ( QWidget *pParent,
 	{
 		QComboBox *pComboBox = new QComboBox(pParent);
 		pComboBox->setEditable(false);
-		pComboBox->addItem(
-			synthv1_controls::textFromType(synthv1_controls::CC));
-		pComboBox->addItem(
-			synthv1_controls::textFromType(synthv1_controls::RPN));
-		pComboBox->addItem(
-			synthv1_controls::textFromType(synthv1_controls::NRPN));
-		pComboBox->addItem(
-			synthv1_controls::textFromType(synthv1_controls::CC14));
+		pComboBox->addItem(synthv1_controls::textFromType(synthv1_controls::CC));
+		pComboBox->addItem(synthv1_controls::textFromType(synthv1_controls::RPN));
+		pComboBox->addItem(synthv1_controls::textFromType(synthv1_controls::NRPN));
+		pComboBox->addItem(synthv1_controls::textFromType(synthv1_controls::CC14));
 		pEditor = pComboBox;
 		break;
 	}
 
-	case 2: // Param.
+	case 2: // Parameter.
 	{
 		QComboBox *pComboBox = new QComboBox(pParent);
 		pComboBox->setEditable(true);
@@ -88,7 +84,7 @@ QWidget *synthv1widget_controls_item_delegate::createEditor ( QWidget *pParent,
 		break;
 	}
 
-	case 3: // Index.
+	case 3: // Subject.
 	{
 		QComboBox *pComboBox = new QComboBox(pParent);
 		pComboBox->setEditable(false);
@@ -138,7 +134,7 @@ void synthv1widget_controls_item_delegate::setEditorData (
 		break;
 	}
 
-	case 2: // Param.
+	case 2: // Parameter.
 	{
 		const QString& sText = index.data().toString();
 		//	= index.model()->data(index, Qt::DisplayRole).toString();
@@ -147,9 +143,9 @@ void synthv1widget_controls_item_delegate::setEditorData (
 		break;
 	}
 
-	case 3: // Index.
+	case 3: // Subject.
 	{
-		const int iIndex = index.data().toInt();
+		const int iIndex = index.data(Qt::UserRole).toInt();
 		//	= index.model()->data(index, Qt::DisplayRole).toInt();
 		QComboBox *pComboBox = qobject_cast<QComboBox *> (pEditor);
 		if (pComboBox) pComboBox->setCurrentIndex(iIndex);
@@ -191,7 +187,7 @@ void synthv1widget_controls_item_delegate::setModelData ( QWidget *pEditor,
 		break;
 	}
 
-	case 2: // Param.
+	case 2: // Parameter.
 	{
 		QComboBox *pComboBox = qobject_cast<QComboBox *> (pEditor);
 		if (pComboBox) {
@@ -201,12 +197,14 @@ void synthv1widget_controls_item_delegate::setModelData ( QWidget *pEditor,
 		break;
 	}
 
-	case 3: // Index.
+	case 3: // Subject.
 	{
 		QComboBox *pComboBox = qobject_cast<QComboBox *> (pEditor);
 		if (pComboBox) {
 			const int iIndex = pComboBox->currentIndex();
-			pModel->setData(index, QString::number(iIndex));
+			pModel->setData(index,
+				synthv1_param::paramName(synthv1::ParamIndex(iIndex)));
+			pModel->setData(index, iIndex, Qt::UserRole);
 		}
 		break;
 	}
@@ -228,9 +226,10 @@ synthv1widget_controls::synthv1widget_controls ( QWidget *pParent )
 {
 	QTreeWidget::setColumnCount(4);
 
+	QTreeWidget::setRootIsDecorated(false);
 	QTreeWidget::setAlternatingRowColors(true);
 	QTreeWidget::setUniformRowHeights(true);
-	QTreeWidget::setAllColumnsShowFocus(true);
+	QTreeWidget::setAllColumnsShowFocus(false);
 
 	QTreeWidget::setSelectionBehavior(QAbstractItemView::SelectRows);
 	QTreeWidget::setSelectionMode(QAbstractItemView::SingleSelection);
@@ -258,6 +257,7 @@ void synthv1widget_controls::loadControls ( synthv1_controls *pControls )
 {
 	QTreeWidget::clear();
 
+	const QIcon icon(":/images/synthv1_preset.png");
 	QList<QTreeWidgetItem *> items;
 	const synthv1_controls::Map& map = pControls->map();
 	synthv1_controls::Map::ConstIterator iter = map.constBegin();
@@ -266,13 +266,17 @@ void synthv1widget_controls::loadControls ( synthv1_controls *pControls )
 		const synthv1_controls::Key& key = iter.key();
 		const synthv1::ParamIndex index = synthv1::ParamIndex(iter.value());
 		QTreeWidgetItem *pItem = new QTreeWidgetItem(this);
+		pItem->setIcon(0, icon);
 		pItem->setText(0, QString::number(
 			(key.status & 0x0f) + 1));
 		pItem->setText(1, synthv1_controls::textFromType(
 			synthv1_controls::Type(key.status & 0xf0)));
 		pItem->setText(2, QString::number(key.param));
+		pItem->setIcon(3, icon);
 		pItem->setText(3, synthv1_param::paramName(index));
-		pItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+		pItem->setData(3, Qt::UserRole, int(index));
+		pItem->setFlags(
+			Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable);
 		items.append(pItem);
 	}
 	QTreeWidget::addTopLevelItems(items);
@@ -294,7 +298,7 @@ void synthv1widget_controls::saveControls ( synthv1_controls *pControls )
 		synthv1_controls::Key key;
 		key.status = ctype | (channel & 0x0f);
 		key.param = pItem->text(2).toInt();
-		pControls->add_control(key, pItem->text(3).toInt());
+		pControls->add_control(key, pItem->data(3, Qt::UserRole).toInt());
 	}
 }
 
@@ -316,7 +320,16 @@ void synthv1widget_controls::addControlItem (void)
 QTreeWidgetItem *synthv1widget_controls::newControlItem (void)
 {
 	QTreeWidgetItem *pItem = new QTreeWidgetItem();
-	pItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+	const QIcon icon(":/images/synthv1_preset.png");
+	pItem->setIcon(0, icon);
+	pItem->setText(0, QString::number(1));
+	pItem->setText(1, synthv1_controls::textFromType(synthv1_controls::CC));
+	pItem->setText(2, QString::number(0));
+	pItem->setIcon(3, icon);
+	pItem->setText(3, synthv1_param::paramName(synthv1::ParamIndex(0)));
+	pItem->setData(3, Qt::UserRole, 0);
+	pItem->setFlags(
+		Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable);
 	QTreeWidget::addTopLevelItem(pItem);
 
 	return pItem;

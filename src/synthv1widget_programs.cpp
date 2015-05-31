@@ -194,6 +194,7 @@ synthv1widget_programs::synthv1widget_programs ( QWidget *pParent )
 {
 	QTreeWidget::setColumnCount(2);
 
+	QTreeWidget::setRootIsDecorated(true);
 	QTreeWidget::setAlternatingRowColors(true);
 	QTreeWidget::setUniformRowHeights(true);
 	QTreeWidget::setAllColumnsShowFocus(true);

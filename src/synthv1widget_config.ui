@@ -157,12 +157,12 @@
          </column>
          <column>
           <property name="text">
-           <string notr="true">Controller</string>
+           <string notr="true">Parameter</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string notr="true">Parameter</string>
+           <string notr="true">Subject</string>
           </property>
          </column>
         </widget>
