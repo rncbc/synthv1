@@ -335,13 +335,10 @@ const QMap<unsigned short, QString>& control14Names (void)
 // MIDI Controller Names general helpers.
 
 static
-void loadControlParamComboBox (
-	QComboBox *pComboBox, synthv1_controls::Type ctype )
+QComboBox *controlParamComboBox (
+	synthv1_controls::Type ctype, QWidget *pParent )
 {
-	const bool bBlockSignals
-		= pComboBox->blockSignals(true);
-
-	pComboBox->clear();
+	QComboBox *pComboBox = new QComboBox(pParent);
 
 	QMap<unsigned short, QString> map;
 
@@ -375,12 +372,13 @@ void loadControlParamComboBox (
 		pComboBox->addItem(sMask.arg(param).arg(iter.value()), int(param));
 	}
 
-	pComboBox->blockSignals(bBlockSignals);
+	return pComboBox;
 }
 
 
 static
-QString controlParamName ( synthv1_controls::Type ctype, unsigned short param )
+QString controlParamName (
+	synthv1_controls::Type ctype, unsigned short param )
 {
 	QMap<unsigned short, QString> map;
 
@@ -424,7 +422,8 @@ synthv1widget_controls_item_delegate::synthv1widget_controls_item_delegate (
 QSize synthv1widget_controls_item_delegate::sizeHint (
 	const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-	return QItemDelegate::sizeHint(option, index) + QSize(4, 4);
+	const int x = (index.column() == 1 ? 32 : 4); // Type is special.
+	return QItemDelegate::sizeHint(option, index) + QSize(x, 4);
 }
 
 
@@ -447,23 +446,25 @@ QWidget *synthv1widget_controls_item_delegate::createEditor ( QWidget *pParent,
 	{
 		QComboBox *pComboBox = new QComboBox(pParent);
 		pComboBox->setEditable(false);
-		pComboBox->addItem(synthv1_controls::textFromType(synthv1_controls::CC));
-		pComboBox->addItem(synthv1_controls::textFromType(synthv1_controls::RPN));
-		pComboBox->addItem(synthv1_controls::textFromType(synthv1_controls::NRPN));
-		pComboBox->addItem(synthv1_controls::textFromType(synthv1_controls::CC14));
+		pComboBox->addItem(
+			synthv1_controls::textFromType(synthv1_controls::CC));
+		pComboBox->addItem(
+			synthv1_controls::textFromType(synthv1_controls::RPN));
+		pComboBox->addItem(
+			synthv1_controls::textFromType(synthv1_controls::NRPN));
+		pComboBox->addItem(
+			synthv1_controls::textFromType(synthv1_controls::CC14));
 		pEditor = pComboBox;
 		break;
 	}
 
 	case 2: // Parameter.
 	{
-		QComboBox *pComboBox = new QComboBox(pParent);
 		const QModelIndex& ctype_index = index.sibling(index.row(), 1);
 		const QString& sType = ctype_index.data().toString();
 		const synthv1_controls::Type ctype
 			= synthv1_controls::typeFromText(sType);
-		loadControlParamComboBox(pComboBox, ctype);
-		pEditor = pComboBox;
+		pEditor = controlParamComboBox(ctype, pParent);
 		break;
 	}
 
@@ -472,7 +473,8 @@ QWidget *synthv1widget_controls_item_delegate::createEditor ( QWidget *pParent,
 		QComboBox *pComboBox = new QComboBox(pParent);
 		pComboBox->setEditable(false);
 		for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i)
-			pComboBox->addItem(synthv1_param::paramName(synthv1::ParamIndex(i)));
+			pComboBox->addItem(
+				synthv1_param::paramName(synthv1::ParamIndex(i)));
 		pEditor = pComboBox;
 		break;
 	}
@@ -513,7 +515,13 @@ void synthv1widget_controls_item_delegate::setEditorData (
 		const QString& sText = index.data().toString();
 		//	= index.model()->data(index, Qt::DisplayRole).toString();
 		QComboBox *pComboBox = qobject_cast<QComboBox *> (pEditor);
-		if (pComboBox) pComboBox->setEditText(sText);
+		if (pComboBox) {
+			const int iIndex = pComboBox->findText(sText);
+			if (iIndex >= 0)
+				pComboBox->setCurrentIndex(iIndex);
+			else
+				pComboBox->setCurrentIndex(0);
+		}
 		break;
 	}
 
@@ -642,6 +650,10 @@ synthv1widget_controls::synthv1widget_controls ( QWidget *pParent )
 	pHeaderView->hide();
 
 	QTreeWidget::setItemDelegate(new synthv1widget_controls_item_delegate(this));
+
+	QObject::connect(this,
+		SIGNAL(itemChanged(QTreeWidgetItem *, int)),
+		SLOT(itemChangedSlot(QTreeWidgetItem *, int)));
 }
 
 
@@ -667,7 +679,7 @@ void synthv1widget_controls::loadControls ( synthv1_controls *pControls )
 			= synthv1_controls::Type(key.status & 0xf0);
 		const synthv1::ParamIndex index = synthv1::ParamIndex(iter.value());
 		QTreeWidgetItem *pItem = new QTreeWidgetItem(this);
-		pItem->setIcon(0, icon);
+	//	pItem->setIcon(0, icon);
 		pItem->setText(0, QString::number(
 			(key.status & 0x0f) + 1));
 		pItem->setText(1, synthv1_controls::textFromType(ctype));
@@ -723,7 +735,7 @@ QTreeWidgetItem *synthv1widget_controls::newControlItem (void)
 	QTreeWidgetItem *pItem = new QTreeWidgetItem();
 	const QIcon icon(":/images/synthv1_preset.png");
 	const synthv1_controls::Type ctype = synthv1_controls::CC;
-	pItem->setIcon(0, icon);
+//	pItem->setIcon(0, icon);
 	pItem->setText(0, QString::number(1));
 	pItem->setText(1, synthv1_controls::textFromType(ctype));
 	pItem->setText(2, controlParamName(ctype, 0));
@@ -736,6 +748,21 @@ QTreeWidgetItem *synthv1widget_controls::newControlItem (void)
 	QTreeWidget::addTopLevelItem(pItem);
 
 	return pItem;
+}
+
+
+void synthv1widget_controls::itemChangedSlot (
+	QTreeWidgetItem *pItem, int column )
+{
+	if (column == 1) {
+		const bool bBlockSignals = QTreeWidget::blockSignals(true);
+		const QString& sType = pItem->text(1);
+		const synthv1_controls::Type ctype
+			= synthv1_controls::typeFromText(sType);
+		const int iParam = pItem->data(2, Qt::UserRole).toInt();
+		pItem->setText(2, controlParamName(ctype, iParam));
+		QTreeWidget::blockSignals(bBlockSignals);
+	}
 }
 
 

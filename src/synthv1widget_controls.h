@@ -84,6 +84,11 @@ public slots:
 	// slots.
 	void addControlItem();
 
+protected slots:
+
+	// private slots.
+	void itemChangedSlot(QTreeWidgetItem *, int);
+
 protected:
 
 	// factory methods.
