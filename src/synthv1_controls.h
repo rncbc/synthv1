@@ -89,8 +89,6 @@ public:
 
 	void process_dequeue();
 
-	void flush();
-
 	// text utilities.
 	static Type typeFromText(const QString& sText);
 	static QString textFromType(Type ctype);

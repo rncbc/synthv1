@@ -540,19 +540,19 @@ void synthv1_controls::process_enqueue (
 {
 	Event event;
 
-	event.status = CC | (channel & 0x0f);
+	event.status = CC | ((channel - 1) & 0x0f);
 	event.param  = param;
 	event.value  = value;
 
-	if (m_pImpl->process(event))
-		return;
-
-	process_event(event);
+	if (!m_pImpl->process(event))
+		process_event(event);
 }
 
 
 void synthv1_controls::process_dequeue (void)
 {
+	m_pImpl->flush();
+
 	Event event;
 
 	while (m_pImpl->is_pending()) {
@@ -575,12 +575,6 @@ void synthv1_controls::process_event ( const Event& event )
 		fValue /= 127.0f;
 
 	m_pSynth->setParamValue(synthv1::ParamIndex(index), fValue);
-}
-
-
-void synthv1_controls::flush (void)
-{
-	m_pImpl->flush();
 }
 
 

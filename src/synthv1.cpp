@@ -1687,9 +1687,6 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 		if (on1) m_ctl1.pitchbend = synthv1_pow2f(*m_def1.pitchbend * pitchbend);
 		if (on2) m_ctl2.pitchbend = synthv1_pow2f(*m_def2.pitchbend * pitchbend);
 	}
-	else
-	// flush controllers...
-	m_controls.flush();
 
 	// process pending controllers...
 	m_controls.process_dequeue();
