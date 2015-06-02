@@ -342,34 +342,46 @@ QComboBox *controlParamComboBox (
 
 	QMap<unsigned short, QString> map;
 
+	int iParamMin = 0;
+	int iParamMax = iParamMin;
+
 	switch(ctype) {
 	case synthv1_controls::CC:
-		pComboBox->setEditable(false);
+		iParamMin = 0;
+		iParamMax = 128;
 		map = controllerNames();
 		break;
 	case synthv1_controls::RPN:
-		pComboBox->setEditable(true);
 		map = rpnNames();
 		break;
 	case synthv1_controls::NRPN:
-		pComboBox->setEditable(true);
 		map = nrpnNames();
 		break;
 	case synthv1_controls::CC14:
-		pComboBox->setEditable(false);
+		iParamMin = 1;
+		iParamMax = 32;
 		map = control14Names();
-		break;
+		// Fall thru...
 	default:
-		pComboBox->setEditable(true);
 		break;
 	}
 
+	const bool bEditable = (iParamMin >= iParamMax);
+	pComboBox->setEditable(bEditable);
+
 	const QString sMask("%1 - %2");
-	QMap<unsigned short, QString>::ConstIterator iter = map.constBegin();
-	const QMap<unsigned short, QString>::ConstIterator& iter_end = map.constEnd();
-	for ( ; iter != iter_end; ++iter) {
-		const unsigned short param = iter.key();
-		pComboBox->addItem(sMask.arg(param).arg(iter.value()), int(param));
+	if (bEditable) {
+		const QMap<unsigned short, QString>::ConstIterator& iter_end = map.constEnd();
+		QMap<unsigned short, QString>::ConstIterator iter = map.constBegin();
+		for ( ; iter != iter_end; ++iter) {
+			const unsigned short param = iter.key();
+			pComboBox->addItem(sMask.arg(param).arg(iter.value()), int(param));
+		}
+	} else {
+		for (int iParam = iParamMin; iParam < iParamMax; ++iParam) {
+			const unsigned short param = iParam;
+			pComboBox->addItem(sMask.arg(param).arg(map.value(param)), iParam);
+		}
 	}
 
 	return pComboBox;
