@@ -523,7 +523,7 @@ private:
 //
 
 synthv1_controls::synthv1_controls ( synthv1 *pSynth )
-	: m_pImpl(new synthv1_controls::Impl()), m_pSynth(pSynth)
+	: m_pImpl(new synthv1_controls::Impl()), m_sched(pSynth)
 {
 }
 
@@ -565,8 +565,8 @@ void synthv1_controls::process_dequeue (void)
 void synthv1_controls::process_event ( const Event& event )
 {
 	const Key key(event);
-	const int index = find_control(key);
-	if (index < 0)
+	const int iIndex = find_control(key);
+	if (iIndex < 0)
 		return;
 
 	// TODO: process controller event...
@@ -574,7 +574,7 @@ void synthv1_controls::process_event ( const Event& event )
 	if (Type(key.status & 0xf0) != CC)
 		fValue /= 127.0f;
 
-	m_pSynth->setParamValue(synthv1::ParamIndex(index), fValue);
+	m_sched.schedule_event(iIndex, fValue);
 }
 
 

@@ -133,7 +133,7 @@ protected:
 		}
 
 		// process (virtual).
-		void process()
+		void process(int)
 		{
 			synthv1_programs *pPrograms = m_pSynth->programs();
 			pPrograms->process_program(m_pSynth, m_bank_id, m_prog_id);

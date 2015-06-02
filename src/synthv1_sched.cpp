@@ -25,8 +25,6 @@
 #include <QMutex>
 #include <QWaitCondition>
 
-#include <stdint.h>
-
 
 //-------------------------------------------------------------------------
 // synthv1_sched_thread - worker/schedule thread decl.
@@ -164,9 +162,20 @@ void synthv1_sched_thread::run (void)
 //
 
 // ctor.
-synthv1_sched::synthv1_sched ( Type stype)
+synthv1_sched::synthv1_sched ( Type stype, uint32_t nsize )
 	: m_stype(stype), m_sync_wait(false)
 {
+	m_nsize = (4 << 1);
+	while (m_nsize < nsize)
+		m_nsize <<= 1;
+	m_nmask = (m_nsize - 1);
+	m_items = new int [m_nsize];
+
+	m_iread  = 0;
+	m_iwrite = 0;
+
+	::memset(m_items, 0, m_nsize * sizeof(int));
+
 	if (++g_sched_refcount == 1 && g_sched_thread == NULL) {
 		g_sched_thread = new synthv1_sched_thread();
 		g_sched_thread->start();
@@ -177,6 +186,8 @@ synthv1_sched::synthv1_sched ( Type stype)
 // dtor (virtual).
 synthv1_sched::~synthv1_sched (void)
 {
+	delete [] m_items;
+
 	if (--g_sched_refcount == 0) {
 		if (g_sched_thread) {
 			delete g_sched_thread;
@@ -187,8 +198,14 @@ synthv1_sched::~synthv1_sched (void)
 
 
 // schedule process.
-void synthv1_sched::schedule (void)
+void synthv1_sched::schedule ( int sid )
 {
+	const uint32_t w = (m_iwrite + 1) & m_nmask;
+	if (w != m_iread) {
+		m_items[m_iwrite] = sid;
+		m_iwrite = w;
+	}
+
 	if (g_sched_thread)
 		g_sched_thread->schedule(this);
 }
@@ -209,20 +226,27 @@ bool synthv1_sched::sync_wait (void)
 // scheduled processor.
 void synthv1_sched::sync_process (void)
 {
-	process();
+	// do whatever we must...
+	uint32_t r = m_iread;
+	while (r != m_iwrite) {
+		const int sid = m_items[r];
+		process(sid);
+		sync_notify(m_stype, sid);
+		m_items[r] = 0;
+		++r &= m_nmask;
+	}
+	m_iread = r;
 
 	m_sync_wait = false;
-
-	sync_notify(m_stype);
 }
 
 
 // signal broadcast (static).
-void synthv1_sched::sync_notify ( Type stype )
+void synthv1_sched::sync_notify ( Type stype, int sid )
 {
 	QListIterator<synthv1_sched_notifier *> iter(g_sched_notifiers);
 	while (iter.hasNext())
-		iter.next()->sync_notify(stype);
+		iter.next()->sync_notify(stype, sid);
 }
 
 
@@ -245,9 +269,9 @@ synthv1_sched_notifier::~synthv1_sched_notifier (void)
 }
 
 
-void synthv1_sched_notifier::sync_notify ( synthv1_sched::Type stype )
+void synthv1_sched_notifier::sync_notify ( synthv1_sched::Type stype, int sid )
 {
-	emit notify(int(stype));
+	emit notify(int(stype), sid);
 }
 
 

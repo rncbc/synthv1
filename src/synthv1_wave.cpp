@@ -51,7 +51,7 @@ public:
 	}
 
 	// process reset (virtual).
-	void process()
+	void process(int)
 	{
 		m_wave->reset_sync(m_shape, m_width, m_bandl);
 	}

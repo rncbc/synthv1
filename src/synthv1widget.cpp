@@ -733,8 +733,8 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 
 	// Special sample update notifications (eg. reverse)
 	QObject::connect(m_sched_notifier,
-		SIGNAL(notify(int)),
-		SLOT(updateSchedNotify(int)));
+		SIGNAL(notify(int, int)),
+		SLOT(updateSchedNotify(int, int)));
 
 	// General knob/dial  behavior init...
 	synthv1_config *pConfig = synthv1_config::getInstance();
@@ -1052,17 +1052,22 @@ void synthv1widget::updateLoadPreset ( const QString& sPreset )
 
 
 // Notification updater.
-void synthv1widget::updateSchedNotify ( int stype )
+void synthv1widget::updateSchedNotify ( int stype, int sid )
 {
 	synthv1_ui *pSynthUi = ui_instance();
 	if (pSynthUi == NULL)
 		return;
 
 #ifdef CONFIG_DEBUG_0
-	qDebug("samplv1widget::updateSchedNotify(%d)", stype);
+	qDebug("samplv1widget::updateSchedNotify(%d, %d)", stype, sid);
 #endif
 
 	switch (synthv1_sched::Type(stype)) {
+	case synthv1_sched::Controls: {
+		const synthv1::ParamIndex index = synthv1::ParamIndex(sid);
+		setParamValue(index, pSynthUi->paramValue(index));
+		break;
+	}
 	case synthv1_sched::Programs: {
 		synthv1_programs *pPrograms = pSynthUi->programs();
 		synthv1_programs::Prog *pProg = pPrograms->current_prog();

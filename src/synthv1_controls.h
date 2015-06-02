@@ -23,6 +23,7 @@
 #define __synthv1_controls_h
 
 #include "synthv1_param.h"
+#include "synthv1_sched.h"
 
 #include <QHash>
 
@@ -97,6 +98,31 @@ protected:
 
 	void process_event(const Event& event);
 
+	// controller scheduled thread
+	class Sched : public synthv1_sched
+	{
+	public:
+
+		// ctor.
+		Sched (synthv1 *pSynth)
+			: synthv1_sched(Controls), m_pSynth(pSynth) {}
+
+		void schedule_event(int iIndex, float fValue)
+		{
+			m_pSynth->setParamValue(synthv1::ParamIndex(iIndex), fValue);
+
+			schedule(iIndex);
+		}
+
+		// process (virtual stub).
+		void process(int) {}
+
+	private:
+
+		// instance variables.
+		synthv1 *m_pSynth;
+	};
+
 private:
 
 	// instance variables.
@@ -104,7 +130,8 @@ private:
 
 	Impl *m_pImpl;
 
-	synthv1 *m_pSynth;
+	// Event scheduler.
+	Sched m_sched;
 
 	// Controllers map.
 	Map m_map;
