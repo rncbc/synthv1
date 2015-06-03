@@ -107,11 +107,11 @@ protected:
 		Sched (synthv1 *pSynth)
 			: synthv1_sched(Controls), m_pSynth(pSynth) {}
 
-		void schedule_event(int iIndex, float fValue)
+		void schedule_event(synthv1::ParamIndex index, float fValue)
 		{
-			m_pSynth->setParamValue(synthv1::ParamIndex(iIndex), fValue);
+			m_pSynth->setParamValue(index, fValue);
 
-			schedule(iIndex);
+			schedule(int(index));
 		}
 
 		// process (virtual stub).

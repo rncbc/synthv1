@@ -28,22 +28,24 @@
 #include <QTextStream>
 #include <QDir>
 
+#include <math.h>
+
 
 //-------------------------------------------------------------------------
 // state params description.
 
-enum Param_Type { PARAM_FLOAT = 0, PARAM_INT, PARAM_BOOL };
+enum ParamType { PARAM_FLOAT = 0, PARAM_INT, PARAM_BOOL };
 
 static
-struct {
+struct ParamInfo {
 
 	const char *name;
-	Param_Type type;
+	ParamType type;
 	float def;
 	float min;
 	float max;
 
-} synthv1_default_params[synthv1::NUM_PARAMS] = {
+} synthv1_params[synthv1::NUM_PARAMS] = {
 
 	// name            type,           def,    min,    max
 	{ "DCO1_SHAPE1",   PARAM_INT,     1.0f,   0.0f,   4.0f }, // DCO1 Wave Shape 1
@@ -180,13 +182,29 @@ struct {
 
 const char *synthv1_param::paramName ( synthv1::ParamIndex index )
 {
-	return synthv1_default_params[index].name;
+	return synthv1_params[index].name;
 }
 
 
 float synthv1_param::paramDefaultValue ( synthv1::ParamIndex index )
 {
-	return synthv1_default_params[index].def;
+	return synthv1_params[index].def;
+}
+
+
+float synthv1_param::paramValue ( synthv1::ParamIndex index, float fValue )
+{
+	const ParamInfo& param = synthv1_params[index];
+
+	if (param.type == PARAM_BOOL)
+		return (fValue > 0.5f ? 1.0f : 0.0f);
+
+	fValue = param.min + fValue * (param.max - param.min);
+
+	if (param.type == PARAM_INT)
+		return ::rintf(fValue);
+	else
+		return fValue;
 }
 
 
