@@ -34,8 +34,7 @@
 //----------------------------------------------------------------------------
 // MIDI Controller Names - Default controller names hash map.
 
-static
-const QMap<unsigned short, QString>& controllerNames (void)
+const synthv1widget_controls::Names& synthv1widget_controls::controllerNames (void)
 {
 	static struct
 	{
@@ -115,7 +114,7 @@ const QMap<unsigned short, QString>& controllerNames (void)
 		{  0, NULL }
 	};
 
-	static QMap<unsigned short, QString> s_controllerNames;
+	static Names s_controllerNames;
 
 	// Pre-load controller-names hash table...
 	if (s_controllerNames.isEmpty()) {
@@ -132,8 +131,7 @@ const QMap<unsigned short, QString>& controllerNames (void)
 //----------------------------------------------------------------------------
 // MIDI RPN Names - Default RPN names hash map.
 
-static
-const QMap<unsigned short, QString>& rpnNames (void)
+const synthv1widget_controls::Names& synthv1widget_controls::rpnNames (void)
 {
 	static struct
 	{
@@ -151,7 +149,7 @@ const QMap<unsigned short, QString>& rpnNames (void)
 		{  0, NULL }
 	};
 
-	static QMap<unsigned short, QString> s_rpnNames;
+	static Names s_rpnNames;
 
 	if (s_rpnNames.isEmpty()) {
 		// Pre-load RPN-names hash table...
@@ -168,8 +166,7 @@ const QMap<unsigned short, QString>& rpnNames (void)
 //----------------------------------------------------------------------------
 // MIDI NRPN Names - Default NRPN names hash map.
 
-static
-const QMap<unsigned short, QString>& nrpnNames (void)
+const synthv1widget_controls::Names& synthv1widget_controls::nrpnNames (void)
 {
 	static struct
 	{
@@ -262,7 +259,7 @@ const QMap<unsigned short, QString>& nrpnNames (void)
 		{  0, NULL }
 	};
 
-	static QMap<unsigned short, QString> s_nrpnNames;
+	static Names s_nrpnNames;
 
 	if (s_nrpnNames.isEmpty()) {
 		// Pre-load NRPN-names hash table...
@@ -289,8 +286,7 @@ const QMap<unsigned short, QString>& nrpnNames (void)
 //----------------------------------------------------------------------------
 // MIDI Control-14 Names - Default controller names hash map.
 
-static
-const QMap<unsigned short, QString>& control14Names (void)
+const synthv1widget_controls::Names& synthv1widget_controls::control14Names (void)
 {
 	static struct
 	{
@@ -317,7 +313,7 @@ const QMap<unsigned short, QString>& control14Names (void)
 		{  0, NULL }
 	};
 
-	static QMap<unsigned short, QString> s_control14Names;
+	static Names s_control14Names;
 
 	if (s_control14Names.isEmpty()) {
 		// Pre-load controller-names hash table...
@@ -340,7 +336,7 @@ QComboBox *controlParamComboBox (
 {
 	QComboBox *pComboBox = new QComboBox(pParent);
 
-	QMap<unsigned short, QString> map;
+	synthv1widget_controls::Names map;
 
 	int iParamMin = 0;
 	int iParamMax = iParamMin;
@@ -349,18 +345,18 @@ QComboBox *controlParamComboBox (
 	case synthv1_controls::CC:
 		iParamMin = 0;
 		iParamMax = 128;
-		map = controllerNames();
+		map = synthv1widget_controls::controllerNames();
 		break;
 	case synthv1_controls::RPN:
-		map = rpnNames();
+		map = synthv1widget_controls::rpnNames();
 		break;
 	case synthv1_controls::NRPN:
-		map = nrpnNames();
+		map = synthv1widget_controls::nrpnNames();
 		break;
 	case synthv1_controls::CC14:
 		iParamMin = 1;
 		iParamMax = 32;
-		map = control14Names();
+		map = synthv1widget_controls::control14Names();
 		// Fall thru...
 	default:
 		break;
@@ -371,8 +367,8 @@ QComboBox *controlParamComboBox (
 
 	const QString sMask("%1 - %2");
 	if (bEditable) {
-		const QMap<unsigned short, QString>::ConstIterator& iter_end = map.constEnd();
-		QMap<unsigned short, QString>::ConstIterator iter = map.constBegin();
+		const synthv1widget_controls::Names::ConstIterator& iter_end = map.constEnd();
+		synthv1widget_controls::Names::ConstIterator iter = map.constBegin();
 		for ( ; iter != iter_end; ++iter) {
 			const unsigned short param = iter.key();
 			pComboBox->addItem(sMask.arg(param).arg(iter.value()), int(param));
@@ -392,27 +388,27 @@ static
 QString controlParamName (
 	synthv1_controls::Type ctype, unsigned short param )
 {
-	QMap<unsigned short, QString> map;
+	synthv1widget_controls::Names map;
 
 	switch(ctype) {
 	case synthv1_controls::CC:
-		map = controllerNames();
+		map = synthv1widget_controls::controllerNames();
 		break;
 	case synthv1_controls::RPN:
-		map = rpnNames();
+		map = synthv1widget_controls::rpnNames();
 		break;
 	case synthv1_controls::NRPN:
-		map = nrpnNames();
+		map = synthv1widget_controls::nrpnNames();
 		break;
 	case synthv1_controls::CC14:
-		map = control14Names();
+		map = synthv1widget_controls::control14Names();
 		// Fall thru...
 	default:
 		break;
 	}
 
 	const QString sMask("%1 - %2");
-	QMap<unsigned short, QString>::ConstIterator iter = map.constFind(param);
+	synthv1widget_controls::Names::ConstIterator iter = map.constFind(param);
 	if (iter == map.constEnd())
 		return QString::number(param);
 	else
