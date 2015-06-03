@@ -655,7 +655,7 @@ synthv1widget_controls::synthv1widget_controls ( QWidget *pParent )
 #else
 	pHeaderView->setSectionResizeMode(QHeaderView::ResizeToContents);
 #endif
-	pHeaderView->hide();
+//	pHeaderView->hide();
 
 	QTreeWidget::setItemDelegate(new synthv1widget_controls_item_delegate(this));
 

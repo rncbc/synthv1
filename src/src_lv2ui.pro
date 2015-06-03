@@ -16,6 +16,7 @@ HEADERS = \
 	synthv1_lv2ui.h \
 	synthv1_config.h \
 	synthv1_param.h \
+	synthv1_sched.h \
 	synthv1widget.h \
 	synthv1widget_env.h \
 	synthv1widget_filt.h \

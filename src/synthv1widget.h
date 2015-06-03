@@ -25,12 +25,13 @@
 #include "ui_synthv1widget.h"
 
 #include "synthv1_config.h"
+#include "synthv1_sched.h"
 
 #include "synthv1_ui.h"
 
 
 // forward decls.
-class synthv1_sched_notifier;
+class synthv1widget_sched_notifier;
 
 
 //-------------------------------------------------------------------------
@@ -86,14 +87,14 @@ protected slots:
 	// Delay BPM change.
 	void bpmSyncChanged();
 
-	// Schedule notification updater.
-	void updateSchedNotify(int stype, int sid);
-
 	// Menu actions.
 	void helpConfigure();
 
 	void helpAbout();
 	void helpAboutQt();
+
+	// Schedule notification updater.
+	void updateSchedNotify(int stype, int sid);
 
 protected:
 
@@ -127,7 +128,7 @@ private:
 	// Instance variables.
 	Ui::synthv1widget m_ui;
 
-	synthv1_sched_notifier *m_sched_notifier;
+	synthv1widget_sched_notifier *m_sched_notifier;
 
 	QHash<synthv1::ParamIndex, synthv1widget_knob *> m_paramKnobs;
 	QHash<synthv1widget_knob *, synthv1::ParamIndex> m_knobParams;
@@ -135,6 +136,54 @@ private:
 	float m_params_ab[synthv1::NUM_PARAMS];
 
 	int m_iUpdate;
+};
+
+
+//-------------------------------------------------------------------------
+// synthv1widget_sched_notifier - worker/schedule proxy decl.
+//
+
+class synthv1widget_sched_notifier : public QObject
+{
+	Q_OBJECT
+
+public:
+
+	// ctor.
+	synthv1widget_sched_notifier(QObject *pParent = NULL)
+		: QObject(pParent), m_notifier(this) {}
+
+signals:
+
+	// Notification signal.
+	void notify(int stype, int sid);
+
+protected:
+
+	// Notififier visitor.
+	class Notifier : public synthv1_sched_notifier
+	{
+	public:
+
+		Notifier(synthv1widget_sched_notifier *pNotifier)
+			: synthv1_sched_notifier(), m_pNotifier(pNotifier) {}
+
+		void notify(synthv1_sched::Type stype, int sid) const
+			{ m_pNotifier->emit_notify(stype, sid); }
+
+	private:
+
+		synthv1widget_sched_notifier *m_pNotifier;
+	};
+
+	// Notification method.
+	void emit_notify(synthv1_sched::Type stype, int sid)
+		{ emit notify(int(stype), sid); }
+
+private:
+
+	// Instance variables.
+	Notifier m_notifier;
 };
 
 
