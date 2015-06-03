@@ -87,14 +87,14 @@ protected slots:
 	// Delay BPM change.
 	void bpmSyncChanged();
 
+	// Schedule notification updater.
+	void updateSchedNotify(int stype, int sid);
+
 	// Menu actions.
 	void helpConfigure();
 
 	void helpAbout();
 	void helpAboutQt();
-
-	// Schedule notification updater.
-	void updateSchedNotify(int stype, int sid);
 
 protected:
 
