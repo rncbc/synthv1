@@ -50,6 +50,9 @@ public:
 	// Destructor.
 	virtual ~synthv1widget();
 
+	// Create/initialize the scheduler/work notifier.
+	void initSchedNotifier();
+
 	// Param port accessors.
 	void setParamValue(
 		synthv1::ParamIndex index, float fValue, bool bDefault = false);
@@ -153,8 +156,8 @@ class synthv1widget_sched : public QObject
 public:
 
 	// ctor.
-	synthv1widget_sched(QObject *pParent = NULL)
-		: QObject(pParent), m_notifier(this) {}
+	synthv1widget_sched(synthv1 *pSynth, QObject *pParent = NULL)
+		: QObject(pParent), m_notifier(pSynth, this) {}
 
 signals:
 
@@ -168,8 +171,8 @@ protected:
 	{
 	public:
 
-		Notifier(synthv1widget_sched *pSched)
-			: synthv1_sched_notifier(), m_pSched(pSched) {}
+		Notifier(synthv1 *pSynth, synthv1widget_sched *pSched)
+			: synthv1_sched_notifier(pSynth), m_pSched(pSched) {}
 
 		void notify(synthv1_sched::Type stype, int sid) const
 			{ m_pSched->emit_notify(stype, sid); }

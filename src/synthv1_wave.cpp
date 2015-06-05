@@ -37,7 +37,7 @@ class synthv1_wave_sched : public synthv1_sched
 public:
 
 	// ctor.
-	synthv1_wave_sched (synthv1_wave *wave)	: synthv1_sched(Wave),
+	synthv1_wave_sched (synthv1_wave *wave)	: synthv1_sched(NULL, Wave),
 		m_wave(wave), m_shape(synthv1_wave::Pulse), m_width(1.0f) {}
 
 	// schedule reset.

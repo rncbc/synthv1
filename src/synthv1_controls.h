@@ -105,22 +105,17 @@ protected:
 
 		// ctor.
 		Sched (synthv1 *pSynth)
-			: synthv1_sched(Controls), m_pSynth(pSynth) {}
+			: synthv1_sched(pSynth, Controls) {}
 
 		void schedule_event(synthv1::ParamIndex index, float fValue)
 		{
-			m_pSynth->setParamValue(index, fValue);
+			instance()->setParamValue(index, fValue);
 
 			schedule(int(index));
 		}
 
 		// process (virtual stub).
 		void process(int) {}
-
-	private:
-
-		// instance variables.
-		synthv1 *m_pSynth;
 	};
 
 private:

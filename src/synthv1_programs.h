@@ -120,8 +120,8 @@ protected:
 	public:
 
 		// ctor.
-		Sched (synthv1 *pSynth) : synthv1_sched(Programs),
-			m_pSynth(pSynth), m_bank_id(0), m_prog_id(0) {}
+		Sched (synthv1 *pSynth)
+			: synthv1_sched(pSynth, Programs), m_bank_id(0), m_prog_id(0) {}
 
 		// schedule (override)
 		void select_program(uint16_t bank_id, uint16_t prog_id)
@@ -135,15 +135,14 @@ protected:
 		// process (virtual).
 		void process(int)
 		{
-			synthv1_programs *pPrograms = m_pSynth->programs();
-			pPrograms->process_program(m_pSynth, m_bank_id, m_prog_id);
+			synthv1 *pSynth = instance();
+			synthv1_programs *pPrograms = pSynth->programs();
+			pPrograms->process_program(pSynth, m_bank_id, m_prog_id);
 		}
 
 	private:
 
 		// instance variables.
-		synthv1 *m_pSynth;
-
 		uint16_t m_bank_id;
 		uint16_t m_prog_id;
 	};

@@ -47,6 +47,9 @@ synthv1widget_lv2::synthv1widget_lv2 ( synthv1_lv2 *pSynth,
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i)
 		m_params_def[i] = true;
 
+	// May initialize the scheduler/work notifier.
+	initSchedNotifier();
+
 	clearPreset();
 }
 

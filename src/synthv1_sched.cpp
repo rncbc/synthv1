@@ -25,6 +25,8 @@
 #include <QMutex>
 #include <QWaitCondition>
 
+#include <QHash>
+
 
 //-------------------------------------------------------------------------
 // synthv1_sched_thread - worker/schedule thread decl.
@@ -71,7 +73,7 @@ private:
 static synthv1_sched_thread *g_sched_thread = NULL;
 static uint32_t g_sched_refcount = 0;
 
-static QList<synthv1_sched_notifier *> g_sched_notifiers;
+static QHash<synthv1 *, QList<synthv1_sched_notifier *> > g_sched_notifiers;
 
 
 //-------------------------------------------------------------------------
@@ -162,8 +164,8 @@ void synthv1_sched_thread::run (void)
 //
 
 // ctor.
-synthv1_sched::synthv1_sched ( Type stype, uint32_t nsize )
-	: m_stype(stype), m_sync_wait(false)
+synthv1_sched::synthv1_sched ( synthv1 *pSynth, Type stype, uint32_t nsize )
+	: m_pSynth(pSynth), m_stype(stype), m_sync_wait(false)
 {
 	m_nsize = (4 << 1);
 	while (m_nsize < nsize)
@@ -194,6 +196,13 @@ synthv1_sched::~synthv1_sched (void)
 			g_sched_thread = NULL;
 		}
 	}
+}
+
+
+// instance access.
+synthv1 *synthv1_sched::instance (void) const
+{
+	return m_pSynth;
 }
 
 
@@ -231,7 +240,7 @@ void synthv1_sched::sync_process (void)
 	while (r != m_iwrite) {
 		const int sid = m_items[r];
 		process(sid);
-		sync_notify(m_stype, sid);
+		sync_notify(m_pSynth, m_stype, sid);
 		m_items[r] = 0;
 		++r &= m_nmask;
 	}
@@ -242,11 +251,15 @@ void synthv1_sched::sync_process (void)
 
 
 // signal broadcast (static).
-void synthv1_sched::sync_notify ( Type stype, int sid )
+void synthv1_sched::sync_notify ( synthv1 *pSynth, Type stype, int sid )
 {
-	QListIterator<synthv1_sched_notifier *> iter(g_sched_notifiers);
-	while (iter.hasNext())
-		iter.next()->notify(stype, sid);
+	if (g_sched_notifiers.contains(pSynth)) {
+		const QList<synthv1_sched_notifier *>& list
+			= g_sched_notifiers.value(pSynth);
+		QListIterator<synthv1_sched_notifier *> iter(list);
+		while (iter.hasNext())
+			iter.next()->notify(stype, sid);
+	}
 }
 
 
@@ -255,16 +268,22 @@ void synthv1_sched::sync_notify ( Type stype, int sid )
 //
 
 // ctor.
-synthv1_sched_notifier::synthv1_sched_notifier (void)
+synthv1_sched_notifier::synthv1_sched_notifier ( synthv1 *pSynth )
+	: m_pSynth(pSynth)
 {
-	g_sched_notifiers.append(this);
+	g_sched_notifiers[m_pSynth].append(this);
 }
 
 
 // dtor.
 synthv1_sched_notifier::~synthv1_sched_notifier (void)
 {
-	g_sched_notifiers.removeAll(this);
+	if (g_sched_notifiers.contains(m_pSynth)) {
+		QList<synthv1_sched_notifier *>& list = g_sched_notifiers[m_pSynth];
+		list.removeAll(this);
+		if (list.isEmpty())
+			g_sched_notifiers.remove(m_pSynth);
+	}
 }
 
 

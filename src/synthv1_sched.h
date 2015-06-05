@@ -24,6 +24,9 @@
 
 #include <stdint.h>
 
+// forward decls.
+class synthv1;
+
 
 //-------------------------------------------------------------------------
 // synthv1_sched - worker/scheduled stuff (pure virtual).
@@ -37,10 +40,13 @@ public:
 	enum Type { Wave, Programs, Controls };
 
 	// ctor.
-	synthv1_sched(Type stype, uint32_t nsize = 8);
+	synthv1_sched(synthv1 *pSynth, Type stype, uint32_t nsize = 8);
 
 	// virtual dtor.
 	virtual ~synthv1_sched();
+
+	// instance access.
+	synthv1 *instance() const;
 
 	// schedule process.
 	void schedule(int sid = 0);
@@ -55,11 +61,13 @@ public:
 	virtual void process(int sid) = 0;
 
 	// signal broadcast (static).
-	static void sync_notify(Type stype, int sid);
+	static void sync_notify(synthv1 *pSynth, Type stype, int sid);
 
 private:
 
 	// instance variables.
+	synthv1 *m_pSynth;
+
 	Type m_stype;
 
 	// sched queue instance reference.
@@ -84,13 +92,18 @@ class synthv1_sched_notifier
 public:
 
 	// ctor.
-	synthv1_sched_notifier();
+	synthv1_sched_notifier(synthv1 *pSynth);
 
 	// dtor.
 	~synthv1_sched_notifier();
 
 	// signal notifier.
 	virtual void notify(synthv1_sched::Type stype, int sid) const = 0;
+
+private:
+
+	// instance variables.
+	synthv1 *m_pSynth;
 };
 
 
