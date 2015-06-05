@@ -755,8 +755,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 // Destructor.
 synthv1widget::~synthv1widget (void)
 {
-	if (m_sched_notifier)
-		delete m_sched_notifier;
+	delete m_sched_notifier;
 }
 
 
