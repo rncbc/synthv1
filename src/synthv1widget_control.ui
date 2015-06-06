@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>rncbc aka Rui Nuno Capela</author>
+ <comment>qtractor - An Audio/MIDI multi-track sequencer.
+
+   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License along
+   with this program; if not, write to the Free Software Foundation, Inc.,
+   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+ </comment>
+ <class>synthv1widget_control</class>
+ <widget class="QDialog" name="synthv1widget_control">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>320</width>
+    <height>120</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MIDI Controller</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="synthv1.qrc">
+    <normaloff>:/images/synthv1_preset.png</normaloff>:/images/synthv1_preset.png</iconset>
+  </property>
+  <layout class="QGridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="ControlTypeTextLabel">
+     <property name="text">
+      <string>&amp;Type:</string>
+     </property>
+     <property name="buddy">
+      <cstring>ControlTypeComboBox</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="ControlTypeComboBox">
+     <property name="toolTip">
+      <string>MIDI event type</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLabel" name="ControlChannelTextLabel">
+     <property name="text">
+      <string>Cha&amp;nnel:</string>
+     </property>
+     <property name="buddy">
+      <cstring>ControlChannelSpinBox</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QSpinBox" name="ControlChannelSpinBox">
+     <property name="toolTip">
+      <string>MIDI channel</string>
+     </property>
+     <property name="specialValueText">
+      <string>Auto</string>
+     </property>
+     <property name="accelerated">
+      <bool>false</bool>
+     </property>
+     <property name="minimum">
+      <number>0</number>
+     </property>
+     <property name="maximum">
+      <number>16</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="ControlParamTextLabel">
+     <property name="text">
+      <string>&amp;Parameter:</string>
+     </property>
+     <property name="buddy">
+      <cstring>ControlParamComboBox</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="3">
+    <widget class="QComboBox" name="ControlParamComboBox">
+     <property name="toolTip">
+      <string>MIDI parameter</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="4">
+    <widget class="QDialogButtonBox" name="DialogButtonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="4" margin="8"/>
+ <tabstops>
+  <tabstop>ControlTypeComboBox</tabstop>
+  <tabstop>ControlChannelSpinBox</tabstop>
+  <tabstop>ControlParamComboBox</tabstop>
+  <tabstop>DialogButtonBox</tabstop>
+ </tabstops>
+ <resources>
+  <include location="synthv1.qrc"/>
+ </resources>
+ <connections/>
+</ui>

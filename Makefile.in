@@ -39,7 +39,8 @@ headers_ui = \
 	src/$(name)widget_status.h \
 	src/$(name)widget_config.h \
 	src/$(name)widget_programs.h \
-	src/$(name)widget_controls.h
+	src/$(name)widget_controls.h \
+	src/$(name)widget_control.h
 
 sources_ui = \
 	src/$(name)widget.cpp \
@@ -50,11 +51,13 @@ sources_ui = \
 	src/$(name)widget_status.cpp \
 	src/$(name)widget_config.cpp \
 	src/$(name)widget_programs.cpp \
-	src/$(name)widget_controls.cpp
+	src/$(name)widget_controls.cpp \
+	src/$(name)widget_control.cpp
 
 forms = \
 	src/$(name)widget.ui \
 	src/$(name)widget_config.ui \
+	src/$(name)widget_control.ui
 
 resources = \
 	src/$(name).qrc
