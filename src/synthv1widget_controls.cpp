@@ -444,8 +444,9 @@ QWidget *synthv1widget_controls_item_delegate::createEditor ( QWidget *pParent,
 	case 0: // Channel.
 	{
 		QSpinBox *pSpinBox = new QSpinBox(pParent);
-		pSpinBox->setMinimum(1);
+		pSpinBox->setMinimum(0);
 		pSpinBox->setMaximum(16);
+		pSpinBox->setSpecialValueText(tr("Auto"));
 		pEditor = pSpinBox;
 		break;
 	}
@@ -577,7 +578,9 @@ void synthv1widget_controls_item_delegate::setModelData ( QWidget *pEditor,
 		QSpinBox *pSpinBox = qobject_cast<QSpinBox *> (pEditor);
 		if (pSpinBox) {
 			const int iChannel = pSpinBox->value();
-			pModel->setData(index, QString::number(iChannel));
+			const QString& sText
+				= (iChannel > 0 ? QString::number(iChannel) : tr("Auto"));
+			pModel->setData(index, sText);
 		}
 		break;
 	}
@@ -683,13 +686,12 @@ void synthv1widget_controls::loadControls ( synthv1_controls *pControls )
 	const synthv1_controls::Map::ConstIterator& iter_end = map.constEnd();
 	for ( ; iter != iter_end; ++iter) {
 		const synthv1_controls::Key& key = iter.key();
-		const synthv1_controls::Type ctype
-			= synthv1_controls::Type(key.status & 0xf0);
+		const synthv1_controls::Type ctype = key.type();
+		const unsigned short channel = key.channel();
 		const synthv1::ParamIndex index = synthv1::ParamIndex(iter.value());
 		QTreeWidgetItem *pItem = new QTreeWidgetItem(this);
 	//	pItem->setIcon(0, icon);
-		pItem->setText(0, QString::number(
-			(key.status & 0x0f) + 1));
+		pItem->setText(0, (channel > 0 ? QString::number(channel) : tr("Auto")));
 		pItem->setText(1, synthv1_controls::textFromType(ctype));
 		pItem->setText(2, controlParamName(ctype, key.param));
 		pItem->setData(2, Qt::UserRole, int(key.param));
@@ -713,11 +715,11 @@ void synthv1widget_controls::saveControls ( synthv1_controls *pControls )
 	for (int iItem = 0 ; iItem < iItemCount; ++iItem) {
 		QTreeWidgetItem *pItem = QTreeWidget::topLevelItem(iItem);
 		const unsigned short channel
-			= pItem->text(0).toInt() - 1;
-		const unsigned char ctype
+			= pItem->text(0).toInt();
+		const synthv1_controls::Type ctype
 			= synthv1_controls::typeFromText(pItem->text(1));
 		synthv1_controls::Key key;
-		key.status = ctype | (channel & 0x0f);
+		key.status = ctype | (channel & 0x1f);
 		key.param = pItem->data(2, Qt::UserRole).toInt();
 		pControls->add_control(key, pItem->data(3, Qt::UserRole).toInt());
 	}

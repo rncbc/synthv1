@@ -107,40 +107,29 @@ class xrpn_item
 {
 public:
 
-	xrpn_item() : m_time(0), m_port(0), m_status(0) {}
+	xrpn_item() : m_status(0) {}
 
-	xrpn_item ( const xrpn_item& item ) : m_time(item.m_time),
-		m_port(item.m_port), m_status(item.m_status),
-		m_param(item.m_param), m_value(item.m_value) {}
+	xrpn_item ( const xrpn_item& item ) :
+		m_status(item.m_status),
+		m_param(item.m_param),
+		m_value(item.m_value) {}
 
 	void clear()
 	{
-		m_time = 0;
-		m_port = 0;
 		m_status = 0;
 		m_param.clear();
 		m_value.clear();
 	}
 
-	void set_time(unsigned long time)
-		{ m_time = time; }
-	unsigned long time() const
-		{ return m_time; }
-
-	void set_port(int port)
-		{ m_port = port; }
-	int port() const
-		{ return m_port; }
-
-	void set_status(unsigned char status)
+	void set_status(unsigned short status)
 		{ m_status = status; }
-	unsigned char status() const
+	unsigned short status() const
 		{ return m_status; }
 
 	synthv1_controls::Type type() const
-		{ return synthv1_controls::Type(m_status & 0xf0); }
+		{ return synthv1_controls::Type(m_status & 0xf00); }
 	unsigned short channel() const
-		{ return (m_status & 0x0f); }
+		{ return (m_status & 0x1f); }
 
 	bool is_param_msb() const
 		{ return m_param.is_msb(); }
@@ -189,11 +178,9 @@ public:
 
 private:
 
-	unsigned long m_time;
-	int           m_port;
-	unsigned char m_status;
-	xrpn_data14   m_param;
-	xrpn_data14   m_value;
+	unsigned short m_status;
+	xrpn_data14    m_param;
+	xrpn_data14    m_value;
 };
 
 typedef QHash<unsigned int, xrpn_item> xrpn_cache;
@@ -249,15 +236,15 @@ public:
 	void clear() { m_read = m_write = 0; }
 
 	bool push (
-		unsigned char status,
+		unsigned short status,
 		unsigned short param,
 		unsigned short value )
 	{
 		synthv1_controls::Event event;
 
-		event.status = status;
-		event.param  = param;
-		event.value  = value;
+		event.key.status = status;
+		event.key.param  = param;
+		event.value = value;
 
 		return push(event);
 	}
@@ -335,9 +322,9 @@ public:
 
 	bool process ( const synthv1_controls::Event& event )
 	{
-		const unsigned short channel = (event.status & 0x0f);
+		const unsigned short channel = event.key.channel();
 
-		if (event.param == RPN_MSB) {
+		if (event.key.param == RPN_MSB) {
 			xrpn_item& item = get_item(channel);
 			if (item.is_param_msb()
 				|| (item.is_any() && item.type() != synthv1_controls::RPN))
@@ -350,7 +337,7 @@ public:
 			return true;
 		}
 		else
-		if (event.param == RPN_LSB) {
+		if (event.key.param == RPN_LSB) {
 			xrpn_item& item = get_item(channel);
 			if (item.is_param_lsb()
 				|| (item.is_any() && item.type() != synthv1_controls::RPN))
@@ -363,7 +350,7 @@ public:
 			return true;
 		}
 		else
-		if (event.param == NRPN_MSB) {
+		if (event.key.param == NRPN_MSB) {
 			xrpn_item& item = get_item(channel);
 			if (item.is_param_msb()
 				|| (item.is_any() && item.type() != synthv1_controls::NRPN))
@@ -376,7 +363,7 @@ public:
 			return true;
 		}
 		else
-		if (event.param == NRPN_LSB) {
+		if (event.key.param == NRPN_LSB) {
 			xrpn_item& item = get_item(channel);
 			if (item.is_param_lsb()
 				|| (item.is_any() && item.type() != synthv1_controls::NRPN))
@@ -389,7 +376,7 @@ public:
 			return true;
 		}
 		else
-		if (event.param == DATA_MSB) {
+		if (event.key.param == DATA_MSB) {
 			xrpn_item& item = get_item(channel);
 			if (item.type() == synthv1_controls::None)
 				return false;
@@ -405,7 +392,7 @@ public:
 			return true;
 		}
 		else
-		if (event.param == DATA_LSB) {
+		if (event.key.param == DATA_LSB) {
 			xrpn_item& item = get_item(channel);
 			if (item.type() == synthv1_controls::None)
 				return false;
@@ -421,36 +408,38 @@ public:
 			return true;
 		}
 		else
-		if (event.param > CC14_MSB_MIN && event.param < CC14_MSB_MAX) {
+		if (event.key.param > CC14_MSB_MIN &&
+			event.key.param < CC14_MSB_MAX) {
 			xrpn_item& item = get_item(channel);
 			if (item.is_param_msb() || item.is_value_msb()
 				|| (item.is_any() && item.type() != synthv1_controls::CC14)
 				|| (item.type() == synthv1_controls::CC14
-					&& item.param_lsb() != event.param + CC14_LSB_MIN))
+					&& item.param_lsb() != event.key.param + CC14_LSB_MIN))
 				enqueue(item);
 			if (item.type() == synthv1_controls::None) {
 				item.set_status(synthv1_controls::CC14 | channel);
 				++m_count;
 			}
-			item.set_param_msb(event.param);
+			item.set_param_msb(event.key.param);
 			item.set_value_msb(event.value);
 			if (item.is_14bit())
 				enqueue(item);
 			return true;
 		}
 		else
-		if (event.param > CC14_LSB_MIN && event.param < CC14_LSB_MAX) {
+		if (event.key.param > CC14_LSB_MIN &&
+			event.key.param < CC14_LSB_MAX) {
 			xrpn_item& item = get_item(channel);
 			if (item.is_param_lsb() || item.is_value_lsb()
 				|| (item.is_any() && item.type() != synthv1_controls::CC14)
 				|| (item.type() == synthv1_controls::CC14
-					&& item.param_msb() != event.param - CC14_LSB_MIN))
+					&& item.param_msb() != event.key.param - CC14_LSB_MIN))
 				enqueue(item);
 			if (item.type() == synthv1_controls::None) {
 				item.set_status(synthv1_controls::CC14 | channel);
 				++m_count;
 			}
-			item.set_param_lsb(event.param);
+			item.set_param_lsb(event.key.param);
 			item.set_value_lsb(event.value);
 			if (item.is_14bit())
 				enqueue(item);
@@ -474,7 +463,8 @@ protected:
 			if (item.is_14bit()) {
 				m_queue.push(item.status(), item.param_msb(), item.value());
 			} else  {
-				const unsigned char status = synthv1_controls::CC | item.channel();
+				const unsigned short status
+					= synthv1_controls::CC | item.channel();
 				if (item.is_value_msb())
 					m_queue.push(status, item.param_msb(), item.value_msb());
 				if (item.is_value_lsb())
@@ -485,7 +475,8 @@ protected:
 		if (item.is_ready()) {
 			m_queue.push(item.status(), item.param(), item.value());
 		} else {
-			const unsigned char status = synthv1_controls::CC | item.channel();
+			const unsigned short status
+				= synthv1_controls::CC | item.channel();
 			if (item.type() == synthv1_controls::RPN) {
 				if (item.is_param_msb())
 					m_queue.push(status, RPN_MSB, item.param_msb());
@@ -540,9 +531,9 @@ void synthv1_controls::process_enqueue (
 {
 	Event event;
 
-	event.status = CC | ((channel - 1) & 0x0f);
-	event.param  = param;
-	event.value  = value;
+	event.key.status = CC | (channel & 0x1f);
+	event.key.param = param;
+	event.value = value;
 
 	if (!m_pImpl->process(event))
 		process_event(event);
@@ -564,14 +555,20 @@ void synthv1_controls::process_dequeue (void)
 
 void synthv1_controls::process_event ( const Event& event )
 {
-	const Key key(event);
-	const int iIndex = find_control(key);
+	Key key(event.key);
+	int iIndex = find_control(key);
+
+	if (iIndex < 0 && key.channel() > 0) {
+		key.status = key.type(); // channel: 0=Auto
+		iIndex = find_control(key);
+	}
+
 	if (iIndex < 0)
 		return;
 
-	// TODO: process controller event...
+	// Process controller event...
 	float fValue = float(event.value) / 127.0f;
-	if (Type(key.status & 0xf0) != CC)
+	if (key.type() != CC)
 		fValue /= 127.0f;
 
 	const synthv1::ParamIndex index = synthv1::ParamIndex(iIndex);

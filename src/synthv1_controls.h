@@ -43,32 +43,36 @@ public:
 	~synthv1_controls();
 
 	// controller types,
-	enum Type { None = 0, CC = 0xb0, RPN = 0x10, NRPN = 0x20, CC14 = 0x30 };
-
-	// controller events.
-	struct Event
-	{
-		unsigned char  status;
-		unsigned short param;
-		unsigned short value;
-	};
+	enum Type { None = 0, CC = 0x100, RPN = 0x200, NRPN = 0x300, CC14 = 0x400 };
 
 	// controller hash key.
 	struct Key
 	{
 		Key () : status(0), param(0) {}
-		Key (const Event& event)
-			: status(event.status), param(event.param) {}
+		Key (const Key& key)
+			: status(key.status), param(key.param) {}
+
+		Type type() const
+			{ return Type(status & 0xf00); }
+		unsigned short channel() const
+			{ return (status & 0x1f); }
 
 		// hash key comparator.
 		bool operator== (const Key& key) const
 			{ return (key.status == status) && (key.param == param); }
 
-		unsigned char  status;
+		unsigned short status;
 		unsigned short param;
 	};
 
 	typedef QHash<Key, int> Map;
+
+	// controller events.
+	struct Event
+	{
+		Key key;
+		unsigned short value;
+	};
 
 	// controller map methods.
 	const Map& map() const { return m_map; }
@@ -77,7 +81,7 @@ public:
 		{ return m_map.value(key, -1); }
 	void add_control(const Key& key, int index)
 		{ m_map.insert(key, index); }
-	void remove__control(const Key& key)
+	void remove_control(const Key& key)
 		{ m_map.remove(key); }
 
 	void clear() { m_map.clear(); }
