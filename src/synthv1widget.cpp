@@ -837,8 +837,7 @@ void synthv1widget::paramChanged ( float fValue )
 		synthv1::ParamIndex index = m_knobParams.value(pKnob);
 		updateParam(index, fValue);
 		updateParamEx(index, fValue);
-		m_ui.StatusBar->showMessage(QString("%1 / %2: %3")
-			.arg(m_ui.StackedWidget->currentWidget()->windowTitle())
+		m_ui.StatusBar->showMessage(QString("%1: %2")
 			.arg(pKnob->toolTip())
 			.arg(pKnob->valueText()), 5000);
 		updateDirtyPreset(true);
@@ -874,6 +873,26 @@ void synthv1widget::updateParamEx ( synthv1::ParamIndex index, float fValue )
 		// Fall thru...
 	default:
 		break;
+	}
+
+	--m_iUpdate;
+}
+
+
+// Update scheduled controllers param/knob widgets.
+void synthv1widget::updateSchedParam ( synthv1::ParamIndex index, float fValue )
+{
+	++m_iUpdate;
+
+	synthv1widget_knob *pKnob = paramKnob(index);
+	if (pKnob) {
+		pKnob->setValue(fValue, false);
+		updateParam(index, fValue);
+		updateParamEx(index, fValue);
+		m_ui.StatusBar->showMessage(QString("%1: %2")
+			.arg(pKnob->toolTip())
+			.arg(pKnob->valueText()), 5000);
+		updateDirtyPreset(true);
 	}
 
 	--m_iUpdate;
@@ -1088,7 +1107,7 @@ void synthv1widget::updateSchedNotify ( int stype, int sid )
 	switch (synthv1_sched::Type(stype)) {
 	case synthv1_sched::Controls: {
 		const synthv1::ParamIndex index = synthv1::ParamIndex(sid);
-		setParamValue(index, pSynthUi->paramValue(index));
+		updateSchedParam(index, pSynthUi->paramValue(index));
 		break;
 	}
 	case synthv1_sched::Programs: {
