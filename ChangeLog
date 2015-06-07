@@ -6,8 +6,9 @@ ChangeLog
 
 GIT HEAD
 
-- MIDI Controllers configuration interface is being indroduced
-  to Help/Configure dialog (INFLUX).
+- MIDI Controller mapping/learn is now possible on all parameter
+  control knobs; with global configuration also avaiable on the
+  Help/Configure dialog. (EXPERIMENTAL)
 - French (fr) translation line to desktop file added (by Olivier
   Humbert, thanks).
 
