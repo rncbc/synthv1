@@ -26,6 +26,7 @@
 #include "synthv1_sched.h"
 
 #include "synthv1widget_config.h"
+#include "synthv1widget_control.h"
 
 #include <QMessageBox>
 #include <QDir>
@@ -786,6 +787,12 @@ void synthv1widget::setParamKnob ( synthv1::ParamIndex index, synthv1widget_knob
 	QObject::connect(pKnob,
 		SIGNAL(valueChanged(float)),
 		SLOT(paramChanged(float)));
+
+	pKnob->setContextMenuPolicy(Qt::CustomContextMenu);
+
+	QObject::connect(pKnob,
+		SIGNAL(customContextMenuRequested(const QPoint&)),
+		SLOT(paramContextMenu(const QPoint&)));
 }
 
 synthv1widget_knob *synthv1widget::paramKnob ( synthv1::ParamIndex index ) const
@@ -1219,6 +1226,36 @@ void synthv1widget::bpmSyncChanged (void)
 			pSynthUi->setParamValue(synthv1::DEL1_BPMSYNC, (bBpmSync1 ? 1.0f : 0.0f));
 	}
 	--m_iUpdate;
+}
+
+
+// Param knob context menu.
+void synthv1widget::paramContextMenu ( const QPoint& pos )
+{
+	synthv1widget_knob *pKnob
+		= qobject_cast<synthv1widget_knob *> (sender());
+	if (pKnob == NULL)
+		return;
+
+	synthv1_ui *pSynthUi = ui_instance();
+	if (pSynthUi == NULL)
+		return;
+
+	synthv1_controls *pControls = pSynthUi->controls();
+	if (pControls == NULL)
+		return;
+
+	QMenu menu(this);
+
+	QAction *pAction = menu.addAction(
+		QIcon(":/images/synthv1_preset.png"),
+		tr("MIDI &Controller..."));
+
+	if (menu.exec(pKnob->mapToGlobal(pos)) == pAction) {
+		const synthv1::ParamIndex index = m_knobParams.value(pKnob);
+		const QString& sTitle = pKnob->toolTip();
+		synthv1widget_control::showInstance(pControls, index, sTitle, this);
+	}
 }
 
 

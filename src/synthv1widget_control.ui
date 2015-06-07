@@ -26,8 +26,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>320</width>
-    <height>120</height>
+    <width>307</width>
+    <height>107</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -59,6 +59,9 @@
     <widget class="QLabel" name="ControlChannelTextLabel">
      <property name="text">
       <string>Cha&amp;nnel:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy">
       <cstring>ControlChannelSpinBox</cstring>
@@ -96,18 +99,37 @@
    </item>
    <item row="1" column="1" colspan="3">
     <widget class="QComboBox" name="ControlParamComboBox">
+     <property name="minimumSize">
+      <size>
+       <width>220</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="toolTip">
       <string>MIDI parameter</string>
      </property>
     </widget>
    </item>
    <item row="2" column="0" colspan="4">
+    <spacer>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint">
+      <size>
+       <width>20</width>
+       <height>8</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="0" colspan="4">
     <widget class="QDialogButtonBox" name="DialogButtonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::Reset</set>
      </property>
     </widget>
    </item>

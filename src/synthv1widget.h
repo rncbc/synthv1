@@ -93,6 +93,9 @@ protected slots:
 	// Delay BPM change.
 	void bpmSyncChanged();
 
+	// Param knob context menu.
+	void paramContextMenu(const QPoint& pos);
+
 	// Schedule notification updater.
 	void updateSchedNotify(int stype, int sid);
 

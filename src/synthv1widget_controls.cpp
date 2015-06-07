@@ -364,6 +364,7 @@ QComboBox *controlParamComboBox (
 
 	const bool bEditable = (iParamMin >= iParamMax);
 	pComboBox->setEditable(bEditable);
+	pComboBox->setInsertPolicy(QComboBox::NoInsert);
 
 	const QString sMask("%1 - %2");
 	if (bEditable) {

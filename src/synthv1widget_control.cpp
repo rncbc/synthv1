@@ -22,6 +22,8 @@
 #include "synthv1widget_control.h"
 #include "synthv1widget_controls.h"
 
+#include "synthv1_config.h"
+
 #include <QMessageBox>
 #include <QPushButton>
 #include <QLineEdit>
@@ -115,13 +117,14 @@ synthv1widget_control *synthv1widget_control::getInstance (void)
 // Pseudo-constructor.
 void synthv1widget_control::showInstance (
 	synthv1_controls *pControls, synthv1::ParamIndex index,
-	QWidget *pParent, Qt::WindowFlags wflags )
+	const QString& sTitle, QWidget *pParent, Qt::WindowFlags wflags )
 {
 	synthv1widget_control *pInstance = synthv1widget_control::getInstance();
 	if (pInstance)
 		pInstance->close();
 
 	pInstance = new synthv1widget_control(pParent, wflags);
+	pInstance->setWindowTitle(sTitle);
 	pInstance->setControls(pControls, index);
 	pInstance->show();
 }
@@ -131,15 +134,28 @@ void synthv1widget_control::showInstance (
 void synthv1widget_control::setControls (
 	synthv1_controls *pControls, synthv1::ParamIndex index )
 {
+	++m_iDirtySetup;
+
 	m_pControls = pControls;
 	m_index = index;
 
-	const QString sParamName = synthv1_param::paramName(m_index);
-	QDialog::setWindowTitle(sParamName + " - " + tr("MIDI Controller"));
+	synthv1_controls::Key key;
+	key.status = synthv1_controls::CC;
 
-	++m_iDirtySetup;
+	if (m_pControls) {
+		const synthv1_controls::Map& map = m_pControls->map();
+		synthv1_controls::Map::ConstIterator iter = map.constBegin();
+		const synthv1_controls::Map::ConstIterator& iter_end
+			= map.constEnd();
+		for ( ; iter != iter_end; ++iter) {
+			if (synthv1::ParamIndex(iter.value()) == m_index) {
+				key = iter.key();
+				break;
+			}
+		}
+	}
 
-	setControlKey(controlKey());
+	setControlKey(key);
 
 	--m_iDirtySetup;
 
@@ -177,6 +193,11 @@ void synthv1widget_control::setControlKey ( const synthv1_controls::Key& key )
 	setControlParam(key.param);
 
 	m_ui.ControlChannelSpinBox->setValue(key.channel());
+
+	QPushButton *pResetButton
+		= m_ui.DialogButtonBox->button(QDialogButtonBox::Reset);
+	if (pResetButton && m_pControls)
+		pResetButton->setEnabled(m_pControls->find_control(key) >= 0);
 }
 
 
@@ -184,18 +205,11 @@ synthv1_controls::Key synthv1widget_control::controlKey (void) const
 {
 	synthv1_controls::Key key;
 
-	if (m_pControls) {
-		const synthv1_controls::Map& map = m_pControls->map();
-		synthv1_controls::Map::ConstIterator iter = map.constBegin();
-		const synthv1_controls::Map::ConstIterator& iter_end
-			= map.constEnd();
-		for ( ; iter != iter_end; ++iter) {
-			if (synthv1::ParamIndex(iter.value()) == m_index) {
-				key = iter.key();
-				break;
-			}
-		}
-	}
+	const synthv1_controls::Type ctype = controlType();
+	const unsigned short channel = controlChannel();
+
+	key.status = ctype | (channel & 0x1f);
+	key.param = controlParam();
 
 	return key;
 }
@@ -217,6 +231,52 @@ void synthv1widget_control::changed (void)
 }
 
 
+// Reset settings (action button slot).
+void synthv1widget_control::clicked ( QAbstractButton *pButton )
+{
+#ifdef CONFIG_DEBUG_0
+	qDebug("synthv1widget_control::clicked(%p)", pButton);
+#endif
+
+	QDialogButtonBox::ButtonRole role
+		= m_ui.DialogButtonBox->buttonRole(pButton);
+	if ((role & QDialogButtonBox::ResetRole) == QDialogButtonBox::ResetRole)
+		reset();
+}
+
+
+// Reset settings (Reset button slot).
+void synthv1widget_control::reset (void)
+{
+	if (m_pControls == NULL)
+		return;
+
+#ifdef CONFIG_DEBUG_0
+	qDebug("synthv1widget_control::reset()");
+#endif
+
+	// Get map settings...
+	const synthv1_controls::Key& key = controlKey();
+
+	// Unmap the existing controller....
+	const int iIndex = m_pControls->find_control(key);
+	if (iIndex >= 0)
+		m_pControls->remove_control(key);
+
+	// Save controls...
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig)
+		pConfig->saveControls(m_pControls);
+
+	// Aint't dirty no more...
+	m_iDirtyCount = 0;
+
+	// Bail out...
+	QDialog::accept();
+	QDialog::close();
+}
+
+
 // Accept settings (OK button slot).
 void synthv1widget_control::accept (void)
 {
@@ -228,12 +288,7 @@ void synthv1widget_control::accept (void)
 #endif
 
 	// Get map settings...
-	const synthv1_controls::Type ctype = controlType();
-	const unsigned short channel = controlChannel();
-
-	synthv1_controls::Key key;
-	key.status = ctype | (channel & 0x1f);
-	key.param = controlParam();
+	const synthv1_controls::Key& key = controlKey();
 
 	// Check if already mapped to someone else...
 	const int iIndex = m_pControls->find_control(key);
@@ -253,6 +308,11 @@ void synthv1widget_control::accept (void)
 
 	// Map the damn controller....
 	m_pControls->add_control(key, m_index);
+
+	// Save controls...
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig)
+		pConfig->saveControls(m_pControls);
 
 	// Aint't dirty no more...
 	m_iDirtyCount = 0;

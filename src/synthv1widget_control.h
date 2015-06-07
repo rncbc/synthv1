@@ -46,7 +46,7 @@ public:
 	// Pseudo-constructor.
 	static void showInstance(
 		synthv1_controls *pControls, synthv1::ParamIndex index,
-		QWidget *pParent = 0, Qt::WindowFlags wflags = 0);
+		const QString& sTitle, QWidget *pParent = 0, Qt::WindowFlags wflags = 0);
 
 	// Control accessors.
 	void setControls(synthv1_controls *pControls, synthv1::ParamIndex index);
@@ -60,6 +60,9 @@ public:
 protected slots:
 
 	void changed();
+
+	void clicked(QAbstractButton *);
+	void reset();
 
 	void accept();
 	void reject();

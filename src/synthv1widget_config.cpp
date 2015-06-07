@@ -409,7 +409,7 @@ void synthv1widget_config::accept (void)
 	synthv1_config *pConfig = synthv1_config::getInstance();
 
 	if (m_iDirtyControls > 0 && pConfig && m_pControls) {
-		// Save programs...
+		// Save controls...
 		m_ui.ControlsTreeWidget->saveControls(m_pControls);
 		pConfig->saveControls(m_pControls);
 		// Reset dirty flag.
