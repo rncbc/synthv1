@@ -98,11 +98,14 @@ public:
 	static Type typeFromText(const QString& sText);
 	static QString textFromType(Type ctype);
 
+	// current/last controller accessor.
+	const Key& current_key() const;
+
 protected:
 
 	void process_event(const Event& event);
 
-	// controller scheduled thread
+	// assigned controller scheduled events
 	class Sched : public synthv1_sched
 	{
 	public:
@@ -122,6 +125,31 @@ protected:
 		void process(int) {}
 	};
 
+	// general controller scheduled events
+	class ControlSched : public synthv1_sched
+	{
+	public:
+
+		// ctor.
+		ControlSched (synthv1 *pSynth)
+			: synthv1_sched(pSynth, Controller) {}
+
+		void schedule_key(const Key& key)
+			{ m_key = key; schedule(); }
+
+		// process (virtual stub).
+		void process(int) {}
+
+		// current controller accessor.
+		const Key& current_key() const
+			{ return m_key; }
+
+	private:
+
+		// instance variables,.
+		Key m_key;
+	};
+
 private:
 
 	// instance variables.
@@ -131,6 +159,9 @@ private:
 
 	// Event scheduler.
 	Sched m_sched;
+
+	// Controller scheduler.
+	ControlSched m_control_sched;
 
 	// Controllers map.
 	Map m_map;
@@ -142,6 +173,7 @@ inline uint qHash ( const synthv1_controls::Key& key )
 {
 	return qHash(key.status ^ key.param);
 }
+
 
 
 #endif	// __synthv1_controls_h

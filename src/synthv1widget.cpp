@@ -1112,6 +1112,15 @@ void synthv1widget::updateSchedNotify ( int stype, int sid )
 #endif
 
 	switch (synthv1_sched::Type(stype)) {
+	case synthv1_sched::Controller: {
+		synthv1widget_control *pInstance
+			= synthv1widget_control::getInstance();
+		if (pInstance) {
+			synthv1_controls *pControls = pSynthUi->controls();
+			pInstance->setControlKey(pControls->current_key());
+		}
+		break;
+	}
 	case synthv1_sched::Controls: {
 		const synthv1::ParamIndex index = synthv1::ParamIndex(sid);
 		updateSchedParam(index, pSynthUi->paramValue(index));

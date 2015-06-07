@@ -514,7 +514,8 @@ private:
 //
 
 synthv1_controls::synthv1_controls ( synthv1 *pSynth )
-	: m_pImpl(new synthv1_controls::Impl()), m_sched(pSynth)
+	: m_pImpl(new synthv1_controls::Impl()),
+		m_sched(pSynth), m_control_sched(pSynth)
 {
 }
 
@@ -556,8 +557,10 @@ void synthv1_controls::process_dequeue (void)
 void synthv1_controls::process_event ( const Event& event )
 {
 	Key key(event.key);
-	int iIndex = find_control(key);
 
+	m_control_sched.schedule_key(key);
+
+	int iIndex = find_control(key);
 	if (iIndex < 0 && key.channel() > 0) {
 		key.status = key.type(); // channel: 0=Auto
 		iIndex = find_control(key);
@@ -617,6 +620,13 @@ QString synthv1_controls::textFromType ( Type ctype )
 	}
 
 	return sText;
+}
+
+
+// current/last controller accessor.
+const synthv1_controls::Key& synthv1_controls::current_key (void) const
+{
+	return m_control_sched.current_key();
 }
 
 
