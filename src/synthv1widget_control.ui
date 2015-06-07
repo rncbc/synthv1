@@ -26,8 +26,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>307</width>
-    <height>107</height>
+    <width>320</width>
+    <height>120</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -135,7 +135,7 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="4" margin="8"/>
+ <layoutdefault spacing="8" margin="8"/>
  <tabstops>
   <tabstop>ControlTypeComboBox</tabstop>
   <tabstop>ControlChannelSpinBox</tabstop>

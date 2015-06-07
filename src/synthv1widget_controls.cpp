@@ -368,8 +368,10 @@ QComboBox *controlParamComboBox (
 
 	const QString sMask("%1 - %2");
 	if (bEditable) {
-		const synthv1widget_controls::Names::ConstIterator& iter_end = map.constEnd();
-		synthv1widget_controls::Names::ConstIterator iter = map.constBegin();
+		synthv1widget_controls::Names::ConstIterator iter
+			= map.constBegin();
+		const synthv1widget_controls::Names::ConstIterator& iter_end
+			= map.constEnd();
 		for ( ; iter != iter_end; ++iter) {
 			const unsigned short param = iter.key();
 			pComboBox->addItem(sMask.arg(param).arg(iter.value()), int(param));
@@ -747,7 +749,7 @@ QTreeWidgetItem *synthv1widget_controls::newControlItem (void)
 	const QIcon icon(":/images/synthv1_preset.png");
 	const synthv1_controls::Type ctype = synthv1_controls::CC;
 //	pItem->setIcon(0, icon);
-	pItem->setText(0, QString::number(1));
+	pItem->setText(0, tr("Auto"));
 	pItem->setText(1, synthv1_controls::textFromType(ctype));
 	pItem->setText(2, controlParamName(ctype, 0));
 	pItem->setData(2, Qt::UserRole, 0);

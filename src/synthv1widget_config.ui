@@ -147,7 +147,7 @@
          </property>
          <column>
           <property name="text">
-           <string notr="true">Chan</string>
+           <string notr="true">Channel</string>
           </property>
          </column>
          <column>
