@@ -61,7 +61,7 @@
             <string>&amp;Add Controller</string>
            </property>
            <property name="icon">
-            <iconset resource="synthv1.qrc">:/images/synthv1_preset.png</iconset>
+            <iconset resource="synthv1.qrc">:/images/synthv1_control.png</iconset>
            </property>
            <property name="toolButtonStyle">
             <enum>Qt::ToolButtonTextBesideIcon</enum>

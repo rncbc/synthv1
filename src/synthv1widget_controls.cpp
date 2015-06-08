@@ -682,7 +682,7 @@ void synthv1widget_controls::loadControls ( synthv1_controls *pControls )
 {
 	QTreeWidget::clear();
 
-	const QIcon icon(":/images/synthv1_preset.png");
+	const QIcon icon(":/images/synthv1_control.png");
 	QList<QTreeWidgetItem *> items;
 	const synthv1_controls::Map& map = pControls->map();
 	synthv1_controls::Map::ConstIterator iter = map.constBegin();
@@ -746,7 +746,7 @@ void synthv1widget_controls::addControlItem (void)
 QTreeWidgetItem *synthv1widget_controls::newControlItem (void)
 {
 	QTreeWidgetItem *pItem = new QTreeWidgetItem();
-	const QIcon icon(":/images/synthv1_preset.png");
+	const QIcon icon(":/images/synthv1_control.png");
 	const synthv1_controls::Type ctype = synthv1_controls::CC;
 //	pItem->setIcon(0, icon);
 	pItem->setText(0, tr("Auto"));

@@ -1257,7 +1257,7 @@ void synthv1widget::paramContextMenu ( const QPoint& pos )
 	QMenu menu(this);
 
 	QAction *pAction = menu.addAction(
-		QIcon(":/images/synthv1_preset.png"),
+		QIcon(":/images/synthv1_control.png"),
 		tr("MIDI &Controller..."));
 
 	if (menu.exec(pKnob->mapToGlobal(pos)) == pAction) {

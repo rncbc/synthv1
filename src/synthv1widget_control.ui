@@ -34,8 +34,7 @@
    <string>MIDI Controller</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="synthv1.qrc">
-    <normaloff>:/images/synthv1_preset.png</normaloff>:/images/synthv1_preset.png</iconset>
+   <iconset resource="synthv1.qrc">:/images/synthv1_control.png</iconset>
   </property>
   <layout class="QGridLayout">
    <item row="0" column="0">
