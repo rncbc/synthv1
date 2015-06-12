@@ -25,7 +25,7 @@
 #include "synthv1_param.h"
 #include "synthv1_sched.h"
 
-#include <QHash>
+#include <QMap>
 
 
 //-------------------------------------------------------------------------
@@ -58,14 +58,19 @@ public:
 			{ return (status & 0x1f); }
 
 		// hash key comparator.
-		bool operator== (const Key& key) const
-			{ return (key.status == status) && (key.param == param); }
+		bool operator< (const Key& key) const
+		{
+			if (status != key.status)
+				return (status < key.status);
+			else
+				return (param < key.param);
+		}
 
 		unsigned short status;
 		unsigned short param;
 	};
 
-	typedef QHash<Key, int> Map;
+	typedef QMap<Key, int> Map;
 
 	// controller events.
 	struct Event
@@ -166,14 +171,6 @@ private:
 	// Controllers map.
 	Map m_map;
 };
-
-
-// hash key function.
-inline uint qHash ( const synthv1_controls::Key& key )
-{
-	return qHash(key.status ^ key.param);
-}
-
 
 
 #endif	// __synthv1_controls_h

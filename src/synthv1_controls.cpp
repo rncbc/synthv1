@@ -562,7 +562,7 @@ void synthv1_controls::process_event ( const Event& event )
 
 	int iIndex = find_control(key);
 	if (iIndex < 0 && key.channel() > 0) {
-		key.status = key.type(); // channel: 0=Auto
+		key.status = key.type(); // channel=0 (Auto)
 		iIndex = find_control(key);
 	}
 
