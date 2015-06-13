@@ -1,7 +1,7 @@
 // synthv1_fx.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -35,7 +35,9 @@
 //
 
 //-------------------------------------------------------------------------
-// synthv1_fx_filter - RBJ filter implementation.
+// synthv1_fx_filter - RBJ biquad filter implementation.
+//
+//   http://www.musicdsp.org/files/Audio-EQ-Cookbook.txt
 
 class synthv1_fx_filter
 {
@@ -45,10 +47,15 @@ public:
 		Low = 0, High, Band1, Band2, Notch, AllPass, Peak, LoShelf, HiShelf
 	};
 
-	synthv1_fx_filter()
-		{ reset(); }
+	synthv1_fx_filter(float srate = 44100.0f)
+		: m_srate(srate) { reset(); }
 
-	void reset(Type type, float freq, float srate, float q, float gain, bool bwq = false)
+	void setSampleRate(float srate)
+		{ m_srate = srate; }
+	float sampleRate() const
+		{ return m_srate; }
+
+	void reset(Type type, float freq, float q, float gain, bool bwq = false)
 	{
 		reset();
 
@@ -58,7 +65,7 @@ public:
 		// peaking, lowshelf and hishelf
 		if (type >= Peak) {
 			const float amp   = ::powf(10.0f, (gain / 40.0f));
-			const float omega = 2.0f * M_PI * freq / srate;
+			const float omega = 2.0f * M_PI * freq / m_srate;
 			const float tsin  = ::sinf(omega);
 			const float tcos  = ::cosf(omega);
 			const float beta  = ::sqrtf(amp) / q;
@@ -98,7 +105,7 @@ public:
 			}
 		} else {
 			// other filters
-			const float omega = 2.0f * M_PI * freq / srate;
+			const float omega = 2.0f * M_PI * freq / m_srate;
 			const float tsin  = ::sinf(omega);
 			const float tcos  = ::cosf(omega);
 			if (bwq)
@@ -197,6 +204,9 @@ protected:
 
 private:
 
+	// nominal sample-rate
+	float m_srate;
+
 	// filter coeffs
 	float m_b0a0, m_b1a0, m_b2a0, m_a1a0, m_a2a0;
 
@@ -212,14 +222,22 @@ class synthv1_fx_comp
 {
 public:
 
-	synthv1_fx_comp(uint32_t iSampleRate = 44100)
-		: m_srate(float(iSampleRate)), m_peak(0.0f),
-			m_attack(0.0f), m_release(0.0f) {}
+	synthv1_fx_comp(float srate = 44100.0f)
+		: m_srate(srate), m_peak(0.0f),
+			m_attack(0.0f), m_release(0.0f),
+			m_lo(srate), m_mi(srate), m_hi(srate) {}
 
-	void setSampleRate(uint32_t iSampleRate)
-		{ m_srate = float(iSampleRate); }
+	void setSampleRate(float srate)
+	{
+		m_srate = srate;
+
+		m_lo.setSampleRate(srate);
+		m_mi.setSampleRate(srate);
+		m_hi.setSampleRate(srate);
+	}
+
 	float sampleRate() const
-		{ return uint32_t(m_srate); }
+		{ return m_srate; }
 
 	void reset()
 	{
@@ -229,9 +247,9 @@ public:
 		m_release = ::expf(-1000.0f / (m_srate * 150.0f));
 
 		// rock-da-house eq.
-		m_lo.reset(synthv1_fx_filter::Peak,      100.0f, m_srate, 1.0f, 6.0f);
-		m_mi.reset(synthv1_fx_filter::LoShelf,  1000.0f, m_srate, 1.0f, 3.0f);
-		m_hi.reset(synthv1_fx_filter::HiShelf, 10000.0f, m_srate, 1.0f, 4.0f);
+		m_lo.reset(synthv1_fx_filter::Peak,      100.0f, 1.0f, 6.0f);
+		m_mi.reset(synthv1_fx_filter::LoShelf,  1000.0f, 1.0f, 3.0f);
+		m_hi.reset(synthv1_fx_filter::HiShelf, 10000.0f, 1.0f, 4.0f);
 	}
 
 	void process(float *in, uint32_t nframes)
@@ -267,6 +285,7 @@ public:
 private:
 
 	float m_srate;
+
 	float m_peak;
 	float m_attack;
 	float m_release;
@@ -357,13 +376,13 @@ class synthv1_fx_chorus
 {
 public:
 
-	synthv1_fx_chorus(uint32_t iSampleRate = 44100)
-		: m_srate(float(iSampleRate)) { reset(); }
+	synthv1_fx_chorus(float srate = 44100.0f)
+		: m_srate(srate) { reset(); }
 
-	void setSampleRate(uint32_t iSampleRate)
-		{ m_srate = float(iSampleRate); }
+	void setSampleRate(float srate)
+		{ m_srate = srate; }
 	float sampleRate() const
-		{ return uint32_t(m_srate); }
+		{ return m_srate; }
 
 	void reset()
 	{
@@ -428,13 +447,13 @@ class synthv1_fx_delay
 {
 public:
 
-	synthv1_fx_delay(uint32_t iSampleRate = 44100)
-		: m_srate(iSampleRate) { reset(); }
+	synthv1_fx_delay(float srate = 44100.0f)
+		: m_srate(srate) { reset(); }
 
-	void setSampleRate(uint32_t iSampleRate)
-		{ m_srate = float(iSampleRate); }
+	void setSampleRate(float srate)
+		{ m_srate = srate; }
 	float sampleRate() const
-		{ return uint32_t(m_srate); }
+		{ return m_srate; }
 
 	void reset()
 	{
@@ -522,13 +541,13 @@ class synthv1_fx_phaser
 {
 public:
 
-	synthv1_fx_phaser(uint32_t iSampleRate = 44100)
-		: m_srate(float(iSampleRate)) { reset(); }
+	synthv1_fx_phaser(float srate = 44100.0f)
+		: m_srate(srate) { reset(); }
 
-	void setSampleRate(uint32_t iSampleRate)
-		{ m_srate = float(iSampleRate); }
+	void setSampleRate(float srate)
+		{ m_srate = srate; }
 	float sampleRate() const
-		{ return uint32_t(m_srate); }
+		{ return m_srate; }
 
 	void reset()
 	{

@@ -1,7 +1,7 @@
 // synthv1_reverb.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -37,15 +37,14 @@ class synthv1_reverb
 {
 public:
 
-	synthv1_reverb (uint32_t iSampleRate = 44100)
-		: m_srate(float(iSampleRate)),
-			m_room(0.5f), m_damp(0.5f), m_feedb(0.5f)
+	synthv1_reverb (float srate = 44100.0f)
+		: m_srate(srate), m_room(0.5f), m_damp(0.5f), m_feedb(0.5f)
 			{ reset(); }
 
-	void setSampleRate(uint32_t iSampleRate)
-		{ m_srate = float(iSampleRate); }
-	uint32_t sampleRate() const
-		{ return uint32_t(m_srate); }
+	void setSampleRate(float srate)
+		{ m_srate = srate; }
+	float sampleRate() const
+		{ return m_srate; }
 
 	void reset()
 	{
