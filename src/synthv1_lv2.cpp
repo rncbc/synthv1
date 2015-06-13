@@ -34,7 +34,7 @@
 
 synthv1_lv2::synthv1_lv2 (
 	double sample_rate, const LV2_Feature *const *host_features )
-	: synthv1(2, uint32_t(sample_rate))
+	: synthv1(2, float(sample_rate))
 {
 	::memset(&m_urids, 0, sizeof(m_urids));
 

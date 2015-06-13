@@ -284,7 +284,7 @@ void synthv1_jack::open ( const char *client_id )
 		return;
 
 	// set sample rate
-	synthv1::setSampleRate(jack_get_sample_rate(m_client));
+	synthv1::setSampleRate(float(jack_get_sample_rate(m_client)));
 //	synthv1::reset();
 
 	// register audio ports & buffers
