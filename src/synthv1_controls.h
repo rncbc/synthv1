@@ -98,6 +98,7 @@ public:
 		unsigned short value);
 
 	void process_dequeue();
+	void process_flush();
 
 	// text utilities.
 	static Type typeFromText(const QString& sText);
