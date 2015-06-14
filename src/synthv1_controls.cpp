@@ -536,28 +536,21 @@ void synthv1_controls::process_enqueue (
 	event.key.param = param;
 	event.value = value;
 
-	if (!m_pImpl->process(event)) {
+	if (!m_pImpl->process(event))
 		process_event(event);
-		process_flush();
-	}
 }
 
 
 void synthv1_controls::process_dequeue (void)
 {
-	Event event;
+	m_pImpl->flush();
 
 	while (m_pImpl->is_pending()) {
+		Event event;
 		if (m_pImpl->dequeue(event))
 			process_event(event);
 	}
 }
-
-void synthv1_controls::process_flush (void)
-{
-	m_pImpl->flush();
-}
-
 
 
 void synthv1_controls::process_event ( const Event& event )
