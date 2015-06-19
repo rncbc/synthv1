@@ -165,18 +165,18 @@ private:
 
 	Impl *m_pImpl;
 
-	// Event scheduler.
+	// event scheduler.
 	Sched m_sched;
 
-	// Controller scheduler.
+	// controller scheduler.
 	ControlSched m_control_sched;
 
-	// Controllers map.
+	// controllers map.
 	Map m_map;
 
-	// Timer counters.
+	// frame timers.
 	unsigned int m_timeout;
-	unsigned int m_nframes;
+	unsigned int m_timein;
 };
 
 
