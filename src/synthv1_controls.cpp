@@ -517,6 +517,8 @@ synthv1_controls::synthv1_controls ( synthv1 *pSynth )
 	: m_pImpl(new synthv1_controls::Impl()),
 		m_sched(pSynth), m_control_sched(pSynth)
 {
+	m_timeout = (unsigned int) (0.2f * pSynth->sampleRate()); // 200ms.
+	m_nframes = 0;
 }
 
 
@@ -543,13 +545,13 @@ void synthv1_controls::process_enqueue (
 
 void synthv1_controls::process_dequeue (void)
 {
-	m_pImpl->flush();
-
 	while (m_pImpl->is_pending()) {
 		Event event;
 		if (m_pImpl->dequeue(event))
 			process_event(event);
 	}
+
+	m_nframes = 0;
 }
 
 
@@ -575,6 +577,18 @@ void synthv1_controls::process_event ( const Event& event )
 
 	const synthv1::ParamIndex index = synthv1::ParamIndex(iIndex);
 	m_sched.schedule_event(index, synthv1_param::paramValue(index, fValue));
+}
+
+
+// process timer counter.
+void synthv1_controls::process ( unsigned int nframes )
+{
+	m_nframes += nframes;
+
+	if (m_nframes > m_timeout) {
+		m_pImpl->flush();
+		m_nframes = 0;
+	}
 }
 
 

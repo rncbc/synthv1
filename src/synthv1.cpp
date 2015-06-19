@@ -2208,6 +2208,8 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	m_wid2.process(nframes);
 	m_pan2.process(nframes);
 	m_vol2.process(nframes);
+
+	m_controls.process(nframes);
 }
 
 

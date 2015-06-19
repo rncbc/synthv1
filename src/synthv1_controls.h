@@ -99,6 +99,9 @@ public:
 
 	void process_dequeue();
 
+	// process timer counter.
+	void process(unsigned int nframes);
+
 	// text utilities.
 	static Type typeFromText(const QString& sText);
 	static QString textFromType(Type ctype);
@@ -170,6 +173,10 @@ private:
 
 	// Controllers map.
 	Map m_map;
+
+	// Timer counters.
+	unsigned int m_timeout;
+	unsigned int m_nframes;
 };
 
 
