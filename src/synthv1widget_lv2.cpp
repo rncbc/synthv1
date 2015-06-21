@@ -119,7 +119,7 @@ void synthv1widget_lv2::port_event ( uint32_t port_index,
 	uint32_t buffer_size, uint32_t format, const void *buffer )
 {
 	if (format == 0 && buffer_size == sizeof(float)) {
-		synthv1::ParamIndex index
+		const synthv1::ParamIndex index
 			= synthv1::ParamIndex(port_index - synthv1_lv2::ParamBase);
 		float fValue = *(float *) buffer;
 	//--legacy support < 0.3.0.4 -- begin

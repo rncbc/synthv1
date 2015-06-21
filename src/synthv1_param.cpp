@@ -235,7 +235,7 @@ void synthv1_param::loadPreset ( synthv1 *pSynth, const QString& sFilename )
 	static QHash<QString, synthv1::ParamIndex> s_hash;
 	if (s_hash.isEmpty()) {
 		for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
-			synthv1::ParamIndex index = synthv1::ParamIndex(i);
+			const synthv1::ParamIndex index = synthv1::ParamIndex(i);
 			s_hash.insert(synthv1_param::paramName(index), index);
 		}
 	}
@@ -301,7 +301,7 @@ void synthv1_param::savePreset ( synthv1 *pSynth, const QString& sFilename )
 	QDomElement eParams = doc.createElement("params");
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
 		QDomElement eParam = doc.createElement("param");
-		synthv1::ParamIndex index = synthv1::ParamIndex(i);
+		const synthv1::ParamIndex index = synthv1::ParamIndex(i);
 		eParam.setAttribute("index", QString::number(i));
 		eParam.setAttribute("name", synthv1_param::paramName(index));
 		const float fValue = pSynth->paramValue(index);

@@ -841,7 +841,7 @@ void synthv1widget::paramChanged ( float fValue )
 
 	synthv1widget_knob *pKnob = qobject_cast<synthv1widget_knob *> (sender());
 	if (pKnob) {
-		synthv1::ParamIndex index = m_knobParams.value(pKnob);
+		const synthv1::ParamIndex index = m_knobParams.value(pKnob);
 		updateParam(index, fValue);
 		updateParamEx(index, fValue);
 		m_ui.StatusBar->showMessage(QString("%1: %2")
@@ -918,7 +918,7 @@ void synthv1widget::resetParams (void)
 	resetSwapParams();
 
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
-		synthv1::ParamIndex index = synthv1::ParamIndex(i);
+		const synthv1::ParamIndex index = synthv1::ParamIndex(i);
 		float fValue = synthv1_param::paramDefaultValue(index);
 		synthv1widget_knob *pKnob = paramKnob(index);
 		if (pKnob)
@@ -945,7 +945,7 @@ void synthv1widget::swapParams ( bool bOn )
 //	resetParamKnobs();
 
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
-		synthv1::ParamIndex index = synthv1::ParamIndex(i);
+		const synthv1::ParamIndex index = synthv1::ParamIndex(i);
 		synthv1widget_knob *pKnob = paramKnob(index);
 		if (pKnob) {
 			const float fOldValue = pKnob->value();
@@ -979,7 +979,7 @@ void synthv1widget::updateParamValues (void)
 	synthv1_ui *pSynthUi = ui_instance();
 
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
-		synthv1::ParamIndex index = synthv1::ParamIndex(i);
+		const synthv1::ParamIndex index = synthv1::ParamIndex(i);
 		const float fValue = (pSynthUi
 			? pSynthUi->paramValue(index)
 			: synthv1_param::paramDefaultValue(index));
@@ -997,7 +997,7 @@ void synthv1widget::resetParamValues (void)
 	resetSwapParams();
 
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
-		synthv1::ParamIndex index = synthv1::ParamIndex(i);
+		const synthv1::ParamIndex index = synthv1::ParamIndex(i);
 		const float fValue = synthv1_param::paramDefaultValue(index);
 		setParamValue(index, fValue, true);
 		updateParam(index, fValue);
