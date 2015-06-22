@@ -111,6 +111,7 @@ public:
 
 protected:
 
+	// controller action.
 	void process_event(const Event& event);
 
 	// assigned controller scheduled events
