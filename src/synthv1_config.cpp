@@ -238,7 +238,13 @@ void synthv1_config::loadControls ( synthv1_controls *pControls )
 			synthv1_controls::Key key;
 			key.status = ctype | (channel & 0x1f);
 			key.param = clist.at(3).toInt();
-			pControls->add_control(key, QSettings::value(sKey).toInt());
+			const QStringList& vlist
+				= QSettings::value(sKey).toStringList();
+			synthv1_controls::Data data;
+			data.index = vlist.at(0).toInt();
+			if (vlist.count() > 1)
+				data.flags = vlist.at(1).toInt();
+			pControls->add_control(key, data);
 		}
 	}
 
@@ -261,7 +267,11 @@ void synthv1_config::saveControls ( synthv1_controls *pControls )
 		sKey += '_' + QString::number(key.channel());
 		sKey += '_' + synthv1_controls::textFromType(key.type());
 		sKey += '_' + QString::number(key.param);
-		QSettings::setValue(sKey, iter.value());
+		const synthv1_controls::Data& data = iter.value();
+		QStringList vlist;
+		vlist.append(QString::number(data.index));
+		vlist.append(QString::number(data.flags));
+		QSettings::setValue(sKey, vlist);
 	}
 
 	QSettings::endGroup();

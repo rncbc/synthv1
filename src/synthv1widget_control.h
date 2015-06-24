@@ -109,6 +109,7 @@ private:
 	synthv1_controls *m_pControls;
 
 	// Target subject.
+	synthv1_controls::Key m_key;
 	synthv1::ParamIndex m_index;
 
 	// Instance variables.

@@ -564,21 +564,33 @@ void synthv1_controls::process_event ( const Event& event )
 
 	m_control_sched.schedule_key(key);
 
-	int iIndex = find_control(key);
+	Data data;
+	int iIndex = get_control(key, data);
 	if (iIndex < 0 && key.channel() > 0) {
 		key.status = key.type(); // channel=0 (Auto)
-		iIndex = find_control(key);
+		iIndex = get_control(key, data);
 	}
 
 	if (iIndex < 0)
 		return;
 
-	// Process controller event...
+	// process controller event...
 	float fValue = float(event.value) / 127.0f;
 	if (key.type() != CC)
 		fValue /= 127.0f;
 
-	const synthv1::ParamIndex index = synthv1::ParamIndex(iIndex);
+	if (fValue > 1.0f)
+		fValue = 1.0f;
+	else
+	if (fValue < 0.0f)
+		fValue = 0.0f;
+
+	if (data.flags & Invert)
+		fValue = 1.0f - fValue;
+	if (data.flags & Logarithmic)
+		fValue *= (fValue * fValue);
+
+	const synthv1::ParamIndex index = synthv1::ParamIndex(data.index);
 	m_sched.schedule_event(index, synthv1_param::paramValue(index, fValue));
 }
 

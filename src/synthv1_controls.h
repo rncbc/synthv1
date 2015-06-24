@@ -70,7 +70,21 @@ public:
 		unsigned short param;
 	};
 
-	typedef QMap<Key, int> Map;
+	// controller flags,
+	enum Flag { Logarithmic = 1, Invert = 2 };
+
+	// controller data.
+	struct Data
+	{
+		Data () : index(-1), flags(0) {}
+		Data (const Data& data)
+			: index(data.index), flags(data.flags) {}
+
+		int index;
+		int flags;
+	};
+
+	typedef QMap<Key, Data> Map;
 
 	// controller events.
 	struct Event
@@ -83,9 +97,9 @@ public:
 	const Map& map() const { return m_map; }
 
 	int find_control(const Key& key) const
-		{ return m_map.value(key, -1); }
-	void add_control(const Key& key, int index)
-		{ m_map.insert(key, index); }
+		{ Data data; return get_control(key, data); }
+	void add_control(const Key& key, const Data& data)
+		{ m_map.insert(key, data); }
 	void remove_control(const Key& key)
 		{ m_map.remove(key); }
 
@@ -110,6 +124,10 @@ public:
 	const Key& current_key() const;
 
 protected:
+
+	// controller data accessor.
+	int get_control(const Key& key, Data& data) const
+		{ data = m_map.value(key); return data.index; }
 
 	// controller action.
 	void process_event(const Event& event);

@@ -86,6 +86,12 @@ synthv1widget_control::synthv1widget_control (
 	QObject::connect(m_ui.ControlChannelSpinBox,
 		SIGNAL(valueChanged(int)),
 		SLOT(changed()));
+	QObject::connect(m_ui.ControlLogarithmicCheckBox,
+		SIGNAL(toggled(bool)),
+		SLOT(changed()));
+	QObject::connect(m_ui.ControlInvertCheckBox,
+		SIGNAL(toggled(bool)),
+		SLOT(changed()));
 	QObject::connect(m_ui.DialogButtonBox,
 		SIGNAL(clicked(QAbstractButton *)),
 		SLOT(clicked(QAbstractButton *)));
@@ -138,9 +144,9 @@ void synthv1widget_control::setControls (
 
 	m_pControls = pControls;
 	m_index = index;
+	m_key.status = synthv1_controls::CC;
 
-	synthv1_controls::Key key;
-	key.status = synthv1_controls::CC;
+	unsigned int flags = 0;
 
 	if (m_pControls) {
 		const synthv1_controls::Map& map = m_pControls->map();
@@ -148,14 +154,21 @@ void synthv1widget_control::setControls (
 		const synthv1_controls::Map::ConstIterator& iter_end
 			= map.constEnd();
 		for ( ; iter != iter_end; ++iter) {
-			if (synthv1::ParamIndex(iter.value()) == m_index) {
-				key = iter.key();
+			const synthv1_controls::Data& data = iter.value();
+			if (synthv1::ParamIndex(data.index) == m_index) {
+				flags = data.flags;
+				m_key = iter.key();
 				break;
 			}
 		}
 	}
 
-	setControlKey(key);
+	setControlKey(m_key);
+
+	m_ui.ControlLogarithmicCheckBox->setChecked(
+		flags & synthv1_controls::Logarithmic);
+	m_ui.ControlInvertCheckBox->setChecked(
+		flags & synthv1_controls::Invert);
 
 	--m_iDirtySetup;
 
@@ -255,13 +268,12 @@ void synthv1widget_control::reset (void)
 	qDebug("synthv1widget_control::reset()");
 #endif
 
-	// Get map settings...
-	const synthv1_controls::Key& key = controlKey();
+	const int iIndex = m_pControls->find_control(m_key);
+	if (iIndex < 0)
+		return;
 
 	// Unmap the existing controller....
-	const int iIndex = m_pControls->find_control(key);
-	if (iIndex >= 0)
-		m_pControls->remove_control(key);
+	m_pControls->remove_control(m_key);
 
 	// Save controls...
 	synthv1_config *pConfig = synthv1_config::getInstance();
@@ -287,11 +299,16 @@ void synthv1widget_control::accept (void)
 	qDebug("synthv1widget_control::accept()");
 #endif
 
-	// Get map settings...
-	const synthv1_controls::Key& key = controlKey();
+	// Unmap the existing controller....
+	int iIndex = m_pControls->find_control(m_key);
+	if (iIndex >= 0)
+		m_pControls->remove_control(m_key);
+
+	// Get new map settings...
+	m_key = controlKey();
 
 	// Check if already mapped to someone else...
-	const int iIndex = m_pControls->find_control(key);
+	iIndex = m_pControls->find_control(m_key);
 	if (iIndex >= 0 && synthv1::ParamIndex(iIndex) != m_index) {
 		if (QMessageBox::warning(this,
 			QDialog::windowTitle(),
@@ -304,10 +321,21 @@ void synthv1widget_control::accept (void)
 
 	// Unmap the existing controller....
 	if (iIndex >= 0)
-		m_pControls->remove_control(key);
+		m_pControls->remove_control(m_key);
+
+	// Reset controller flags all te way...
+	unsigned int flags = 0;
+	if (m_ui.ControlLogarithmicCheckBox->isChecked())
+		flags |= synthv1_controls::Logarithmic;
+	if (m_ui.ControlInvertCheckBox->isChecked())
+		flags |= synthv1_controls::Invert;
 
 	// Map the damn controller....
-	m_pControls->add_control(key, m_index);
+	synthv1_controls::Data data;
+	data.index = m_index;
+	data.flags = flags;
+
+	m_pControls->add_control(m_key, data);
 
 	// Save controls...
 	synthv1_config *pConfig = synthv1_config::getInstance();
