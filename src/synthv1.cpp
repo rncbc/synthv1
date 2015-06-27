@@ -1874,7 +1874,7 @@ synthv1_programs *synthv1_impl::programs (void)
 
 void synthv1_impl::reset (void)
 {
-#if 1//--legacy support < 0.3.0.4
+#if 0//--legacy support < 0.3.0.4
 	if (*m_del.bpm < 3.6f)
 		*m_del.bpm *= 100.0f;
 #endif
@@ -1883,7 +1883,7 @@ void synthv1_impl::reset (void)
 	m_del.bpmsync0 = 0.0f;
 	m_del.bpm0 = m_del.bpm;
 
-m_vol1.reset(m_out1.volume, m_dca1.volume, &m_ctl1.volume, &m_aux1.volume);
+	m_vol1.reset(m_out1.volume, m_dca1.volume, &m_ctl1.volume, &m_aux1.volume);
 	m_pan1.reset(m_out1.panning, &m_ctl1.panning, &m_aux1.panning);
 	m_wid1.reset(m_out1.width);
 

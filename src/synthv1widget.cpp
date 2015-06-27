@@ -1254,6 +1254,9 @@ void synthv1widget::paramContextMenu ( const QPoint& pos )
 	if (pControls == NULL)
 		return;
 
+	if (!pControls->enabled())
+		return;
+
 	QMenu menu(this);
 
 	QAction *pAction = menu.addAction(
