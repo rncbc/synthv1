@@ -77,6 +77,10 @@ synthv1widget_config::synthv1widget_config (
 		SIGNAL(itemChanged(QTreeWidgetItem *, int)),
 		SLOT(controlsChanged()));
 
+	QObject::connect(m_ui.ControlsEnabledCheckBox,
+		SIGNAL(toggled(bool)),
+		SLOT(controlsEnabled(bool)));
+
 	QObject::connect(m_ui.ProgramsAddBankToolButton,
 		SIGNAL(clicked()),
 		SLOT(programsAddBankItem()));
@@ -99,6 +103,10 @@ synthv1widget_config::synthv1widget_config (
 	QObject::connect(m_ui.ProgramsTreeWidget,
 		SIGNAL(itemActivated(QTreeWidgetItem *, int)),
 		SLOT(programsActivated()));
+
+	QObject::connect(m_ui.ProgramsEnabledCheckBox,
+		SIGNAL(toggled(bool)),
+		SLOT(programsEnabled(bool)));
 
 	// Custom context menu...
 	m_ui.ControlsTreeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -160,8 +168,12 @@ void synthv1widget_config::setControls ( synthv1_controls *pControls )
 
 	// Load controllers database...
 	synthv1_config *pConfig = synthv1_config::getInstance();
-	if (pConfig && m_pControls)
+	if (pConfig && m_pControls) {
 		m_ui.ControlsTreeWidget->loadControls(m_pControls);
+		const bool bControlsOptional = m_pControls->optional();
+		m_ui.ControlsEnabledCheckBox->setEnabled(bControlsOptional);
+		m_ui.ControlsEnabledCheckBox->setChecked(m_pControls->enabled());
+	}
 
 	// Reset dialog dirty flags.
 	m_iDirtyControls = 0;
@@ -243,6 +255,15 @@ void synthv1widget_config::controlsContextMenuRequested ( const QPoint& pos )
 }
 
 
+void synthv1widget_config::controlsEnabled ( bool bOn )
+{
+	if (m_pControls && m_pControls->optional())
+		m_pControls->enabled(bOn);
+
+	controlsChanged();
+}
+
+
 void synthv1widget_config::controlsChanged (void)
 {
 	++m_iDirtyControls;
@@ -258,8 +279,13 @@ void synthv1widget_config::setPrograms ( synthv1_programs *pPrograms )
 
 	// Load programs database...
 	synthv1_config *pConfig = synthv1_config::getInstance();
-	if (pConfig && m_pPrograms)
+	if (pConfig && m_pPrograms) {
 		m_ui.ProgramsTreeWidget->loadPrograms(m_pPrograms);
+		const bool bProgramsOptional = m_pPrograms->optional();
+		m_ui.ProgramsEnabledCheckBox->setEnabled(bProgramsOptional);
+		m_ui.ProgramsPreviewCheckBox->setEnabled(!bProgramsOptional);
+		m_ui.ProgramsEnabledCheckBox->setChecked(m_pPrograms->enabled());
+	}
 
 	// Reset dialog dirty flags.
 	m_iDirtyPrograms = 0;
@@ -353,6 +379,15 @@ void synthv1widget_config::programsContextMenuRequested ( const QPoint& pos )
 }
 
 
+void synthv1widget_config::programsEnabled ( bool bOn )
+{
+	if (m_pPrograms && m_pPrograms->optional())
+		m_pPrograms->enabled(bOn);
+
+	programsChanged();
+}
+
+
 void synthv1widget_config::programsChanged (void)
 {
 	++m_iDirtyPrograms;
@@ -391,6 +426,8 @@ void synthv1widget_config::stabilize (void)
 
 	pItem = m_ui.ProgramsTreeWidget->currentItem();
 	bEnabled = (m_pPrograms != NULL);
+	m_ui.ProgramsPreviewCheckBox->setEnabled(
+		bEnabled && m_pPrograms->enabled());
 	m_ui.ProgramsAddBankToolButton->setEnabled(bEnabled);
 	m_ui.ProgramsAddItemToolButton->setEnabled(bEnabled);
 	bEnabled = bEnabled && (pItem != NULL);

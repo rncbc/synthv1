@@ -42,6 +42,19 @@ public:
 	// dtor.
 	~synthv1_controls();
 
+	// operational mode flags.
+	enum Mode { Enabled = 1, Optional = 2 };
+
+	void enabled(bool on)
+		{ if (on) m_mode |= Enabled; else m_mode &= ~Enabled; }
+	bool enabled() const
+		{ return m_mode & Enabled; }
+
+	void optional(bool on)
+		{ if (on) m_mode |= Optional; else m_mode &= ~Optional; }
+	bool optional() const
+		{ return m_mode & Optional; }
+
 	// controller types,
 	enum Type { None = 0, CC = 0x100, RPN = 0x200, NRPN = 0x300, CC14 = 0x400 };
 
@@ -183,6 +196,9 @@ private:
 	class Impl;
 
 	Impl *m_pImpl;
+
+	// operational mode flags.
+	unsigned int m_mode;
 
 	// event scheduler.
 	Sched m_sched;

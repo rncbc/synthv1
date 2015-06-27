@@ -20,6 +20,7 @@
 *****************************************************************************/
 
 #include "synthv1_config.h"
+
 #include "synthv1_programs.h"
 #include "synthv1_controls.h"
 
@@ -149,11 +150,15 @@ void synthv1_config::loadPrograms ( synthv1_programs *pPrograms )
 	}
 
 	QSettings::endGroup();
+
+	pPrograms->enabled(bProgramsEnabled);
 }
 
 
 void synthv1_config::savePrograms ( synthv1_programs *pPrograms )
 {
+	bProgramsEnabled = pPrograms->enabled();
+
 	clearPrograms();
 
 	QSettings::beginGroup(programsGroup());
@@ -249,11 +254,15 @@ void synthv1_config::loadControls ( synthv1_controls *pControls )
 	}
 
 	QSettings::endGroup();
+
+	pControls->enabled(bControlsEnabled);
 }
 
 
 void synthv1_config::saveControls ( synthv1_controls *pControls )
 {
+	bControlsEnabled = pControls->enabled();
+
 	clearControls();
 
 	QSettings::beginGroup(controlsGroup());
@@ -301,6 +310,8 @@ void synthv1_config::load (void)
 	sPreset = QSettings::value("/Preset").toString();
 	sPresetDir = QSettings::value("/PresetDir").toString();
 	iKnobDialMode = QSettings::value("/KnobDialMode", 0).toInt();
+	bControlsEnabled = QSettings::value("/ControlsEnabled", true).toBool();
+	bProgramsEnabled = QSettings::value("/ProgramsEnabled", true).toBool();
 	QSettings::endGroup();
 
 	QSettings::beginGroup("/Dialogs");
@@ -326,6 +337,8 @@ void synthv1_config::save (void)
 	QSettings::setValue("/Preset", sPreset);
 	QSettings::setValue("/PresetDir", sPresetDir);
 	QSettings::setValue("/KnobDialMode", iKnobDialMode);
+	QSettings::setValue("/ControlsEnabled", bControlsEnabled);
+	QSettings::setValue("/ProgramsEnabled", bProgramsEnabled);
 	QSettings::endGroup();
 
 	QSettings::beginGroup("/Dialogs");

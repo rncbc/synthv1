@@ -514,7 +514,7 @@ private:
 //
 
 synthv1_controls::synthv1_controls ( synthv1 *pSynth )
-	: m_pImpl(new synthv1_controls::Impl()),
+	: m_pImpl(new synthv1_controls::Impl()), m_mode(0),
 		m_sched(pSynth), m_control_sched(pSynth),
 		m_timeout(0), m_timein(0)
 {
@@ -531,6 +531,9 @@ synthv1_controls::~synthv1_controls (void)
 void synthv1_controls::process_enqueue (
 	unsigned short channel, unsigned short param, unsigned short value )
 {
+	if (!enabled())
+		return;
+
 	Event event;
 
 	event.key.status = CC | (channel & 0x1f);

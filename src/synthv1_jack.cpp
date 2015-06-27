@@ -23,6 +23,9 @@
 #include "synthv1_config.h"
 #include "synthv1_param.h"
 
+#include "synthv1_programs.h"
+#include "synthv1_controls.h"
+
 #include <jack/midiport.h>
 
 #include <stdio.h>
@@ -163,6 +166,9 @@ synthv1_jack::synthv1_jack (void) : synthv1(2)
 #endif
 
 	m_bpm = 0.0f;
+
+	synthv1::programs()->enabled(true);
+	synthv1::controls()->enabled(true);
 
 	open(SYNTHV1_TITLE);
 	activate();

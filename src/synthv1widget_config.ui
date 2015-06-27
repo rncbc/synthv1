@@ -26,8 +26,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>480</width>
-    <height>320</height>
+    <width>520</width>
+    <height>340</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -167,6 +167,33 @@
          </column>
         </widget>
        </item>
+       <item>
+        <layout class="QHBoxLayout">
+         <item>
+          <widget class="QCheckBox" name="ControlsEnabledCheckBox" >
+           <property name="toolTip" >
+            <string>Whether MIDI controllers will be enabled</string>
+           </property>
+           <property name="text" >
+            <string>E&amp;nabled</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="ProgramsTab">
@@ -301,14 +328,41 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="ProgramsPreviewCheckBox" >
-         <property name="toolTip" >
-          <string>Whether to preview the current selected program</string>
-         </property>
-         <property name="text" >
-          <string>Preview current program</string>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout">
+         <item>
+          <widget class="QCheckBox" name="ProgramsEnabledCheckBox" >
+           <property name="toolTip" >
+            <string>Whether MIDI bank/programs will be enabled</string>
+           </property>
+           <property name="text" >
+            <string>E&amp;nabled</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="ProgramsPreviewCheckBox" >
+           <property name="toolTip" >
+            <string>Whether to preview the current selected program</string>
+           </property>
+           <property name="text" >
+            <string>&amp;Preview current program</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -447,11 +501,13 @@
   <tabstop>ControlsEditToolButton</tabstop>
   <tabstop>ControlsDeleteToolButton</tabstop>
   <tabstop>ControlsTreeWidget</tabstop>
+  <tabstop>ControlsEnabledCheckBox</tabstop>
   <tabstop>ProgramsAddBankToolButton</tabstop>
   <tabstop>ProgramsAddItemToolButton</tabstop>
   <tabstop>ProgramsEditToolButton</tabstop>
   <tabstop>ProgramsDeleteToolButton</tabstop>
   <tabstop>ProgramsTreeWidget</tabstop>
+  <tabstop>ProgramsEnabledCheckBox</tabstop>
   <tabstop>ProgramsPreviewCheckBox</tabstop>
   <tabstop>UseNativeDialogsCheckBox</tabstop>
   <tabstop>KnobDialModeComboBox</tabstop>

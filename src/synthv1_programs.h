@@ -42,6 +42,19 @@ public:
 	// dtor.
 	~synthv1_programs();
 
+	// operational mode flags.
+	enum Mode { Enabled = 1, Optional = 2 };
+
+	void enabled(bool on)
+		{ if (on) m_mode |= Enabled; else m_mode &= ~Enabled; }
+	bool enabled() const
+		{ return m_mode & Enabled; }
+
+	void optional(bool on)
+		{ if (on) m_mode |= Optional; else m_mode &= ~Optional; }
+	bool optional() const
+		{ return m_mode & Optional; }
+
 	// prog. base node
 	class Prog
 	{
@@ -150,7 +163,9 @@ protected:
 private:
 
 	// instance variables.
-	Sched *m_sched;
+	unsigned int m_mode;
+
+	Sched m_sched;
 
 	uint8_t m_bank_msb;
 	uint8_t m_bank_lsb;

@@ -72,6 +72,9 @@ protected slots:
 	void programsActivated();
 	void programsContextMenuRequested(const QPoint&);
 
+	void controlsEnabled(bool);
+	void programsEnabled(bool);
+
 	void controlsChanged();
 	void programsChanged();
 	void optionsChanged();

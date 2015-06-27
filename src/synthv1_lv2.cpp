@@ -21,6 +21,9 @@
 
 #include "synthv1_lv2.h"
 
+#include "synthv1_programs.h"
+#include "synthv1_controls.h"
+
 #include "lv2/lv2plug.in/ns/ext/midi/midi.h"
 #include "lv2/lv2plug.in/ns/ext/time/time.h"
 #include "lv2/lv2plug.in/ns/ext/atom/util.h"
@@ -67,6 +70,9 @@ synthv1_lv2::synthv1_lv2 (
 	m_outs = new float * [nchannels];
 	for (uint16_t k = 0; k < nchannels; ++k)
 		m_ins[k] = m_outs[k] = NULL;
+
+	synthv1::programs()->optional(true);
+	synthv1::controls()->optional(true);
 }
 
 

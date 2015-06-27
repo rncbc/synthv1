@@ -6,6 +6,10 @@ ChangeLog
 
 GIT HEAD
 
+- MIDI Controllers/Programss is now an optional feature on the
+  LV2 plugin forms, as some LV2 hosts might enforce the purity
+  restriction to input control ports as being absolutely read-
+  only parameter values from a plugin's instance perspective.
 - MIDI Controller mapping/learn is now possible on all parameter
   control knobs; with global configuration also avaiable on the
   Help/Configure dialog. (EXPERIMENTAL)
