@@ -310,8 +310,8 @@ void synthv1_config::load (void)
 	sPreset = QSettings::value("/Preset").toString();
 	sPresetDir = QSettings::value("/PresetDir").toString();
 	iKnobDialMode = QSettings::value("/KnobDialMode", 0).toInt();
-	bControlsEnabled = QSettings::value("/ControlsEnabled", true).toBool();
-	bProgramsEnabled = QSettings::value("/ProgramsEnabled", true).toBool();
+	bControlsEnabled = QSettings::value("/ControlsEnabled", false).toBool();
+	bProgramsEnabled = QSettings::value("/ProgramsEnabled", false).toBool();
 	QSettings::endGroup();
 
 	QSettings::beginGroup("/Dialogs");
