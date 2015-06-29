@@ -145,33 +145,13 @@ protected:
 	// controller action.
 	void process_event(const Event& event);
 
-	// assigned controller scheduled events
-	class Sched : public synthv1_sched
+	// input controller scheduled events (learn)
+	class SchedIn : public synthv1_sched
 	{
 	public:
 
 		// ctor.
-		Sched (synthv1 *pSynth)
-			: synthv1_sched(pSynth, Controls) {}
-
-		void schedule_event(synthv1::ParamIndex index, float fValue)
-		{
-			instance()->setParamValue(index, fValue);
-
-			schedule(int(index));
-		}
-
-		// process (virtual stub).
-		void process(int) {}
-	};
-
-	// general controller scheduled events
-	class ControlSched : public synthv1_sched
-	{
-	public:
-
-		// ctor.
-		ControlSched (synthv1 *pSynth)
+		SchedIn (synthv1 *pSynth)
 			: synthv1_sched(pSynth, Controller) {}
 
 		void schedule_key(const Key& key)
@@ -190,6 +170,26 @@ protected:
 		Key m_key;
 	};
 
+	// output controller scheduled events (assignments)
+	class SchedOut : public synthv1_sched
+	{
+	public:
+
+		// ctor.
+		SchedOut (synthv1 *pSynth)
+			: synthv1_sched(pSynth, Controls) {}
+
+		void schedule_event(synthv1::ParamIndex index, float fValue)
+		{
+			instance()->setParamValue(index, fValue);
+
+			schedule(int(index));
+		}
+
+		// process (virtual stub).
+		void process(int) {}
+	};
+
 private:
 
 	// instance variables.
@@ -200,11 +200,9 @@ private:
 	// operational mode flags.
 	unsigned int m_mode;
 
-	// event scheduler.
-	Sched m_sched;
-
-	// controller scheduler.
-	ControlSched m_control_sched;
+	// controller schedulers.
+	SchedIn  m_sched_in;
+	SchedOut m_sched_out;
 
 	// controllers map.
 	Map m_map;
