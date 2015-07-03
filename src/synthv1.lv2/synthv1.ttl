@@ -14,7 +14,7 @@
 @prefix synthv1_lv2: <http://synthv1.sourceforge.net/lv2#> .
 
 <http://synthv1.sourceforge.net/lv2>
-	a lv2:Plugin, lv2:InstrumentPlugin ;
+	a lv2:Plugin, lv2:InstrumentPlugin, doap:Project ;
 	doap:name "synthv1" ;
 	doap:maintainer [
 		foaf:name "rncbc aka. Rui Nuno Capela" ;
@@ -59,7 +59,7 @@
 		lv2:index 5 ;
 		lv2:symbol "DCO1_SHAPE1" ;
 		lv2:name "DCO1 Wave Shape 1" ;
-		lv2:portProperty lv2:integer ;
+		lv2:portProperty lv2:integer, lv2:enumeration ;
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "Sine"; rdf:value 2 ] ;
@@ -93,7 +93,7 @@
 		lv2:index 8 ;
 		lv2:symbol "DCO1_SHAPE2" ;
 		lv2:name "DCO1 Wave Shape 2" ;
-		lv2:portProperty lv2:integer ;
+		lv2:portProperty lv2:integer, lv2:enumeration ;
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "Sine"; rdf:value 2 ] ;
@@ -208,7 +208,7 @@
 		lv2:index 20 ;
 		lv2:symbol "DCF1_TYPE" ;
 		lv2:name "DCF1 Type" ;
-		lv2:portProperty lv2:integer ;
+		lv2:portProperty lv2:integer, lv2:enumeration ;
 		lv2:scalePoint [ rdfs:label "LPF"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "BPF"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "HPF"; rdf:value 2 ] ;
@@ -222,7 +222,7 @@
 		lv2:index 21 ;
 		lv2:symbol "DCF1_SLOPE" ;
 		lv2:name "DCF1 Slope" ;
-		lv2:portProperty lv2:integer ;
+		lv2:portProperty lv2:integer, lv2:enumeration ;
 		lv2:scalePoint [ rdfs:label "12dB/oct"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "24dB/oct"; rdf:value 1 ] ;
 		lv2:default 0.0 ;
@@ -279,7 +279,7 @@
 		lv2:index 27 ;
 		lv2:symbol "LFO1_SHAPE" ;
 		lv2:name "LFO1 Wave Shape" ;
-		lv2:portProperty lv2:integer ;
+		lv2:portProperty lv2:integer, lv2:enumeration ;
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "Sine"; rdf:value 2 ] ;
@@ -532,7 +532,7 @@
 		lv2:index 54 ;
 		lv2:symbol "DCO2_SHAPE1" ;
 		lv2:name "DCO2 Wave Shape 1" ;
-		lv2:portProperty lv2:integer ;
+		lv2:portProperty lv2:integer, lv2:enumeration ;
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "Sine"; rdf:value 2 ] ;
@@ -566,7 +566,7 @@
 		lv2:index 57 ;
 		lv2:symbol "DCO2_SHAPE2" ;
 		lv2:name "DCO2 Wave Shape 2" ;
-		lv2:portProperty lv2:integer ;
+		lv2:portProperty lv2:integer, lv2:enumeration ;
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "Sine"; rdf:value 2 ] ;
@@ -681,7 +681,7 @@
 		lv2:index 69 ;
 		lv2:symbol "DCF2_TYPE" ;
 		lv2:name "DCF2 Type" ;
-		lv2:portProperty lv2:integer ;
+		lv2:portProperty lv2:integer, lv2:enumeration ;
 		lv2:scalePoint [ rdfs:label "LPF"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "BPF"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "HPF"; rdf:value 2 ] ;
@@ -695,7 +695,7 @@
 		lv2:index 70 ;
 		lv2:symbol "DCF2_SLOPE" ;
 		lv2:name "DCF2 Slope" ;
-		lv2:portProperty lv2:integer ;
+		lv2:portProperty lv2:integer, lv2:enumeration ;
 		lv2:scalePoint [ rdfs:label "12dB/oct"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "24dB/oct"; rdf:value 1 ] ;
 		lv2:default 0.0 ;
@@ -752,7 +752,7 @@
 		lv2:index 76 ;
 		lv2:symbol "LFO2_SHAPE" ;
 		lv2:name "LFO2 Wave Shape" ;
-		lv2:portProperty lv2:integer ;
+		lv2:portProperty lv2:integer, lv2:enumeration ;
 		lv2:scalePoint [ rdfs:label "Pulse"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
 		lv2:scalePoint [ rdfs:label "Sine"; rdf:value 2 ] ;
@@ -1272,7 +1272,7 @@ synthv1_lv2:103_LFO1
 synthv1_lv2:104_DCA1
 	a lv2pg:InputGroup;
 	lv2:name "Synth 1 - DCA1" ;
-	lv2:symbol "104_DCA1" .
+	lv2:symbol "DCA1" .
 
 synthv1_lv2:105_OUT1
 	a lv2pg:InputGroup;

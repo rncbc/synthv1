@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- Small fixes to LV2.ttl (pull-request by Hanspeter Portner aka.
+  ventosus, thanks).
 - MIDI Controllers/Programss is now an optional feature on the
   LV2 plugin forms, as some LV2 hosts might enforce the purity
   restriction to input control ports as being absolutely read-
