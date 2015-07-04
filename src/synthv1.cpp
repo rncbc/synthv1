@@ -1222,6 +1222,48 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DYN1_LIMITER:   m_dyn.limiter      = pfParam; break;
 	default: break;
 	}
+
+	// reset ramps after port (re)connection.
+	switch (index) {
+	case synthv1::OUT1_VOLUME:
+	case synthv1::DCA1_VOLUME:
+		m_vol1.reset(
+			m_out1.volume,
+			m_dca1.volume,
+			&m_ctl1.volume,
+			&m_aux1.volume);
+		break;
+	case synthv1::OUT1_WIDTH:
+		m_wid1.reset(
+			m_out1.width);
+		break;
+	case synthv1::OUT1_PANNING:
+		m_pan1.reset(
+			m_out1.panning,
+			&m_ctl1.panning,
+			&m_aux1.panning);
+		break;
+	case synthv1::OUT2_VOLUME:
+	case synthv1::DCA2_VOLUME:
+		m_vol2.reset(
+			m_out2.volume,
+			m_dca2.volume,
+			&m_ctl2.volume,
+			&m_aux2.volume);
+		break;
+	case synthv1::OUT2_WIDTH:
+		m_wid2.reset(
+			m_out2.width);
+		break;
+	case synthv1::OUT2_PANNING:
+		m_pan2.reset(
+			m_out2.panning,
+			&m_ctl2.panning,
+			&m_aux2.panning);
+		break;
+	default:
+		break;
+	}
 }
 
 
