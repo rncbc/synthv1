@@ -1223,6 +1223,10 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	default: break;
 	}
 
+	// check null connections.
+	if (pfParam == &s_fDummy)
+		return;
+
 	// reset ramps after port (re)connection.
 	switch (index) {
 	case synthv1::OUT1_VOLUME:
