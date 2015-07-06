@@ -170,6 +170,9 @@ protected:
 			: m_buffer(0), m_size(0), m_index(0)
 			{ resize(size); }
 
+		virtual ~sample_buffer()
+			{ delete [] m_buffer; }
+
 		void reset()
 			{ ::memset(m_buffer, 0, m_size * sizeof(float)); m_index = 0; }
 
