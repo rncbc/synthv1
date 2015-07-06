@@ -42,157 +42,109 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="ControlsTab">
+     <widget class="QWidget" name="OptionsTab">
       <attribute name="title">
-       <string>&amp;Controllers</string>
+       <string>&amp;Options</string>
       </attribute>
       <attribute name="toolTip">
-       <string>Controllers</string>
+       <string>Options</string>
       </attribute>
-      <layout class="QVBoxLayout">
-       <item>
-        <layout class="QHBoxLayout">
-         <item>
-          <widget class="QToolButton" name="ControlsAddItemToolButton">
-           <property name="toolTip">
-            <string>Add controller</string>
-           </property>
-           <property name="text">
-            <string>&amp;Add Controller</string>
-           </property>
-           <property name="icon">
-            <iconset resource="synthv1.qrc">:/images/synthv1_control.png</iconset>
-           </property>
-           <property name="toolButtonStyle">
-            <enum>Qt::ToolButtonTextBesideIcon</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QToolButton" name="ControlsEditToolButton">
-           <property name="toolTip">
-            <string>Edit controller</string>
-           </property>
-           <property name="text">
-            <string>&amp;Edit</string>
-           </property>
-           <property name="icon">
-            <iconset resource="synthv1.qrc">:/images/presetEdit.png</iconset>
-           </property>
-           <property name="toolButtonStyle">
-            <enum>Qt::ToolButtonTextBesideIcon</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QToolButton" name="ControlsDeleteToolButton">
-           <property name="toolTip">
-            <string>Delete controller</string>
-           </property>
-           <property name="text">
-            <string>&amp;Delete</string>
-           </property>
-           <property name="icon">
-            <iconset resource="synthv1.qrc">:/images/presetDelete.png</iconset>
-           </property>
-           <property name="toolButtonStyle">
-            <enum>Qt::ToolButtonTextBesideIcon</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="synthv1widget_controls" name="ControlsTreeWidget">
+      <layout class="QGridLayout">
+       <item row="0" column="0" colspan="3">
+        <widget class="QCheckBox" name="UseNativeDialogsCheckBox">
          <property name="toolTip">
-          <string>Controllers</string>
+          <string>Whether to use desktop environment's native dialogs where applicable</string>
          </property>
-         <property name="uniformRowHeights">
-          <bool>true</bool>
+         <property name="text">
+          <string>Use desktop environment &amp;native dialogs</string>
          </property>
-         <property name="allColumnsShowFocus">
-          <bool>true</bool>
-         </property>
-         <property name="headerHidden">
-          <bool>false</bool>
-         </property>
-         <property name="columnCount">
-          <number>4</number>
-         </property>
-         <column>
-          <property name="text">
-           <string notr="true">Channel</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string notr="true">Type</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string notr="true">Parameter</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string notr="true">Subject</string>
-          </property>
-         </column>
         </widget>
        </item>
-       <item>
-        <layout class="QHBoxLayout">
+       <item row="1" column="0">
+        <widget class="QLabel" name="KnobDialModeTextLabel">
+         <property name="text">
+          <string>&amp;Knob dial mode:</string>
+         </property>
+         <property name="buddy">
+          <cstring>KnobDialModeComboBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="KnobDialModeComboBox">
+         <property name="toolTip">
+          <string>Knob dial mode</string>
+         </property>
+         <property name="editable">
+          <bool>false</bool>
+         </property>
          <item>
-          <widget class="QCheckBox" name="ControlsEnabledCheckBox" >
-           <property name="toolTip" >
-            <string>Whether MIDI controllers will be enabled</string>
-           </property>
-           <property name="text" >
-            <string>E&amp;nabled</string>
-           </property>
-          </widget>
+          <property name="text">
+           <string>(default)</string>
+          </property>
          </item>
          <item>
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
+          <property name="text">
+           <string>Linear</string>
+          </property>
          </item>
-        </layout>
+         <item>
+          <property name="text">
+           <string>Angular</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="2" colspan="2">
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+	   <item row="2" column="0">
+        <widget class="QLabel" name="CustomStyleThemeTextLabel">
+         <property name="text">
+          <string>Custom &amp;style theme:</string>
+         </property>
+         <property name="buddy">
+          <cstring>CustomStyleThemeComboBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="CustomStyleThemeComboBox">
+         <property name="toolTip">
+          <string>Custom widget style theme</string>
+         </property>
+         <property name="editable">
+          <bool>false</bool>
+         </property>
+         <item>
+          <property name="text">
+           <string>(default)</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="3" colspan="3">
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -366,109 +318,157 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="OptionsTab">
+     <widget class="QWidget" name="ControlsTab">
       <attribute name="title">
-       <string>&amp;Options</string>
+       <string>&amp;Controllers</string>
       </attribute>
       <attribute name="toolTip">
-       <string>Options</string>
+       <string>Controllers</string>
       </attribute>
-      <layout class="QGridLayout">
-       <item row="0" column="0" colspan="3">
-        <widget class="QCheckBox" name="UseNativeDialogsCheckBox">
-         <property name="toolTip">
-          <string>Whether to use desktop environment's native dialogs where applicable</string>
-         </property>
-         <property name="text">
-          <string>Use desktop environment &amp;native dialogs</string>
-         </property>
-        </widget>
+      <layout class="QVBoxLayout">
+       <item>
+        <layout class="QHBoxLayout">
+         <item>
+          <widget class="QToolButton" name="ControlsAddItemToolButton">
+           <property name="toolTip">
+            <string>Add controller</string>
+           </property>
+           <property name="text">
+            <string>&amp;Add Controller</string>
+           </property>
+           <property name="icon">
+            <iconset resource="synthv1.qrc">:/images/synthv1_control.png</iconset>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QToolButton" name="ControlsEditToolButton">
+           <property name="toolTip">
+            <string>Edit controller</string>
+           </property>
+           <property name="text">
+            <string>&amp;Edit</string>
+           </property>
+           <property name="icon">
+            <iconset resource="synthv1.qrc">:/images/presetEdit.png</iconset>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QToolButton" name="ControlsDeleteToolButton">
+           <property name="toolTip">
+            <string>Delete controller</string>
+           </property>
+           <property name="text">
+            <string>&amp;Delete</string>
+           </property>
+           <property name="icon">
+            <iconset resource="synthv1.qrc">:/images/presetDelete.png</iconset>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="KnobDialModeTextLabel">
-         <property name="text">
-          <string>&amp;Knob dial mode:</string>
-         </property>
-         <property name="buddy">
-          <cstring>KnobDialModeComboBox</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QComboBox" name="KnobDialModeComboBox">
+       <item>
+        <widget class="synthv1widget_controls" name="ControlsTreeWidget">
          <property name="toolTip">
-          <string>Knob dial mode</string>
+          <string>Controllers</string>
          </property>
-         <property name="editable">
+         <property name="uniformRowHeights">
+          <bool>true</bool>
+         </property>
+         <property name="allColumnsShowFocus">
+          <bool>true</bool>
+         </property>
+         <property name="headerHidden">
           <bool>false</bool>
          </property>
-         <item>
+         <property name="columnCount">
+          <number>4</number>
+         </property>
+         <column>
           <property name="text">
-           <string>(default)</string>
+           <string notr="true">Channel</string>
           </property>
-         </item>
-         <item>
+         </column>
+         <column>
           <property name="text">
-           <string>Linear</string>
+           <string notr="true">Type</string>
           </property>
-         </item>
-         <item>
+         </column>
+         <column>
           <property name="text">
-           <string>Angular</string>
+           <string notr="true">Parameter</string>
           </property>
-         </item>
+         </column>
+         <column>
+          <property name="text">
+           <string notr="true">Subject</string>
+          </property>
+         </column>
         </widget>
        </item>
-       <item row="1" column="2" colspan="2">
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint">
-          <size>
-           <width>20</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-	   <item row="2" column="0">
-        <widget class="QLabel" name="CustomStyleThemeTextLabel">
-         <property name="text">
-          <string>Custom &amp;style theme:</string>
-         </property>
-         <property name="buddy">
-          <cstring>CustomStyleThemeComboBox</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QComboBox" name="CustomStyleThemeComboBox">
-         <property name="toolTip">
-          <string>Custom widget style theme</string>
-         </property>
-         <property name="editable">
-          <bool>false</bool>
-         </property>
+       <item>
+        <layout class="QHBoxLayout">
          <item>
-          <property name="text">
-           <string>(default)</string>
-          </property>
+          <widget class="QCheckBox" name="ControlsEnabledCheckBox" >
+           <property name="toolTip" >
+            <string>Whether MIDI controllers will be enabled</string>
+           </property>
+           <property name="text" >
+            <string>E&amp;nabled</string>
+           </property>
+          </widget>
          </item>
-        </widget>
-       </item>
-       <item row="3" colspan="3">
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint">
-          <size>
-           <width>20</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
+         <item>
+          <spacer>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -497,11 +497,9 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>ControlsAddItemToolButton</tabstop>
-  <tabstop>ControlsEditToolButton</tabstop>
-  <tabstop>ControlsDeleteToolButton</tabstop>
-  <tabstop>ControlsTreeWidget</tabstop>
-  <tabstop>ControlsEnabledCheckBox</tabstop>
+  <tabstop>UseNativeDialogsCheckBox</tabstop>
+  <tabstop>KnobDialModeComboBox</tabstop>
+  <tabstop>CustomStyleThemeComboBox</tabstop>
   <tabstop>ProgramsAddBankToolButton</tabstop>
   <tabstop>ProgramsAddItemToolButton</tabstop>
   <tabstop>ProgramsEditToolButton</tabstop>
@@ -509,9 +507,11 @@
   <tabstop>ProgramsTreeWidget</tabstop>
   <tabstop>ProgramsEnabledCheckBox</tabstop>
   <tabstop>ProgramsPreviewCheckBox</tabstop>
-  <tabstop>UseNativeDialogsCheckBox</tabstop>
-  <tabstop>KnobDialModeComboBox</tabstop>
-  <tabstop>CustomStyleThemeComboBox</tabstop>
+  <tabstop>ControlsAddItemToolButton</tabstop>
+  <tabstop>ControlsEditToolButton</tabstop>
+  <tabstop>ControlsDeleteToolButton</tabstop>
+  <tabstop>ControlsTreeWidget</tabstop>
+  <tabstop>ControlsEnabledCheckBox</tabstop>
   <tabstop>DialogButtonBox</tabstop>
  </tabstops>
  <resources>
