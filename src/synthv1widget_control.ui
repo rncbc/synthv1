@@ -143,7 +143,7 @@
      </property>
     </spacer>
    </item>
-   <item row="5" column="0" colspan="4">
+   <item row="6" column="0" colspan="4">
     <widget class="QDialogButtonBox" name="DialogButtonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
