@@ -57,7 +57,7 @@
    <item row="0" column="2">
     <widget class="QLabel" name="ControlChannelTextLabel">
      <property name="text">
-      <string>Cha&amp;nnel:</string>
+      <string>&amp;Channel:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -119,11 +119,18 @@
    <item row="3" column="1" colspan="3">
     <widget class="QCheckBox" name="ControlInvertCheckBox">
      <property name="text">
-      <string>In&amp;vert</string>
+      <string>&amp;Invert</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="4">
+   <item row="4" column="1" colspan="3">
+    <widget class="QCheckBox" name="ControlHookCheckBox">
+     <property name="text">
+      <string>&amp;Hook</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="4">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -155,6 +162,7 @@
   <tabstop>ControlParamComboBox</tabstop>
   <tabstop>ControlLogarithmicCheckBox</tabstop>
   <tabstop>ControlInvertCheckBox</tabstop>
+  <tabstop>ControlHookCheckBox</tabstop>
   <tabstop>DialogButtonBox</tabstop>
  </tabstops>
  <resources>
