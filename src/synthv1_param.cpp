@@ -208,6 +208,13 @@ float synthv1_param::paramValue ( synthv1::ParamIndex index, float fValue )
 }
 
 
+bool synthv1_param::paramTypeFloat ( synthv1::ParamIndex index )
+{
+	return (synthv1_params[index].type == PARAM_FLOAT);
+}
+
+
+
 // Preset serialization methods.
 void synthv1_param::loadPreset ( synthv1 *pSynth, const QString& sFilename )
 {

@@ -23,6 +23,8 @@
 
 #include <QHash>
 
+#include <math.h>
+
 
 #define RPN_MSB   0x65
 #define RPN_LSB   0x64
@@ -567,14 +569,17 @@ void synthv1_controls::process_event ( const Event& event )
 
 	m_sched_in.schedule_key(key);
 
-	Data& data = m_map[key];
-	if (data.index < 0 && key.channel() > 0) {
+	const Map::Iterator& iter_end = m_map.end();
+	Map::Iterator iter = m_map.find(key);
+	if (iter == iter_end && key.channel() > 0) {
 		key.status = key.type(); // channel=0 (Auto)
-		data = m_map[key];
+		iter = m_map.find(key);
 	}
-
-	if (data.index < 0)
+	if (iter == iter_end)
 		return;
+
+	// reference to payload...
+	Data& data = iter.value();
 
 	// process controller event...
 	float fValue = float(event.value) / 127.0f;
@@ -599,14 +604,18 @@ void synthv1_controls::process_event ( const Event& event )
 	fValue = synthv1_param::paramValue(index, fValue);
 
 	// catch-up testing begin...
-	bool bSync = (data.flags & Hook);
+	bool bSync = (data.flags & Hook) || !synthv1_param::paramTypeFloat(index);
 
 	if (!bSync) {
 		const float v0 = data.val;
 		const float v1 = m_sched_in.instance()->paramValue(index);
+	#if 0
 		if ((fValue > v0 && v1 >= v0 && fValue >= v1) ||
 			(fValue < v0 && v0 >= v1 && v1 >= fValue))
 			bSync = true;
+	#else
+		bSync = (::fabsf(v1 - v0) < 0.1f && ::fabsf(v1 - fValue) < 0.1f);
+	#endif
 	}
 
 	if (bSync)

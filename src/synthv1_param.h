@@ -47,6 +47,7 @@ namespace synthv1_param
 	const char *paramName(synthv1::ParamIndex index);
 	float paramDefaultValue(synthv1::ParamIndex index);
 	float paramValue(synthv1::ParamIndex index, float fValue);
+	bool paramTypeFloat(synthv1::ParamIndex index);
 };
 
 

@@ -91,7 +91,7 @@ public:
 	{
 		Data () : index(-1), flags(0), val(0.0f) {}
 		Data (const Data& data)
-			: index(data.index), flags(data.flags), val(0.0f) {}
+			: index(data.index), flags(data.flags), val(data.val) {}
 
 		int index;
 		int flags;
