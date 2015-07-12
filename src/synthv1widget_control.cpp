@@ -168,7 +168,7 @@ void synthv1widget_control::setControls (
 
 	setControlKey(m_key);
 
-	const bool bFloat = synthv1_param::paramTypeFloat(m_index);
+	const bool bFloat = synthv1_param::paramFloat(m_index);
 
 	m_ui.ControlLogarithmicCheckBox->setChecked(
 		(flags & synthv1_controls::Logarithmic) && bFloat);

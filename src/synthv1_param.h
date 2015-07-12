@@ -46,8 +46,9 @@ namespace synthv1_param
 	// Default parameter name/value helpers.
 	const char *paramName(synthv1::ParamIndex index);
 	float paramDefaultValue(synthv1::ParamIndex index);
-	float paramValue(synthv1::ParamIndex index, float fValue);
-	bool paramTypeFloat(synthv1::ParamIndex index);
+	float paramValue(synthv1::ParamIndex index, float fScale);
+	float paramScale(synthv1::ParamIndex index, float fValue);
+	bool paramFloat(synthv1::ParamIndex index);
 };
 
 

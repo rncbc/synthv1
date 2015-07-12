@@ -582,46 +582,46 @@ void synthv1_controls::process_event ( const Event& event )
 	Data& data = iter.value();
 
 	// process controller event...
-	float fValue = float(event.value) / 127.0f;
+	float fScale = float(event.value) / 127.0f;
 	if (key.type() != CC)
-		fValue /= 127.0f;
+		fScale /= 127.0f;
 
-	if (fValue > 1.0f)
-		fValue = 1.0f;
+	if (fScale > 1.0f)
+		fScale = 1.0f;
 	else
-	if (fValue < 0.0f)
-		fValue = 0.0f;
+	if (fScale < 0.0f)
+		fScale = 0.0f;
 
 	if (data.flags & Invert)
-		fValue = 1.0f - fValue;
+		fScale = 1.0f - fScale;
 	if (data.flags & Logarithmic)
-		fValue *= (fValue * fValue);
+		fScale *= (fScale * fScale);
 
 	const synthv1::ParamIndex index
 		= synthv1::ParamIndex(data.index);
 
-	// normalize value...
-	fValue = synthv1_param::paramValue(index, fValue);
-
 	// catch-up testing begin...
-	bool bSync = (data.flags & Hook) || !synthv1_param::paramTypeFloat(index);
+	bool bSync = (data.flags & Hook) || !synthv1_param::paramFloat(index);
 
 	if (!bSync) {
 		const float v0 = data.val;
-		const float v1 = m_sched_in.instance()->paramValue(index);
+		const float v1 = synthv1_param::paramScale(index,
+			m_sched_in.instance()->paramValue(index));
 	#if 0
-		if ((fValue > v0 && v1 >= v0 && fValue >= v1) ||
-			(fValue < v0 && v0 >= v1 && v1 >= fValue))
+		if ((fScale > v0 && v1 >= v0 && fScale >= v1) ||
+			(fScale < v0 && v0 >= v1 && v1 >= fScale))
 			bSync = true;
 	#else
-		bSync = (::fabsf(v1 - v0) < 0.1f && ::fabsf(v1 - fValue) < 0.1f);
+		bSync = (::fabsf(v1 - v0) < 0.1f && ::fabsf(v1 - fScale) < 0.1f);
 	#endif
 	}
 
-	if (bSync)
-		m_sched_out.schedule_event(index, fValue);
+	if (bSync) {
+		m_sched_out.schedule_event(index,
+			synthv1_param::paramValue(index, fScale));
+	}
 
-	data.val = fValue;
+	data.val = fScale;
 }
 
 
