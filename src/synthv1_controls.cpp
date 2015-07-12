@@ -23,8 +23,6 @@
 
 #include <QHash>
 
-#include <math.h>
-
 
 #define RPN_MSB   0x65
 #define RPN_LSB   0x64
@@ -298,6 +296,7 @@ private:
 //---------------------------------------------------------------------
 // synthv1_controls:Impl - decl.
 //
+
 class synthv1_controls::Impl
 {
 public:
@@ -514,6 +513,7 @@ private:
 //---------------------------------------------------------------------
 // synthv1_controls - impl.
 //
+#include <math.h>
 
 synthv1_controls::synthv1_controls ( synthv1 *pSynth )
 	: m_pImpl(new synthv1_controls::Impl()), m_mode(0),
@@ -557,8 +557,6 @@ void synthv1_controls::process_dequeue (void)
 		if (m_pImpl->dequeue(event))
 			process_event(event);
 	}
-
-	m_timein = 0;
 }
 
 
