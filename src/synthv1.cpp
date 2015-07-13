@@ -1956,6 +1956,9 @@ void synthv1_impl::reset (void)
 	// reverbs
 	m_reverb.reset();
 
+	// controllers reset.
+	m_controls.reset();
+
 	allSoundOff();
 //	allControllersOff();
 	allNotesOff();

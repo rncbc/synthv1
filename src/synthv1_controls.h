@@ -119,6 +119,9 @@ public:
 
 	void clear() { m_map.clear(); }
 
+	// reset all controllers.
+	void reset();
+
 	// controller queue methods.
 	void process_enqueue(
 		unsigned short channel,

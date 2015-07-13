@@ -552,6 +552,9 @@ void synthv1_controls::process_enqueue (
 
 void synthv1_controls::process_dequeue (void)
 {
+	if (!enabled())
+		return;
+
 	while (m_pImpl->is_pending()) {
 		Event event;
 		if (m_pImpl->dequeue(event))
@@ -626,15 +629,35 @@ void synthv1_controls::process_event ( const Event& event )
 // process timer counter.
 void synthv1_controls::process ( unsigned int nframes )
 {
-	if (m_timeout < 1)
+	if (!enabled() || m_timeout < 1)
 		return;
 
 	m_timein += nframes;
 
 	if (m_timein > m_timeout) {
+		m_timein = 0;
 		m_pImpl->flush();
 		process_dequeue();
-		m_timein = 0;
+	}
+}
+
+
+// reset all controllers.
+void synthv1_controls::reset (void)
+{
+	if (!enabled())
+		return;
+
+	const Map::Iterator& iter_end = m_map.end();
+	Map::Iterator iter = m_map.begin();
+	for ( ; iter != iter_end; ++iter) {
+		Data& data = iter.value();
+		if (data.flags & Hook)
+			continue;
+		const synthv1::ParamIndex index
+			= synthv1::ParamIndex(index);
+		data.val = synthv1_param::paramScale(index,
+			m_sched_in.instance()->paramValue(index));
 	}
 }
 
