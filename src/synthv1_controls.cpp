@@ -608,21 +608,15 @@ void synthv1_controls::process_event ( const Event& event )
 		const float v0 = data.val;
 		const float v1 = synthv1_param::paramScale(index,
 			m_sched_in.instance()->paramValue(index));
-	#if 0
-		if ((fScale > v0 && v1 >= v0 && fScale >= v1) ||
-			(fScale < v0 && v0 >= v1 && v1 >= fScale))
-			bSync = true;
-	#else
-		bSync = (::fabsf(v1 - v0) < 0.1f && ::fabsf(v1 - fScale) < 0.1f);
-	#endif
+		const float vx = (v1 - v0) * (v1 - fScale);
+		bSync = (vx < 0.0f || ::fabsf(vx) < 0.01f);
+		if (bSync) data.val = fScale;
 	}
 
 	if (bSync) {
 		m_sched_out.schedule_event(index,
 			synthv1_param::paramValue(index, fScale));
 	}
-
-	data.val = fScale;
 }
 
 
