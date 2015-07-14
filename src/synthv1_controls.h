@@ -89,13 +89,15 @@ public:
 	// controller data.
 	struct Data
 	{
-		Data () : index(-1), flags(0), val(0.0f) {}
+		Data () : index(-1), flags(0), val(0.0f), sync(false) {}
 		Data (const Data& data)
-			: index(data.index), flags(data.flags), val(data.val) {}
+			: index(data.index), flags(data.flags),
+			  val(data.val), sync(data.sync) {}
 
 		int index;
 		int flags;
 		float val;
+		bool sync;
 	};
 
 	typedef QMap<Key, Data> Map;
