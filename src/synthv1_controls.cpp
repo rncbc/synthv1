@@ -649,7 +649,7 @@ void synthv1_controls::reset (void)
 		if (data.flags & Hook)
 			continue;
 		const synthv1::ParamIndex index
-			= synthv1::ParamIndex(index);
+			= synthv1::ParamIndex(data.index);
 		data.val = synthv1_param::paramScale(index,
 			m_sched_in.instance()->paramValue(index));
 	}
