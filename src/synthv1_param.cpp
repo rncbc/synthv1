@@ -266,8 +266,8 @@ void synthv1_param::loadPreset ( synthv1 *pSynth, const QString& sFilename )
 	QDomDocument doc(SYNTHV1_TITLE);
 	if (doc.setContent(&file)) {
 		QDomElement ePreset = doc.documentElement();
-		if (ePreset.tagName() == "preset"
-			&& ePreset.attribute("name") == fi.completeBaseName()) {
+		if (ePreset.tagName() == "preset") {
+		//	&& ePreset.attribute("name") == fi.completeBaseName()) {
 			for (QDomNode nChild = ePreset.firstChild();
 					!nChild.isNull();
 						nChild = nChild.nextSibling()) {
