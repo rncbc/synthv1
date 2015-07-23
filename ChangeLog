@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Complete rewrite of Qt4 vs. Qt5 configure builds. (TESTING)
 - Reset ramps after LV2 control port reconnection; small fixes
   to LV2.ttl (pull-requests by Hanspeter Portner aka. ventosus,
   thanks).
