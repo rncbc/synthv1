@@ -4,9 +4,9 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.7.0  2015-07-24  A seventh official beta.
 
-- Complete rewrite of Qt4 vs. Qt5 configure builds. (TESTING)
+- Complete rewrite of Qt4 vs. Qt5 configure builds.
 - Reset ramps after LV2 control port reconnection; small fixes
   to LV2.ttl (pull-requests by Hanspeter Portner aka. ventosus,
   thanks).
@@ -16,7 +16,7 @@ GIT HEAD
   only parameter values from a plugin's instance perspective.
 - MIDI Controller mapping/learn is now possible on all parameter
   control knobs; with global configuration also avaiable on the
-  Help/Configure dialog. (EXPERIMENTAL)
+  Help/Configure dialog.
 - French (fr) translation line to desktop file added (by Olivier
   Humbert, thanks).
 
