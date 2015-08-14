@@ -1,7 +1,5 @@
 prefix  = @ac_prefix@
 
-QMAKE   = @ac_qmake@
-
 name    = synthv1
 
 name_lv2   = $(name)_lv2
@@ -104,6 +102,9 @@ sources_jack = \
 export datarootdir = @datarootdir@
 export datadir = @datadir@
 export mandir = @mandir@
+
+
+export QMAKE = @ac_qmake@
 
 
 all:	@ac_all_targets@
