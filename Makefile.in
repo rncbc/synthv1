@@ -1,7 +1,8 @@
 prefix  = @ac_prefix@
-qmake = @ac_qmake@
 
-name = synthv1
+QMAKE   = @ac_qmake@
+
+name    = synthv1
 
 name_lv2   = $(name)_lv2
 name_lv2ui = $(name)_lv2ui
@@ -119,13 +120,13 @@ jack:	$(name_jack).mak $(resources) ${forms} $(sources_jack) $(headers_jack)
 
 
 $(name_lv2).mak:	$(name_lv2).pro
-	@$(qmake) -o $(name_lv2).mak $(name_lv2).pro
+	@$(QMAKE) -o $(name_lv2).mak $(name_lv2).pro
 
 $(name_lv2ui).mak:	$(name_lv2ui).pro
-	@$(qmake) -o $(name_lv2ui).mak $(name_lv2ui).pro
+	@$(QMAKE) -o $(name_lv2ui).mak $(name_lv2ui).pro
 
 $(name_jack).mak:	$(name_jack).pro
-	@$(qmake) -o $(name_jack).mak $(name_jack).pro
+	@$(QMAKE) -o $(name_jack).mak $(name_jack).pro
 
 
 install_lv2:	lv2 lv2ui
