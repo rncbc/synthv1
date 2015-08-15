@@ -105,6 +105,8 @@ export mandir = @mandir@
 
 
 export QMAKE = @ac_qmake@
+export LUPDATE = @ac_lupdate@
+export LRELEASE = @ac_lrelease@
 
 
 all:	@ac_all_targets@
