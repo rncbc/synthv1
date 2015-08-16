@@ -4,6 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Improved Qt4 vs. Qt5 configure builds (via qmake). 
+
+
 0.7.0  2015-07-24  A seventh official beta.
 
 - Complete rewrite of Qt4 vs. Qt5 configure builds.
