@@ -6,7 +6,7 @@ ChangeLog
 
 GIT HEAD
 
-- Improved Qt4 vs. Qt5 configure builds (via qmake). 
+- Improved Qt4 vs. Qt5 configure builds (via qmake).
 
 
 0.7.0  2015-07-24  A seventh official beta.
@@ -15,7 +15,7 @@ GIT HEAD
 - Reset ramps after LV2 control port reconnection; small fixes
   to LV2.ttl (pull-requests by Hanspeter Portner aka. ventosus,
   thanks).
-- MIDI Controllers/Programss is now an optional feature on the
+- MIDI Controllers/Programs is now an optional feature on the
   LV2 plugin forms, as some LV2 hosts might enforce the purity
   restriction to input control ports as being absolutely read-
   only parameter values from a plugin's instance perspective.
