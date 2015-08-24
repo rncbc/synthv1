@@ -1,8 +1,14 @@
+synthv1 (0.7.1-24) unstable; urgency=low
+
+  * A seventh-bis official beta.
+
+ -- Rui Nuno Capela <rncbc@rncbc.org>  Mon, 24 Aug 2015 19:00:00 +0100
+
 synthv1 (0.7.0-23) unstable; urgency=low
 
   * A seventh official beta.
 
- -- Rui Nuno Capela <rncbc@rncbc.org>  Fri, 24 May 2015 19:00:00 +0100
+ -- Rui Nuno Capela <rncbc@rncbc.org>  Fri, 24 Jul 2015 19:00:00 +0100
 
 synthv1 (0.6.3-22) unstable; urgency=low
 
