@@ -5,7 +5,7 @@ ChangeLog
 
 GIT HEAD
 
-- (micro version number bump sync to drumkv1).
+- Introducing a brand new DCO Ring Mod(ulator) parameter.
 
 
 0.7.1  2015-08-24  A seventh-bis official beta.

@@ -252,6 +252,29 @@
            </spacer>
           </item>
           <item>
+           <widget class="synthv1widget_spin" name="Dco1RingModKnob">
+            <property name="toolTip">
+             <string>DCO1 Ring Mod.</string>
+            </property>
+            <property name="text">
+             <string>Ring Mod.</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
            <widget class="synthv1widget_spin" name="Dco1OctaveKnob">
             <property name="toolTip">
              <string>DCO1 Octave</string>
@@ -981,6 +1004,29 @@
             </property>
             <property name="text">
              <string>Phase</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Dco2RingModKnob">
+            <property name="toolTip">
+             <string>DCO2 Ring Mod.</string>
+            </property>
+            <property name="text">
+             <string>Ring Mod.</string>
             </property>
            </widget>
           </item>

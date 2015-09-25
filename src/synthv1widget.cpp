@@ -253,6 +253,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	setParamKnob(synthv1::DCO1_BALANCE, m_ui.Dco1BalanceKnob);
 	setParamKnob(synthv1::DCO1_DETUNE,  m_ui.Dco1DetuneKnob);
 	setParamKnob(synthv1::DCO1_PHASE,   m_ui.Dco1PhaseKnob);
+	setParamKnob(synthv1::DCO1_RINGMOD, m_ui.Dco1RingModKnob);
 	setParamKnob(synthv1::DCO1_OCTAVE,  m_ui.Dco1OctaveKnob);
 	setParamKnob(synthv1::DCO1_TUNING,  m_ui.Dco1TuningKnob);
 	setParamKnob(synthv1::DCO1_GLIDE,   m_ui.Dco1GlideKnob);
@@ -459,6 +460,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	setParamKnob(synthv1::DCO2_BALANCE, m_ui.Dco2BalanceKnob);
 	setParamKnob(synthv1::DCO2_DETUNE,  m_ui.Dco2DetuneKnob);
 	setParamKnob(synthv1::DCO2_PHASE,   m_ui.Dco2PhaseKnob);
+	setParamKnob(synthv1::DCO2_RINGMOD, m_ui.Dco2RingModKnob);
 	setParamKnob(synthv1::DCO2_OCTAVE,  m_ui.Dco2OctaveKnob);
 	setParamKnob(synthv1::DCO2_TUNING,  m_ui.Dco2TuningKnob);
 	setParamKnob(synthv1::DCO2_GLIDE,   m_ui.Dco2GlideKnob);

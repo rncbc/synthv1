@@ -318,6 +318,7 @@ struct synthv1_dco
 	float *balance;
 	float *detune;
 	float *phase;
+	float *ringmod;
 	float *octave;
 	float *tuning;
 	float *glide;
@@ -1104,6 +1105,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DCO1_BALANCE:   m_dco1.balance     = pfParam; break;
 	case synthv1::DCO1_DETUNE:    m_dco1.detune      = pfParam; break;
 	case synthv1::DCO1_PHASE:     m_dco1.phase       = pfParam; break;
+	case synthv1::DCO1_RINGMOD:   m_dco1.ringmod     = pfParam; break;
 	case synthv1::DCO1_OCTAVE:    m_dco1.octave      = pfParam; break;
 	case synthv1::DCO1_TUNING:    m_dco1.tuning      = pfParam; break;
 	case synthv1::DCO1_GLIDE:     m_dco1.glide       = pfParam; break;
@@ -1153,6 +1155,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DCO2_BALANCE:   m_dco2.balance     = pfParam; break;
 	case synthv1::DCO2_DETUNE:    m_dco2.detune      = pfParam; break;
 	case synthv1::DCO2_PHASE:     m_dco2.phase       = pfParam; break;
+	case synthv1::DCO2_RINGMOD:   m_dco2.ringmod     = pfParam; break;
 	case synthv1::DCO2_OCTAVE:    m_dco2.octave      = pfParam; break;
 	case synthv1::DCO2_TUNING:    m_dco2.tuning      = pfParam; break;
 	case synthv1::DCO2_GLIDE:     m_dco2.glide       = pfParam; break;
@@ -1285,6 +1288,7 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index ) const
 	case synthv1::DCO1_BALANCE:   pfParam = m_dco1.balance;     break;
 	case synthv1::DCO1_DETUNE:    pfParam = m_dco1.detune;      break;
 	case synthv1::DCO1_PHASE:     pfParam = m_dco1.phase;       break;
+	case synthv1::DCO1_RINGMOD:   pfParam = m_dco1.ringmod;     break;
 	case synthv1::DCO1_OCTAVE:    pfParam = m_dco1.octave;      break;
 	case synthv1::DCO1_TUNING:    pfParam = m_dco1.tuning;      break;
 	case synthv1::DCO1_GLIDE:     pfParam = m_dco1.glide;       break;
@@ -1334,6 +1338,7 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index ) const
 	case synthv1::DCO2_BALANCE:   pfParam = m_dco2.balance;     break;
 	case synthv1::DCO2_DETUNE:    pfParam = m_dco2.detune;      break;
 	case synthv1::DCO2_PHASE:     pfParam = m_dco2.phase;       break;
+	case synthv1::DCO2_RINGMOD:   pfParam = m_dco2.ringmod;     break;
 	case synthv1::DCO2_OCTAVE:    pfParam = m_dco2.octave;      break;
 	case synthv1::DCO2_TUNING:    pfParam = m_dco2.tuning;      break;
 	case synthv1::DCO2_GLIDE:     pfParam = m_dco2.glide;       break;
@@ -2070,10 +2075,10 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				const float lfo1 = pv->lfo1_sample * lfo1_env;
 				const float lfo2 = pv->lfo2_sample * lfo2_env;
 
-				float dco11 = pv->dco1_sample1 * pv->dco1_bal.value(j, 0);
-				float dco12 = pv->dco1_sample2 * pv->dco1_bal.value(j, 1);
-				float dco21 = pv->dco2_sample1 * pv->dco2_bal.value(j, 0);
-				float dco22 = pv->dco2_sample2 * pv->dco2_bal.value(j, 1);
+				const float dco11 = pv->dco1_sample1 * pv->dco1_bal.value(j, 0);
+				const float dco12 = pv->dco1_sample2 * pv->dco1_bal.value(j, 1);
+				const float dco21 = pv->dco2_sample1 * pv->dco2_bal.value(j, 0);
+				const float dco22 = pv->dco2_sample2 * pv->dco2_bal.value(j, 1);
 
 				pv->dco1_sample1 = pv->dco1_osc1.sample(pv->dco1_freq1
 					* (m_ctl1.pitchbend + modwheel1 * lfo1)
@@ -2094,6 +2099,16 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				pv->lfo2_sample = pv->lfo2_osc.sample(lfo2_freq
 					* (1.0f + SWEEP_SCALE * *m_lfo2.sweep * lfo2_env));
 
+				// ring modulators
+
+				const float ringmod1 = *m_dco1.ringmod;
+				const float ringmod2 = *m_dco2.ringmod;
+
+				float mod11 = dco11 + 0.5f * dco11 * (1.0f + dco12) * ringmod1;
+				float mod12 = dco12 + 0.5f * dco12 * (1.0f + dco11) * ringmod1;
+				float mod21 = dco21 + 0.5f * dco21 * (1.0f + dco22) * ringmod2;
+				float mod22 = dco22 + 0.5f * dco22 * (1.0f + dco21) * ringmod2;
+
 				// filters
 
 				const float env1 = 0.5f * (1.0f + vel1
@@ -2104,11 +2119,11 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 					* env1 * (1.0f + *m_lfo1.reso * lfo1));
 
 				if (int(*m_dcf1.slope) > 0) { // 24db/octave
-					dco11 = pv->dcf13.output(dco11, cutoff1, reso1);
-					dco12 = pv->dcf14.output(dco12, cutoff1, reso1);
+					mod11 = pv->dcf13.output(mod11, cutoff1, reso1);
+					mod12 = pv->dcf14.output(mod12, cutoff1, reso1);
 				} else { // 12db/octave
-					dco11 = pv->dcf11.output(dco11, cutoff1, reso1);
-					dco12 = pv->dcf12.output(dco12, cutoff1, reso1);
+					mod11 = pv->dcf11.output(mod11, cutoff1, reso1);
+					mod12 = pv->dcf12.output(mod12, cutoff1, reso1);
 				}
 
 				const float env2 = 0.5f * (1.0f + vel2
@@ -2119,24 +2134,24 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 					* env2 * (1.0f + *m_lfo2.reso * lfo2));
 
 				if (int(*m_dcf2.slope) > 0) { // 24db/octave
-					dco21 = pv->dcf23.output(dco21, cutoff2, reso2);
-					dco22 = pv->dcf24.output(dco22, cutoff2, reso2);
+					mod21 = pv->dcf23.output(mod21, cutoff2, reso2);
+					mod22 = pv->dcf24.output(mod22, cutoff2, reso2);
 				} else { // 12db/octave
-					dco21 = pv->dcf21.output(dco21, cutoff2, reso2);
-					dco22 = pv->dcf22.output(dco22, cutoff2, reso2);
+					mod21 = pv->dcf21.output(mod21, cutoff2, reso2);
+					mod22 = pv->dcf22.output(mod22, cutoff2, reso2);
 				}
 
 				// volumes
 
 				const float wid1 = m_wid1.value(j);
-				const float mid1 = 0.5f * (dco11 + dco12);
-				const float sid1 = 0.5f * (dco11 - dco12);
+				const float mid1 = 0.5f * (mod11 + mod12);
+				const float sid1 = 0.5f * (mod11 - mod12);
 				const float vol1 = vel1 * m_vol1.value(j)
 					* pv->dca1_env.tick();
 
 				const float wid2 = m_wid2.value(j);
-				const float mid2 = 0.5f * (dco21 + dco22);
-				const float sid2 = 0.5f * (dco21 - dco22);
+				const float mid2 = 0.5f * (mod21 + mod22);
+				const float sid2 = 0.5f * (mod21 - mod22);
 				const float vol2 = vel2 * m_vol2.value(j)
 					* pv->dca2_env.tick();
 

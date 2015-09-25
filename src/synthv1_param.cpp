@@ -57,6 +57,7 @@ struct ParamInfo {
 	{ "DCO1_BALANCE",  PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // DCO1 Balance
 	{ "DCO1_DETUNE",   PARAM_FLOAT,   0.1f,   0.0f,   1.0f }, // DCO1 Detune
 	{ "DCO1_PHASE",    PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // DCO1 Phase
+	{ "DCO1_RINGMOD",  PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // DCO1 Ring Mod
 	{ "DCO1_OCTAVE",   PARAM_FLOAT,   0.0f,  -4.0f,   4.0f }, // DCO1 Octave
 	{ "DCO1_TUNING",   PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // DCO1 Tuning
 	{ "DCO1_GLIDE",    PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // DCO1 Glide
@@ -108,6 +109,7 @@ struct ParamInfo {
 	{ "DCO2_BALANCE",  PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // DCO2 Balance
 	{ "DCO2_DETUNE",   PARAM_FLOAT,   0.1f,   0.0f,   1.0f }, // DCO2 Detune
 	{ "DCO2_PHASE",    PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // DCO2 Phase
+	{ "DCO2_RINGMOD",  PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // DCO2 Ring Mod
 	{ "DCO2_OCTAVE",   PARAM_FLOAT,  -2.0f,  -4.0f,   4.0f }, // DCO2 Octave
 	{ "DCO2_TUNING",   PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // DCO2 Tuning
 	{ "DCO2_GLIDE",    PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // DCO2 Glide
