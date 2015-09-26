@@ -349,6 +349,7 @@ struct synthv1_lfo
 	float *rate;
 	float *sweep;
 	float *pitch;
+	float *ringmod;
 	float *cutoff;
 	float *reso;
 	float *panning;
@@ -1124,6 +1125,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::LFO1_RATE:      m_lfo1.rate        = pfParam; break;
 	case synthv1::LFO1_SWEEP:     m_lfo1.sweep       = pfParam; break;
 	case synthv1::LFO1_PITCH:     m_lfo1.pitch       = pfParam; break;
+	case synthv1::LFO1_RINGMOD:   m_lfo1.ringmod     = pfParam; break;
 	case synthv1::LFO1_CUTOFF:    m_lfo1.cutoff      = pfParam; break;
 	case synthv1::LFO1_RESO:      m_lfo1.reso        = pfParam; break;
 	case synthv1::LFO1_PANNING:   m_lfo1.panning     = pfParam; break;
@@ -1174,6 +1176,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::LFO2_RATE:      m_lfo2.rate        = pfParam; break;
 	case synthv1::LFO2_SWEEP:     m_lfo2.sweep       = pfParam; break;
 	case synthv1::LFO2_PITCH:     m_lfo2.pitch       = pfParam; break;
+	case synthv1::LFO2_RINGMOD:   m_lfo2.ringmod     = pfParam; break;
 	case synthv1::LFO2_CUTOFF:    m_lfo2.cutoff      = pfParam; break;
 	case synthv1::LFO2_RESO:      m_lfo2.reso        = pfParam; break;
 	case synthv1::LFO2_PANNING:   m_lfo2.panning     = pfParam; break;
@@ -1307,6 +1310,7 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index ) const
 	case synthv1::LFO1_RATE:      pfParam = m_lfo1.rate;        break;
 	case synthv1::LFO1_SWEEP:     pfParam = m_lfo1.sweep;       break;
 	case synthv1::LFO1_PITCH:     pfParam = m_lfo1.pitch;       break;
+	case synthv1::LFO1_RINGMOD:   pfParam = m_lfo1.ringmod;     break;
 	case synthv1::LFO1_CUTOFF:    pfParam = m_lfo1.cutoff;      break;
 	case synthv1::LFO1_RESO:      pfParam = m_lfo1.reso;        break;
 	case synthv1::LFO1_PANNING:   pfParam = m_lfo1.panning;     break;
@@ -1357,6 +1361,7 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index ) const
 	case synthv1::LFO2_RATE:      pfParam = m_lfo2.rate;        break;
 	case synthv1::LFO2_SWEEP:     pfParam = m_lfo2.sweep;       break;
 	case synthv1::LFO2_PITCH:     pfParam = m_lfo2.pitch;       break;
+	case synthv1::LFO2_RINGMOD:   pfParam = m_lfo2.ringmod;     break;
 	case synthv1::LFO2_CUTOFF:    pfParam = m_lfo2.cutoff;      break;
 	case synthv1::LFO2_RESO:      pfParam = m_lfo2.reso;        break;
 	case synthv1::LFO2_PANNING:   pfParam = m_lfo2.panning;     break;
@@ -2101,8 +2106,10 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 
 				// ring modulators
 
-				const float ringmod1 = *m_dco1.ringmod;
-				const float ringmod2 = *m_dco2.ringmod;
+				const float ringmod1 = synthv1_sigmoid_1(
+					*m_dco1.ringmod * (1.0f + *m_lfo1.ringmod * lfo1));
+				const float ringmod2 = synthv1_sigmoid_1(
+					*m_dco2.ringmod * (1.0f + *m_lfo2.ringmod * lfo2));
 
 				float mod11 = dco11 * (1.0f - ringmod1) + dco11 * dco12 * ringmod1;
 				float mod12 = dco12 * (1.0f - ringmod1) + dco12 * dco11 * ringmod1;

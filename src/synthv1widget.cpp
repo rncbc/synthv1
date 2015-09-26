@@ -192,6 +192,8 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_ui.Lfo1ResoKnob->setMaximum(+1.0f);
 	m_ui.Lfo1PitchKnob->setMinimum(-1.0f);
 	m_ui.Lfo1PitchKnob->setMaximum(+1.0f);
+	m_ui.Lfo1RingModKnob->setMinimum(-1.0f);
+	m_ui.Lfo1RingModKnob->setMaximum(+1.0f);
 	m_ui.Lfo1PanningKnob->setMinimum(-1.0f);
 	m_ui.Lfo1PanningKnob->setMaximum(+1.0f);
 	m_ui.Lfo1VolumeKnob->setMinimum(-1.0f);
@@ -205,6 +207,8 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_ui.Lfo2ResoKnob->setMaximum(+1.0f);
 	m_ui.Lfo2PitchKnob->setMinimum(-1.0f);
 	m_ui.Lfo2PitchKnob->setMaximum(+1.0f);
+	m_ui.Lfo2RingModKnob->setMinimum(-1.0f);
+	m_ui.Lfo2RingModKnob->setMaximum(+1.0f);
 	m_ui.Lfo2PanningKnob->setMinimum(-1.0f);
 	m_ui.Lfo2PanningKnob->setMaximum(+1.0f);
 	m_ui.Lfo2VolumeKnob->setMinimum(-1.0f);
@@ -358,6 +362,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	setParamKnob(synthv1::LFO1_CUTOFF,  m_ui.Lfo1CutoffKnob);
 	setParamKnob(synthv1::LFO1_RESO,    m_ui.Lfo1ResoKnob);
 	setParamKnob(synthv1::LFO1_PITCH,   m_ui.Lfo1PitchKnob);
+	setParamKnob(synthv1::LFO1_RINGMOD, m_ui.Lfo1RingModKnob);
 	setParamKnob(synthv1::LFO1_SWEEP,   m_ui.Lfo1SweepKnob);
 	setParamKnob(synthv1::LFO1_ATTACK,  m_ui.Lfo1AttackKnob);
 	setParamKnob(synthv1::LFO1_DECAY,   m_ui.Lfo1DecayKnob);
@@ -565,6 +570,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	setParamKnob(synthv1::LFO2_CUTOFF,  m_ui.Lfo2CutoffKnob);
 	setParamKnob(synthv1::LFO2_RESO,    m_ui.Lfo2ResoKnob);
 	setParamKnob(synthv1::LFO2_PITCH,   m_ui.Lfo2PitchKnob);
+	setParamKnob(synthv1::LFO2_RINGMOD, m_ui.Lfo2RingModKnob);
 	setParamKnob(synthv1::LFO2_SWEEP,   m_ui.Lfo2SweepKnob);
 	setParamKnob(synthv1::LFO2_ATTACK,  m_ui.Lfo2AttackKnob);
 	setParamKnob(synthv1::LFO2_DECAY,   m_ui.Lfo2DecayKnob);

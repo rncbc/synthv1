@@ -620,6 +620,29 @@
              </spacer>
             </item>
             <item>
+             <widget class="synthv1widget_spin" name="Lfo1RingModKnob">
+              <property name="toolTip">
+               <string>LFO1 Ring Mod</string>
+              </property>
+              <property name="text">
+               <string>Ring Mod</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint">
+               <size>
+                <width>8</width>
+                <height>8</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
              <widget class="synthv1widget_spin" name="Lfo1CutoffKnob">
               <property name="toolTip">
                <string>LFO1 Cutoff</string>
@@ -1372,6 +1395,29 @@
               </property>
               <property name="text">
                <string>Pitch</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint">
+               <size>
+                <width>8</width>
+                <height>8</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo2RingModKnob">
+              <property name="toolTip">
+               <string>LFO1 Ring Mod</string>
+              </property>
+              <property name="text">
+               <string>Ring Mod</string>
               </property>
              </widget>
             </item>
