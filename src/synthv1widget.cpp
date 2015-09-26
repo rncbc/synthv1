@@ -133,6 +133,10 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 
 	// Special values
 	const QString& sOff = states.first();
+	m_ui.Dco1RingModKnob->setSpecialValueText(sOff);
+	m_ui.Dco2RingModKnob->setSpecialValueText(sOff);
+	m_ui.Dco1GlideKnob->setSpecialValueText(sOff);
+	m_ui.Dco2GlideKnob->setSpecialValueText(sOff);
 	m_ui.Cho1WetKnob->setSpecialValueText(sOff);
 	m_ui.Fla1WetKnob->setSpecialValueText(sOff);
 	m_ui.Pha1WetKnob->setSpecialValueText(sOff);

@@ -2104,10 +2104,10 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				const float ringmod1 = *m_dco1.ringmod;
 				const float ringmod2 = *m_dco2.ringmod;
 
-				float mod11 = dco11 + 0.5f * dco11 * (1.0f + dco12) * ringmod1;
-				float mod12 = dco12 + 0.5f * dco12 * (1.0f + dco11) * ringmod1;
-				float mod21 = dco21 + 0.5f * dco21 * (1.0f + dco22) * ringmod2;
-				float mod22 = dco22 + 0.5f * dco22 * (1.0f + dco21) * ringmod2;
+				float mod11 = dco11 * (1.0f - ringmod1) + dco11 * dco12 * ringmod1;
+				float mod12 = dco12 * (1.0f - ringmod1) + dco12 * dco11 * ringmod1;
+				float mod21 = dco21 * (1.0f - ringmod2) + dco21 * dco22 * ringmod2;
+				float mod22 = dco22 * (1.0f - ringmod2) + dco22 * dco21 * ringmod2;
 
 				// filters
 
