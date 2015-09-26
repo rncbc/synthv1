@@ -153,7 +153,7 @@
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 14 ;
 		lv2:symbol "DCO1_RINGMOD" ;
-		lv2:name "DCO1 Ring Mod." ;
+		lv2:name "DCO1 Ring Mod" ;
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
@@ -635,7 +635,7 @@
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 64 ;
 		lv2:symbol "DCO2_RINGMOD" ;
-		lv2:name "DCO2 Ring Mod." ;
+		lv2:name "DCO2 Ring Mod" ;
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;

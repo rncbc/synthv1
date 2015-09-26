@@ -254,10 +254,10 @@
           <item>
            <widget class="synthv1widget_spin" name="Dco1RingModKnob">
             <property name="toolTip">
-             <string>DCO1 Ring Mod.</string>
+             <string>DCO1 Ring Mod</string>
             </property>
             <property name="text">
-             <string>Ring Mod.</string>
+             <string>Ring Mod</string>
             </property>
            </widget>
           </item>
@@ -1023,10 +1023,10 @@
           <item>
            <widget class="synthv1widget_spin" name="Dco2RingModKnob">
             <property name="toolTip">
-             <string>DCO2 Ring Mod.</string>
+             <string>DCO2 Ring Mod</string>
             </property>
             <property name="text">
-             <string>Ring Mod.</string>
+             <string>Ring Mod</string>
             </property>
            </widget>
           </item>
