@@ -50,6 +50,9 @@ public:
 	void setSampleRate(float srate);
 	float sampleRate() const;
 
+	void setBufferSize(uint32_t nsize);
+	uint32_t bufferSize() const;
+
 	enum ParamIndex	 {
 
 		DCO1_SHAPE1 = 0,
@@ -96,6 +99,7 @@ public:
 		DCA1_RELEASE,
 		OUT1_WIDTH,
 		OUT1_PANNING,
+		OUT1_FXSEND,
 		OUT1_VOLUME,
 
 		DEF1_PITCHBEND,
@@ -149,6 +153,7 @@ public:
 		DCA2_RELEASE,
 		OUT2_WIDTH,
 		OUT2_PANNING,
+		OUT2_FXSEND,
 		OUT2_VOLUME,
 
 		DEF2_PITCHBEND,

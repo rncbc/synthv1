@@ -92,6 +92,7 @@ struct ParamInfo {
 	{ "DCA1_RELEASE",  PARAM_FLOAT,   0.1f,   0.0f,   1.0f }, // DCA1 Release
 	{ "OUT1_WIDTH",    PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // OUT1 Stereo Width
 	{ "OUT1_PANNING",  PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // OUT1 Panning
+	{ "OUT1_FXSEND",   PARAM_FLOAT,   1.0f,   0.0f,   1.0f }, // OUT1 FX Send
 	{ "OUT1_VOLUME",   PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // OUT1 Volume
 
 	{ "DEF1_PITCHBEND",PARAM_FLOAT,   0.2f,   0.0f,   1.0f }, // DEF1 Pitchbend
@@ -145,6 +146,7 @@ struct ParamInfo {
 	{ "DCA2_RELEASE",  PARAM_FLOAT,   0.1f,   0.0f,   1.0f }, // DCA2 Release
 	{ "OUT2_WIDTH",    PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // OUT2 Stereo Width
 	{ "OUT2_PANNING",  PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // OUT2 Panning
+	{ "OUT2_FXSEND",   PARAM_FLOAT,   1.0f,   0.0f,   1.0f }, // OUT2 FX Send
 	{ "OUT2_VOLUME",   PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // OUT2 Volume
 
 	{ "DEF2_PITCHBEND",PARAM_FLOAT,   0.2f,   0.0f,   1.0f }, // DEF2 Pitchbend

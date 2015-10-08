@@ -79,9 +79,11 @@ private:
 		LV2_URID atom_Blank;
 		LV2_URID atom_Object;
 		LV2_URID atom_Float;
+		LV2_URID atom_Int;
 		LV2_URID time_Position;
 		LV2_URID time_beatsPerMinute;
 		LV2_URID midi_MidiEvent;
+		LV2_URID bufsz_maxBlockLength;
 
 	} m_urids;
 

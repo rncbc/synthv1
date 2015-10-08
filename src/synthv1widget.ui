@@ -888,6 +888,29 @@
            </spacer>
           </item>
           <item>
+           <widget class="synthv1widget_spin" name="Out1FxSendKnob">
+            <property name="toolTip">
+             <string>OUT1 FX Send</string>
+            </property>
+            <property name="text">
+             <string>FX</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
            <widget class="synthv1widget_spin" name="Out1VolumeKnob">
             <property name="toolTip">
              <string>OUT1 Volume</string>
@@ -1663,6 +1686,29 @@
             </property>
             <property name="text">
              <string>Panning</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="synthv1widget_spin" name="Out2FxSendKnob">
+            <property name="toolTip">
+             <string>OUT2 FX Send</string>
+            </property>
+            <property name="text">
+             <string>FX</string>
             </property>
            </widget>
           </item>

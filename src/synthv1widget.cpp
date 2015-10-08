@@ -456,6 +456,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	// OUT1
 	setParamKnob(synthv1::OUT1_WIDTH,   m_ui.Out1WidthKnob);
 	setParamKnob(synthv1::OUT1_PANNING, m_ui.Out1PanningKnob);
+	setParamKnob(synthv1::OUT1_FXSEND,  m_ui.Out1FxSendKnob);
 	setParamKnob(synthv1::OUT1_VOLUME,  m_ui.Out1VolumeKnob);
 
 
@@ -664,6 +665,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	// OUT2
 	setParamKnob(synthv1::OUT2_WIDTH,   m_ui.Out2WidthKnob);
 	setParamKnob(synthv1::OUT2_PANNING, m_ui.Out2PanningKnob);
+	setParamKnob(synthv1::OUT2_FXSEND,  m_ui.Out2FxSendKnob);
 	setParamKnob(synthv1::OUT2_VOLUME,  m_ui.Out2VolumeKnob);
 
 
