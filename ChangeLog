@@ -5,6 +5,7 @@ ChangeLog
 
 GIT HEAD
 
+- Prefer Qt5 over Qt4 by default with configure script.
 - Introducing brand new OUT FX Send parameter per engine.
 - Introducing brand new DCO, LFO Ring Mod(ulator) parameters.
 - Special value (0=Off) added to DCO1,2 Glide knob spin-boxes.
