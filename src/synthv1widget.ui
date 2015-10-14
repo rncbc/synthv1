@@ -893,7 +893,7 @@
              <string>OUT1 FX Send</string>
             </property>
             <property name="text">
-             <string>FX</string>
+             <string>Effects</string>
             </property>
            </widget>
           </item>
