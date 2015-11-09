@@ -132,7 +132,7 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 	const int w4 = w >> 2;
 	const int w8 = w >> 3;
 
-	const int ws = w8 - (w8 >> 1) * int(m_fSlope);
+	const int ws = w8 - (w8 >> 1) * (int(m_fSlope) > 0 ? 1 : 0);
 
 	int x = w8 + int(m_fCutoff * float(w - w4));
 	int y = h2 - int(m_fReso * float(h + h4));

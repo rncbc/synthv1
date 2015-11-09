@@ -114,6 +114,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	QStringList slopes;
 	slopes << tr("12dB/oct");
 	slopes << tr("24dB/oct");
+	slopes << tr("RBJ");
 
 	m_ui.Dcf1SlopeKnob->insertItems(0, slopes);
 	m_ui.Dcf2SlopeKnob->insertItems(0, slopes);
