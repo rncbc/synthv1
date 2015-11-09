@@ -9,14 +9,14 @@ AC_CONFIG_FILES(Makefile synthv1.spec src/src_jack.pri src/src_lv2.pri src/synth
 AC_PREFIX_DEFAULT(/usr/local)
 ac_prefix=$prefix
 if test "x$ac_prefix" = "xNONE"; then
-    ac_prefix=$ac_default_prefix
+   ac_prefix=$ac_default_prefix
 fi
 AC_SUBST(ac_prefix)
 AC_DEFINE_UNQUOTED(CONFIG_PREFIX, ["$ac_prefix"], [Default installation prefix.]) 
 
 # Set default library/plugin prefix.
 if test "x$exec_prefix" = "xNONE"; then
-    exec_prefix=$ac_prefix
+   exec_prefix=$ac_prefix
 fi
 eval ac_libdir=$libdir
 AC_SUBST(ac_libdir)
