@@ -114,7 +114,8 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	QStringList slopes;
 	slopes << tr("12dB/oct");
 	slopes << tr("24dB/oct");
-	slopes << tr("RBJ");
+	slopes << tr("Biquad");
+	slopes << tr("Formant");
 
 	m_ui.Dcf1SlopeKnob->insertItems(0, slopes);
 	m_ui.Dcf2SlopeKnob->insertItems(0, slopes);
@@ -888,6 +889,12 @@ void synthv1widget::updateParamEx ( synthv1::ParamIndex index, float fValue )
 	case synthv1::DCO2_SHAPE2:
 		m_ui.Dco2Bandl2Knob->setEnabled(
 			synthv1_wave::Shape(int(fValue)) != synthv1_wave::Noise);
+		break;
+	case synthv1::DCF1_SLOPE:
+		m_ui.Dcf1TypeKnob->setEnabled(int(fValue) != 3); // !Formant
+		break;
+	case synthv1::DCF2_SLOPE:
+		m_ui.Dcf2TypeKnob->setEnabled(int(fValue) != 3); // !Formant
 		break;
 	case synthv1::DEL1_BPMSYNC:
 		if (fValue > 0.0f)

@@ -27,6 +27,7 @@
 #include "synthv1_list.h"
 
 #include "synthv1_filter.h"
+#include "synthv1_formant.h"
 
 #include "synthv1_fx.h"
 #include "synthv1_reverb.h"
@@ -603,6 +604,7 @@ struct synthv1_voice : public synthv1_list<synthv1_voice>
 	synthv1_filter1 dcf11, dcf12, dcf21, dcf22;	// filters
 	synthv1_filter2 dcf13, dcf14, dcf23, dcf24;
 	synthv1_filter3 dcf15, dcf16, dcf25, dcf26;
+	synthv1_formant dcf17, dcf18, dcf27, dcf28;
 
 	synthv1_env::State dca1_env, dca2_env;		// envelope states
 	synthv1_env::State dcf1_env, dcf2_env;
@@ -908,6 +910,14 @@ void synthv1_impl::setSampleRate ( float srate )
 	dco1_wave2.setSampleRate(m_srate);
 	dco2_wave1.setSampleRate(m_srate);
 	dco2_wave2.setSampleRate(m_srate);
+
+	for (int i = 0; i < MAX_VOICES; ++i) {
+		synthv1_voice *pv = m_voices[i];
+		pv->dcf17.setSampleRate(m_srate);
+		pv->dcf18.setSampleRate(m_srate);
+		pv->dcf27.setSampleRate(m_srate);
+		pv->dcf28.setSampleRate(m_srate);
+	}
 
 	lfo1_wave.setSampleRate(m_srate);
 	lfo2_wave.setSampleRate(m_srate);
@@ -2062,7 +2072,11 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 					* env1 * (1.0f + *m_lfo1.reso * lfo1));
 
 				switch (int(*m_dcf1.slope)) {
-				case 2: // RBJ/bi-quad
+				case 3: // Formant
+					mod11 = pv->dcf17.output(mod11, cutoff1, reso1);
+					mod12 = pv->dcf18.output(mod12, cutoff1, reso1);
+					break;
+				case 2: // Biquad
 					mod11 = pv->dcf15.output(mod11, cutoff1, reso1);
 					mod12 = pv->dcf16.output(mod12, cutoff1, reso1);
 					break;
@@ -2085,7 +2099,11 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 					* env2 * (1.0f + *m_lfo2.reso * lfo2));
 
 				switch (int(*m_dcf2.slope)) {
-				case 2: // RBJ/bi-quad
+				case 3: // Formant
+					mod21 = pv->dcf27.output(mod21, cutoff2, reso2);
+					mod22 = pv->dcf28.output(mod22, cutoff2, reso2);
+					break;
+				case 2: // Biquad
 					mod21 = pv->dcf25.output(mod21, cutoff2, reso2);
 					mod22 = pv->dcf26.output(mod22, cutoff2, reso2);
 					break;

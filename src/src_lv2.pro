@@ -15,6 +15,7 @@ HEADERS = \
 	synthv1_lv2.h \
 	synthv1_config.h \
 	synthv1_filter.h \
+	synthv1_formant.h \
 	synthv1_wave.h \
 	synthv1_ramp.h \
 	synthv1_list.h \
@@ -30,6 +31,7 @@ SOURCES = \
 	synthv1_ui.cpp \
 	synthv1_lv2.cpp \
 	synthv1_config.cpp \
+	synthv1_formant.cpp \
 	synthv1_wave.cpp \
 	synthv1_param.cpp \
 	synthv1_sched.cpp \

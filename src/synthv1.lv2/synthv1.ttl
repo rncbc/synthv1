@@ -234,10 +234,11 @@
 		lv2:portProperty lv2:integer, lv2:enumeration ;
 		lv2:scalePoint [ rdfs:label "12dB/oct"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "24dB/oct"; rdf:value 1 ] ;
-		lv2:scalePoint [ rdfs:label "RBJ"; rdf:value 2 ] ;
+		lv2:scalePoint [ rdfs:label "Biquad"; rdf:value 2 ] ;
+		lv2:scalePoint [ rdfs:label "Formant"; rdf:value 3 ] ;
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
-		lv2:maximum 2.0 ;
+		lv2:maximum 3.0 ;
 		lv2pg:group synthv1_lv2:102_DCF1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
@@ -735,10 +736,11 @@
 		lv2:portProperty lv2:integer, lv2:enumeration ;
 		lv2:scalePoint [ rdfs:label "12dB/oct"; rdf:value 0 ] ;
 		lv2:scalePoint [ rdfs:label "24dB/oct"; rdf:value 1 ] ;
-		lv2:scalePoint [ rdfs:label "RBJ"; rdf:value 2 ] ;
+		lv2:scalePoint [ rdfs:label "Biquad"; rdf:value 2 ] ;
+		lv2:scalePoint [ rdfs:label "Formant"; rdf:value 3 ] ;
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
-		lv2:maximum 2.0 ;
+		lv2:maximum 3.0 ;
 		lv2pg:group synthv1_lv2:202_DCF2 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;

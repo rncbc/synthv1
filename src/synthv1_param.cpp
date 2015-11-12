@@ -65,7 +65,7 @@ struct ParamInfo {
 	{ "DCF1_CUTOFF",   PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // DCF1 Cutoff
 	{ "DCF1_RESO",     PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // DCF1 Resonance
 	{ "DCF1_TYPE",     PARAM_INT,     0.0f,   0.0f,   3.0f }, // DCF1 Type
-	{ "DCF1_SLOPE",    PARAM_INT,     0.0f,   0.0f,   2.0f }, // DCF1 Slope
+	{ "DCF1_SLOPE",    PARAM_INT,     0.0f,   0.0f,   3.0f }, // DCF1 Slope
 	{ "DCF1_ENVELOPE", PARAM_FLOAT,   1.0f,  -1.0f,   1.0f }, // DCF1 Envelope
 	{ "DCF1_ATTACK",   PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // DCF1 Attack
 	{ "DCF1_DECAY",    PARAM_FLOAT,   0.2f,   0.0f,   1.0f }, // DCF1 Decay
@@ -119,7 +119,7 @@ struct ParamInfo {
 	{ "DCF2_CUTOFF",   PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // DCF2 Cutoff
 	{ "DCF2_RESO",     PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // DCF2 Resonance
 	{ "DCF2_TYPE",     PARAM_INT,     0.0f,   0.0f,   3.0f }, // DCF2 Type
-	{ "DCF2_SLOPE",    PARAM_INT,     0.0f,   0.0f,   2.0f }, // DCF2 Slope
+	{ "DCF2_SLOPE",    PARAM_INT,     0.0f,   0.0f,   3.0f }, // DCF2 Slope
 	{ "DCF2_ENVELOPE", PARAM_FLOAT,   1.0f,  -1.0f,   1.0f }, // DCF2 Envelope
 	{ "DCF2_ATTACK",   PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // DCF2 Attack
 	{ "DCF2_DECAY",    PARAM_FLOAT,   0.2f,   0.0f,   1.0f }, // DCF2 Decay
