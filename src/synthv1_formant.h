@@ -53,17 +53,18 @@ public:
 
 		const float   fK = cutoff * float(NUM_VTABS);
 		const uint32_t k = uint32_t(fK);
-		const float   fX = (fK - float(k)); // linear morph fract.
-		const float   fJ = fX * float(NUM_VOWELS);
+		const float   fJ = (fK - float(k)) * float(NUM_VOWELS);
 		const uint32_t j = uint32_t(fJ);
+		const float   fX = (fJ - float(j)); // linear morph fract.
 
-		const float q = 2.0f * m_reso * m_reso + 1.0f;
+		const float q = 4.0f * m_reso * m_reso + 1.0f;
 		const float p = 1.0f / q;
 
-		// vocal formant coeffs. morphing
+		// vocal formant morphing
 		Coeff coeff1, coeff2;
-		const Vtab& vtab1 = g_vtabs[k][j];
-		const Vtab& vtab2 = (k < NUM_VTABS - 1 ? g_vtabs[k + 1][j] : vtab1);
+		const Vtab *vtabs = g_vtabs[k];
+		const Vtab& vtab1 = vtabs[j];
+		const Vtab& vtab2 = (j < NUM_VOWELS - 1 ? vtabs[j + 1] : vtab1);
 		for (uint32_t i = 0; i < NUM_FORMANTS; ++i) {
 			vtab_coeffs(coeff1, vtab1, i, p);
 			vtab_coeffs(coeff2, vtab2, i, p);
@@ -87,7 +88,7 @@ public:
 		return out;
 	}
 
-	// process
+	// process block
 	void process(float *in, uint32_t nframes, float wet, float cutoff, float reso)
 	{
 		for (uint32_t i = 0; i < nframes; ++i) {
