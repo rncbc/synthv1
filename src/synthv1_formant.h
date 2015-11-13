@@ -114,6 +114,40 @@ public:
 
 protected:
 
+	// coeff. step-wise smoother
+	class FilterCoeff
+	{
+	public:
+
+		FilterCoeff(float value = 0.0f)
+			: m_value(value), m_vstep(0.0f), m_nstep(0) {}
+
+		void set_value(float value)
+		{
+			const uint32_t NUM_STEPS = 32;
+			m_nstep = NUM_STEPS;
+			m_vstep = (value - m_value) / float(m_nstep);
+		}
+
+		float value() const
+			{ return m_value + m_vstep * float(m_nstep); }
+
+		float tick()
+		{
+			if (m_nstep > 0) {
+				m_value += m_vstep;
+				--m_nstep;
+			}
+			return m_value;
+		}
+
+	private:
+
+		float    m_value;
+		float    m_vstep;
+		uint32_t m_nstep;
+	};
+
 	// 2-pole resonator filter
 	class Filter
 	{
@@ -122,21 +156,22 @@ protected:
 		Filter() { reset(); }
 
 		void reset()
-		{
-			m_a = m_b = m_c = 0.0f;
-			m_out1 = m_out2 = 0.0f;
-		}
+			{ m_out1 = m_out2 = 0.0f; }
 	
 		void reset_coeffs(const Coeff& coeff)
 		{
-			m_a = coeff.a;
-			m_b = coeff.b;
-			m_c = coeff.c;
+			m_a.set_value(coeff.a);
+			m_b.set_value(coeff.b);
+			m_c.set_value(coeff.c);
 		}
 	
 		float output(float in)
 		{
-			const float out = m_a * in + m_b * m_out1 - m_c * m_out2;
+			const float out
+				= m_a.tick() * in
+				+ m_b.tick() * m_out1
+				- m_c.tick() * m_out2;
+
 			m_out2 = m_out1;
 			m_out1 = out;
 			return out;
@@ -144,7 +179,7 @@ protected:
 	
 	private:
 
-		float m_a, m_b, m_c;
+		FilterCoeff m_a, m_b, m_c;
 		float m_out1, m_out2;
 	};
 	
