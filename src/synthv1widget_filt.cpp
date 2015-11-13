@@ -133,7 +133,7 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 	const int w8 = w >> 3;
 
 	const int iSlope = int(m_fSlope);
-	const int ws = w8 - (w8 >> 1) * (iSlope & 1);
+	const int ws = w8 - (w8 >> 1) * (iSlope == 1 ? 1 : 0);
 
 	int x = w8 + int(m_fCutoff * float(w - w4));
 	int y = h2 - int(m_fReso * float(h + h4));
@@ -141,7 +141,7 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 	QPolygon poly(6);
 	QPainterPath path;
 
-	const int iType = (iSlope == 3 ? 1 : int(m_fType));
+	const int iType = (iSlope == 3 ? 4 : int(m_fType));
 	// Low, Notch
 	if (iType == 0 || iType == 3) {
 		if (iType == 3) x -= w8;
@@ -188,6 +188,22 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 		path.lineTo(poly.at(4));
 		path.lineTo(poly.at(5));
 		if (iType == 3) x -= w8;
+	}
+	// Formant
+	if (iType == 4) {
+		const int x2 = (x - w4) >> 1;
+		const int y2 = (y - h4) >> 1;
+		poly.putPoints(0, 6,
+			0, h2,
+			x2, h2,
+			x, h2,
+			x, y2,
+			x + ws, h,
+			0, h);
+		path.moveTo(poly.at(0));
+		path.lineTo(poly.at(1));
+		path.cubicTo(poly.at(2), poly.at(3), poly.at(4));
+		path.lineTo(poly.at(5));
 	}
 
 	const QPalette& pal = palette();

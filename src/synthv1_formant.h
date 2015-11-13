@@ -51,7 +51,7 @@ public:
 		m_cutoff = cutoff;
 		m_reso = reso;
 
-		const float   fK = cutoff * float(NUM_VTABS);
+		const float   fK = m_cutoff * float(NUM_VTABS);
 		const uint32_t k = uint32_t(fK);
 		const float   fJ = (fK - float(k)) * float(NUM_VOWELS);
 		const uint32_t j = uint32_t(fJ);
