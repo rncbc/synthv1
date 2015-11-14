@@ -61,18 +61,24 @@ public:
 		const float p = 1.0f / q;
 
 		// vocal formant morphing
-		Coeff coeff1, coeff2;
+		Coeffs coeff1, coeff2;
 		const Vtab *vtabs = g_vtabs[k];
 		const Vtab& vtab1 = vtabs[j];
 		const Vtab& vtab2 = (j < NUM_VOWELS - 1 ? vtabs[j + 1] : vtab1);
 		for (uint32_t i = 0; i < NUM_FORMANTS; ++i) {
 			vtab_coeffs(coeff1, vtab1, i, p);
 			vtab_coeffs(coeff2, vtab2, i, p);
-			coeff1.a += fX * (coeff2.a - coeff1.a);
-			coeff1.b += fX * (coeff2.b - coeff1.b);
-			coeff1.c += fX * (coeff2.c - coeff1.c);
+			coeff1.a0 += fX * (coeff2.a0 - coeff1.a0);
+			coeff1.b1 += fX * (coeff2.b1 - coeff1.b1);
+			coeff1.b2 += fX * (coeff2.b2 - coeff1.b2);
 			m_filters[i].reset_coeffs(coeff1);
 		}
+	}
+
+	void reset_filters()
+	{
+		for (uint32_t i = 0; i < NUM_FORMANTS; ++i)
+			m_filters[i].reset();
 	}
 
 	// output tick
@@ -110,17 +116,22 @@ public:
 		float B[NUM_FORMANTS];	// bandwidth [Hz]
 	};
 
-	struct Coeff { float a, b, c; };
+	struct Coeffs { float a0, b1, b2; };
 
 protected:
 
-	// coeff. step-wise smoother
-	class FilterCoeff
+	// step-wise smoothed coeff.
+	class Coeff
 	{
 	public:
 
-		FilterCoeff(float value = 0.0f)
-			: m_value(value), m_vstep(0.0f), m_nstep(0) {}
+		Coeff() { reset(); }
+
+		void reset()
+		{
+			m_value = m_vstep = 0.0f;
+			m_nstep = 0;
+		}
 
 		void set_value(float value)
 		{
@@ -156,21 +167,27 @@ protected:
 		Filter() { reset(); }
 
 		void reset()
-			{ m_out1 = m_out2 = 0.0f; }
-	
-		void reset_coeffs(const Coeff& coeff)
 		{
-			m_a.set_value(coeff.a);
-			m_b.set_value(coeff.b);
-			m_c.set_value(coeff.c);
+			m_a0.reset();
+			m_b1.reset();
+			m_b2.reset();
+
+			m_out1 = m_out2 = 0.0f;
+		}
+	
+		void reset_coeffs(const Coeffs& coeffs)
+		{
+			m_a0.set_value(coeffs.a0);
+			m_b1.set_value(coeffs.b1);
+			m_b2.set_value(coeffs.b2);
 		}
 	
 		float output(float in)
 		{
 			const float out
-				= m_a.tick() * in
-				+ m_b.tick() * m_out1
-				- m_c.tick() * m_out2;
+				= m_a0.tick() * in
+				+ m_b1.tick() * m_out1
+				- m_b2.tick() * m_out2;
 
 			m_out2 = m_out1;
 			m_out1 = out;
@@ -179,28 +196,23 @@ protected:
 	
 	private:
 
-		FilterCoeff m_a, m_b, m_c;
+		Coeff m_a0, m_b1, m_b2;
 		float m_out1, m_out2;
 	};
 	
-	void reset_filters()
-	{
-		for (uint32_t i = 0; i < NUM_FORMANTS; ++i)
-			m_filters[i].reset();
-	}
-
 	// compute coeffs. for given vocal formant table
-	void vtab_coeffs(Coeff& coeff, const Vtab& vtab, uint32_t i, float p)
+	void vtab_coeffs(Coeffs& coeffs, const Vtab& vtab, uint32_t i, float p)
 	{
 		const float Fi = vtab.F[i];
 		const float Gi = vtab.G[i];
 		const float Bi = vtab.B[i] * p;
-		const float Ai = ::powf(10.0f, (Gi / 20.0f));
 
-		coeff.c = ::expf(-2.0f * M_PI * Bi / m_srate);
-		coeff.b = 2.0f * ::expf(- M_PI * Bi / m_srate)
-				* ::cosf(2.0f * M_PI * Fi / m_srate);
-		coeff.a = Ai * (1.0f - coeff.b + coeff.c);
+		const float Ai = ::powf(10.0f, (0.05f * Gi));
+		const float Ri = ::expf(-M_PI * Bi / m_srate);
+
+		coeffs.b2 = Ri * Ri;
+		coeffs.b1 = 2.0f * Ri * ::cosf(2.0f * M_PI * Fi / m_srate);
+		coeffs.a0 = Ai * (1.0f - coeffs.b1 + coeffs.b2);
 	}
 
 private:

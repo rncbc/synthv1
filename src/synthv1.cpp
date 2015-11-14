@@ -1506,6 +1506,8 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					pv->dcf14.reset(synthv1_filter2::Type(type1));
 					pv->dcf15.reset(synthv1_filter3::Type(type1));
 					pv->dcf16.reset(synthv1_filter3::Type(type1));
+					pv->dcf17.reset_filters();
+					pv->dcf18.reset_filters();
 					// envelopes
 					m_dcf1.env.start(&pv->dcf1_env);
 					m_lfo1.env.start(&pv->lfo1_env);
@@ -1552,6 +1554,8 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					pv->dcf24.reset(synthv1_filter2::Type(type2));
 					pv->dcf25.reset(synthv1_filter3::Type(type2));
 					pv->dcf26.reset(synthv1_filter3::Type(type2));
+					pv->dcf27.reset_filters();
+					pv->dcf28.reset_filters();
 					// envelopes
 					m_dcf2.env.start(&pv->dcf2_env);
 					m_lfo2.env.start(&pv->lfo2_env);
