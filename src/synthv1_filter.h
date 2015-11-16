@@ -70,13 +70,13 @@ public:
 		}
 	}
 
-	float output(float input, float cutoff, float reso)
+	float output(float in, float cutoff, float reso)
 	{
 		const float q = (1.0f - reso);
 
 		for (uint16_t i = 0; i < m_nover; ++i) {
 			m_low  += cutoff * m_band;
-			m_high  = input - m_low - q * m_band;
+			m_high  = in - m_low - q * m_band;
 			m_band += cutoff * m_high;
 			m_notch = m_high + m_low;
 		}
@@ -122,29 +122,29 @@ public:
 		m_t1 = m_t2 = m_t3 = 0.0f;
 	}
 
-	float output(float input, float cutoff, float reso)
+	float output(float in, float cutoff, float reso)
 	{
 		const float c = 1.0f - cutoff;
 		const float p = cutoff + 0.8f * cutoff * c;
 		const float f = p + p - 1.0f;
 		const float q = reso * (1.0f + 0.5f * c * (1.0f - c + 5.6f * c * c));
 
-		input -= q * m_b4; // feedback
+		in -= q * m_b4; // feedback
 
-		m_t1 = m_b1; m_b1 = (input + m_b0) * p - m_b1 * f;
-		m_t2 = m_b2; m_b2 = (m_b1  + m_t1) * p - m_b2 * f;
-		m_t1 = m_b3; m_b3 = (m_b2  + m_t2) * p - m_b3 * f;
+		m_t1 = m_b1; m_b1 = (in   + m_b0) * p - m_b1 * f;
+		m_t2 = m_b2; m_b2 = (m_b1 + m_t1) * p - m_b2 * f;
+		m_t1 = m_b3; m_b3 = (m_b2 + m_t2) * p - m_b3 * f;
 
 		m_b4 = (m_b3 + m_t1) * p - m_b4 * f;
 		m_b4 = m_b4 - m_b4 * m_b4 * m_b4 * 0.166667f; // clipping
 
-		m_b0 = input;
+		m_b0 = in;
 
 		switch (m_type) {
 		case Notch:
-			return 3.0f * (m_b3 - m_b4) - input;
+			return 3.0f * (m_b3 - m_b4) - in;
 		case High:
-			return input - m_b4;
+			return in - m_b4;
 		case Band:
 			return 3.0f * (m_b3 - m_b4);
 		case Low:
@@ -175,13 +175,47 @@ public:
 	enum Type { Low = 0, Band, High, Notch };
 
 	synthv1_filter3(Type type = Low)
-		: m_type(type), m_cutoff(0.5f), m_reso(0.0f) { init_reset(); }
+		: m_type(type), m_cutoff(0.5f), m_reso(0.0f) { reset(type); }
 
 	Type type() const
 		{ return m_type; }
 
 	void reset(Type type)
-		{ m_type = type; reset(); }
+	{
+		m_type = type;
+
+		m_out1 = m_out2 = 0.0f;
+		m_in1 = m_in2 = 0.0f;
+
+		reset();
+	}
+
+	float output(float in, float cutoff, float reso)
+	{
+		// parameter changes
+		if (::fabs(m_cutoff - cutoff) > 0.001f ||
+			::fabs(m_reso   - reso)   > 0.001f) {
+			m_cutoff = cutoff;
+			m_reso = reso;
+			reset();
+		}
+
+		// filter
+		const float out = m_b0a0 * in
+			+ m_b1a0 * m_in1  + m_b2a0 * m_in2
+			- m_a1a0 * m_out1 - m_a2a0 * m_out2;
+
+		// push in/out buffers
+		m_in2  = m_in1;
+		m_in1  = in;
+		m_out2 = m_out1;
+		m_out1 = out;
+
+		// return output
+		return out;
+	}
+
+protected:
 
 	void reset()
 	{
@@ -230,42 +264,6 @@ public:
 		m_b2a0 = b2 / a0;
 		m_a1a0 = a1 / a0;
 		m_a2a0 = a2 / a0;
-	}
-
-	float output(float in, float cutoff, float reso)
-	{
-		// parameter changes
-		if (::fabs(m_cutoff - cutoff) > 0.001f ||
-			::fabs(m_reso   - reso)   > 0.001f) {
-			m_cutoff = cutoff;
-			m_reso = reso;
-			reset();
-		}
-
-		// filter
-		const float out = m_b0a0 * in
-			+ m_b1a0 * m_in1  + m_b2a0 * m_in2
-			- m_a1a0 * m_out1 - m_a2a0 * m_out2;
-
-		// push in/out buffers
-		m_in2  = m_in1;
-		m_in1  = in;
-		m_out2 = m_out1;
-		m_out1 = out;
-
-		// return output
-		return out;
-	}
-
-protected:
-
-	void init_reset()
-	{
-		// reset filter memory
-		m_out1 = m_out2 = 0.0f;
-		m_in1 = m_in2 = 0.0f;
-
-		reset();
 	}
 
 private:
