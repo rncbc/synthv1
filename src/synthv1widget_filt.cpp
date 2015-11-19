@@ -133,10 +133,10 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 	const int w8 = w >> 3;
 
 	const int iSlope = int(m_fSlope);
-	const int ws = w8 - (w8 >> 1) * (iSlope == 1 ? 1 : 0);
+	const int ws = w8 - (iSlope == 1 ? (w8 >> 1) : 0);
 
 	int x = w8 + int(m_fCutoff * float(w - w4));
-	int y = h2 - int(m_fReso * float(h + h4));
+	int y = h2 - int(m_fReso   * float(h + h4));
 
 	QPolygon poly(6);
 	QPainterPath path;
@@ -191,18 +191,35 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 	}
 	// Formant
 	if (iType == 4) {
-		const int x2 = (x - w4) >> 1;
-		const int y2 = (y - h4) >> 1;
+		const int x2 = (x - w4) >> 2;
+		const int y2 = (y - h4) >> 2;
 		poly.putPoints(0, 6,
 			0, h2,
 			x2, h2,
-			x, h2,
+			x - ws, h2,
 			x, y2,
 			x + ws, h,
 			0, h);
 		path.moveTo(poly.at(0));
+	#if 0
 		path.lineTo(poly.at(1));
 		path.cubicTo(poly.at(2), poly.at(3), poly.at(4));
+	#else
+		const int n3 = 5; // num.formants
+		const int w3 = (x + ws - x2) / n3 - 1;
+		const int w6 = (w3 >> 1);
+		const int h3 = (h4 >> 1);
+		int x3 = x2; int y3 = y2;
+		for (int i = 0; i < n3; ++i) {
+			poly.putPoints(1, 3,
+				x3, h2,
+				x3 + w6, y3,
+				x3 + w3, y3 + h2);
+			path.cubicTo(poly.at(1), poly.at(2), poly.at(3));
+			x3 += w3; y3 += h3;
+		}
+		path.lineTo(poly.at(4));
+	#endif
 		path.lineTo(poly.at(5));
 	}
 
@@ -210,7 +227,7 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 	const bool bDark = (pal.window().color().value() < 0x7f);
 	const QColor& rgbLite = (isEnabled()
 		? (bDark ? Qt::darkYellow : Qt::yellow) : pal.mid().color());
-    const QColor& rgbDark = pal.window().color().darker(180);
+	const QColor& rgbDark = pal.window().color().darker(180);
 
 	painter.fillRect(rect, rgbDark);
 
