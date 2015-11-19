@@ -55,12 +55,12 @@ public:
 		const uint32_t k = uint32_t(fK);
 		const float   fJ = (fK - float(k)) * float(NUM_VOWELS);
 		const uint32_t j = uint32_t(fJ);
-		const float   fX = (fJ - float(j)); // linear morph fract.
+		const float   dJ = (fJ - float(j)); // vowel morph fraction
 
 		const float q = 4.0f * m_reso * m_reso + 1.0f;
 		const float p = 1.0f / q;
 
-		// vocal formant morphing
+		// vocal/vowel formant morphing
 		Coeffs coeff1, coeff2;
 		const Vtab *vtabs = g_vtabs[k];
 		const Vtab& vtab1 = vtabs[j];
@@ -68,9 +68,9 @@ public:
 		for (uint32_t i = 0; i < NUM_FORMANTS; ++i) {
 			vtab_coeffs(coeff1, vtab1, i, p);
 			vtab_coeffs(coeff2, vtab2, i, p);
-			coeff1.a0 += fX * (coeff2.a0 - coeff1.a0);
-			coeff1.b1 += fX * (coeff2.b1 - coeff1.b1);
-			coeff1.b2 += fX * (coeff2.b2 - coeff1.b2);
+			coeff1.a0 += dJ * (coeff2.a0 - coeff1.a0);
+			coeff1.b1 += dJ * (coeff2.b1 - coeff1.b1);
+			coeff1.b2 += dJ * (coeff2.b2 - coeff1.b2);
 			m_filters[i].reset_coeffs(coeff1);
 		}
 	}
