@@ -28,70 +28,93 @@
 
 //---------------------------------------------------------------------
 // synthv1_formant - formant parallel filter after Dennis H. Klatt's
-//                 Software for a cascade/parallel formant synthesizer.
+//                   Software for a cascade/parallel formant synthesizer
+//                   1979 MIT; 1980 Acoustical Society of America.
 //
 
 class synthv1_formant
 {
 public:
 
+	// constants
+	static const uint32_t NUM_VTABS = 5;
+	static const uint32_t NUM_VOWELS = 5;
+	static const uint32_t NUM_FORMANTS = 5;
+
+	// 2-pole filter coeffs.
+	struct Coeffs { float a0, b1, b2; };
+
+	// vocal/vowel table
+	struct Vtab
+	{
+		float freq[NUM_FORMANTS];	// frequency [Hz]
+		float gain[NUM_FORMANTS];	// peak gain [dB]
+		float band[NUM_FORMANTS];	// bandwidth [Hz]
+	};
+
+	// main impl.
+	class Impl
+	{
+	public:
+
+		// ctor.
+		Impl(float srate = 44100.0f)
+			: m_srate(srate), m_cutoff(0.0f), m_reso(0.0f)
+			{ reset_coeffs(); }
+
+		// sample-rate accessors
+		void setSampleRate(float srate)
+			{ m_srate = srate; }
+		float sampleRate() const
+			{ return m_srate; }
+
+		// formant coeffs. accessor
+		const Coeffs& coeffs(uint32_t i) const
+			{ return m_ctabs[i]; }
+
+		// reset method
+		void reset_coeffs(float cutoff = 0.5f, float reso = 0.0f);
+
+	protected:
+
+		// compute coeffs. for given vocal formant table
+		void vtab_coeffs(Coeffs& coeffs, const Vtab& vtab, uint32_t i, float p);
+
+	private:
+
+		// instance members
+		float m_srate;
+
+		// parameters
+		float m_cutoff;
+		float m_reso;
+
+		// filter coeffs.
+		Coeffs m_ctabs[NUM_FORMANTS];
+	};
+
 	// ctor.
-	synthv1_formant(float srate = 44100.0f)
-		: m_srate(srate) { reset(); }
-
-	// sample-rate accessors
-	void setSampleRate(float srate)
-		{ m_srate = srate; }
-	float sampleRate() const
-		{ return m_srate; }
-
-	// reset method
-	void reset(float cutoff = 0.5f, float reso = 0.0f)
-	{
-		m_cutoff = cutoff;
-		m_reso = reso;
-
-		const float   fK = m_cutoff * float(NUM_VTABS);
-		const uint32_t k = uint32_t(fK);
-		const float   fJ = (fK - float(k)) * float(NUM_VOWELS);
-		const uint32_t j = uint32_t(fJ);
-		const float   dJ = (fJ - float(j)); // vowel morph fraction
-
-		const float q = 4.0f * m_reso * m_reso + 1.0f;
-		const float p = 1.0f / q;
-
-		// vocal/vowel formant morphing
-		Coeffs coeff1, coeff2;
-		const Vtab *vtabs = g_vtabs[k];
-		const Vtab& vtab1 = vtabs[j];
-		const Vtab& vtab2 = (j < NUM_VOWELS - 1 ? vtabs[j + 1] : vtab1);
-		for (uint32_t i = 0; i < NUM_FORMANTS; ++i) {
-			vtab_coeffs(coeff1, vtab1, i, p);
-			vtab_coeffs(coeff2, vtab2, i, p);
-			coeff1.a0 += dJ * (coeff2.a0 - coeff1.a0);
-			coeff1.b1 += dJ * (coeff2.b1 - coeff1.b1);
-			coeff1.b2 += dJ * (coeff2.b2 - coeff1.b2);
-			m_filters[i].reset_coeffs(coeff1);
-		}
-	}
-
-	void reset_filters()
-	{
-		for (uint32_t i = 0; i < NUM_FORMANTS; ++i)
-			m_filters[i].reset();
-	}
+	synthv1_formant(Impl *pImpl)
+		: m_pImpl(pImpl), m_cutoff(0.0f), m_reso(0.0f)
+		{ reset_coeffs(); }
 
 	// output tick
 	float output(float in, float cutoff, float reso)
 	{
 		if (::fabs(m_cutoff - cutoff) > 0.001f ||
 			::fabs(m_reso - reso) > 0.001f)
-			reset(cutoff, reso);
+			reset_coeffs(cutoff, reso);
 
 		float out = 0.0f;
 		for (uint32_t i = 0; i < NUM_FORMANTS; ++i)
 			out += m_filters[i].output(in);
 		return out;
+	}
+
+	void reset_filters()
+	{
+		for (uint32_t i = 0; i < NUM_FORMANTS; ++i)
+			m_filters[i].reset();
 	}
 
 	// process block
@@ -103,20 +126,6 @@ public:
 			in[i] += (wet * out);
 		}
 	}
-
-	// constants
-	static const uint32_t NUM_VTABS = 5;
-	static const uint32_t NUM_VOWELS = 5;
-	static const uint32_t NUM_FORMANTS = 5;
-	
-	struct Vtab
-	{
-		float F[NUM_FORMANTS];	// frequency [Hz]
-		float G[NUM_FORMANTS];	// peak gain [dB]
-		float B[NUM_FORMANTS];	// bandwidth [Hz]
-	};
-
-	struct Coeffs { float a0, b1, b2; };
 
 protected:
 
@@ -199,33 +208,21 @@ protected:
 		Coeff m_a0, m_b1, m_b2;
 		float m_out1, m_out2;
 	};
-	
-	// compute coeffs. for given vocal formant table
-	void vtab_coeffs(Coeffs& coeffs, const Vtab& vtab, uint32_t i, float p)
-	{
-		const float Fi = vtab.F[i];
-		const float Gi = vtab.G[i];
-		const float Bi = vtab.B[i] * p;
 
-		const float Ai = ::powf(10.0f, (0.05f * Gi));
-		const float Ri = ::expf(-M_PI * Bi / m_srate);
-
-		coeffs.b2 = Ri * Ri;
-		coeffs.b1 = 2.0f * Ri * ::cosf(2.0f * M_PI * Fi / m_srate);
-		coeffs.a0 = Ai * (1.0f - coeffs.b1 + coeffs.b2);
-	}
+	// reset method.
+	void reset_coeffs(float cutoff = 0.5f, float reso = 0.0f);
 
 private:
 
 	// instance members
-	float m_srate;
+	Impl *m_pImpl;
 
-	// parameters
+	// parameters.
 	float m_cutoff;
 	float m_reso;
 
 	// formant filters
-	Filter m_filters[NUM_FORMANTS];
+	Filter m_filters[NUM_FORMANTS];			
 
 	// base vocal tables.
 	static Vtab  g_bass_vtab[NUM_VOWELS];

@@ -24,7 +24,8 @@
 
 //---------------------------------------------------------------------
 // synthv1_formant - formant parallel filter after Dennis H. Klatt's
-//                 Software for a cascade/parallel formant synthesizer.
+//                   Software for a cascade/parallel formant synthesizer
+//                   1979 MIT; 1980 Acoustical Society of America.
 //
 
 // formant tables.
@@ -157,6 +158,71 @@ synthv1_formant::Vtab *synthv1_formant::g_vtabs[NUM_VTABS] = {
 	g_soprano_vtab,
 	g_alto_vtab
 };
+
+
+// compute coeffs. for given vocal formant table
+void synthv1_formant::Impl::vtab_coeffs (
+	Coeffs& coeffs, const Vtab& vtab, uint32_t i, float p )
+{
+	const float Fi = vtab.freq[i];
+	const float Gi = vtab.gain[i];
+	const float Bi = vtab.band[i] * p;
+
+	const float Ai = ::powf(10.0f, (0.05f * Gi));
+	const float Ri = ::expf(-M_PI * Bi / m_srate);
+
+	coeffs.b2 = Ri * Ri;
+	coeffs.b1 = 2.0f * Ri * ::cosf(2.0f * M_PI * Fi / m_srate);
+	coeffs.a0 = Ai * (1.0f - coeffs.b1 + coeffs.b2);
+}
+
+
+// reset method impl.
+void synthv1_formant::Impl::reset_coeffs ( float cutoff, float reso )
+{
+	if (::fabs(m_cutoff - cutoff) < 0.001f &&
+		::fabs(m_reso   - reso)   < 0.001f)
+		return;
+
+	m_cutoff = cutoff;
+	m_reso = reso;
+
+	const float   fK = m_cutoff * float(NUM_VTABS);
+	const uint32_t k = uint32_t(fK);
+	const float   fJ = (fK - float(k)) * float(NUM_VOWELS);
+	const uint32_t j = uint32_t(fJ);
+	const float   dJ = (fJ - float(j)); // vowel morph fraction
+
+	const float q = 4.0f * m_reso * m_reso + 1.0f;
+	const float p = 1.0f / q;
+
+	// vocal/vowel formant morphing
+	Coeffs coeff2;
+	const Vtab *vtabs = g_vtabs[k];
+	const Vtab& vtab1 = vtabs[j];
+	const Vtab& vtab2 = (j < NUM_VOWELS - 1 ? vtabs[j + 1] : vtab1);
+	for (uint32_t i = 0; i < NUM_FORMANTS; ++i) {
+		Coeffs& coeff1 = m_ctabs[i];
+		vtab_coeffs(coeff1, vtab1, i, p);
+		vtab_coeffs(coeff2, vtab2, i, p);
+		coeff1.a0 += dJ * (coeff2.a0 - coeff1.a0);
+		coeff1.b1 += dJ * (coeff2.b1 - coeff1.b1);
+		coeff1.b2 += dJ * (coeff2.b2 - coeff1.b2);
+	}
+}
+
+
+// reset method.
+void synthv1_formant::reset_coeffs ( float cutoff, float reso )
+{
+	m_cutoff = cutoff;
+	m_reso = reso;
+
+	m_pImpl->reset_coeffs(m_cutoff, m_reso);
+
+	for (uint32_t i = 0; i < NUM_FORMANTS; ++i)
+		m_filters[i].reset_coeffs(m_pImpl->coeffs(i));
+}
 
 
 // end of synthv1_formant.cpp

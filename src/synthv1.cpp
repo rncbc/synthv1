@@ -662,6 +662,9 @@ public:
 	float dco2_last1;
 	float dco2_last2;
 
+	synthv1_formant::Impl dcf1_formant;
+	synthv1_formant::Impl dcf2_formant;
+
 protected:
 
 	void updateEnvTimes();
@@ -765,6 +768,10 @@ synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
 	dco2_freq1(0.0f), dco2_sample1(0.0f),
 	dco2_freq2(0.0f), dco2_sample2(0.0f),
 	lfo1_sample(0.0f), lfo2_sample(0.0f),
+	dcf17(&pImpl->dcf1_formant),
+	dcf18(&pImpl->dcf1_formant),
+	dcf27(&pImpl->dcf2_formant),
+	dcf28(&pImpl->dcf2_formant),
 	dco1_glide1(pImpl->dco1_last1),
 	dco1_glide2(pImpl->dco1_last2),
 	dco2_glide1(pImpl->dco2_last1),
@@ -911,13 +918,8 @@ void synthv1_impl::setSampleRate ( float srate )
 	dco2_wave1.setSampleRate(m_srate);
 	dco2_wave2.setSampleRate(m_srate);
 
-	for (int i = 0; i < MAX_VOICES; ++i) {
-		synthv1_voice *pv = m_voices[i];
-		pv->dcf17.setSampleRate(m_srate);
-		pv->dcf18.setSampleRate(m_srate);
-		pv->dcf27.setSampleRate(m_srate);
-		pv->dcf28.setSampleRate(m_srate);
-	}
+	dcf1_formant.setSampleRate(m_srate);
+	dcf2_formant.setSampleRate(m_srate);
 
 	lfo1_wave.setSampleRate(m_srate);
 	lfo2_wave.setSampleRate(m_srate);
