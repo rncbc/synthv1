@@ -215,6 +215,9 @@ void synthv1_formant::Impl::reset_coeffs ( float cutoff, float reso )
 // reset method.
 void synthv1_formant::reset_coeffs ( float cutoff, float reso )
 {
+	if (m_pImpl == 0)
+		return;
+
 	m_cutoff = cutoff;
 	m_reso = reso;
 

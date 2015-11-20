@@ -94,9 +94,13 @@ public:
 	};
 
 	// ctor.
-	synthv1_formant(Impl *pImpl)
+	synthv1_formant(Impl *pImpl = 0)
 		: m_pImpl(pImpl), m_cutoff(0.0f), m_reso(0.0f)
 		{ reset_coeffs(); }
+
+	// reset impl.
+	void reset(Impl *pImpl)
+		{ m_pImpl = pImpl; reset_coeffs(); }
 
 	// output tick
 	float output(float in, float cutoff, float reso)
@@ -183,14 +187,14 @@ protected:
 
 			m_out1 = m_out2 = 0.0f;
 		}
-	
+
 		void reset_coeffs(const Coeffs& coeffs)
 		{
 			m_a0.set_value(coeffs.a0);
 			m_b1.set_value(coeffs.b1);
 			m_b2.set_value(coeffs.b2);
 		}
-	
+
 		float output(float in)
 		{
 			const float out
@@ -202,7 +206,7 @@ protected:
 			m_out1 = out;
 			return out;
 		}
-	
+
 	private:
 
 		Coeff m_a0, m_b1, m_b2;
@@ -222,7 +226,7 @@ private:
 	float m_reso;
 
 	// formant filters
-	Filter m_filters[NUM_FORMANTS];			
+	Filter m_filters[NUM_FORMANTS];
 
 	// base vocal tables.
 	static Vtab  g_bass_vtab[NUM_VOWELS];
