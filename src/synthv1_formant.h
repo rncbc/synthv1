@@ -64,7 +64,7 @@ public:
 
 		// sample-rate accessors
 		void setSampleRate(float srate)
-			{ m_srate = srate; }
+			{ m_srate = srate; reset_coeffs(); }
 		float sampleRate() const
 			{ return m_srate; }
 
@@ -72,13 +72,24 @@ public:
 		const Coeffs& coeffs(uint32_t i) const
 			{ return m_ctabs[i]; }
 
-		// reset method
-		void reset_coeffs(float cutoff = 0.5f, float reso = 0.0f);
+		// update method
+		void update(float cutoff = 0.5f, float reso = 0.0f)
+		{
+			if (::fabs(m_cutoff - cutoff) > 0.001f ||
+				::fabs(m_reso   - reso)   > 0.001f) {
+				m_cutoff = cutoff;
+				m_reso = reso;
+				reset_coeffs();
+			}
+		}
 
 	protected:
 
 		// compute coeffs. for given vocal formant table
 		void vtab_coeffs(Coeffs& coeffs, const Vtab& vtab, uint32_t i, float p);
+
+		// reset coeffs. method
+		void reset_coeffs();
 
 	private:
 
@@ -105,9 +116,7 @@ public:
 	// output tick
 	float output(float in, float cutoff, float reso)
 	{
-		if (::fabs(m_cutoff - cutoff) > 0.001f ||
-			::fabs(m_reso - reso) > 0.001f)
-			reset_coeffs(cutoff, reso);
+		update(cutoff, reso);
 
 		float out = 0.0f;
 		for (uint32_t i = 0; i < NUM_FORMANTS; ++i)
@@ -213,8 +222,19 @@ protected:
 		float m_out1, m_out2;
 	};
 
-	// reset method.
-	void reset_coeffs(float cutoff = 0.5f, float reso = 0.0f);
+	// update method
+	void update(float cutoff, float reso)
+	{
+		if (::fabs(m_cutoff - cutoff) > 0.001f ||
+			::fabs(m_reso   - reso)   > 0.001f) {
+			m_cutoff = cutoff;
+			m_reso = reso;
+			reset_coeffs();
+		}
+	}
+
+	// reset coeffs. method
+	void reset_coeffs();
 
 private:
 
@@ -228,7 +248,7 @@ private:
 	// formant filters
 	Filter m_filters[NUM_FORMANTS];
 
-	// base vocal tables.
+	// base vocal tables
 	static Vtab  g_bass_vtab[NUM_VOWELS];
 	static Vtab  g_tenor_vtab[NUM_VOWELS];
 	static Vtab  g_countertenor_vtab[NUM_VOWELS];

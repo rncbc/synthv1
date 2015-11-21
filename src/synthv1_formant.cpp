@@ -178,15 +178,8 @@ void synthv1_formant::Impl::vtab_coeffs (
 
 
 // reset method impl.
-void synthv1_formant::Impl::reset_coeffs ( float cutoff, float reso )
+void synthv1_formant::Impl::reset_coeffs (void)
 {
-	if (::fabs(m_cutoff - cutoff) < 0.001f &&
-		::fabs(m_reso   - reso)   < 0.001f)
-		return;
-
-	m_cutoff = cutoff;
-	m_reso = reso;
-
 	const float   fK = m_cutoff * float(NUM_VTABS);
 	const uint32_t k = uint32_t(fK);
 	const float   fJ = (fK - float(k)) * float(NUM_VOWELS);
@@ -212,19 +205,14 @@ void synthv1_formant::Impl::reset_coeffs ( float cutoff, float reso )
 }
 
 
-// reset method.
-void synthv1_formant::reset_coeffs ( float cutoff, float reso )
+// reset coeffs. method
+void synthv1_formant::reset_coeffs (void)
 {
-	if (m_pImpl == 0)
-		return;
-
-	m_cutoff = cutoff;
-	m_reso = reso;
-
-	m_pImpl->reset_coeffs(m_cutoff, m_reso);
-
-	for (uint32_t i = 0; i < NUM_FORMANTS; ++i)
-		m_filters[i].reset_coeffs(m_pImpl->coeffs(i));
+	if (m_pImpl) {
+		m_pImpl->update(m_cutoff, m_reso);
+		for (uint32_t i = 0; i < NUM_FORMANTS; ++i)
+			m_filters[i].reset_coeffs(m_pImpl->coeffs(i));
+	}
 }
 
 
