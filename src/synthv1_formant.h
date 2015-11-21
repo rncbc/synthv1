@@ -86,7 +86,7 @@ public:
 	protected:
 
 		// compute coeffs. for given vocal formant table
-		void vtab_coeffs(Coeffs& coeffs, const Vtab& vtab, uint32_t i, float p);
+		void vtab_coeffs(Coeffs& coeffs, const Vtab *vtab, uint32_t i, float p);
 
 		// reset coeffs. method
 		void reset_coeffs();

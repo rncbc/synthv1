@@ -162,11 +162,11 @@ synthv1_formant::Vtab *synthv1_formant::g_vtabs[NUM_VTABS] = {
 
 // compute coeffs. for given vocal formant table
 void synthv1_formant::Impl::vtab_coeffs (
-	Coeffs& coeffs, const Vtab& vtab, uint32_t i, float p )
+	Coeffs& coeffs, const Vtab *vtab, uint32_t i, float p )
 {
-	const float Fi = vtab.freq[i];
-	const float Gi = vtab.gain[i];
-	const float Bi = vtab.band[i] * p;
+	const float Fi = vtab->freq[i];
+	const float Gi = vtab->gain[i];
+	const float Bi = vtab->band[i] * p;
 
 	const float Ai = ::powf(10.0f, (0.05f * Gi));
 	const float Ri = ::expf(-M_PI * Bi / m_srate);
@@ -190,10 +190,18 @@ void synthv1_formant::Impl::reset_coeffs (void)
 	const float p = 1.0f / q;
 
 	// vocal/vowel formant morphing
+	const Vtab *vtabs1 = g_vtabs[k];
+	const Vtab *vtabs2 = (k < NUM_VTABS - 1 ? g_vtabs[k + 1] : vtabs1);
+
+	const Vtab *vtab1 = &vtabs1[j];
+	const Vtab *vtab2 = &vtabs2[j];
+	if (j < NUM_VOWELS - 1)
+		vtab2 = &vtabs1[j + 1];
+	else
+	if (k < NUM_VTABS - 1)
+		vtab2 = &vtabs2[0];
+
 	Coeffs coeff2;
-	const Vtab *vtabs = g_vtabs[k];
-	const Vtab& vtab1 = vtabs[j];
-	const Vtab& vtab2 = (j < NUM_VOWELS - 1 ? vtabs[j + 1] : vtab1);
 	for (uint32_t i = 0; i < NUM_FORMANTS; ++i) {
 		Coeffs& coeff1 = m_ctabs[i];
 		vtab_coeffs(coeff1, vtab1, i, p);
