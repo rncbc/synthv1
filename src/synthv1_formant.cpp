@@ -190,16 +190,14 @@ void synthv1_formant::Impl::reset_coeffs (void)
 	const float p = 1.0f / q;
 
 	// vocal/vowel formant morphing
-	const Vtab *vtabs1 = g_vtabs[k];
-	const Vtab *vtabs2 = (k < NUM_VTABS - 1 ? g_vtabs[k + 1] : vtabs1);
-
-	const Vtab *vtab1 = &vtabs1[j];
-	const Vtab *vtab2 = &vtabs2[j];
+	const Vtab *vtabs = g_vtabs[k];
+	const Vtab *vtab1 = &vtabs[j];
+	const Vtab *vtab2 = vtab1;
 	if (j < NUM_VOWELS - 1)
-		vtab2 = &vtabs1[j + 1];
+		vtab2 = &vtabs[j + 1];
 	else
 	if (k < NUM_VTABS - 1)
-		vtab2 = &vtabs2[0];
+		vtab2 = &g_vtabs[k + 1][0];
 
 	Coeffs coeff2;
 	for (uint32_t i = 0; i < NUM_FORMANTS; ++i) {
