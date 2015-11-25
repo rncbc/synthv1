@@ -350,6 +350,7 @@ struct synthv1_lfo
 	float *shape;
 	float *width;
 	float *rate;
+	float *sync;
 	float *sweep;
 	float *pitch;
 	float *ringmod;
@@ -571,6 +572,32 @@ protected:
 };
 
 
+// common phasor (LFO sync)
+
+class synthv1_phasor
+{
+public:
+
+	synthv1_phasor(uint32_t nsize = 128)
+		: m_nsize(nsize), m_nframes(0) {}
+
+	void process(uint32_t nframes)
+	{
+		m_nframes += nframes;
+		while (m_nframes >= m_nsize)
+			m_nframes -= m_nsize;
+	}
+
+	float pshift() const
+		{ return float(m_nframes) / float(m_nsize); }
+
+private:
+
+	uint32_t m_nsize;
+	uint32_t m_nframes;
+};
+
+
 // forward decl.
 
 class synthv1_impl;
@@ -748,6 +775,7 @@ private:
 	synthv1_fx_comp    *m_comp;
 
 	synthv1_reverb m_reverb;
+	synthv1_phasor m_phasor;
 };
 
 
@@ -1054,6 +1082,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::LFO1_SHAPE:     m_lfo1.shape       = pfParam; break;
 	case synthv1::LFO1_WIDTH:     m_lfo1.width       = pfParam; break;
 	case synthv1::LFO1_RATE:      m_lfo1.rate        = pfParam; break;
+	case synthv1::LFO1_SYNC:      m_lfo1.sync        = pfParam; break;
 	case synthv1::LFO1_SWEEP:     m_lfo1.sweep       = pfParam; break;
 	case synthv1::LFO1_PITCH:     m_lfo1.pitch       = pfParam; break;
 	case synthv1::LFO1_RINGMOD:   m_lfo1.ringmod     = pfParam; break;
@@ -1106,6 +1135,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::LFO2_SHAPE:     m_lfo2.shape       = pfParam; break;
 	case synthv1::LFO2_WIDTH:     m_lfo2.width       = pfParam; break;
 	case synthv1::LFO2_RATE:      m_lfo2.rate        = pfParam; break;
+	case synthv1::LFO2_SYNC:      m_lfo2.sync        = pfParam; break;
 	case synthv1::LFO2_SWEEP:     m_lfo2.sweep       = pfParam; break;
 	case synthv1::LFO2_PITCH:     m_lfo2.pitch       = pfParam; break;
 	case synthv1::LFO2_RINGMOD:   m_lfo2.ringmod     = pfParam; break;
@@ -1241,6 +1271,7 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index ) const
 	case synthv1::LFO1_SHAPE:     pfParam = m_lfo1.shape;       break;
 	case synthv1::LFO1_WIDTH:     pfParam = m_lfo1.width;       break;
 	case synthv1::LFO1_RATE:      pfParam = m_lfo1.rate;        break;
+	case synthv1::LFO1_SYNC:      pfParam = m_lfo1.sync;        break;
 	case synthv1::LFO1_SWEEP:     pfParam = m_lfo1.sweep;       break;
 	case synthv1::LFO1_PITCH:     pfParam = m_lfo1.pitch;       break;
 	case synthv1::LFO1_RINGMOD:   pfParam = m_lfo1.ringmod;     break;
@@ -1293,6 +1324,7 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index ) const
 	case synthv1::LFO2_SHAPE:     pfParam = m_lfo2.shape;       break;
 	case synthv1::LFO2_WIDTH:     pfParam = m_lfo2.width;       break;
 	case synthv1::LFO2_RATE:      pfParam = m_lfo2.rate;        break;
+	case synthv1::LFO2_SYNC:      pfParam = m_lfo2.sync;        break;
 	case synthv1::LFO2_SWEEP:     pfParam = m_lfo2.sweep;       break;
 	case synthv1::LFO2_PITCH:     pfParam = m_lfo2.pitch;       break;
 	case synthv1::LFO2_RINGMOD:   pfParam = m_lfo2.ringmod;     break;
@@ -1515,7 +1547,9 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					m_lfo1.env.start(&pv->lfo1_env);
 					m_dca1.env.start(&pv->dca1_env);
 					// lfos
-					pv->lfo1_sample = pv->lfo1_osc.start();
+					const float pshift1
+						= (*m_lfo1.sync > 0.0f ? m_phasor.pshift() : 0.0f);
+					pv->lfo1_sample = pv->lfo1_osc.start(pshift1);
 					// glides (portamento)
 					const float frames1
 						= uint32_t(*m_dco1.glide * *m_dco1.glide * m_srate);
@@ -1563,7 +1597,9 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					m_lfo2.env.start(&pv->lfo2_env);
 					m_dca2.env.start(&pv->dca2_env);
 					// lfos
-					pv->lfo2_sample = pv->lfo2_osc.start();
+					const float pshift2
+						= (*m_lfo2.sync > 0.0f ? m_phasor.pshift() : 0.0f);
+					pv->lfo2_sample = pv->lfo2_osc.start(pshift2);
 					// glides (portamento)
 					const float frames2
 						= uint32_t(*m_dco2.glide * *m_dco2.glide * m_srate);
@@ -2264,6 +2300,7 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	}
 
 	// post-processing
+	m_phasor.process(nframes);
 
 	m_wid1.process(nframes);
 	m_pan1.process(nframes);

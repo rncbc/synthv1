@@ -74,6 +74,7 @@ struct ParamInfo {
 	{ "LFO1_SHAPE",    PARAM_INT,     1.0f,   0.0f,   4.0f }, // LFO1 Wave Shape
 	{ "LFO1_WIDTH",    PARAM_FLOAT,   1.0f,   0.0f,   1.0f }, // LFO1 Wave Width
 	{ "LFO1_RATE",     PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // LFO1 Rate
+	{ "LFO1_SYNC",     PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // LFO1 Sync
 	{ "LFO1_SWEEP",    PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO1 Sweep
 	{ "LFO1_PITCH",    PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO1 Pitch
 	{ "LFO1_RINGMOD",  PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO1 Ring Mod
@@ -128,6 +129,7 @@ struct ParamInfo {
 	{ "LFO2_SHAPE",    PARAM_INT,     1.0f,   0.0f,   4.0f }, // LFO2 Wave Shape
 	{ "LFO2_WIDTH",    PARAM_FLOAT,   1.0f,   0.0f,   1.0f }, // LFO2 Wave Width
 	{ "LFO2_RATE",     PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // LFO2 Rate
+	{ "LFO2_SYNC",     PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // LFO2 Sync
 	{ "LFO2_SWEEP",    PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO2 Sweep
 	{ "LFO2_PITCH",    PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO2 Pitch
 	{ "LFO2_RINGMOD",  PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO2 Ring Mod

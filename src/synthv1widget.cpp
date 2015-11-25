@@ -130,6 +130,9 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_ui.Dco2Bandl1Knob->insertItems(0, states);
 	m_ui.Dco2Bandl2Knob->insertItems(0, states);
 
+	m_ui.Lfo1SyncKnob->insertItems(0, states);
+	m_ui.Lfo2SyncKnob->insertItems(0, states);
+
 	m_ui.Dyn1CompressKnob->insertItems(0, states);
 	m_ui.Dyn1LimiterKnob->insertItems(0, states);
 
@@ -359,6 +362,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	setParamKnob(synthv1::LFO1_SHAPE,   m_ui.Lfo1ShapeKnob);
 	setParamKnob(synthv1::LFO1_WIDTH,   m_ui.Lfo1WidthKnob);
 	setParamKnob(synthv1::LFO1_RATE,    m_ui.Lfo1RateKnob);
+	setParamKnob(synthv1::LFO1_SYNC,    m_ui.Lfo1SyncKnob);
 	setParamKnob(synthv1::LFO1_PANNING, m_ui.Lfo1PanningKnob);
 	setParamKnob(synthv1::LFO1_VOLUME,  m_ui.Lfo1VolumeKnob);
 	setParamKnob(synthv1::LFO1_CUTOFF,  m_ui.Lfo1CutoffKnob);
@@ -568,6 +572,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	setParamKnob(synthv1::LFO2_SHAPE,   m_ui.Lfo2ShapeKnob);
 	setParamKnob(synthv1::LFO2_WIDTH,   m_ui.Lfo2WidthKnob);
 	setParamKnob(synthv1::LFO2_RATE,    m_ui.Lfo2RateKnob);
+	setParamKnob(synthv1::LFO2_SYNC,    m_ui.Lfo2SyncKnob);
 	setParamKnob(synthv1::LFO2_PANNING, m_ui.Lfo2PanningKnob);
 	setParamKnob(synthv1::LFO2_VOLUME,  m_ui.Lfo2VolumeKnob);
 	setParamKnob(synthv1::LFO2_CUTOFF,  m_ui.Lfo2CutoffKnob);
