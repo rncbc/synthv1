@@ -204,14 +204,14 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 
 	const float bpm_sync = paramValue(synthv1::DEL1_BPMSYNC);
 	if (bpm_sync > 0.0f) {
-		const float bpm_host = paramValue(synthv1::DEL1_BPMHOST);
-		if (bpm_host > 0.0f) {
+		const float bpm = paramValue(synthv1::DEL1_BPM);
+		if (bpm > 0.0f) {
 			jack_position_t pos;
 			jack_transport_query(m_client, &pos);
 			if (pos.valid & JackPositionBBT) {
-				const float bpm = float(pos.beats_per_minute);
+				const float bpm_host = float(pos.beats_per_minute);
 				if (::fabs(bpm_host - bpm) > 0.01f)
-					setParamValue(synthv1::DEL1_BPMHOST, bpm);
+					setParamValue(synthv1::DEL1_BPM, bpm_host);
 			}
 		}
 	}

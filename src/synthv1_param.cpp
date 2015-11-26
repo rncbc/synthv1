@@ -177,7 +177,6 @@ struct ParamInfo {
 	{ "DEL1_FEEDB",    PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // Delay Feedback
 	{ "DEL1_BPM",      PARAM_FLOAT, 180.0f,   3.6f, 360.0f }, // Delay BPM
 	{ "DEL1_BPMSYNC",  PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // Delay BPM (sync)
-	{ "DEL1_BPMHOST",  PARAM_FLOAT, 180.0f,   3.6f, 360.0f }, // Delay BPM (host)
 	{ "REV1_WET",      PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // Reverb Wet
 	{ "REV1_ROOM",     PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // Reverb Room
 	{ "REV1_DAMP",     PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // Reverb Damp

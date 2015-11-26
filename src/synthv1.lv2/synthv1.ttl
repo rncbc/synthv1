@@ -1253,20 +1253,10 @@
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
 		lv2pg:group synthv1_lv2:304_DEL1 ;
-	], [
-		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 130 ;
-		lv2:symbol "DEL1_BPMHOST" ;
-		lv2:name "Delay BPM (host)" ;
-		lv2:default 180.0 ;
-		lv2:minimum 3.6 ;
-		lv2:maximum 360.0 ;
-		lv2:designation lv2time:beatsPerMinute ;
-		lv2pg:group synthv1_lv2:304_DEL1 ;
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 131 ;
+		lv2:index 130 ;
 		lv2:symbol "REV1_WET" ;
 		lv2:name "Reverb Wet" ;
 		lv2:default 0.0 ;
@@ -1275,7 +1265,7 @@
 		lv2pg:group synthv1_lv2:305_REV1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 132 ;
+		lv2:index 131 ;
 		lv2:symbol "REV1_ROOM" ;
 		lv2:name "Reverb Room" ;
 		lv2:default 0.5 ;
@@ -1284,7 +1274,7 @@
 		lv2pg:group synthv1_lv2:305_REV1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 133 ;
+		lv2:index 132 ;
 		lv2:symbol "REV1_DAMP" ;
 		lv2:name "Reverb Damp" ;
 		lv2:default 0.5 ;
@@ -1293,7 +1283,7 @@
 		lv2pg:group synthv1_lv2:305_REV1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 134 ;
+		lv2:index 133 ;
 		lv2:symbol "REV1_FEEDB" ;
 		lv2:name "Reverb Feedback" ;
 		lv2:default 0.5 ;
@@ -1302,7 +1292,7 @@
 		lv2pg:group synthv1_lv2:305_REV1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 135 ;
+		lv2:index 134 ;
 		lv2:symbol "REV1_WIDTH" ;
 		lv2:name "Reverb Width" ;
 		lv2:default 0.0 ;
@@ -1312,7 +1302,7 @@
 	] ;
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 136 ;
+		lv2:index 135 ;
 		lv2:symbol "DYN1_COMPRESS" ;
 		lv2:name "Dynamic Compressor" ;
 		lv2:portProperty lv2:toggled ;
@@ -1322,7 +1312,7 @@
 		lv2pg:group synthv1_lv2:306_DYN1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 137 ;
+		lv2:index 136 ;
 		lv2:symbol "DYN1_LIMITER" ;
 		lv2:name "Dynamic Limiter" ;
 		lv2:portProperty lv2:toggled ;
