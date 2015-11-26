@@ -264,7 +264,7 @@ public:
 			// process
 			const float lo = m_lo.output(m_mi.output(m_hi.output(*in + ad)));
 			// compute peak
-			const float peak = ::fabs(lo);
+			const float peak = ::fabsf(lo);
 			// compute gain
 			float gain = 1.0f;
 			if (peak > threshold)

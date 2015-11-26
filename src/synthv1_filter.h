@@ -193,8 +193,8 @@ public:
 	float output(float in, float cutoff, float reso)
 	{
 		// parameter changes
-		if (::fabs(m_cutoff - cutoff) > 0.001f ||
-			::fabs(m_reso   - reso)   > 0.001f) {
+		if (::fabsf(m_cutoff - cutoff) > 0.001f ||
+			::fabsf(m_reso   - reso)   > 0.001f) {
 			m_cutoff = cutoff;
 			m_reso = reso;
 			reset();

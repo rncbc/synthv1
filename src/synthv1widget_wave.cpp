@@ -86,7 +86,7 @@ float synthv1widget_wave::waveShape (void) const
 
 void synthv1widget_wave::setWaveWidth ( float fWaveWidth )
 {
-	if (::fabs(fWaveWidth - m_pWave->width()) > 0.001f) {
+	if (::fabsf(fWaveWidth - m_pWave->width()) > 0.001f) {
 		m_pWave->reset(m_pWave->shape(), safe_value(fWaveWidth));
 		update();
 		emit waveWidthChanged(waveWidth());

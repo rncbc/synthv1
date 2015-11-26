@@ -197,7 +197,7 @@ void synthv1widget_knob::setValue ( float fValue, bool bDefault )
 	}
 	else
 	if (QWidget::isEnabled()
-		&& ::fabs(fValue - m_fDefaultValue) > 0.0001f) {
+		&& ::fabsf(fValue - m_fDefaultValue) > 0.0001f) {
 		pal.setColor(QPalette::Base,
 			(pal.window().color().value() < 0x7f
 				? QColor(Qt::darkYellow).darker()

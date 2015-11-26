@@ -5,7 +5,8 @@ ChangeLog
 
 GIT HEAD
 
-- LFO Sync (free running) mode option is being introduced.
+- New LFO Rate option to follow current transport BPM (Auto).
+- LFO Sync (free running) mode option has been introduced.
 - A fourth DCF type has been added: a vocal Formant filter.
 - A third DCF slope/type has been added: the RBJ's bi-quad.
 - Prefer Qt5 over Qt4 by default with configure script.

@@ -471,7 +471,7 @@ void synthv1_wave::reset_normalize ( uint16_t itab )
 	pmax = 0.0f;
 	for (i = 0; i < m_nsize; ++i) {
 		frames[i] -= pmid;
-		const float p = ::fabs(frames[i]);
+		const float p = ::fabsf(frames[i]);
 		if (pmax < p)
 			pmax = p;
 	}

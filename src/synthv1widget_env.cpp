@@ -61,7 +61,7 @@ synthv1widget_env::~synthv1widget_env (void)
 // Parameter accessors.
 void synthv1widget_env::setAttack ( float fAttack )
 {
-	if (::fabs(m_fAttack - fAttack) > 0.001f) {
+	if (::fabsf(m_fAttack - fAttack) > 0.001f) {
 		m_fAttack = safe_value(fAttack);
 		update();
 		emit attackChanged(attack());
@@ -76,7 +76,7 @@ float synthv1widget_env::attack (void) const
 
 void synthv1widget_env::setDecay ( float fDecay )
 {
-	if (::fabs(m_fDecay - fDecay) > 0.001f) {
+	if (::fabsf(m_fDecay - fDecay) > 0.001f) {
 		m_fDecay = safe_value(fDecay);
 		update();
 		emit decayChanged(decay());
@@ -91,7 +91,7 @@ float synthv1widget_env::decay (void) const
 
 void synthv1widget_env::setSustain ( float fSustain )
 {
-	if (::fabs(m_fSustain - fSustain) > 0.001f) {
+	if (::fabsf(m_fSustain - fSustain) > 0.001f) {
 		m_fSustain = safe_value(fSustain);
 		update();
 		emit sustainChanged(sustain());
@@ -106,7 +106,7 @@ float synthv1widget_env::sustain (void) const
 
 void synthv1widget_env::setRelease ( float fRelease )
 {
-	if (::fabs(m_fRelease - fRelease) > 0.001f) {
+	if (::fabsf(m_fRelease - fRelease) > 0.001f) {
 		m_fRelease = safe_value(fRelease);
 		update();
 		emit releaseChanged(release());

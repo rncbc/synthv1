@@ -126,7 +126,7 @@ protected:
 
 	virtual bool probe() const
 	{
-		return m_param1 && ::fabs(*m_param1 - m_param1_v) > 0.001f;
+		return m_param1 && ::fabsf(*m_param1 - m_param1_v) > 0.001f;
 	}
 
 	virtual float evaluate(uint16_t)
@@ -170,7 +170,7 @@ protected:
 	virtual bool probe() const
 	{
 		return synthv1_ramp1::probe()
-			|| (m_param2 && ::fabs(*m_param2 - m_param2_v) > 0.001f);
+			|| (m_param2 && ::fabsf(*m_param2 - m_param2_v) > 0.001f);
 	}
 
 	virtual float evaluate(uint16_t i)
@@ -216,7 +216,7 @@ protected:
 	virtual bool probe() const
 	{
 		return synthv1_ramp2::probe()
-			|| (m_param3 && ::fabs(*m_param3 - m_param3_v) > 0.001f);
+			|| (m_param3 && ::fabsf(*m_param3 - m_param3_v) > 0.001f);
 	}
 
 	virtual float evaluate(uint16_t i)
@@ -264,7 +264,7 @@ protected:
 	virtual bool probe() const
 	{
 		return synthv1_ramp3::probe()
-			|| (m_param4 && ::fabs(*m_param4 - m_param4_v) > 0.001f);
+			|| (m_param4 && ::fabsf(*m_param4 - m_param4_v) > 0.001f);
 	}
 
 	virtual float evaluate(uint16_t i)

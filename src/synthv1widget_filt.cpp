@@ -62,7 +62,7 @@ synthv1widget_filt::~synthv1widget_filt (void)
 // Parameter accessors.
 void synthv1widget_filt::setCutoff ( float fCutoff )
 {
-	if (::fabs(m_fCutoff - fCutoff) > 0.001f) {
+	if (::fabsf(m_fCutoff - fCutoff) > 0.001f) {
 		m_fCutoff = safe_value(fCutoff);
 		update();
 		emit cutoffChanged(cutoff());
@@ -77,7 +77,7 @@ float synthv1widget_filt::cutoff (void) const
 
 void synthv1widget_filt::setReso ( float fReso )
 {
-	if (::fabs(m_fReso - fReso) > 0.001f) {
+	if (::fabsf(m_fReso - fReso) > 0.001f) {
 		m_fReso = safe_value(fReso);
 		update();
 		emit resoChanged(reso());
@@ -92,7 +92,7 @@ float synthv1widget_filt::reso (void) const
 
 void synthv1widget_filt::setType ( float fType )
 {
-	if (::fabs(m_fType - fType) > 0.001f) {
+	if (::fabsf(m_fType - fType) > 0.001f) {
 		m_fType = fType;
 		update();
 	}
@@ -106,7 +106,7 @@ float synthv1widget_filt::type (void) const
 
 void synthv1widget_filt::setSlope ( float fSlope )
 {
-	if (::fabs(m_fSlope - fSlope) > 0.001f) {
+	if (::fabsf(m_fSlope - fSlope) > 0.001f) {
 		m_fSlope = fSlope;
 		update();
 	}

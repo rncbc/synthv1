@@ -169,14 +169,23 @@ void synthv1_lv2::run ( uint32_t nframes )
 					lv2_atom_object_get(object,
 						m_urids.time_beatsPerMinute, &atom, NULL);
 					if (atom && atom->type == m_urids.atom_Float) {
-						const float bpm_sync = synthv1::paramValue(synthv1::DEL1_BPMSYNC);
-						if (bpm_sync > 0.0f) {
+						const float bpm_host = ((LV2_Atom_Float *) atom)->body;
+						if (synthv1::paramValue(synthv1::LFO1_BPMSYNC) > 0.0f) {
+							const float rate_bpm = synthv1::lfo_rate_bpm(bpm_host);
+							const float rate = synthv1::paramValue(synthv1::LFO1_RATE);
+							if (::fabsf(rate_bpm - rate) > 0.01f)
+								synthv1::setParamValue(synthv1::LFO1_RATE, rate_bpm);
+						}
+						if (synthv1::paramValue(synthv1::LFO2_BPMSYNC) > 0.0f) {
+							const float rate_bpm = synthv1::lfo_rate_bpm(bpm_host);
+							const float rate = synthv1::paramValue(synthv1::LFO2_RATE);
+							if (::fabsf(rate_bpm - rate) > 0.01f)
+								synthv1::setParamValue(synthv1::LFO2_RATE, rate_bpm);
+						}
+						if (synthv1::paramValue(synthv1::DEL1_BPMSYNC) > 0.0f) {
 							const float bpm = synthv1::paramValue(synthv1::DEL1_BPM);
-							if (bpm > 0.0f) {
-								const float bpm_host = ((LV2_Atom_Float *) atom)->body;
-								if (::fabs(bpm_host - bpm) > 0.01f)
-									synthv1::setParamValue(synthv1::DEL1_BPM, bpm_host);
-							}
+							if (bpm > 0.0f && ::fabs(bpm_host - bpm) > 0.01f)
+								synthv1::setParamValue(synthv1::DEL1_BPM, bpm_host);
 						}
 					}
 				}

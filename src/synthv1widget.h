@@ -90,8 +90,14 @@ protected slots:
 	// Swap params A/B.
 	void swapParams(bool bOn);
 
-	// Delay BPM change.
-	void bpmSyncChanged();
+	// LFO1 BPM sync change.
+	void lfo1BpmSyncChanged();
+
+	// LFO2 BPM sync change.
+	void lfo2BpmSyncChanged();
+
+	// Delay BPM sync change.
+	void del1BpmSyncChanged();
 
 	// Schedule notification updater.
 	void updateSchedNotify(int stype, int sid);
@@ -134,6 +140,9 @@ protected:
 
 	// Dirty flag (overridable virtual) methods.
 	virtual void updateDirtyPreset(bool bDirtyPreset);
+
+	// Common BPM sync change.
+	void bpmSyncChanged(synthv1widget_spin *pKnob, synthv1::ParamIndex index);
 
 private:
 

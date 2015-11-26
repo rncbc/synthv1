@@ -360,6 +360,8 @@ struct synthv1_lfo
 	float *volume;
 
 	synthv1_env env;
+
+	float *bpmsync;
 };
 
 
@@ -1089,6 +1091,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::LFO1_DECAY:     m_lfo1.env.decay   = pfParam; break;
 	case synthv1::LFO1_SUSTAIN:   m_lfo1.env.sustain = pfParam; break;
 	case synthv1::LFO1_RELEASE:   m_lfo1.env.release = pfParam; break;
+	case synthv1::LFO1_BPMSYNC:   m_lfo1.bpmsync     = pfParam; break;
 	case synthv1::DCA1_VOLUME:    m_dca1.volume      = pfParam; break;
 	case synthv1::DCA1_ATTACK:    m_dca1.env.attack  = pfParam; break;
 	case synthv1::DCA1_DECAY:     m_dca1.env.decay   = pfParam; break;
@@ -1142,6 +1145,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::LFO2_DECAY:     m_lfo2.env.decay   = pfParam; break;
 	case synthv1::LFO2_SUSTAIN:   m_lfo2.env.sustain = pfParam; break;
 	case synthv1::LFO2_RELEASE:   m_lfo2.env.release = pfParam; break;
+	case synthv1::LFO2_BPMSYNC:   m_lfo2.bpmsync     = pfParam; break;
 	case synthv1::DCA2_VOLUME:    m_dca2.volume      = pfParam; break;
 	case synthv1::DCA2_ATTACK:    m_dca2.env.attack  = pfParam; break;
 	case synthv1::DCA2_DECAY:     m_dca2.env.decay   = pfParam; break;
@@ -1277,6 +1281,7 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index ) const
 	case synthv1::LFO1_DECAY:     pfParam = m_lfo1.env.decay;   break;
 	case synthv1::LFO1_SUSTAIN:   pfParam = m_lfo1.env.sustain; break;
 	case synthv1::LFO1_RELEASE:   pfParam = m_lfo1.env.release; break;
+	case synthv1::LFO1_BPMSYNC:   pfParam = m_lfo1.bpmsync;     break;
 	case synthv1::DCA1_VOLUME:    pfParam = m_dca1.volume;      break;
 	case synthv1::DCA1_ATTACK:    pfParam = m_dca1.env.attack;  break;
 	case synthv1::DCA1_DECAY:     pfParam = m_dca1.env.decay;   break;
@@ -1330,6 +1335,7 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index ) const
 	case synthv1::LFO2_DECAY:     pfParam = m_lfo2.env.decay;   break;
 	case synthv1::LFO2_SUSTAIN:   pfParam = m_lfo2.env.sustain; break;
 	case synthv1::LFO2_RELEASE:   pfParam = m_lfo2.env.release; break;
+	case synthv1::LFO2_BPMSYNC:   pfParam = m_lfo2.bpmsync;     break;
 	case synthv1::DCA2_VOLUME:    pfParam = m_dca2.volume;      break;
 	case synthv1::DCA2_ATTACK:    pfParam = m_dca2.env.attack;  break;
 	case synthv1::DCA2_DECAY:     pfParam = m_dca2.env.decay;   break;
@@ -2412,6 +2418,15 @@ synthv1_programs *synthv1::programs (void) const
 void synthv1::reset (void)
 {
 	m_pImpl->reset();
+}
+
+
+// scalar converter helpers (static)
+
+float synthv1::lfo_rate_bpm ( float bpm )
+{
+	const float freq_bpm = ::fmaxf(LFO_FREQ_MIN, (bpm / 60.f));
+	return ::sqrtf((freq_bpm - LFO_FREQ_MIN) / (LFO_FREQ_MAX - LFO_FREQ_MIN));
 }
 
 
