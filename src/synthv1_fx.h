@@ -508,7 +508,7 @@ private:
 
 
 //-------------------------------------------------------------------------
-// synthv1_fx_allpass_delay - All-pass delay implementation.
+// synthv1_fx_allpass - All-pass delay implementation.
 
 class synthv1_fx_allpass
 {
