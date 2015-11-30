@@ -564,6 +564,16 @@
           <item>
            <layout class="QHBoxLayout">
             <item>
+             <widget class="synthv1widget_spin" name="Lfo1BpmKnob">
+              <property name="toolTip">
+               <string>LFO1 BPM</string>
+              </property>
+              <property name="text">
+               <string>BPM</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="synthv1widget_spin" name="Lfo1RateKnob">
               <property name="toolTip">
                <string>LFO1 Rate</string>
@@ -1388,6 +1398,16 @@
           </item>
           <item>
            <layout class="QHBoxLayout">
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo2BpmKnob">
+              <property name="toolTip">
+               <string>LFO2 BPM</string>
+              </property>
+              <property name="text">
+               <string>BPM</string>
+              </property>
+             </widget>
+            </item>
             <item>
              <widget class="synthv1widget_spin" name="Lfo2RateKnob">
               <property name="toolTip">

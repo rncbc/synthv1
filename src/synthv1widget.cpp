@@ -149,8 +149,13 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_ui.Rev1WetKnob->setSpecialValueText(sOff);
 
 	const QString& sAuto = tr("Auto");
+#if 1//LFO_BPMRATEX
+	m_ui.Lfo1BpmKnob->setSpecialValueText(sAuto);
+	m_ui.Lfo2BpmKnob->setSpecialValueText(sAuto);
+#else
 	m_ui.Lfo1RateKnob->setSpecialValueText(sAuto);
 	m_ui.Lfo2RateKnob->setSpecialValueText(sAuto);
+#endif
 	m_ui.Del1BpmKnob->setSpecialValueText(sAuto);
 
 	// Wave integer widths.
@@ -205,6 +210,14 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_ui.Lfo1PanningKnob->setMaximum(+1.0f);
 	m_ui.Lfo1VolumeKnob->setMinimum(-1.0f);
 	m_ui.Lfo1VolumeKnob->setMaximum(+1.0f);
+#if 1//LFO_BPMRATEX
+	m_ui.Lfo1BpmKnob->setScale(1.0f);
+	m_ui.Lfo1BpmKnob->setMinimum(3.6f);
+	m_ui.Lfo1BpmKnob->setMaximum(360.0f);
+	m_ui.Lfo1BpmKnob->setSingleStep(1.0f);
+#else
+	m_ui.Lfo1BpmKnob->hide();
+#endif
 
 	m_ui.Lfo2SweepKnob->setMinimum(-1.0f);
 	m_ui.Lfo2SweepKnob->setMaximum(+1.0f);
@@ -220,6 +233,15 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_ui.Lfo2PanningKnob->setMaximum(+1.0f);
 	m_ui.Lfo2VolumeKnob->setMinimum(-1.0f);
 	m_ui.Lfo2VolumeKnob->setMaximum(+1.0f);
+#if 1//LFO_BPMRATEX
+	m_ui.Lfo2BpmKnob->setScale(1.0f);
+	m_ui.Lfo2BpmKnob->setMinimum(3.6f);
+	m_ui.Lfo2BpmKnob->setMaximum(360.0f);
+	m_ui.Lfo2BpmKnob->setSingleStep(1.0f);
+#else
+	m_ui.Lfo2BpmKnob->hide();
+#endif
+
 
 	// Channel filters
 	QStringList channels;
@@ -376,7 +398,9 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	setParamKnob(synthv1::LFO1_DECAY,   m_ui.Lfo1DecayKnob);
 	setParamKnob(synthv1::LFO1_SUSTAIN, m_ui.Lfo1SustainKnob);
 	setParamKnob(synthv1::LFO1_RELEASE, m_ui.Lfo1ReleaseKnob);
-
+#if 1//LFO_BPMRATEX
+	setParamKnob(synthv1::LFO1_BPM,     m_ui.Lfo1BpmKnob);
+#endif
 	QObject::connect(
 		m_ui.Lfo1ShapeKnob, SIGNAL(valueChanged(float)),
 		m_ui.Lfo1Wave, SLOT(setWaveShape(float)));
@@ -418,9 +442,15 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		m_ui.Lfo1ReleaseKnob, SIGNAL(valueChanged(float)),
 		m_ui.Lfo1Env, SLOT(setRelease(float)));
 
+#if 1//LFO_BPMRATEX
+	QObject::connect(m_ui.Lfo1BpmKnob,
+		SIGNAL(valueChanged(float)),
+		SLOT(lfo1BpmSyncChanged()));
+#else
 	QObject::connect(m_ui.Lfo1RateKnob,
 		SIGNAL(valueChanged(float)),
 		SLOT(lfo1BpmSyncChanged()));
+#endif
 
 	// DCA1
 	setParamKnob(synthv1::DCA1_VOLUME,  m_ui.Dca1VolumeKnob);
@@ -590,7 +620,9 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	setParamKnob(synthv1::LFO2_DECAY,   m_ui.Lfo2DecayKnob);
 	setParamKnob(synthv1::LFO2_SUSTAIN, m_ui.Lfo2SustainKnob);
 	setParamKnob(synthv1::LFO2_RELEASE, m_ui.Lfo2ReleaseKnob);
-
+#if 1//LFO_BPMRATEX
+	setParamKnob(synthv1::LFO2_BPM,     m_ui.Lfo2BpmKnob);
+#endif
 	QObject::connect(
 		m_ui.Lfo2ShapeKnob, SIGNAL(valueChanged(float)),
 		m_ui.Lfo2Wave, SLOT(setWaveShape(float)));
@@ -632,9 +664,15 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		m_ui.Lfo2ReleaseKnob, SIGNAL(valueChanged(float)),
 		m_ui.Lfo2Env, SLOT(setRelease(float)));
 
+#if 1//LFO_BPMRATEX
+	QObject::connect(m_ui.Lfo2BpmKnob,
+		SIGNAL(valueChanged(float)),
+		SLOT(lfo2BpmSyncChanged()));
+#else
 	QObject::connect(m_ui.Lfo2RateKnob,
 		SIGNAL(valueChanged(float)),
 		SLOT(lfo2BpmSyncChanged()));
+#endif
 
 	// DCA2
 	setParamKnob(synthv1::DCA2_VOLUME,  m_ui.Dca2VolumeKnob);
@@ -912,12 +950,22 @@ void synthv1widget::updateParamEx ( synthv1::ParamIndex index, float fValue )
 		m_ui.Dcf2TypeKnob->setEnabled(int(fValue) != 3); // !Formant
 		break;
 	case synthv1::LFO1_BPMSYNC:
+	#if 1//LFO_BPMRATEX
+		if (fValue > 0.0f)
+			m_ui.Lfo1BpmKnob->setValue(0.0f);
+	#else
 		if (fValue > 0.0f)
 			m_ui.Lfo1RateKnob->setValue(0.0f);
+	#endif
 		break;
 	case synthv1::LFO2_BPMSYNC:
+	#if 1//LFO_BPMRATEX
+		if (fValue > 0.0f)
+			m_ui.Lfo2BpmKnob->setValue(0.0f);
+	#else
 		if (fValue > 0.0f)
 			m_ui.Lfo2RateKnob->setValue(0.0f);
+	#endif
 		break;
 	case synthv1::DEL1_BPMSYNC:
 		if (fValue > 0.0f)
@@ -1287,14 +1335,22 @@ void synthv1widget::bpmSyncChanged (
 // LFO1 BPM sync change.
 void synthv1widget::lfo1BpmSyncChanged (void)
 {
+#if 1//LFO_BPMRATEX
+	bpmSyncChanged(m_ui.Lfo1BpmKnob, synthv1::LFO1_BPMSYNC);
+#else
 	bpmSyncChanged(m_ui.Lfo1RateKnob, synthv1::LFO1_BPMSYNC);
+#endif
 }
 
 
 // LFO2 BPM sync change.
 void synthv1widget::lfo2BpmSyncChanged (void)
 {
+#if 1//LFO_BPMRATEX
+	bpmSyncChanged(m_ui.Lfo2BpmKnob, synthv1::LFO2_BPMSYNC);
+#else
 	bpmSyncChanged(m_ui.Lfo2RateKnob, synthv1::LFO2_BPMSYNC);
+#endif
 }
 
 

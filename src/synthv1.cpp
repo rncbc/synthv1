@@ -349,6 +349,7 @@ struct synthv1_lfo
 {
 	float *shape;
 	float *width;
+	float *bpm;
 	float *rate;
 	float *sync;
 	float *sweep;
@@ -1078,6 +1079,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DCF1_RELEASE:   m_dcf1.env.release = pfParam; break;
 	case synthv1::LFO1_SHAPE:     m_lfo1.shape       = pfParam; break;
 	case synthv1::LFO1_WIDTH:     m_lfo1.width       = pfParam; break;
+	case synthv1::LFO1_BPM:       m_lfo1.bpm         = pfParam; break;
 	case synthv1::LFO1_RATE:      m_lfo1.rate        = pfParam; break;
 	case synthv1::LFO1_SYNC:      m_lfo1.sync        = pfParam; break;
 	case synthv1::LFO1_SWEEP:     m_lfo1.sweep       = pfParam; break;
@@ -1132,6 +1134,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DCF2_RELEASE:   m_dcf2.env.release = pfParam; break;
 	case synthv1::LFO2_SHAPE:     m_lfo2.shape       = pfParam; break;
 	case synthv1::LFO2_WIDTH:     m_lfo2.width       = pfParam; break;
+	case synthv1::LFO2_BPM:       m_lfo2.bpm         = pfParam; break;
 	case synthv1::LFO2_RATE:      m_lfo2.rate        = pfParam; break;
 	case synthv1::LFO2_SYNC:      m_lfo2.sync        = pfParam; break;
 	case synthv1::LFO2_SWEEP:     m_lfo2.sweep       = pfParam; break;
@@ -1268,6 +1271,7 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index ) const
 	case synthv1::DCF1_RELEASE:   pfParam = m_dcf1.env.release; break;
 	case synthv1::LFO1_SHAPE:     pfParam = m_lfo1.shape;       break;
 	case synthv1::LFO1_WIDTH:     pfParam = m_lfo1.width;       break;
+	case synthv1::LFO1_BPM:       pfParam = m_lfo1.bpm;         break;
 	case synthv1::LFO1_RATE:      pfParam = m_lfo1.rate;        break;
 	case synthv1::LFO1_SYNC:      pfParam = m_lfo1.sync;        break;
 	case synthv1::LFO1_SWEEP:     pfParam = m_lfo1.sweep;       break;
@@ -1322,6 +1326,7 @@ float *synthv1_impl::paramPort ( synthv1::ParamIndex index ) const
 	case synthv1::DCF2_RELEASE:   pfParam = m_dcf2.env.release; break;
 	case synthv1::LFO2_SHAPE:     pfParam = m_lfo2.shape;       break;
 	case synthv1::LFO2_WIDTH:     pfParam = m_lfo2.width;       break;
+	case synthv1::LFO2_BPM:       pfParam = m_lfo2.bpm;         break;
 	case synthv1::LFO2_RATE:      pfParam = m_lfo2.rate;        break;
 	case synthv1::LFO2_SYNC:      pfParam = m_lfo2.sync;        break;
 	case synthv1::LFO2_SWEEP:     pfParam = m_lfo2.sweep;       break;
@@ -1967,15 +1972,19 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	}
 
 	// controls
-
+#if 1//LFO_BPMRATEX
+	const float lfo1_freq
+		= *m_lfo1.bpm / (60.0f * (*m_lfo1.rate + 0.001f));
+	const float lfo2_freq
+		= *m_lfo2.bpm / (60.0f * (*m_lfo2.rate + 0.001f));
+#else
 	const float lfo1_rate = *m_lfo1.rate * *m_lfo1.rate;
 	const float lfo2_rate = *m_lfo2.rate * *m_lfo2.rate;
-
 	const float lfo1_freq
 		= LFO_FREQ_MIN + lfo1_rate * (LFO_FREQ_MAX - LFO_FREQ_MIN);
 	const float lfo2_freq
 		= LFO_FREQ_MIN + lfo2_rate * (LFO_FREQ_MAX - LFO_FREQ_MIN);
-
+#endif
 	const float modwheel1 = m_ctl1.modwheel + PITCH_SCALE * *m_lfo1.pitch;
 	const float modwheel2 = m_ctl2.modwheel + PITCH_SCALE * *m_lfo2.pitch;
 

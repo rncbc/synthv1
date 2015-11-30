@@ -165,8 +165,6 @@ synthv1_jack::synthv1_jack (void) : synthv1(2)
 	m_alsa_thread  = NULL;
 #endif
 
-	m_bpm = 0.0f;
-
 	synthv1::programs()->enabled(true);
 	synthv1::controls()->enabled(true);
 
@@ -205,23 +203,35 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 	jack_position_t pos;
 	jack_transport_query(m_client, &pos);
 	if (pos.valid & JackPositionBBT) {
-		const float bpm_host = float(pos.beats_per_minute);
+		const float host_bpm = float(pos.beats_per_minute);
 		if (paramValue(synthv1::LFO1_BPMSYNC) > 0.0f) {
-			const float rate_bpm = lfo_rate_bpm(bpm_host);
+		#if 1//LFO_BPMRATEX
+			const float bpm = paramValue(synthv1::LFO1_BPM);
+			if (::fabsf(host_bpm - bpm) > 0.01f)
+				setParamValue(synthv1::LFO1_BPM, host_bpm);
+		#else
+			const float rate_bpm = lfo_rate_bpm(host_bpm);
 			const float rate = paramValue(synthv1::LFO1_RATE);
 			if (::fabsf(rate_bpm - rate) > 0.01f)
 				setParamValue(synthv1::LFO1_RATE, rate_bpm);
+		#endif
 		}
 		if (paramValue(synthv1::LFO2_BPMSYNC) > 0.0f) {
-			const float rate_bpm = lfo_rate_bpm(bpm_host);
+		#if 1//LFO_BPMRATEX
+			const float bpm = paramValue(synthv1::LFO2_BPM);
+			if (::fabsf(host_bpm - bpm) > 0.01f)
+				setParamValue(synthv1::LFO2_BPM, host_bpm);
+		#else
+			const float rate_bpm = lfo_rate_bpm(host_bpm);
 			const float rate = paramValue(synthv1::LFO2_RATE);
 			if (::fabsf(rate_bpm - rate) > 0.01f)
 				setParamValue(synthv1::LFO2_RATE, rate_bpm);
+		#endif
 		}
 		if (paramValue(synthv1::DEL1_BPMSYNC) > 0.0f) {
 			const float bpm = paramValue(synthv1::DEL1_BPM);
-			if (bpm > 0.0f && ::fabsf(bpm_host - bpm) > 0.01f)
-				setParamValue(synthv1::DEL1_BPM, bpm_host);
+			if (bpm > 0.0f && ::fabsf(host_bpm - bpm) > 0.01f)
+				setParamValue(synthv1::DEL1_BPM, host_bpm);
 		}
 	}
 

@@ -95,8 +95,6 @@ private:
 	jack_ringbuffer_t *m_alsa_buffer;
 	synthv1_alsa_thread *m_alsa_thread;
 #endif
-
-	float m_bpm;
 };
 
 
