@@ -205,7 +205,7 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 	if (pos.valid & JackPositionBBT) {
 		const float host_bpm = float(pos.beats_per_minute);
 		if (paramValue(synthv1::LFO1_BPMSYNC) > 0.0f) {
-		#if 1//LFO_BPMRATEX
+		#ifdef CONFIG_LFO_BPMRATEX
 			const float bpm = paramValue(synthv1::LFO1_BPM);
 			if (::fabsf(host_bpm - bpm) > 0.01f)
 				setParamValue(synthv1::LFO1_BPM, host_bpm);
@@ -217,7 +217,7 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 		#endif
 		}
 		if (paramValue(synthv1::LFO2_BPMSYNC) > 0.0f) {
-		#if 1//LFO_BPMRATEX
+		#ifdef CONFIG_LFO_BPMRATEX
 			const float bpm = paramValue(synthv1::LFO2_BPM);
 			if (::fabsf(host_bpm - bpm) > 0.01f)
 				setParamValue(synthv1::LFO2_BPM, host_bpm);
