@@ -213,7 +213,9 @@ public:
 	void process_midi(uint8_t *data, uint32_t size);
 	void process(float **ins, float **outs, uint32_t nframes);
 
+#ifdef CONFIG_LFO_BPMRATEX_0
 	static float lfo_rate_bpm(float bpm);
+#endif
 
 private:
 
