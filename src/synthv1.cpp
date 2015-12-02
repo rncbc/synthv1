@@ -1982,17 +1982,10 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	const float lfo2_freq
 		= LFO_FREQ_MIN + lfo2_rate2 * (LFO_FREQ_MAX - LFO_FREQ_MIN);
 #else
-	const float lfo1_rate = *m_lfo1.rate;
-	const float lfo2_rate = *m_lfo2.rate;
-//	const float lfo1_freq
-//		= *m_lfo1.bpm / (60.0f * (lfo1_rate + 0.001f));
-//	const float lfo2_freq
-//		= *m_lfo2.bpm / (60.0f * (lfo2_rate + 0.001f));
-	const float lfo1_freq = *m_lfo1.bpm
-		* (1.0f + lfo1_rate * lfo1_rate) / (60.0f + 45.0f * lfo1_rate);
-	const float lfo2_freq = *m_lfo2.bpm
-		* (1.0f + lfo2_rate * lfo2_rate) / (60.0f + 45.0f * lfo2_rate);
+	const float lfo1_freq = *m_lfo1.bpm / (60.01f - *m_lfo1.rate * 60.0f);
+	const float lfo2_freq = *m_lfo2.bpm / (60.01f - *m_lfo2.rate * 60.0f);
 #endif
+
 	const float modwheel1 = m_ctl1.modwheel + PITCH_SCALE * *m_lfo1.pitch;
 	const float modwheel2 = m_ctl2.modwheel + PITCH_SCALE * *m_lfo2.pitch;
 
