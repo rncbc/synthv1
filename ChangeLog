@@ -5,7 +5,9 @@ ChangeLog
 
 GIT HEAD
 
-- New LFO Rate option to follow current transport BPM (Auto).
+- A brand new LFO BPM control parameter is being introduced,
+  as a subordinate to LFO Rate, with follow/sync to current
+  transport/host option (BPM=Auto). (EXPERIMENTAL)
 - LFO Sync (free running) mode option has been introduced.
 - A fourth DCF type has been added: a vocal Formant filter.
 - A third DCF slope/type has been added: the RBJ's bi-quad.

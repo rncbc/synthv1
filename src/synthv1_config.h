@@ -33,7 +33,7 @@
 
 #define SYNTHV1_DOMAIN	"rncbc.org"
 
-#define CONFIG_LFO_BPMRATEX 1
+
 //-------------------------------------------------------------------------
 // synthv1_config - Prototype settings class (singleton).
 //
