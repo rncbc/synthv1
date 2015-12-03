@@ -817,7 +817,7 @@ synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
 
 synthv1_impl::synthv1_impl (
 	synthv1 *pSynth, uint16_t nchannels, float srate )
-	: m_controls(pSynth), m_programs(pSynth), m_phasor(lfo1_wave.size())
+	: m_controls(pSynth), m_programs(pSynth)
 {
 	// max env. stage length (default)
 	m_dco1.envtime0 = m_dco2.envtime0 = 0.0001f * MAX_ENV_MSECS;
