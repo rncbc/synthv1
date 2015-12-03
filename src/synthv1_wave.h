@@ -40,7 +40,7 @@ public:
 	enum Shape { Pulse = 0, Saw, Sine, Rand, Noise };
 
 	// ctor.
-	synthv1_wave(uint32_t nsize = 1024, uint16_t nover = 24, uint16_t ntabs = 8);
+	synthv1_wave(uint32_t nsize = 4096, uint16_t nover = 24, uint16_t ntabs = 8);
 
 	// dtor.
 	~synthv1_wave();
@@ -58,6 +58,10 @@ public:
 		{ m_srate = srate; }
 	float sampleRate() const
 		{ return m_srate; }
+
+	// table size (in frames)
+	uint32_t size() const
+		{ return m_nsize; }
 
 	// init.
 	void reset(Shape shape, float width, bool bandl = false);
@@ -238,7 +242,7 @@ class synthv1_wave_lf : public synthv1_wave
 public:
 
 	// ctor.
-	synthv1_wave_lf(uint32_t nsize = 128)
+	synthv1_wave_lf(uint32_t nsize = 1024)
 		: synthv1_wave(nsize, 0, 0) {}
 };
 

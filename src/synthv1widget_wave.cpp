@@ -1,7 +1,7 @@
 // synthv1widget_wave.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ synthv1widget_wave::synthv1widget_wave (
 	: QFrame(pParent, wflags),
 		m_bDragging(false), m_iDragShape(0)
 {
-	m_pWave = new synthv1_wave_lf();
+	m_pWave = new synthv1_wave_lf(128);
 
 	setFixedSize(QSize(60, 60));
 

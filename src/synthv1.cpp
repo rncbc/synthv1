@@ -582,7 +582,7 @@ class synthv1_phasor
 {
 public:
 
-	synthv1_phasor(uint32_t nsize = 128)
+	synthv1_phasor(uint32_t nsize = 1024)
 		: m_nsize(nsize), m_nframes(0) {}
 
 	void process(uint32_t nframes)
@@ -817,7 +817,7 @@ synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
 
 synthv1_impl::synthv1_impl (
 	synthv1 *pSynth, uint16_t nchannels, float srate )
-	: m_controls(pSynth), m_programs(pSynth)
+	: m_controls(pSynth), m_programs(pSynth), m_phasor(lfo1_wave.size())
 {
 	// max env. stage length (default)
 	m_dco1.envtime0 = m_dco2.envtime0 = 0.0001f * MAX_ENV_MSECS;
