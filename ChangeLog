@@ -3,11 +3,12 @@ synthv1 - an old-school polyphonic synthesizer
 
 ChangeLog
 
-GIT HEAD
+
+0.7.2  2015-12-04  The eighth official beta.
 
 - A brand new LFO BPM control parameter is being introduced,
   as a subordinate to LFO Rate, with follow/sync to current
-  transport/host option (BPM=Auto). (EXPERIMENTAL)
+  transport/host option (BPM=Auto).
 - LFO Sync (free running) mode option has been introduced.
 - A fourth DCF type has been added: a vocal Formant filter.
 - A third DCF slope/type has been added: the RBJ's bi-quad.
