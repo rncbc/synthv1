@@ -1,7 +1,7 @@
 // synthv1_lv2.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2016, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -68,8 +68,12 @@ synthv1_lv2::synthv1_lv2 (
 					urid_map->handle, LV2_TIME__beatsPerMinute);
 				m_urids.midi_MidiEvent = urid_map->map(
 					urid_map->handle, LV2_MIDI__MidiEvent);
+				m_urids.bufsz_minBlockLength = urid_map->map(
+					urid_map->handle, LV2_BUF_SIZE__minBlockLength);
 				m_urids.bufsz_maxBlockLength = urid_map->map(
 					urid_map->handle, LV2_BUF_SIZE__maxBlockLength);
+				m_urids.bufsz_nominalBlockLength = urid_map->map(
+					urid_map->handle, LV2_BUF_SIZE__nominalBlockLength);
 			}
 		}
 		else
@@ -77,16 +81,27 @@ synthv1_lv2::synthv1_lv2 (
 			host_options = (const LV2_Options_Option *const *) host_features[i]->data;
 	}
 
-	uint32_t block_length = 0;
+	uint32_t buffer_size = 1024; // safe default?
 
 	for (int i = 0; host_options && host_options[i]; ++i) {
 		const LV2_Options_Option *host_option = host_options[i];
-		if (host_option->key == m_urids.bufsz_maxBlockLength
-			&& host_option->type == m_urids.atom_Int)
-			block_length = *(int *) host_option->value;
+		if (host_option->type == m_urids.atom_Int) {
+			uint32_t block_length = 0;
+			if (host_option->key == m_urids.bufsz_minBlockLength)
+				block_length = *(int *) host_option->value;
+			else
+			if (host_option->key == m_urids.bufsz_maxBlockLength)
+				block_length = *(int *) host_option->value;
+			else
+			if (host_option->key == m_urids.bufsz_nominalBlockLength)
+				block_length = *(int *) host_option->value;
+			// choose the lengthier...
+			if (buffer_size < block_length)
+				buffer_size = block_length;
+		}
 	}
 
-	synthv1::setBufferSize(block_length);
+	synthv1::setBufferSize(buffer_size);
 
 	const uint16_t nchannels = synthv1::channels();
 	m_ins  = new float * [nchannels];

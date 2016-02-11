@@ -1,7 +1,7 @@
 // synthv1_lv2.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2016, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -83,7 +83,9 @@ private:
 		LV2_URID time_Position;
 		LV2_URID time_beatsPerMinute;
 		LV2_URID midi_MidiEvent;
+		LV2_URID bufsz_minBlockLength;
 		LV2_URID bufsz_maxBlockLength;
+		LV2_URID bufsz_nominalBlockLength;
 
 	} m_urids;
 

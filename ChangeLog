@@ -6,6 +6,10 @@ ChangeLog
 
 GIT HEAD
 
+- Tentatively safe defaults are being introduced to internal
+  OUT FX buffer-sizes, as read from JACK buffer-size changes
+  and LV2 block-length instantiation bound options.
+
 - Added application keywords to freedesktop.org's AppData.
 
 

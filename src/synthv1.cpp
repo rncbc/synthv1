@@ -1,7 +1,7 @@
 // synthv1.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2016, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -1963,7 +1963,7 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	float *v_outs[m_nchannels];
 	float *v_sfxs[m_nchannels];
 
-	// buffer i/o transfer
+	// FIXME: fx-send buffer reallocation... seriously?
 	if (m_nsize < nframes) alloc_sfxs(nframes);
 
 	uint16_t k;
