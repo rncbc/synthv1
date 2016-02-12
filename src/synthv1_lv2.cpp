@@ -73,8 +73,10 @@ synthv1_lv2::synthv1_lv2 (
 					urid_map->handle, LV2_BUF_SIZE__minBlockLength);
 				m_urids.bufsz_maxBlockLength = urid_map->map(
 					urid_map->handle, LV2_BUF_SIZE__maxBlockLength);
+			#ifdef LV2_BUF_SIZE__nominalBlockLength
 				m_urids.bufsz_nominalBlockLength = urid_map->map(
 					urid_map->handle, LV2_BUF_SIZE__nominalBlockLength);
+			#endif
 			}
 		}
 		else
@@ -93,9 +95,11 @@ synthv1_lv2::synthv1_lv2 (
 			else
 			if (host_option->key == m_urids.bufsz_maxBlockLength)
 				block_length = *(int *) host_option->value;
+		#ifdef LV2_BUF_SIZE__nominalBlockLength
 			else
 			if (host_option->key == m_urids.bufsz_nominalBlockLength)
 				block_length = *(int *) host_option->value;
+		#endif
 			// choose the lengthier...
 			if (buffer_size < block_length)
 				buffer_size = block_length;
