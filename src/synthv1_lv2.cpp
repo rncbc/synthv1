@@ -166,7 +166,8 @@ void synthv1_lv2::run ( uint32_t nframes )
 		LV2_ATOM_SEQUENCE_FOREACH(m_atom_sequence, event) {
 			if (event == NULL)
 				continue;
-			if (event->body.type == m_urids.midi_MidiEvent) {
+			if (event->body.type == m_urids.midi_MidiEvent
+				&& event->time.frames > ndelta) {
 				uint8_t *data = (uint8_t *) LV2_ATOM_BODY(&event->body);
 				const uint32_t nread = event->time.frames - ndelta;
 				if (nread > 0) {
