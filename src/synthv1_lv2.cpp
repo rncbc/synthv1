@@ -226,7 +226,8 @@ void synthv1_lv2::run ( uint32_t nframes )
 	//	m_atom_sequence = NULL;
 	}
 
-	synthv1::process(ins, outs, nframes - ndelta);
+	if (nframes > ndelta)
+		synthv1::process(ins, outs, nframes - ndelta);
 }
 
 
