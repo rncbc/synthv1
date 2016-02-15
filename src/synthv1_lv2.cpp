@@ -84,7 +84,7 @@ synthv1_lv2::synthv1_lv2 (
 			host_options = (const LV2_Options_Option *) host_feature->data;
 	}
 
-	uint32_t buffer_size = 1024; // safe default?
+	uint32_t buffer_size = 0; // whatever happened to safe default?
 
 	for (int i = 0; host_options && host_options[i].key; ++i) {
 		const LV2_Options_Option *host_option = &host_options[i];
@@ -166,15 +166,16 @@ void synthv1_lv2::run ( uint32_t nframes )
 		LV2_ATOM_SEQUENCE_FOREACH(m_atom_sequence, event) {
 			if (event == NULL)
 				continue;
-			if (event->body.type == m_urids.midi_MidiEvent
-				&& event->time.frames > ndelta) {
+			if (event->body.type == m_urids.midi_MidiEvent) {
 				uint8_t *data = (uint8_t *) LV2_ATOM_BODY(&event->body);
-				const uint32_t nread = event->time.frames - ndelta;
-				if (nread > 0) {
-					synthv1::process(ins, outs, nread);
-					for (uint16_t k = 0; k < nchannels; ++k) {
-						ins[k]  += nread;
-						outs[k] += nread;
+				if (event->time.frames > ndelta) {
+					const uint32_t nread = event->time.frames - ndelta;
+					if (nread > 0) {
+						synthv1::process(ins, outs, nread);
+						for (uint16_t k = 0; k < nchannels; ++k) {
+							ins[k]  += nread;
+							outs[k] += nread;
+						}
 					}
 				}
 				ndelta = event->time.frames;
