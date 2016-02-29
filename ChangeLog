@@ -4,6 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- French translation updated (by Olivier Humbert, thanks).
+
+
 0.7.3  2016-02-22  The ninth official beta.
 
 - Avoid out-of-bound MIDI events as much as possible, coping
