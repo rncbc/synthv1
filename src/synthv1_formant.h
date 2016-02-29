@@ -1,7 +1,7 @@
 // synthv1_formant.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2016, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -113,6 +113,14 @@ public:
 	void reset(Impl *pImpl)
 		{ m_pImpl = pImpl; reset_coeffs(); }
 
+	void reset_filters(float cutoff, float reso)
+	{
+		for (uint32_t i = 0; i < NUM_FORMANTS; ++i)
+			m_filters[i].reset();
+
+		update(cutoff, reso);
+	}
+
 	// output tick
 	float output(float in, float cutoff, float reso)
 	{
@@ -122,12 +130,6 @@ public:
 		for (uint32_t i = 0; i < NUM_FORMANTS; ++i)
 			out += m_filters[i].output(in);
 		return out;
-	}
-
-	void reset_filters()
-	{
-		for (uint32_t i = 0; i < NUM_FORMANTS; ++i)
-			m_filters[i].reset();
 	}
 
 	// process block

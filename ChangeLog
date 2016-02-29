@@ -6,7 +6,7 @@ ChangeLog
 
 GIT HEAD
 
-- French translation updated (by Olivier Humbert, thanks).
+- Fixed the DCF Format filter voice initialization reset.
 
 
 0.7.3  2016-02-22  The ninth official beta.
