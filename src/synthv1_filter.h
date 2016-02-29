@@ -1,7 +1,7 @@
 // synthv1_filter.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2016, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -119,7 +119,7 @@ public:
 		m_type = type;
 
 		m_b0 = m_b1 = m_b2 = m_b3 = m_b4 = 0.0f;
-		m_t1 = m_t2 = m_t3 = 0.0f;
+		m_t1 = m_t2 = 0.0f;
 	}
 
 	float output(float in, float cutoff, float reso)
@@ -156,10 +156,10 @@ public:
 private:
 
 	// filter type 
-	Type   m_type;
+	Type  m_type;
 
-	float  m_b0, m_b1, m_b2, m_b3, m_b4;
-	float  m_t1, m_t2, m_t3;
+	float m_b0, m_b1, m_b2, m_b3, m_b4;
+	float m_t1, m_t2;
 };
 
 
@@ -251,7 +251,6 @@ protected:
 			break;
 		case Low:
 		default:
-			// low-pass
 			b0 = (1.0f - tcos) / 2.0f;
 			b1 =  1.0f - tcos;
 			b2 =  b0;
