@@ -79,7 +79,7 @@ BuildRequires:	liblo-devel
 %{_datadir}/man/man1/%{name}.1.gz
 
 %changelog
-* Thu Mar  3 2016 Rui Nuno Capela <rncbc@rncbc.org> 0.7.4
+* Wed Mar  2 2016 Rui Nuno Capela <rncbc@rncbc.org> 0.7.4
 - The ninth-bis official beta.
 * Mon Feb 22 2016 Rui Nuno Capela <rncbc@rncbc.org> 0.7.3
 - The ninth official beta.

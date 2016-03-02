@@ -4,7 +4,7 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-0.7.4  2016-03-03  The ninth-bis official beta.
+0.7.4  2016-03-02  The ninth-bis official beta.
 
 - Fixed the DCF Formant filter voice initialization reset.
 
