@@ -4,7 +4,7 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.7.4  2016-03-03  The ninth-bis official beta.
 
 - Fixed the DCF Format filter voice initialization reset.
 
@@ -15,11 +15,9 @@ GIT HEAD
   with LV2 plug-in hosts that feed/run them in on border line
   circumstances (as reported by Thorsten Wilms, on suspected
   Ardour looping crash/bug, probably fixed already, thanks).
-
 - Safe defaults are tentatively sbeing introduced to internal
   OUT FX buffer-sizes, as read from JACK buffer-size changes
   and LV2 block-length instantiation bound options.
-
 - Added application keywords to freedesktop.org's AppData.
 
 
