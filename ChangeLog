@@ -6,7 +6,7 @@ ChangeLog
 
 0.7.4  2016-03-03  The ninth-bis official beta.
 
-- Fixed the DCF Format filter voice initialization reset.
+- Fixed the DCF Formant filter voice initialization reset.
 
 
 0.7.3  2016-02-22  The ninth official beta.
