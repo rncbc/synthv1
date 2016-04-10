@@ -4,6 +4,13 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Dropped the --enable-qt5 from configure as found redundant
+  given that's the build default anyway (suggestion by Guido
+  Scholz, while for Qtractor, thanks).
+
+
 0.7.4  2016-03-02  The ninth-bis official beta.
 
 - Fixed the DCF Formant filter voice initialization reset.

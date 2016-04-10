@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(synthv1, 0.7.4, rncbc@rncbc.org)
+AC_INIT(synthv1, 0.7.4.1, rncbc@rncbc.org)
 
 AC_CONFIG_SRCDIR(src/synthv1.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -105,11 +105,6 @@ AC_SUBST(ac_debug)
 AC_ARG_ENABLE(qt4,
   AC_HELP_STRING([--enable-qt4], [enable Qt4 build (default=no)]),
   [ac_qt4="$enableval"],
-  [ac_qt4="no"])
-
-AC_ARG_ENABLE(qt5,
-  AC_HELP_STRING([--enable-qt5], [enable Qt5 build (default=yes)]),
-  [ac_qt5="$enableval"],
   [ac_qt5="yes"])
 
 
@@ -170,14 +165,11 @@ ac_ldflags=$LDFLAGS
 
 
 # Checks for programs.
-AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_CXX
 AC_PROG_CXXCPP
-AC_PROG_GCC_TRADITIONAL
 
 # Checks for languages.
-AC_LANG_C
 AC_LANG_CPLUSPLUS
 
 
