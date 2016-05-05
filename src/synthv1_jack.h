@@ -57,9 +57,6 @@ public:
 
 	int process(jack_nframes_t nframes);
 
-	void setParamValue(synthv1::ParamIndex index, float fValue);
-	float paramValue(synthv1::ParamIndex index) const;
-
 #ifdef CONFIG_ALSA_MIDI
 	snd_seq_t *alsa_seq() const;
 	void alsa_capture(snd_seq_event_t *ev);

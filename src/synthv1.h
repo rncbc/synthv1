@@ -28,6 +28,7 @@
 
 // forward declarations
 class synthv1_impl;
+class synthv1_port;
 class synthv1_controls;
 class synthv1_programs;
 
@@ -200,12 +201,12 @@ public:
 	};
 
 	void setParamPort(ParamIndex index, float *pfParam);
-	float *paramPort(ParamIndex index) const;
+	synthv1_port *paramPort(ParamIndex index) const;
 
 	synthv1_controls *controls() const;
 	synthv1_programs *programs() const;
 
-	void setParamValue(ParamIndex index, float fValue);
+	void setParamValue(ParamIndex index, float fValue, bool bCache = false);
 	float paramValue(ParamIndex index) const;
 
 	void reset();

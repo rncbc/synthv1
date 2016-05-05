@@ -183,7 +183,7 @@ protected:
 
 		void schedule_event(synthv1::ParamIndex index, float fValue)
 		{
-			instance()->setParamValue(index, fValue);
+			instance()->setParamValue(index, fValue, true); // Cached!
 
 			schedule(int(index));
 		}

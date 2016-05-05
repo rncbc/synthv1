@@ -495,17 +495,6 @@ void synthv1_jack::close (void)
 }
 
 
-void synthv1_jack::setParamValue ( synthv1::ParamIndex index, float fValue )
-{
-	m_params[index] = fValue;
-}
-
-float synthv1_jack::paramValue ( synthv1::ParamIndex index ) const
-{
-	return m_params[index];
-}
-
-
 #ifdef CONFIG_ALSA_MIDI
 
 // alsa sequencer client.

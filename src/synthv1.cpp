@@ -144,6 +144,42 @@ inline float synthv1_freq ( float note )
 }
 
 
+// parameter port
+
+class synthv1_port
+{
+public:
+
+	synthv1_port() : m_port(NULL), m_cache(false), m_value(0.0f) {}
+
+	void set_port(float *port)
+		{ m_port = port; m_cache = false; }
+	float *port() const
+		{ return m_port; }
+
+	void set_value(float value, bool cache)
+		{ m_value = value; m_cache = cache; if (!cache) set_port_value(value); }
+	float value() const
+		{ return (m_cache ? m_value : port_value()); }
+
+	float operator *() const
+		{ return value(); }
+
+protected:
+
+	void  set_port_value(float value)
+		{ if (m_port) *m_port = value; }
+	float port_value() const
+		{ return (m_port ? *m_port : m_value); }
+
+private:
+
+	float *m_port;
+	bool   m_cache;
+	float  m_value;
+};
+
+
 // envelope
 
 struct synthv1_env
@@ -258,10 +294,10 @@ struct synthv1_env
 
 	// parameters
 
-	float *attack;
-	float *decay;
-	float *sustain;
-	float *release;
+	synthv1_port attack;
+	synthv1_port decay;
+	synthv1_port sustain;
+	synthv1_port release;
 
 	uint32_t min_frames;
 	uint32_t max_frames;
@@ -314,20 +350,22 @@ struct synthv1_aux
 
 struct synthv1_dco
 {
-	float *shape1;
-	float *width1;
-	float *bandl1;
-	float *shape2;
-	float *width2;
-	float *bandl2;
-	float *balance;
-	float *detune;
-	float *phase;
-	float *ringmod;
-	float *octave;
-	float *tuning;
-	float *glide;
-	float *envtime, envtime0;
+	synthv1_port shape1;
+	synthv1_port width1;
+	synthv1_port bandl1;
+	synthv1_port shape2;
+	synthv1_port width2;
+	synthv1_port bandl2;
+	synthv1_port balance;
+	synthv1_port detune;
+	synthv1_port phase;
+	synthv1_port ringmod;
+	synthv1_port octave;
+	synthv1_port tuning;
+	synthv1_port glide;
+	synthv1_port envtime;
+
+	float envtime0;
 };
 
 
@@ -335,11 +373,11 @@ struct synthv1_dco
 
 struct synthv1_dcf
 {
-	float *cutoff;
-	float *reso;
-	float *type;
-	float *slope;
-	float *envelope;
+	synthv1_port cutoff;
+	synthv1_port reso;
+	synthv1_port type;
+	synthv1_port slope;
+	synthv1_port envelope;
 
 	synthv1_env env;
 };
@@ -349,22 +387,22 @@ struct synthv1_dcf
 
 struct synthv1_lfo
 {
-	float *shape;
-	float *width;
-	float *bpm;
-	float *rate;
-	float *sync;
-	float *sweep;
-	float *pitch;
-	float *ringmod;
-	float *cutoff;
-	float *reso;
-	float *panning;
-	float *volume;
+	synthv1_port shape;
+	synthv1_port width;
+	synthv1_port bpm;
+	synthv1_port rate;
+	synthv1_port sync;
+	synthv1_port sweep;
+	synthv1_port pitch;
+	synthv1_port ringmod;
+	synthv1_port cutoff;
+	synthv1_port reso;
+	synthv1_port panning;
+	synthv1_port volume;
 
 	synthv1_env env;
 
-	float *bpmsync;
+	synthv1_port bpmsync;
 };
 
 
@@ -372,7 +410,7 @@ struct synthv1_lfo
 
 struct synthv1_dca
 {
-	float *volume;
+	synthv1_port volume;
 
 	synthv1_env env;
 };
@@ -383,12 +421,12 @@ struct synthv1_dca
 
 struct synthv1_def
 {
-	float *pitchbend;
-	float *modwheel;
-	float *pressure;
-	float *velocity;
-	float *channel;
-	float *mono;
+	synthv1_port pitchbend;
+	synthv1_port modwheel;
+	synthv1_port pressure;
+	synthv1_port velocity;
+	synthv1_port channel;
+	synthv1_port mono;
 };
 
 
@@ -396,10 +434,10 @@ struct synthv1_def
 
 struct synthv1_out
 {
-	float *width;
-	float *panning;
-	float *fxsend;
-	float *volume;
+	synthv1_port width;
+	synthv1_port panning;
+	synthv1_port fxsend;
+	synthv1_port volume;
 };
 
 
@@ -407,11 +445,11 @@ struct synthv1_out
 
 struct synthv1_cho
 {
-	float *wet;
-	float *delay;
-	float *feedb;
-	float *rate;
-	float *mod;
+	synthv1_port wet;
+	synthv1_port delay;
+	synthv1_port feedb;
+	synthv1_port rate;
+	synthv1_port mod;
 };
 
 
@@ -419,10 +457,10 @@ struct synthv1_cho
 
 struct synthv1_fla
 {
-	float *wet;
-	float *delay;
-	float *feedb;
-	float *daft;
+	synthv1_port wet;
+	synthv1_port delay;
+	synthv1_port feedb;
+	synthv1_port daft;
 };
 
 
@@ -430,11 +468,11 @@ struct synthv1_fla
 
 struct synthv1_pha
 {
-	float *wet;
-	float *rate;
-	float *feedb;
-	float *depth;
-	float *daft;
+	synthv1_port wet;
+	synthv1_port rate;
+	synthv1_port feedb;
+	synthv1_port depth;
+	synthv1_port daft;
 };
 
 
@@ -442,11 +480,11 @@ struct synthv1_pha
 
 struct synthv1_del
 {
-	float *wet;
-	float *delay;
-	float *feedb;
-	float *bpm;
-	float *bpmsync;
+	synthv1_port wet;
+	synthv1_port delay;
+	synthv1_port feedb;
+	synthv1_port bpm;
+	synthv1_port bpmsync;
 };
 
 
@@ -454,11 +492,11 @@ struct synthv1_del
 
 struct synthv1_rev
 {
-	float *wet;
-	float *room;
-	float *damp;
-	float *feedb;
-	float *width;
+	synthv1_port wet;
+	synthv1_port room;
+	synthv1_port damp;
+	synthv1_port feedb;
+	synthv1_port width;
 };
 
 
@@ -466,8 +504,8 @@ struct synthv1_rev
 
 struct synthv1_dyn
 {
-	float *compress;
-	float *limiter;
+	synthv1_port compress;
+	synthv1_port limiter;
 };
 
 
@@ -669,11 +707,11 @@ public:
 	void setBufferSize(uint32_t nsize);
 	uint32_t bufferSize() const;
 
-	void setParamPort(synthv1::ParamIndex index, float *pfParam = 0);
-	float *paramPort(synthv1::ParamIndex index) const;
+	void setParamPort(synthv1::ParamIndex index, float *pfParam);
+	synthv1_port *paramPort(synthv1::ParamIndex index);
 
-	void setParamValue(synthv1::ParamIndex index, float fValue);
-	float paramValue(synthv1::ParamIndex index) const;
+	void setParamValue(synthv1::ParamIndex index, float fValue, bool bCache);
+	float paramValue(synthv1::ParamIndex index);
 
 	synthv1_controls *controls();
 	synthv1_programs *programs();
@@ -837,23 +875,23 @@ synthv1_impl::synthv1_impl (
 	}
 
 	for (int note = 0; note < MAX_NOTES; ++note)
-		m_note1[note] = m_note2[note] = 0;
+		m_note1[note] = m_note2[note] = NULL;
 
 	// local buffers none yet
 	m_sfxs = NULL;
 	m_nsize = 0;
 
 	// flangers none yet
-	m_flanger = 0;
+	m_flanger = NULL;
 
 	// phasers none yet
-	m_phaser = 0;
+	m_phaser = NULL;
 
 	// delays none yet
-	m_delay = 0;
+	m_delay = NULL;
 
 	// compressors none yet
-	m_comp = 0;
+	m_comp = NULL;
 
 	// load controllers & programs database...
 	m_config.loadControls(&m_controls);
@@ -861,10 +899,6 @@ synthv1_impl::synthv1_impl (
 
 	// number of channels
 	setChannels(nchannels);
-
-	// parameters
-	for (int i = 0; i < int(synthv1::NUM_PARAMS); ++i)
-		setParamPort(synthv1::ParamIndex(i));
 
 	// set default sample rate
 	setSampleRate(srate);
@@ -906,25 +940,25 @@ void synthv1_impl::setChannels ( uint16_t nchannels )
 	// deallocate flangers
 	if (m_flanger) {
 		delete [] m_flanger;
-		m_flanger = 0;
+		m_flanger = NULL;
 	}
 
 	// deallocate phasers
 	if (m_phaser) {
 		delete [] m_phaser;
-		m_phaser = 0;
+		m_phaser = NULL;
 	}
 
 	// deallocate delays
 	if (m_delay) {
 		delete [] m_delay;
-		m_delay = 0;
+		m_delay = NULL;
 	}
 
 	// deallocate compressors
 	if (m_comp) {
 		delete [] m_comp;
-		m_comp = 0;
+		m_comp = NULL;
 	}
 }
 
@@ -1052,148 +1086,12 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 {
 	static float s_fDummy = 0.0f;
 
-	if (pfParam == 0)
+	if (pfParam == NULL)
 		pfParam = &s_fDummy;
 
-	switch (index) {
-	case synthv1::DCO1_SHAPE1:    m_dco1.shape1      = pfParam; break;
-	case synthv1::DCO1_WIDTH1:    m_dco1.width1      = pfParam; break;
-	case synthv1::DCO1_BANDL1:    m_dco1.bandl1      = pfParam; break;
-	case synthv1::DCO1_SHAPE2:    m_dco1.shape2      = pfParam; break;
-	case synthv1::DCO1_WIDTH2:    m_dco1.width2      = pfParam; break;
-	case synthv1::DCO1_BANDL2:    m_dco1.bandl2      = pfParam; break;
-	case synthv1::DCO1_BALANCE:   m_dco1.balance     = pfParam; break;
-	case synthv1::DCO1_DETUNE:    m_dco1.detune      = pfParam; break;
-	case synthv1::DCO1_PHASE:     m_dco1.phase       = pfParam; break;
-	case synthv1::DCO1_RINGMOD:   m_dco1.ringmod     = pfParam; break;
-	case synthv1::DCO1_OCTAVE:    m_dco1.octave      = pfParam; break;
-	case synthv1::DCO1_TUNING:    m_dco1.tuning      = pfParam; break;
-	case synthv1::DCO1_GLIDE:     m_dco1.glide       = pfParam; break;
-	case synthv1::DCO1_ENVTIME:   m_dco1.envtime     = pfParam; break;
-	case synthv1::DCF1_CUTOFF:    m_dcf1.cutoff      = pfParam; break;
-	case synthv1::DCF1_RESO:      m_dcf1.reso        = pfParam; break;
-	case synthv1::DCF1_TYPE:      m_dcf1.type        = pfParam; break;
-	case synthv1::DCF1_SLOPE:     m_dcf1.slope       = pfParam; break;
-	case synthv1::DCF1_ENVELOPE:  m_dcf1.envelope    = pfParam; break;
-	case synthv1::DCF1_ATTACK:    m_dcf1.env.attack  = pfParam; break;
-	case synthv1::DCF1_DECAY:     m_dcf1.env.decay   = pfParam; break;
-	case synthv1::DCF1_SUSTAIN:   m_dcf1.env.sustain = pfParam; break;
-	case synthv1::DCF1_RELEASE:   m_dcf1.env.release = pfParam; break;
-	case synthv1::LFO1_SHAPE:     m_lfo1.shape       = pfParam; break;
-	case synthv1::LFO1_WIDTH:     m_lfo1.width       = pfParam; break;
-	case synthv1::LFO1_BPM:       m_lfo1.bpm         = pfParam; break;
-	case synthv1::LFO1_RATE:      m_lfo1.rate        = pfParam; break;
-	case synthv1::LFO1_SYNC:      m_lfo1.sync        = pfParam; break;
-	case synthv1::LFO1_SWEEP:     m_lfo1.sweep       = pfParam; break;
-	case synthv1::LFO1_PITCH:     m_lfo1.pitch       = pfParam; break;
-	case synthv1::LFO1_RINGMOD:   m_lfo1.ringmod     = pfParam; break;
-	case synthv1::LFO1_CUTOFF:    m_lfo1.cutoff      = pfParam; break;
-	case synthv1::LFO1_RESO:      m_lfo1.reso        = pfParam; break;
-	case synthv1::LFO1_PANNING:   m_lfo1.panning     = pfParam; break;
-	case synthv1::LFO1_VOLUME:    m_lfo1.volume      = pfParam; break;
-	case synthv1::LFO1_ATTACK:    m_lfo1.env.attack  = pfParam; break;
-	case synthv1::LFO1_DECAY:     m_lfo1.env.decay   = pfParam; break;
-	case synthv1::LFO1_SUSTAIN:   m_lfo1.env.sustain = pfParam; break;
-	case synthv1::LFO1_RELEASE:   m_lfo1.env.release = pfParam; break;
-	case synthv1::LFO1_BPMSYNC:   m_lfo1.bpmsync     = pfParam; break;
-	case synthv1::DCA1_VOLUME:    m_dca1.volume      = pfParam; break;
-	case synthv1::DCA1_ATTACK:    m_dca1.env.attack  = pfParam; break;
-	case synthv1::DCA1_DECAY:     m_dca1.env.decay   = pfParam; break;
-	case synthv1::DCA1_SUSTAIN:   m_dca1.env.sustain = pfParam; break;
-	case synthv1::DCA1_RELEASE:   m_dca1.env.release = pfParam; break;
-	case synthv1::OUT1_WIDTH:     m_out1.width       = pfParam; break;
-	case synthv1::OUT1_PANNING:   m_out1.panning     = pfParam; break;
-	case synthv1::OUT1_FXSEND:    m_out1.fxsend      = pfParam; break;
-	case synthv1::OUT1_VOLUME:    m_out1.volume      = pfParam; break;
-	case synthv1::DEF1_PITCHBEND: m_def1.pitchbend   = pfParam; break;
-	case synthv1::DEF1_MODWHEEL:  m_def1.modwheel    = pfParam; break;
-	case synthv1::DEF1_PRESSURE:  m_def1.pressure    = pfParam; break;
-	case synthv1::DEF1_VELOCITY:  m_def1.velocity    = pfParam; break;
-	case synthv1::DEF1_CHANNEL:   m_def1.channel     = pfParam; break;
-	case synthv1::DEF1_MONO:      m_def1.mono        = pfParam; break;
-	case synthv1::DCO2_SHAPE1:    m_dco2.shape1      = pfParam; break;
-	case synthv1::DCO2_WIDTH1:    m_dco2.width1      = pfParam; break;
-	case synthv1::DCO2_BANDL1:    m_dco2.bandl1      = pfParam; break;
-	case synthv1::DCO2_SHAPE2:    m_dco2.shape2      = pfParam; break;
-	case synthv1::DCO2_WIDTH2:    m_dco2.width2      = pfParam; break;
-	case synthv1::DCO2_BANDL2:    m_dco2.bandl2      = pfParam; break;
-	case synthv1::DCO2_BALANCE:   m_dco2.balance     = pfParam; break;
-	case synthv1::DCO2_DETUNE:    m_dco2.detune      = pfParam; break;
-	case synthv1::DCO2_PHASE:     m_dco2.phase       = pfParam; break;
-	case synthv1::DCO2_RINGMOD:   m_dco2.ringmod     = pfParam; break;
-	case synthv1::DCO2_OCTAVE:    m_dco2.octave      = pfParam; break;
-	case synthv1::DCO2_TUNING:    m_dco2.tuning      = pfParam; break;
-	case synthv1::DCO2_GLIDE:     m_dco2.glide       = pfParam; break;
-	case synthv1::DCO2_ENVTIME:   m_dco2.envtime     = pfParam; break;
-	case synthv1::DCF2_CUTOFF:    m_dcf2.cutoff      = pfParam; break;
-	case synthv1::DCF2_RESO:      m_dcf2.reso        = pfParam; break;
-	case synthv1::DCF2_TYPE:      m_dcf2.type        = pfParam; break;
-	case synthv1::DCF2_SLOPE:     m_dcf2.slope       = pfParam; break;
-	case synthv1::DCF2_ENVELOPE:  m_dcf2.envelope    = pfParam; break;
-	case synthv1::DCF2_ATTACK:    m_dcf2.env.attack  = pfParam; break;
-	case synthv1::DCF2_DECAY:     m_dcf2.env.decay   = pfParam; break;
-	case synthv1::DCF2_SUSTAIN:   m_dcf2.env.sustain = pfParam; break;
-	case synthv1::DCF2_RELEASE:   m_dcf2.env.release = pfParam; break;
-	case synthv1::LFO2_SHAPE:     m_lfo2.shape       = pfParam; break;
-	case synthv1::LFO2_WIDTH:     m_lfo2.width       = pfParam; break;
-	case synthv1::LFO2_BPM:       m_lfo2.bpm         = pfParam; break;
-	case synthv1::LFO2_RATE:      m_lfo2.rate        = pfParam; break;
-	case synthv1::LFO2_SYNC:      m_lfo2.sync        = pfParam; break;
-	case synthv1::LFO2_SWEEP:     m_lfo2.sweep       = pfParam; break;
-	case synthv1::LFO2_PITCH:     m_lfo2.pitch       = pfParam; break;
-	case synthv1::LFO2_RINGMOD:   m_lfo2.ringmod     = pfParam; break;
-	case synthv1::LFO2_CUTOFF:    m_lfo2.cutoff      = pfParam; break;
-	case synthv1::LFO2_RESO:      m_lfo2.reso        = pfParam; break;
-	case synthv1::LFO2_PANNING:   m_lfo2.panning     = pfParam; break;
-	case synthv1::LFO2_VOLUME:    m_lfo2.volume      = pfParam; break;
-	case synthv1::LFO2_ATTACK:    m_lfo2.env.attack  = pfParam; break;
-	case synthv1::LFO2_DECAY:     m_lfo2.env.decay   = pfParam; break;
-	case synthv1::LFO2_SUSTAIN:   m_lfo2.env.sustain = pfParam; break;
-	case synthv1::LFO2_RELEASE:   m_lfo2.env.release = pfParam; break;
-	case synthv1::LFO2_BPMSYNC:   m_lfo2.bpmsync     = pfParam; break;
-	case synthv1::DCA2_VOLUME:    m_dca2.volume      = pfParam; break;
-	case synthv1::DCA2_ATTACK:    m_dca2.env.attack  = pfParam; break;
-	case synthv1::DCA2_DECAY:     m_dca2.env.decay   = pfParam; break;
-	case synthv1::DCA2_SUSTAIN:   m_dca2.env.sustain = pfParam; break;
-	case synthv1::DCA2_RELEASE:   m_dca2.env.release = pfParam; break;
-	case synthv1::OUT2_WIDTH:     m_out2.width       = pfParam; break;
-	case synthv1::OUT2_PANNING:   m_out2.panning     = pfParam; break;
-	case synthv1::OUT2_FXSEND:    m_out2.fxsend      = pfParam; break;
-	case synthv1::OUT2_VOLUME:    m_out2.volume      = pfParam; break;
-	case synthv1::DEF2_PITCHBEND: m_def2.pitchbend   = pfParam; break;
-	case synthv1::DEF2_MODWHEEL:  m_def2.modwheel    = pfParam; break;
-	case synthv1::DEF2_PRESSURE:  m_def2.pressure    = pfParam; break;
-	case synthv1::DEF2_VELOCITY:  m_def2.velocity    = pfParam; break;
-	case synthv1::DEF2_CHANNEL:   m_def2.channel     = pfParam; break;
-	case synthv1::DEF2_MONO:      m_def2.mono        = pfParam; break;
-	case synthv1::CHO1_WET:       m_cho.wet          = pfParam; break;
-	case synthv1::CHO1_DELAY:     m_cho.delay        = pfParam; break;
-	case synthv1::CHO1_FEEDB:     m_cho.feedb        = pfParam; break;
-	case synthv1::CHO1_RATE:      m_cho.rate         = pfParam; break;
-	case synthv1::CHO1_MOD:       m_cho.mod          = pfParam; break;
-	case synthv1::FLA1_WET:       m_fla.wet          = pfParam; break;
-	case synthv1::FLA1_DELAY:     m_fla.delay        = pfParam; break;
-	case synthv1::FLA1_FEEDB:     m_fla.feedb        = pfParam; break;
-	case synthv1::FLA1_DAFT:      m_fla.daft         = pfParam; break;
-	case synthv1::PHA1_WET:       m_pha.wet          = pfParam; break;
-	case synthv1::PHA1_RATE:      m_pha.rate         = pfParam; break;
-	case synthv1::PHA1_FEEDB:     m_pha.feedb        = pfParam; break;
-	case synthv1::PHA1_DEPTH:     m_pha.depth        = pfParam; break;
-	case synthv1::PHA1_DAFT:      m_pha.daft         = pfParam; break;
-	case synthv1::DEL1_WET:       m_del.wet          = pfParam; break;
-	case synthv1::DEL1_DELAY:     m_del.delay        = pfParam; break;
-	case synthv1::DEL1_FEEDB:     m_del.feedb        = pfParam; break;
-	case synthv1::DEL1_BPM:       m_del.bpm          = pfParam; break;
-	case synthv1::DEL1_BPMSYNC:   m_del.bpmsync      = pfParam; break;
-	case synthv1::REV1_WET:       m_rev.wet          = pfParam; break;
-	case synthv1::REV1_ROOM:      m_rev.room         = pfParam; break;
-	case synthv1::REV1_DAMP:      m_rev.damp         = pfParam; break;
-	case synthv1::REV1_FEEDB:     m_rev.feedb        = pfParam; break;
-	case synthv1::REV1_WIDTH:     m_rev.width        = pfParam; break;
-	case synthv1::DYN1_COMPRESS:  m_dyn.compress     = pfParam; break;
-	case synthv1::DYN1_LIMITER:   m_dyn.limiter      = pfParam; break;
-	default: break;
-	}
+	synthv1_port *pParamPort = paramPort(index);
+	if (pParamPort)
+		pParamPort->set_port(pfParam);
 
 	// check null connections.
 	if (pfParam == &s_fDummy)
@@ -1204,36 +1102,36 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::OUT1_VOLUME:
 	case synthv1::DCA1_VOLUME:
 		m_vol1.reset(
-			m_out1.volume,
-			m_dca1.volume,
+			m_out1.volume.port(),
+			m_dca1.volume.port(),
 			&m_ctl1.volume,
 			&m_aux1.volume);
 		break;
 	case synthv1::OUT1_WIDTH:
 		m_wid1.reset(
-			m_out1.width);
+			m_out1.width.port());
 		break;
 	case synthv1::OUT1_PANNING:
 		m_pan1.reset(
-			m_out1.panning,
+			m_out1.panning.port(),
 			&m_ctl1.panning,
 			&m_aux1.panning);
 		break;
 	case synthv1::OUT2_VOLUME:
 	case synthv1::DCA2_VOLUME:
 		m_vol2.reset(
-			m_out2.volume,
-			m_dca2.volume,
+			m_out2.volume.port(),
+			m_dca2.volume.port(),
 			&m_ctl2.volume,
 			&m_aux2.volume);
 		break;
 	case synthv1::OUT2_WIDTH:
 		m_wid2.reset(
-			m_out2.width);
+			m_out2.width.port());
 		break;
 	case synthv1::OUT2_PANNING:
 		m_pan2.reset(
-			m_out2.panning,
+			m_out2.panning.port(),
 			&m_ctl2.panning,
 			&m_aux2.panning);
 		break;
@@ -1243,166 +1141,167 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 }
 
 
-float *synthv1_impl::paramPort ( synthv1::ParamIndex index ) const
+synthv1_port *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 {
-	float *pfParam= 0;
+	synthv1_port *pParamPort = NULL;
 
 	switch (index) {
-	case synthv1::DCO1_SHAPE1:    pfParam = m_dco1.shape1;      break;
-	case synthv1::DCO1_WIDTH1:    pfParam = m_dco1.width1;      break;
-	case synthv1::DCO1_BANDL1:    pfParam = m_dco1.bandl1;      break;
-	case synthv1::DCO1_SHAPE2:    pfParam = m_dco1.shape2;      break;
-	case synthv1::DCO1_WIDTH2:    pfParam = m_dco1.width2;      break;
-	case synthv1::DCO1_BANDL2:    pfParam = m_dco1.bandl2;      break;
-	case synthv1::DCO1_BALANCE:   pfParam = m_dco1.balance;     break;
-	case synthv1::DCO1_DETUNE:    pfParam = m_dco1.detune;      break;
-	case synthv1::DCO1_PHASE:     pfParam = m_dco1.phase;       break;
-	case synthv1::DCO1_RINGMOD:   pfParam = m_dco1.ringmod;     break;
-	case synthv1::DCO1_OCTAVE:    pfParam = m_dco1.octave;      break;
-	case synthv1::DCO1_TUNING:    pfParam = m_dco1.tuning;      break;
-	case synthv1::DCO1_GLIDE:     pfParam = m_dco1.glide;       break;
-	case synthv1::DCO1_ENVTIME:   pfParam = m_dco1.envtime;     break;
-	case synthv1::DCF1_CUTOFF:    pfParam = m_dcf1.cutoff;      break;
-	case synthv1::DCF1_RESO:      pfParam = m_dcf1.reso;        break;
-	case synthv1::DCF1_TYPE:      pfParam = m_dcf1.type;        break;
-	case synthv1::DCF1_SLOPE:     pfParam = m_dcf1.slope;       break;
-	case synthv1::DCF1_ENVELOPE:  pfParam = m_dcf1.envelope;    break;
-	case synthv1::DCF1_ATTACK:    pfParam = m_dcf1.env.attack;  break;
-	case synthv1::DCF1_DECAY:     pfParam = m_dcf1.env.decay;   break;
-	case synthv1::DCF1_SUSTAIN:   pfParam = m_dcf1.env.sustain; break;
-	case synthv1::DCF1_RELEASE:   pfParam = m_dcf1.env.release; break;
-	case synthv1::LFO1_SHAPE:     pfParam = m_lfo1.shape;       break;
-	case synthv1::LFO1_WIDTH:     pfParam = m_lfo1.width;       break;
-	case synthv1::LFO1_BPM:       pfParam = m_lfo1.bpm;         break;
-	case synthv1::LFO1_RATE:      pfParam = m_lfo1.rate;        break;
-	case synthv1::LFO1_SYNC:      pfParam = m_lfo1.sync;        break;
-	case synthv1::LFO1_SWEEP:     pfParam = m_lfo1.sweep;       break;
-	case synthv1::LFO1_PITCH:     pfParam = m_lfo1.pitch;       break;
-	case synthv1::LFO1_RINGMOD:   pfParam = m_lfo1.ringmod;     break;
-	case synthv1::LFO1_CUTOFF:    pfParam = m_lfo1.cutoff;      break;
-	case synthv1::LFO1_RESO:      pfParam = m_lfo1.reso;        break;
-	case synthv1::LFO1_PANNING:   pfParam = m_lfo1.panning;     break;
-	case synthv1::LFO1_VOLUME:    pfParam = m_lfo1.volume;      break;
-	case synthv1::LFO1_ATTACK:    pfParam = m_lfo1.env.attack;  break;
-	case synthv1::LFO1_DECAY:     pfParam = m_lfo1.env.decay;   break;
-	case synthv1::LFO1_SUSTAIN:   pfParam = m_lfo1.env.sustain; break;
-	case synthv1::LFO1_RELEASE:   pfParam = m_lfo1.env.release; break;
-	case synthv1::LFO1_BPMSYNC:   pfParam = m_lfo1.bpmsync;     break;
-	case synthv1::DCA1_VOLUME:    pfParam = m_dca1.volume;      break;
-	case synthv1::DCA1_ATTACK:    pfParam = m_dca1.env.attack;  break;
-	case synthv1::DCA1_DECAY:     pfParam = m_dca1.env.decay;   break;
-	case synthv1::DCA1_SUSTAIN:   pfParam = m_dca1.env.sustain; break;
-	case synthv1::DCA1_RELEASE:   pfParam = m_dca1.env.release; break;
-	case synthv1::OUT1_WIDTH:     pfParam = m_out1.width;       break;
-	case synthv1::OUT1_PANNING:   pfParam = m_out1.panning;     break;
-	case synthv1::OUT1_FXSEND:    pfParam = m_out1.fxsend;      break;
-	case synthv1::OUT1_VOLUME:    pfParam = m_out1.volume;      break;
-	case synthv1::DEF1_PITCHBEND: pfParam = m_def1.pitchbend;   break;
-	case synthv1::DEF1_MODWHEEL:  pfParam = m_def1.modwheel;    break;
-	case synthv1::DEF1_PRESSURE:  pfParam = m_def1.pressure;    break;
-	case synthv1::DEF1_VELOCITY:  pfParam = m_def1.velocity;    break;
-	case synthv1::DEF1_CHANNEL:   pfParam = m_def1.channel;     break;
-	case synthv1::DEF1_MONO:      pfParam = m_def1.mono;        break;
-	case synthv1::DCO2_SHAPE1:    pfParam = m_dco2.shape1;      break;
-	case synthv1::DCO2_WIDTH1:    pfParam = m_dco2.width1;      break;
-	case synthv1::DCO2_BANDL1:    pfParam = m_dco2.bandl1;      break;
-	case synthv1::DCO2_SHAPE2:    pfParam = m_dco2.shape2;      break;
-	case synthv1::DCO2_WIDTH2:    pfParam = m_dco2.width2;      break;
-	case synthv1::DCO2_BANDL2:    pfParam = m_dco2.bandl2;      break;
-	case synthv1::DCO2_BALANCE:   pfParam = m_dco2.balance;     break;
-	case synthv1::DCO2_DETUNE:    pfParam = m_dco2.detune;      break;
-	case synthv1::DCO2_PHASE:     pfParam = m_dco2.phase;       break;
-	case synthv1::DCO2_RINGMOD:   pfParam = m_dco2.ringmod;     break;
-	case synthv1::DCO2_OCTAVE:    pfParam = m_dco2.octave;      break;
-	case synthv1::DCO2_TUNING:    pfParam = m_dco2.tuning;      break;
-	case synthv1::DCO2_GLIDE:     pfParam = m_dco2.glide;       break;
-	case synthv1::DCO2_ENVTIME:   pfParam = m_dco2.envtime;     break;
-	case synthv1::DCF2_CUTOFF:    pfParam = m_dcf2.cutoff;      break;
-	case synthv1::DCF2_RESO:      pfParam = m_dcf2.reso;        break;
-	case synthv1::DCF2_TYPE:      pfParam = m_dcf2.type;        break;
-	case synthv1::DCF2_SLOPE:     pfParam = m_dcf2.slope;       break;
-	case synthv1::DCF2_ENVELOPE:  pfParam = m_dcf2.envelope;    break;
-	case synthv1::DCF2_ATTACK:    pfParam = m_dcf2.env.attack;  break;
-	case synthv1::DCF2_DECAY:     pfParam = m_dcf2.env.decay;   break;
-	case synthv1::DCF2_SUSTAIN:   pfParam = m_dcf2.env.sustain; break;
-	case synthv1::DCF2_RELEASE:   pfParam = m_dcf2.env.release; break;
-	case synthv1::LFO2_SHAPE:     pfParam = m_lfo2.shape;       break;
-	case synthv1::LFO2_WIDTH:     pfParam = m_lfo2.width;       break;
-	case synthv1::LFO2_BPM:       pfParam = m_lfo2.bpm;         break;
-	case synthv1::LFO2_RATE:      pfParam = m_lfo2.rate;        break;
-	case synthv1::LFO2_SYNC:      pfParam = m_lfo2.sync;        break;
-	case synthv1::LFO2_SWEEP:     pfParam = m_lfo2.sweep;       break;
-	case synthv1::LFO2_PITCH:     pfParam = m_lfo2.pitch;       break;
-	case synthv1::LFO2_RINGMOD:   pfParam = m_lfo2.ringmod;     break;
-	case synthv1::LFO2_CUTOFF:    pfParam = m_lfo2.cutoff;      break;
-	case synthv1::LFO2_RESO:      pfParam = m_lfo2.reso;        break;
-	case synthv1::LFO2_PANNING:   pfParam = m_lfo2.panning;     break;
-	case synthv1::LFO2_VOLUME:    pfParam = m_lfo2.volume;      break;
-	case synthv1::LFO2_ATTACK:    pfParam = m_lfo2.env.attack;  break;
-	case synthv1::LFO2_DECAY:     pfParam = m_lfo2.env.decay;   break;
-	case synthv1::LFO2_SUSTAIN:   pfParam = m_lfo2.env.sustain; break;
-	case synthv1::LFO2_RELEASE:   pfParam = m_lfo2.env.release; break;
-	case synthv1::LFO2_BPMSYNC:   pfParam = m_lfo2.bpmsync;     break;
-	case synthv1::DCA2_VOLUME:    pfParam = m_dca2.volume;      break;
-	case synthv1::DCA2_ATTACK:    pfParam = m_dca2.env.attack;  break;
-	case synthv1::DCA2_DECAY:     pfParam = m_dca2.env.decay;   break;
-	case synthv1::DCA2_SUSTAIN:   pfParam = m_dca2.env.sustain; break;
-	case synthv1::DCA2_RELEASE:   pfParam = m_dca2.env.release; break;
-	case synthv1::OUT2_WIDTH:     pfParam = m_out2.width;       break;
-	case synthv1::OUT2_PANNING:   pfParam = m_out2.panning;     break;
-	case synthv1::OUT2_FXSEND:    pfParam = m_out2.fxsend;      break;
-	case synthv1::OUT2_VOLUME:    pfParam = m_out2.volume;      break;
-	case synthv1::DEF2_PITCHBEND: pfParam = m_def2.pitchbend;   break;
-	case synthv1::DEF2_MODWHEEL:  pfParam = m_def2.modwheel;    break;
-	case synthv1::DEF2_PRESSURE:  pfParam = m_def2.pressure;    break;
-	case synthv1::DEF2_VELOCITY:  pfParam = m_def2.velocity;    break;
-	case synthv1::DEF2_CHANNEL:   pfParam = m_def2.channel;     break;
-	case synthv1::DEF2_MONO:      pfParam = m_def2.mono;        break;
-	case synthv1::CHO1_WET:       pfParam = m_cho.wet;          break;
-	case synthv1::CHO1_DELAY:     pfParam = m_cho.delay;        break;
-	case synthv1::CHO1_FEEDB:     pfParam = m_cho.feedb;        break;
-	case synthv1::CHO1_RATE:      pfParam = m_cho.rate;         break;
-	case synthv1::CHO1_MOD:       pfParam = m_cho.mod;          break;
-	case synthv1::FLA1_WET:       pfParam = m_fla.wet;          break;
-	case synthv1::FLA1_DELAY:     pfParam = m_fla.delay;        break;
-	case synthv1::FLA1_FEEDB:     pfParam = m_fla.feedb;        break;
-	case synthv1::FLA1_DAFT:      pfParam = m_fla.daft;         break;
-	case synthv1::PHA1_WET:       pfParam = m_pha.wet;          break;
-	case synthv1::PHA1_RATE:      pfParam = m_pha.rate;         break;
-	case synthv1::PHA1_FEEDB:     pfParam = m_pha.feedb;        break;
-	case synthv1::PHA1_DEPTH:     pfParam = m_pha.depth;        break;
-	case synthv1::PHA1_DAFT:      pfParam = m_pha.daft;         break;
-	case synthv1::DEL1_WET:       pfParam = m_del.wet;          break;
-	case synthv1::DEL1_DELAY:     pfParam = m_del.delay;        break;
-	case synthv1::DEL1_FEEDB:     pfParam = m_del.feedb;        break;
-	case synthv1::DEL1_BPM:       pfParam = m_del.bpm;          break;
-	case synthv1::DEL1_BPMSYNC:   pfParam = m_del.bpmsync;      break;
-	case synthv1::REV1_WET:       pfParam = m_rev.wet;          break;
-	case synthv1::REV1_ROOM:      pfParam = m_rev.room;         break;
-	case synthv1::REV1_DAMP:      pfParam = m_rev.damp;         break;
-	case synthv1::REV1_FEEDB:     pfParam = m_rev.feedb;        break;
-	case synthv1::REV1_WIDTH:     pfParam = m_rev.width;        break;
-	case synthv1::DYN1_COMPRESS:  pfParam = m_dyn.compress;     break;
-	case synthv1::DYN1_LIMITER:   pfParam = m_dyn.limiter;      break;
+	case synthv1::DCO1_SHAPE1:    pParamPort = &m_dco1.shape1;      break;
+	case synthv1::DCO1_WIDTH1:    pParamPort = &m_dco1.width1;      break;
+	case synthv1::DCO1_BANDL1:    pParamPort = &m_dco1.bandl1;      break;
+	case synthv1::DCO1_SHAPE2:    pParamPort = &m_dco1.shape2;      break;
+	case synthv1::DCO1_WIDTH2:    pParamPort = &m_dco1.width2;      break;
+	case synthv1::DCO1_BANDL2:    pParamPort = &m_dco1.bandl2;      break;
+	case synthv1::DCO1_BALANCE:   pParamPort = &m_dco1.balance;     break;
+	case synthv1::DCO1_DETUNE:    pParamPort = &m_dco1.detune;      break;
+	case synthv1::DCO1_PHASE:     pParamPort = &m_dco1.phase;       break;
+	case synthv1::DCO1_RINGMOD:   pParamPort = &m_dco1.ringmod;     break;
+	case synthv1::DCO1_OCTAVE:    pParamPort = &m_dco1.octave;      break;
+	case synthv1::DCO1_TUNING:    pParamPort = &m_dco1.tuning;      break;
+	case synthv1::DCO1_GLIDE:     pParamPort = &m_dco1.glide;       break;
+	case synthv1::DCO1_ENVTIME:   pParamPort = &m_dco1.envtime;     break;
+	case synthv1::DCF1_CUTOFF:    pParamPort = &m_dcf1.cutoff;      break;
+	case synthv1::DCF1_RESO:      pParamPort = &m_dcf1.reso;        break;
+	case synthv1::DCF1_TYPE:      pParamPort = &m_dcf1.type;        break;
+	case synthv1::DCF1_SLOPE:     pParamPort = &m_dcf1.slope;       break;
+	case synthv1::DCF1_ENVELOPE:  pParamPort = &m_dcf1.envelope;    break;
+	case synthv1::DCF1_ATTACK:    pParamPort = &m_dcf1.env.attack;  break;
+	case synthv1::DCF1_DECAY:     pParamPort = &m_dcf1.env.decay;   break;
+	case synthv1::DCF1_SUSTAIN:   pParamPort = &m_dcf1.env.sustain; break;
+	case synthv1::DCF1_RELEASE:   pParamPort = &m_dcf1.env.release; break;
+	case synthv1::LFO1_SHAPE:     pParamPort = &m_lfo1.shape;       break;
+	case synthv1::LFO1_WIDTH:     pParamPort = &m_lfo1.width;       break;
+	case synthv1::LFO1_BPM:       pParamPort = &m_lfo1.bpm;         break;
+	case synthv1::LFO1_RATE:      pParamPort = &m_lfo1.rate;        break;
+	case synthv1::LFO1_SYNC:      pParamPort = &m_lfo1.sync;        break;
+	case synthv1::LFO1_SWEEP:     pParamPort = &m_lfo1.sweep;       break;
+	case synthv1::LFO1_PITCH:     pParamPort = &m_lfo1.pitch;       break;
+	case synthv1::LFO1_RINGMOD:   pParamPort = &m_lfo1.ringmod;     break;
+	case synthv1::LFO1_CUTOFF:    pParamPort = &m_lfo1.cutoff;      break;
+	case synthv1::LFO1_RESO:      pParamPort = &m_lfo1.reso;        break;
+	case synthv1::LFO1_PANNING:   pParamPort = &m_lfo1.panning;     break;
+	case synthv1::LFO1_VOLUME:    pParamPort = &m_lfo1.volume;      break;
+	case synthv1::LFO1_ATTACK:    pParamPort = &m_lfo1.env.attack;  break;
+	case synthv1::LFO1_DECAY:     pParamPort = &m_lfo1.env.decay;   break;
+	case synthv1::LFO1_SUSTAIN:   pParamPort = &m_lfo1.env.sustain; break;
+	case synthv1::LFO1_RELEASE:   pParamPort = &m_lfo1.env.release; break;
+	case synthv1::LFO1_BPMSYNC:   pParamPort = &m_lfo1.bpmsync;     break;
+	case synthv1::DCA1_VOLUME:    pParamPort = &m_dca1.volume;      break;
+	case synthv1::DCA1_ATTACK:    pParamPort = &m_dca1.env.attack;  break;
+	case synthv1::DCA1_DECAY:     pParamPort = &m_dca1.env.decay;   break;
+	case synthv1::DCA1_SUSTAIN:   pParamPort = &m_dca1.env.sustain; break;
+	case synthv1::DCA1_RELEASE:   pParamPort = &m_dca1.env.release; break;
+	case synthv1::OUT1_WIDTH:     pParamPort = &m_out1.width;       break;
+	case synthv1::OUT1_PANNING:   pParamPort = &m_out1.panning;     break;
+	case synthv1::OUT1_FXSEND:    pParamPort = &m_out1.fxsend;      break;
+	case synthv1::OUT1_VOLUME:    pParamPort = &m_out1.volume;      break;
+	case synthv1::DEF1_PITCHBEND: pParamPort = &m_def1.pitchbend;   break;
+	case synthv1::DEF1_MODWHEEL:  pParamPort = &m_def1.modwheel;    break;
+	case synthv1::DEF1_PRESSURE:  pParamPort = &m_def1.pressure;    break;
+	case synthv1::DEF1_VELOCITY:  pParamPort = &m_def1.velocity;    break;
+	case synthv1::DEF1_CHANNEL:   pParamPort = &m_def1.channel;     break;
+	case synthv1::DEF1_MONO:      pParamPort = &m_def1.mono;        break;
+	case synthv1::DCO2_SHAPE1:    pParamPort = &m_dco2.shape1;      break;
+	case synthv1::DCO2_WIDTH1:    pParamPort = &m_dco2.width1;      break;
+	case synthv1::DCO2_BANDL1:    pParamPort = &m_dco2.bandl1;      break;
+	case synthv1::DCO2_SHAPE2:    pParamPort = &m_dco2.shape2;      break;
+	case synthv1::DCO2_WIDTH2:    pParamPort = &m_dco2.width2;      break;
+	case synthv1::DCO2_BANDL2:    pParamPort = &m_dco2.bandl2;      break;
+	case synthv1::DCO2_BALANCE:   pParamPort = &m_dco2.balance;     break;
+	case synthv1::DCO2_DETUNE:    pParamPort = &m_dco2.detune;      break;
+	case synthv1::DCO2_PHASE:     pParamPort = &m_dco2.phase;       break;
+	case synthv1::DCO2_RINGMOD:   pParamPort = &m_dco2.ringmod;     break;
+	case synthv1::DCO2_OCTAVE:    pParamPort = &m_dco2.octave;      break;
+	case synthv1::DCO2_TUNING:    pParamPort = &m_dco2.tuning;      break;
+	case synthv1::DCO2_GLIDE:     pParamPort = &m_dco2.glide;       break;
+	case synthv1::DCO2_ENVTIME:   pParamPort = &m_dco2.envtime;     break;
+	case synthv1::DCF2_CUTOFF:    pParamPort = &m_dcf2.cutoff;      break;
+	case synthv1::DCF2_RESO:      pParamPort = &m_dcf2.reso;        break;
+	case synthv1::DCF2_TYPE:      pParamPort = &m_dcf2.type;        break;
+	case synthv1::DCF2_SLOPE:     pParamPort = &m_dcf2.slope;       break;
+	case synthv1::DCF2_ENVELOPE:  pParamPort = &m_dcf2.envelope;    break;
+	case synthv1::DCF2_ATTACK:    pParamPort = &m_dcf2.env.attack;  break;
+	case synthv1::DCF2_DECAY:     pParamPort = &m_dcf2.env.decay;   break;
+	case synthv1::DCF2_SUSTAIN:   pParamPort = &m_dcf2.env.sustain; break;
+	case synthv1::DCF2_RELEASE:   pParamPort = &m_dcf2.env.release; break;
+	case synthv1::LFO2_SHAPE:     pParamPort = &m_lfo2.shape;       break;
+	case synthv1::LFO2_WIDTH:     pParamPort = &m_lfo2.width;       break;
+	case synthv1::LFO2_BPM:       pParamPort = &m_lfo2.bpm;         break;
+	case synthv1::LFO2_RATE:      pParamPort = &m_lfo2.rate;        break;
+	case synthv1::LFO2_SYNC:      pParamPort = &m_lfo2.sync;        break;
+	case synthv1::LFO2_SWEEP:     pParamPort = &m_lfo2.sweep;       break;
+	case synthv1::LFO2_PITCH:     pParamPort = &m_lfo2.pitch;       break;
+	case synthv1::LFO2_RINGMOD:   pParamPort = &m_lfo2.ringmod;     break;
+	case synthv1::LFO2_CUTOFF:    pParamPort = &m_lfo2.cutoff;      break;
+	case synthv1::LFO2_RESO:      pParamPort = &m_lfo2.reso;        break;
+	case synthv1::LFO2_PANNING:   pParamPort = &m_lfo2.panning;     break;
+	case synthv1::LFO2_VOLUME:    pParamPort = &m_lfo2.volume;      break;
+	case synthv1::LFO2_ATTACK:    pParamPort = &m_lfo2.env.attack;  break;
+	case synthv1::LFO2_DECAY:     pParamPort = &m_lfo2.env.decay;   break;
+	case synthv1::LFO2_SUSTAIN:   pParamPort = &m_lfo2.env.sustain; break;
+	case synthv1::LFO2_RELEASE:   pParamPort = &m_lfo2.env.release; break;
+	case synthv1::LFO2_BPMSYNC:   pParamPort = &m_lfo2.bpmsync;     break;
+	case synthv1::DCA2_VOLUME:    pParamPort = &m_dca2.volume;      break;
+	case synthv1::DCA2_ATTACK:    pParamPort = &m_dca2.env.attack;  break;
+	case synthv1::DCA2_DECAY:     pParamPort = &m_dca2.env.decay;   break;
+	case synthv1::DCA2_SUSTAIN:   pParamPort = &m_dca2.env.sustain; break;
+	case synthv1::DCA2_RELEASE:   pParamPort = &m_dca2.env.release; break;
+	case synthv1::OUT2_WIDTH:     pParamPort = &m_out2.width;       break;
+	case synthv1::OUT2_PANNING:   pParamPort = &m_out2.panning;     break;
+	case synthv1::OUT2_FXSEND:    pParamPort = &m_out2.fxsend;      break;
+	case synthv1::OUT2_VOLUME:    pParamPort = &m_out2.volume;      break;
+	case synthv1::DEF2_PITCHBEND: pParamPort = &m_def2.pitchbend;   break;
+	case synthv1::DEF2_MODWHEEL:  pParamPort = &m_def2.modwheel;    break;
+	case synthv1::DEF2_PRESSURE:  pParamPort = &m_def2.pressure;    break;
+	case synthv1::DEF2_VELOCITY:  pParamPort = &m_def2.velocity;    break;
+	case synthv1::DEF2_CHANNEL:   pParamPort = &m_def2.channel;     break;
+	case synthv1::DEF2_MONO:      pParamPort = &m_def2.mono;        break;
+	case synthv1::CHO1_WET:       pParamPort = &m_cho.wet;          break;
+	case synthv1::CHO1_DELAY:     pParamPort = &m_cho.delay;        break;
+	case synthv1::CHO1_FEEDB:     pParamPort = &m_cho.feedb;        break;
+	case synthv1::CHO1_RATE:      pParamPort = &m_cho.rate;         break;
+	case synthv1::CHO1_MOD:       pParamPort = &m_cho.mod;          break;
+	case synthv1::FLA1_WET:       pParamPort = &m_fla.wet;          break;
+	case synthv1::FLA1_DELAY:     pParamPort = &m_fla.delay;        break;
+	case synthv1::FLA1_FEEDB:     pParamPort = &m_fla.feedb;        break;
+	case synthv1::FLA1_DAFT:      pParamPort = &m_fla.daft;         break;
+	case synthv1::PHA1_WET:       pParamPort = &m_pha.wet;          break;
+	case synthv1::PHA1_RATE:      pParamPort = &m_pha.rate;         break;
+	case synthv1::PHA1_FEEDB:     pParamPort = &m_pha.feedb;        break;
+	case synthv1::PHA1_DEPTH:     pParamPort = &m_pha.depth;        break;
+	case synthv1::PHA1_DAFT:      pParamPort = &m_pha.daft;         break;
+	case synthv1::DEL1_WET:       pParamPort = &m_del.wet;          break;
+	case synthv1::DEL1_DELAY:     pParamPort = &m_del.delay;        break;
+	case synthv1::DEL1_FEEDB:     pParamPort = &m_del.feedb;        break;
+	case synthv1::DEL1_BPM:       pParamPort = &m_del.bpm;          break;
+	case synthv1::DEL1_BPMSYNC:   pParamPort = &m_del.bpmsync;      break;
+	case synthv1::REV1_WET:       pParamPort = &m_rev.wet;          break;
+	case synthv1::REV1_ROOM:      pParamPort = &m_rev.room;         break;
+	case synthv1::REV1_DAMP:      pParamPort = &m_rev.damp;         break;
+	case synthv1::REV1_FEEDB:     pParamPort = &m_rev.feedb;        break;
+	case synthv1::REV1_WIDTH:     pParamPort = &m_rev.width;        break;
+	case synthv1::DYN1_COMPRESS:  pParamPort = &m_dyn.compress;     break;
+	case synthv1::DYN1_LIMITER:   pParamPort = &m_dyn.limiter;      break;
 	default: break;
 	}
 
-	return pfParam;
+	return pParamPort;
 }
 
 
-void synthv1_impl::setParamValue ( synthv1::ParamIndex index, float fValue )
+void synthv1_impl::setParamValue (
+	synthv1::ParamIndex index, float fValue, bool bCache )
 {
-	float *pfParamPort = paramPort(index);
-	if (pfParamPort)
-		*pfParamPort = fValue; // LV2:BUG?
+	synthv1_port *pParamPort = paramPort(index);
+	if (pParamPort)
+		pParamPort->set_value(fValue, bCache);
 }
 
 
-float synthv1_impl::paramValue ( synthv1::ParamIndex index ) const
+float synthv1_impl::paramValue ( synthv1::ParamIndex index )
 {
-	float *pfParamPort = paramPort(index);
-	return (pfParamPort ? *pfParamPort : 0.0f);
+	synthv1_port *pParamPort = paramPort(index);
+	return (pParamPort ? pParamPort->value() : 0.0f);
 }
 
 
@@ -1469,7 +1368,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 							m_dcf1.env.note_off_fast(&pv->dcf1_env);
 							m_lfo1.env.note_off_fast(&pv->lfo1_env);
 							m_dca1.env.note_off_fast(&pv->dca1_env);
-							m_note1[pv->note1] = 0;
+							m_note1[pv->note1] = NULL;
 							pv->note1 = -1;
 						}
 					}
@@ -1481,7 +1380,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					m_dcf1.env.note_off_fast(&pv->dcf1_env);
 					m_lfo1.env.note_off_fast(&pv->lfo1_env);
 					m_dca1.env.note_off_fast(&pv->dca1_env);
-					m_note1[pv->note1] = 0;
+					m_note1[pv->note1] = NULL;
 					pv->note1 = -1;
 				}
 			}
@@ -1495,7 +1394,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 							m_dcf2.env.note_off_fast(&pv->dcf2_env);
 							m_lfo2.env.note_off_fast(&pv->lfo2_env);
 							m_dca2.env.note_off_fast(&pv->dca2_env);
-							m_note2[pv->note2] = 0;
+							m_note2[pv->note2] = NULL;
 							pv->note2 = -1;
 						}
 					}
@@ -1507,7 +1406,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					m_dcf2.env.note_off_fast(&pv->dcf2_env);
 					m_lfo2.env.note_off_fast(&pv->lfo2_env);
 					m_dca2.env.note_off_fast(&pv->dca2_env);
-					m_note2[pv->note2] = 0;
+					m_note2[pv->note2] = NULL;
 					pv->note2 = -1;
 				}
 			}
@@ -1522,10 +1421,12 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					pv->note1 = key;
 					pv->vel1 = synthv1_velocity(vel, *m_def1.velocity);
 					// balance
-					pv->dco1_bal.reset(m_dco1.balance);
+					pv->dco1_bal.reset(m_dco1.balance.port());
 					// pressure/after-touch
 					pv->pre1 = 0.0f;
-					pv->dca1_pre.reset(m_def1.pressure, &m_ctl1.pressure, &pv->pre1);
+					pv->dca1_pre.reset(
+						m_def1.pressure.port(),
+						&m_ctl1.pressure, &pv->pre1);
 					// frequencies
 					const float note1 = float(key)
 						+ *m_dco1.octave * OCTAVE_SCALE
@@ -1575,10 +1476,12 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					pv->note2 = key;
 					pv->vel2 = synthv1_velocity(vel, *m_def2.velocity);
 					// balance
-					pv->dco2_bal.reset(m_dco2.balance);
+					pv->dco2_bal.reset(m_dco2.balance.port());
 					// pressure/after-touch
 					pv->pre2 = 0.0f;
-					pv->dca2_pre.reset(m_def2.pressure, &m_ctl2.pressure, &pv->pre2);
+					pv->dca2_pre.reset(
+						m_def2.pressure.port(),
+						&m_ctl2.pressure, &pv->pre2);
 					// frequencies
 					const float note2 = float(key)
 						+ *m_dco2.octave * OCTAVE_SCALE
@@ -1783,9 +1686,9 @@ void synthv1_impl::allNotesOff (void)
 	synthv1_voice *pv = m_play_list.next();
 	while (pv) {
 		if (pv->note1 >= 0)
-			m_note1[pv->note1] = 0;
+			m_note1[pv->note1] = NULL;
 		if (pv->note2 >= 0)
-			m_note2[pv->note2] = 0;
+			m_note2[pv->note2] = NULL;
 		free_voice(pv);
 		pv = m_play_list.next();
 	}
@@ -1809,7 +1712,7 @@ void synthv1_impl::allNotesOff_1 (void)
 			m_dca1.env.note_off_fast(&pv->dca1_env);
 			m_dcf1.env.note_off_fast(&pv->dcf1_env);
 			m_lfo1.env.note_off_fast(&pv->lfo1_env);
-			m_note1[pv->note1] = 0;
+			m_note1[pv->note1] = NULL;
 			pv->note1 = -1;
 		}
 		pv = pv->next();
@@ -1830,7 +1733,7 @@ void synthv1_impl::allNotesOff_2 (void)
 			m_dca2.env.note_off_fast(&pv->dca2_env);
 			m_dcf2.env.note_off_fast(&pv->dcf2_env);
 			m_lfo2.env.note_off_fast(&pv->lfo2_env);
-			m_note2[pv->note2] = 0;
+			m_note2[pv->note2] = NULL;
 			pv->note2 = -1;
 		}
 		pv = pv->next();
@@ -1926,28 +1829,43 @@ void synthv1_impl::reset (void)
 		*m_del.bpm *= 100.0f;
 #endif
 
-	m_vol1.reset(m_out1.volume, m_dca1.volume, &m_ctl1.volume, &m_aux1.volume);
-	m_pan1.reset(m_out1.panning, &m_ctl1.panning, &m_aux1.panning);
-	m_wid1.reset(m_out1.width);
+	m_vol1.reset(
+		m_out1.volume.port(),
+		m_dca1.volume.port(),
+		&m_ctl1.volume, &m_aux1.volume);
+	m_pan1.reset(
+		m_out1.panning.port(),
+		&m_ctl1.panning,
+		&m_aux1.panning);
+	m_wid1.reset(
+		m_out1.width.port());
 
-	m_vol2.reset(m_out2.volume, m_dca2.volume, &m_ctl2.volume, &m_aux2.volume);
-	m_pan2.reset(m_out2.panning, &m_ctl2.panning, &m_aux2.panning);
-	m_wid2.reset(m_out2.width);
+	m_vol2.reset(
+		m_out2.volume.port(),
+		m_dca2.volume.port(),
+		&m_ctl2.volume,
+		&m_aux2.volume);
+	m_pan2.reset(
+		m_out2.panning.port(),
+		&m_ctl2.panning,
+		&m_aux2.panning);
+	m_wid2.reset(
+		m_out2.width.port());
 	
 	// flangers
-	if (m_flanger == 0)
+	if (m_flanger == NULL)
 		m_flanger = new synthv1_fx_flanger [m_nchannels];
 
 	// phasers
-	if (m_phaser == 0)
+	if (m_phaser == NULL)
 		m_phaser = new synthv1_fx_phaser [m_nchannels];
 
 	// delays
-	if (m_delay == 0)
+	if (m_delay == NULL)
 		m_delay = new synthv1_fx_delay [m_nchannels];
 
 	// compressors
-	if (m_comp == 0)
+	if (m_comp == NULL)
 		m_comp = new synthv1_fx_comp [m_nchannels];
 
 	// reverbs
@@ -2235,9 +2153,9 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 			if (pv->dca1_env.stage == synthv1_env::Idle &&
 				pv->dca2_env.stage == synthv1_env::Idle) {
 				if (pv->note1 >= 0)
-					m_note1[pv->note1] = 0;
+					m_note1[pv->note1] = NULL;
 				if (pv->note2 >= 0)
-					m_note2[pv->note2] = 0;
+					m_note2[pv->note2] = NULL;
 				free_voice(pv);
 				nblock = 0;
 			} else {
@@ -2377,15 +2295,15 @@ void synthv1::setParamPort ( ParamIndex index, float *pfParam )
 	m_pImpl->setParamPort(index, pfParam);
 }
 
-float *synthv1::paramPort ( ParamIndex index ) const
+synthv1_port *synthv1::paramPort ( ParamIndex index ) const
 {
 	return m_pImpl->paramPort(index);
 }
 
 
-void synthv1::setParamValue ( ParamIndex index, float fValue )
+void synthv1::setParamValue ( ParamIndex index, float fValue, bool bCache )
 {
-	m_pImpl->setParamValue(index, fValue);
+	m_pImpl->setParamValue(index, fValue, bCache);
 }
 
 float synthv1::paramValue ( ParamIndex index ) const
