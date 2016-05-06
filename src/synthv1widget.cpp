@@ -1,7 +1,7 @@
 // synthv1widget.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2016, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -149,13 +149,8 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_ui.Rev1WetKnob->setSpecialValueText(sOff);
 
 	const QString& sAuto = tr("Auto");
-#ifdef CONFIG_LFO_BPMRATEX_0
-	m_ui.Lfo1RateKnob->setSpecialValueText(sAuto);
-	m_ui.Lfo2RateKnob->setSpecialValueText(sAuto);
-#else
 	m_ui.Lfo1BpmKnob->setSpecialValueText(sAuto);
 	m_ui.Lfo2BpmKnob->setSpecialValueText(sAuto);
-#endif
 	m_ui.Del1BpmKnob->setSpecialValueText(sAuto);
 
 	// Wave integer widths.
@@ -214,9 +209,6 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_ui.Lfo1PanningKnob->setMaximum(+1.0f);
 	m_ui.Lfo1VolumeKnob->setMinimum(-1.0f);
 	m_ui.Lfo1VolumeKnob->setMaximum(+1.0f);
-#ifdef CONFIG_LFO_BPMRATEX_0
-	m_ui.Lfo1BpmKnob->hide();
-#endif
 
 	m_ui.Lfo2BpmKnob->setScale(1.0f);
 	m_ui.Lfo2BpmKnob->setMinimum(3.6f);
@@ -236,9 +228,6 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_ui.Lfo2PanningKnob->setMaximum(+1.0f);
 	m_ui.Lfo2VolumeKnob->setMinimum(-1.0f);
 	m_ui.Lfo2VolumeKnob->setMaximum(+1.0f);
-#ifdef CONFIG_LFO_BPMRATEX_0
-	m_ui.Lfo2BpmKnob->hide();
-#endif
 
 
 	// Channel filters
@@ -439,15 +428,9 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		m_ui.Lfo1ReleaseKnob, SIGNAL(valueChanged(float)),
 		m_ui.Lfo1Env, SLOT(setRelease(float)));
 
-#ifdef CONFIG_LFO_BPMRATEX_0
-	QObject::connect(m_ui.Lfo1RateKnob,
-		SIGNAL(valueChanged(float)),
-		SLOT(lfo1BpmSyncChanged()));
-#else
 	QObject::connect(m_ui.Lfo1BpmKnob,
 		SIGNAL(valueChanged(float)),
 		SLOT(lfo1BpmSyncChanged()));
-#endif
 
 	// DCA1
 	setParamKnob(synthv1::DCA1_VOLUME,  m_ui.Dca1VolumeKnob);
@@ -660,15 +643,9 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		m_ui.Lfo2ReleaseKnob, SIGNAL(valueChanged(float)),
 		m_ui.Lfo2Env, SLOT(setRelease(float)));
 
-#ifdef CONFIG_LFO_BPMRATEX_0
-	QObject::connect(m_ui.Lfo2RateKnob,
-		SIGNAL(valueChanged(float)),
-		SLOT(lfo2BpmSyncChanged()));
-#else
 	QObject::connect(m_ui.Lfo2BpmKnob,
 		SIGNAL(valueChanged(float)),
 		SLOT(lfo2BpmSyncChanged()));
-#endif
 
 	// DCA2
 	setParamKnob(synthv1::DCA2_VOLUME,  m_ui.Dca2VolumeKnob);
@@ -946,22 +923,12 @@ void synthv1widget::updateParamEx ( synthv1::ParamIndex index, float fValue )
 		m_ui.Dcf2TypeKnob->setEnabled(int(fValue) != 3); // !Formant
 		break;
 	case synthv1::LFO1_BPMSYNC:
-	#ifdef CONFIG_LFO_BPMRATEX_0
-		if (fValue > 0.0f)
-			m_ui.Lfo1RateKnob->setValue(0.0f);
-	#else
 		if (fValue > 0.0f)
 			m_ui.Lfo1BpmKnob->setValue(0.0f);
-	#endif
 		break;
 	case synthv1::LFO2_BPMSYNC:
-	#ifdef CONFIG_LFO_BPMRATEX_0
-		if (fValue > 0.0f)
-			m_ui.Lfo2RateKnob->setValue(0.0f);
-	#else
 		if (fValue > 0.0f)
 			m_ui.Lfo2BpmKnob->setValue(0.0f);
-	#endif
 		break;
 	case synthv1::DEL1_BPMSYNC:
 		if (fValue > 0.0f)
@@ -1331,22 +1298,14 @@ void synthv1widget::bpmSyncChanged (
 // LFO1 BPM sync change.
 void synthv1widget::lfo1BpmSyncChanged (void)
 {
-#ifdef CONFIG_LFO_BPMRATEX_0
-	bpmSyncChanged(m_ui.Lfo1RateKnob, synthv1::LFO1_BPMSYNC);
-#else
 	bpmSyncChanged(m_ui.Lfo1BpmKnob, synthv1::LFO1_BPMSYNC);
-#endif
 }
 
 
 // LFO2 BPM sync change.
 void synthv1widget::lfo2BpmSyncChanged (void)
 {
-#ifdef CONFIG_LFO_BPMRATEX_0
-	bpmSyncChanged(m_ui.Lfo2RateKnob, synthv1::LFO2_BPMSYNC);
-#else
 	bpmSyncChanged(m_ui.Lfo2BpmKnob, synthv1::LFO2_BPMSYNC);
-#endif
 }
 
 

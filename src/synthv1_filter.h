@@ -286,6 +286,3 @@ private:
 
 
 // end of synthv1_filter.h
-
-
-

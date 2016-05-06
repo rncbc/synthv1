@@ -1,7 +1,7 @@
 // synthv1widget_lv2.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2016, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -122,10 +122,6 @@ void synthv1widget_lv2::port_event ( uint32_t port_index,
 		const synthv1::ParamIndex index
 			= synthv1::ParamIndex(port_index - synthv1_lv2::ParamBase);
 		const float fValue = *(float *) buffer;
-	#if 0//--legacy support < 0.3.0.4 -- begin
-		if (index == synthv1::DEL1_BPM && fValue < 3.6f)
-			fValue *= 100.0f;
-	#endif
 		setParamValue(index, fValue, m_params_def[index]);
 		m_params_def[index] = false;
 	}
