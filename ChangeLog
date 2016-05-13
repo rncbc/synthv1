@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- All changes to most continuous parameter values are now
+  smoothed to a fast but finite slew rate. (EXPERIMENTAL)
+
 - In compliance to the LV2 spec. MIDI Controllers now affect
   cached parameter values only, via shadow ports, instead of
   input control ports directly, mitigating their read-only
