@@ -39,7 +39,7 @@ synthv1 *synthv1_ui::instance (void) const
 
 void synthv1_ui::setParamValue ( synthv1::ParamIndex index, float fValue )
 {
-	m_pSynth->setParamValue(index, fValue); // Cached!
+	m_pSynth->setParamValue(index, fValue);
 }
 
 float synthv1_ui::paramValue ( synthv1::ParamIndex index ) const
