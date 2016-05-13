@@ -139,7 +139,7 @@ inline float synthv1_freq ( float note )
 }
 
 
-// parameter port (basic)
+// parameter port
 
 class synthv1_port
 {
@@ -148,85 +148,31 @@ public:
 	synthv1_port() : m_port(NULL), m_value(0.0f), m_cache(false) {}
 
 	void set_port(float *port)
-		{ m_port = port; }
+		{ m_port = port; m_cache = false; }
 	float *port() const
 		{ return m_port; }
 
-	virtual void set_value(float value, bool cache)
-		{ m_value = value; m_cache = cache; if (!m_cache) update(); }
+	void set_value(float value, bool cache)
+		{ m_value = value; m_cache = cache; if (!cache) set_port_value(value); }
 
-	virtual float value(uint32_t /*nstep*/ = 1)
-		{ probe(); return m_value; }
+	float value() const
+		{ return (m_cache ? m_value : port_value()); }
 
-	float operator *() { return value(1); }
+	float operator *()
+		{ return value(); }
 
 protected:
 
-	void probe()
-	{
-		if (m_port && ::fabsf(*m_port - m_value) > 0.001f) {
-			if (m_cache)
-				update();
-			else
-				set_value(*m_port, true);
-		}
-	}
+	void set_port_value(float value)
+		{ if (m_port) *m_port = value; }
+	float port_value() const
+		{ return (m_port ? *m_port : m_value); }
 
-	void update() { if (m_port) *m_port = m_value; m_cache = false; }
+private:
 
 	float *m_port;
 	float  m_value;
 	bool   m_cache;
-};
-
-
-// parameter port (smoothed)
-
-class synthv1_port2 : public synthv1_port
-{
-public:
-
-	synthv1_port2() : m_vstep(0.0f), m_nstep(0) {}
-
-	void set_value(float value, bool cache)
-	{
-		m_cache = cache;
-
-		if (m_cache) {
-			m_nstep = NSTEP;
-			m_vstep = (value - m_value) / float(m_nstep);
-		} else {
-			m_nstep = 0;
-			m_value = value;
-			update();
-		}
-	}
-
-	float value(uint32_t nstep = NSTEP)
-	{
-		if (m_nstep == 0)
-			probe();
-
-		if (m_nstep > 0) {
-			if (m_nstep >= nstep) {
-				m_value += m_vstep * float(nstep);
-				m_nstep -= nstep;
-			} else {
-				m_value += m_vstep * float(m_nstep);
-				m_nstep  = 0;
-			}
-			update();
-		}
-
-		return m_value;
-	}
-
-private:
-
-	static const uint32_t NSTEP = 32;
-
-	float    m_vstep;
-	uint32_t m_nstep;
 };
 
 
@@ -400,20 +346,20 @@ struct synthv1_aux
 
 struct synthv1_dco
 {
-	synthv1_port  shape1;
-	synthv1_port2 width1;
-	synthv1_port  bandl1;
-	synthv1_port  shape2;
-	synthv1_port2 width2;
-	synthv1_port  bandl2;
-	synthv1_port2 balance;
-	synthv1_port2 detune;
-	synthv1_port2 phase;
-	synthv1_port2 ringmod;
-	synthv1_port2 octave;
-	synthv1_port2 tuning;
-	synthv1_port2 glide;
-	synthv1_port  envtime;
+	synthv1_port shape1;
+	synthv1_port width1;
+	synthv1_port bandl1;
+	synthv1_port shape2;
+	synthv1_port width2;
+	synthv1_port bandl2;
+	synthv1_port balance;
+	synthv1_port detune;
+	synthv1_port phase;
+	synthv1_port ringmod;
+	synthv1_port octave;
+	synthv1_port tuning;
+	synthv1_port glide;
+	synthv1_port envtime;
 
 	float envtime0;
 };
@@ -423,13 +369,13 @@ struct synthv1_dco
 
 struct synthv1_dcf
 {
-	synthv1_port2 cutoff;
-	synthv1_port2 reso;
-	synthv1_port  type;
-	synthv1_port  slope;
-	synthv1_port2 envelope;
+	synthv1_port cutoff;
+	synthv1_port reso;
+	synthv1_port type;
+	synthv1_port slope;
+	synthv1_port envelope;
 
-	synthv1_env env;
+	synthv1_env  env;
 };
 
 
@@ -437,21 +383,21 @@ struct synthv1_dcf
 
 struct synthv1_lfo
 {
-	synthv1_port  shape;
-	synthv1_port2 width;
-	synthv1_port2 bpm;
-	synthv1_port  bpmsync;
-	synthv1_port2 rate;
-	synthv1_port  sync;
-	synthv1_port2 sweep;
-	synthv1_port2 pitch;
-	synthv1_port2 ringmod;
-	synthv1_port2 cutoff;
-	synthv1_port2 reso;
-	synthv1_port2 panning;
-	synthv1_port2 volume;
+	synthv1_port shape;
+	synthv1_port width;
+	synthv1_port bpm;
+	synthv1_port bpmsync;
+	synthv1_port rate;
+	synthv1_port sync;
+	synthv1_port sweep;
+	synthv1_port pitch;
+	synthv1_port ringmod;
+	synthv1_port cutoff;
+	synthv1_port reso;
+	synthv1_port panning;
+	synthv1_port volume;
 
-	synthv1_env env;
+	synthv1_env  env;
 };
 
 
@@ -459,9 +405,9 @@ struct synthv1_lfo
 
 struct synthv1_dca
 {
-	synthv1_port2 volume;
+	synthv1_port volume;
 
-	synthv1_env env;
+	synthv1_env  env;
 };
 
 
@@ -483,10 +429,10 @@ struct synthv1_def
 
 struct synthv1_out
 {
-	synthv1_port2 width;
-	synthv1_port2 panning;
-	synthv1_port2 fxsend;
-	synthv1_port2 volume;
+	synthv1_port width;
+	synthv1_port panning;
+	synthv1_port fxsend;
+	synthv1_port volume;
 };
 
 
@@ -494,11 +440,11 @@ struct synthv1_out
 
 struct synthv1_cho
 {
-	synthv1_port2 wet;
-	synthv1_port2 delay;
-	synthv1_port2 feedb;
-	synthv1_port2 rate;
-	synthv1_port2 mod;
+	synthv1_port wet;
+	synthv1_port delay;
+	synthv1_port feedb;
+	synthv1_port rate;
+	synthv1_port mod;
 };
 
 
@@ -506,10 +452,10 @@ struct synthv1_cho
 
 struct synthv1_fla
 {
-	synthv1_port2 wet;
-	synthv1_port2 delay;
-	synthv1_port2 feedb;
-	synthv1_port2 daft;
+	synthv1_port wet;
+	synthv1_port delay;
+	synthv1_port feedb;
+	synthv1_port daft;
 };
 
 
@@ -517,11 +463,11 @@ struct synthv1_fla
 
 struct synthv1_pha
 {
-	synthv1_port2 wet;
-	synthv1_port2 rate;
-	synthv1_port2 feedb;
-	synthv1_port2 depth;
-	synthv1_port2 daft;
+	synthv1_port wet;
+	synthv1_port rate;
+	synthv1_port feedb;
+	synthv1_port depth;
+	synthv1_port daft;
 };
 
 
@@ -529,11 +475,11 @@ struct synthv1_pha
 
 struct synthv1_del
 {
-	synthv1_port2 wet;
-	synthv1_port2 delay;
-	synthv1_port2 feedb;
-	synthv1_port2 bpm;
-	synthv1_port  bpmsync;
+	synthv1_port wet;
+	synthv1_port delay;
+	synthv1_port feedb;
+	synthv1_port bpm;
+	synthv1_port bpmsync;
 };
 
 
@@ -541,13 +487,12 @@ struct synthv1_del
 
 struct synthv1_rev
 {
-	synthv1_port2 wet;
-	synthv1_port2 room;
-	synthv1_port2 damp;
-	synthv1_port2 feedb;
-	synthv1_port2 width;
+	synthv1_port wet;
+	synthv1_port room;
+	synthv1_port damp;
+	synthv1_port feedb;
+	synthv1_port width;
 };
-
 
 // dynamic(compressor/limiter)
 
