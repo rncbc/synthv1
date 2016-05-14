@@ -154,11 +154,10 @@ public:
 
 	void set_value(float value, bool cache)
 		{ m_value = value; m_cache = cache; if (!cache) set_port_value(value); }
-
 	float value() const
 		{ return (m_cache ? m_value : port_value()); }
 
-	float operator *()
+	float operator *() const
 		{ return value(); }
 
 protected:
