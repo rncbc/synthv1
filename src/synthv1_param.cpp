@@ -1,7 +1,7 @@
 // synthv1_param.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2016, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -73,7 +73,7 @@ struct ParamInfo {
 	{ "DCF1_RELEASE",  PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // DCF1 Release
 	{ "LFO1_SHAPE",    PARAM_INT,     1.0f,   0.0f,   4.0f }, // LFO1 Wave Shape
 	{ "LFO1_WIDTH",    PARAM_FLOAT,   1.0f,   0.0f,   1.0f }, // LFO1 Wave Width
-	{ "LFP1_BPM",      PARAM_FLOAT, 180.0f,   3.6f, 360.0f }, // LFO1 BPM
+	{ "LFP1_BPM",      PARAM_FLOAT, 180.0f,   0.0f, 360.0f }, // LFO1 BPM
 	{ "LFO1_RATE",     PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // LFO1 Rate
 	{ "LFO1_SYNC",     PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // LFO1 Sync
 	{ "LFO1_SWEEP",    PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO1 Sweep
@@ -87,7 +87,6 @@ struct ParamInfo {
 	{ "LFO1_DECAY",    PARAM_FLOAT,   0.1f,   0.0f,   1.0f }, // LFO1 Decay
 	{ "LFO1_SUSTAIN",  PARAM_FLOAT,   1.0f,   0.0f,   1.0f }, // LFO1 Sustain
 	{ "LFO1_RELEASE",  PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // LFO1 Release
-	{ "LFO1_BPMSYNC",  PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // LFO1 BPM (sync)
 	{ "DCA1_VOLUME",   PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // DCA1 Volume
 	{ "DCA1_ATTACK",   PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // DCA1 Attack
 	{ "DCA1_DECAY",    PARAM_FLOAT,   0.1f,   0.0f,   1.0f }, // DCA1 Decay
@@ -130,7 +129,7 @@ struct ParamInfo {
 	{ "DCF2_RELEASE",  PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // DCF2 Release
 	{ "LFO2_SHAPE",    PARAM_INT,     1.0f,   0.0f,   4.0f }, // LFO2 Wave Shape
 	{ "LFO2_WIDTH",    PARAM_FLOAT,   1.0f,   0.0f,   1.0f }, // LFO2 Wave Width
-	{ "LFP2_BPM",      PARAM_FLOAT, 180.0f,   3.6f, 360.0f }, // LFO2 BPM
+	{ "LFP2_BPM",      PARAM_FLOAT, 180.0f,   0.0f, 360.0f }, // LFO2 BPM
 	{ "LFO2_RATE",     PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // LFO2 Rate
 	{ "LFO2_SYNC",     PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // LFO2 Sync
 	{ "LFO2_SWEEP",    PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO2 Sweep
@@ -144,7 +143,6 @@ struct ParamInfo {
 	{ "LFO2_DECAY",    PARAM_FLOAT,   0.1f,   0.0f,   1.0f }, // LFO2 Decay
 	{ "LFO2_SUSTAIN",  PARAM_FLOAT,   1.0f,   0.0f,   1.0f }, // LFO2 Sustain
 	{ "LFO2_RELEASE",  PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // LFO2 Release
-	{ "LFO2_BPMSYNC",  PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // LFO2 BPM (sync)
 	{ "DCA2_VOLUME",   PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // DCA2 Volume
 	{ "DCA2_ATTACK",   PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // DCA2 Attack
 	{ "DCA2_DECAY",    PARAM_FLOAT,   0.1f,   0.0f,   1.0f }, // DCA2 Decay
@@ -179,8 +177,7 @@ struct ParamInfo {
 	{ "DEL1_WET",      PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // Delay Wet
 	{ "DEL1_DELAY",    PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // Delay Delay
 	{ "DEL1_FEEDB",    PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // Delay Feedback
-	{ "DEL1_BPM",      PARAM_FLOAT, 180.0f,   3.6f, 360.0f }, // Delay BPM
-	{ "DEL1_BPMSYNC",  PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // Delay BPM (sync)
+	{ "DEL1_BPM",      PARAM_FLOAT, 180.0f,   0.0f, 360.0f }, // Delay BPM
 	{ "REV1_WET",      PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // Reverb Wet
 	{ "REV1_ROOM",     PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // Reverb Room
 	{ "REV1_DAMP",     PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // Reverb Damp

@@ -385,7 +385,6 @@ struct synthv1_lfo
 	synthv1_port shape;
 	synthv1_port width;
 	synthv1_port bpm;
-	synthv1_port bpmsync;
 	synthv1_port rate;
 	synthv1_port sync;
 	synthv1_port sweep;
@@ -478,7 +477,6 @@ struct synthv1_del
 	synthv1_port delay;
 	synthv1_port feedb;
 	synthv1_port bpm;
-	synthv1_port bpmsync;
 };
 
 
@@ -700,6 +698,9 @@ public:
 	void setBufferSize(uint32_t nsize);
 	uint32_t bufferSize() const;
 
+	void setTempo(float bpm);
+	float tempo() const;
+
 	void setParamPort(synthv1::ParamIndex index, float *pfParam);
 	synthv1_port *paramPort(synthv1::ParamIndex index);
 
@@ -743,6 +744,9 @@ protected:
 	void allSustainOff_2();
 	void allSoundOff();
 
+	float get_bpm ( float bpm ) const
+		{ return (bpm > 0.0f ? bpm : m_bpm); }
+
 	synthv1_voice *alloc_voice ()
 	{
 		synthv1_voice *pv = m_free_list.next();
@@ -769,6 +773,7 @@ private:
 
 	uint16_t m_nchannels;
 	float    m_srate;
+	float    m_bpm;
 
 	synthv1_ctl m_ctl1, m_ctl2;
 
@@ -848,7 +853,7 @@ synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
 
 synthv1_impl::synthv1_impl (
 	synthv1 *pSynth, uint16_t nchannels, float srate )
-	: m_controls(pSynth), m_programs(pSynth)
+	: m_controls(pSynth), m_programs(pSynth), m_bpm(180.0f)
 {
 	// max env. stage length (default)
 	m_dco1.envtime0 = m_dco2.envtime0 = 0.0001f * MAX_ENV_MSECS;
@@ -999,6 +1004,19 @@ void synthv1_impl::setBufferSize ( uint32_t nsize )
 uint32_t synthv1_impl::bufferSize (void) const
 {
 	return m_nsize;
+}
+
+
+void synthv1_impl::setTempo ( float bpm )
+{
+	// set nominal tempo (BPM)
+	m_bpm = bpm;
+}
+
+
+float synthv1_impl::tempo (void) const
+{
+	return m_bpm;
 }
 
 
@@ -1178,7 +1196,6 @@ synthv1_port *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::LFO1_DECAY:     pParamPort = &m_lfo1.env.decay;   break;
 	case synthv1::LFO1_SUSTAIN:   pParamPort = &m_lfo1.env.sustain; break;
 	case synthv1::LFO1_RELEASE:   pParamPort = &m_lfo1.env.release; break;
-	case synthv1::LFO1_BPMSYNC:   pParamPort = &m_lfo1.bpmsync;     break;
 	case synthv1::DCA1_VOLUME:    pParamPort = &m_dca1.volume;      break;
 	case synthv1::DCA1_ATTACK:    pParamPort = &m_dca1.env.attack;  break;
 	case synthv1::DCA1_DECAY:     pParamPort = &m_dca1.env.decay;   break;
@@ -1233,7 +1250,6 @@ synthv1_port *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::LFO2_DECAY:     pParamPort = &m_lfo2.env.decay;   break;
 	case synthv1::LFO2_SUSTAIN:   pParamPort = &m_lfo2.env.sustain; break;
 	case synthv1::LFO2_RELEASE:   pParamPort = &m_lfo2.env.release; break;
-	case synthv1::LFO2_BPMSYNC:   pParamPort = &m_lfo2.bpmsync;     break;
 	case synthv1::DCA2_VOLUME:    pParamPort = &m_dca2.volume;      break;
 	case synthv1::DCA2_ATTACK:    pParamPort = &m_dca2.env.attack;  break;
 	case synthv1::DCA2_DECAY:     pParamPort = &m_dca2.env.decay;   break;
@@ -1267,7 +1283,6 @@ synthv1_port *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DEL1_DELAY:     pParamPort = &m_del.delay;        break;
 	case synthv1::DEL1_FEEDB:     pParamPort = &m_del.feedb;        break;
 	case synthv1::DEL1_BPM:       pParamPort = &m_del.bpm;          break;
-	case synthv1::DEL1_BPMSYNC:   pParamPort = &m_del.bpmsync;      break;
 	case synthv1::REV1_WET:       pParamPort = &m_rev.wet;          break;
 	case synthv1::REV1_ROOM:      pParamPort = &m_rev.room;         break;
 	case synthv1::REV1_DAMP:      pParamPort = &m_rev.damp;         break;
@@ -1886,8 +1901,10 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	}
 
 	// controls
-	const float lfo1_freq = *m_lfo1.bpm / (60.01f - *m_lfo1.rate * 60.0f);
-	const float lfo2_freq = *m_lfo2.bpm / (60.01f - *m_lfo2.rate * 60.0f);
+	const float lfo1_freq
+		= get_bpm(*m_lfo1.bpm) / (60.01f - *m_lfo1.rate * 60.0f);
+	const float lfo2_freq
+		= get_bpm(*m_lfo2.bpm) / (60.01f - *m_lfo2.rate * 60.0f);
 
 	const float modwheel1 = m_ctl1.modwheel + PITCH_SCALE * *m_lfo1.pitch;
 	const float modwheel2 = m_ctl2.modwheel + PITCH_SCALE * *m_lfo2.pitch;
@@ -2171,7 +2188,7 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 			*m_pha.rate, *m_pha.feedb, *m_pha.depth, *m_pha.daft * float(k));
 		// delay
 		m_delay[k].process(in, nframes, *m_del.wet,
-			*m_del.delay, *m_del.feedb, *m_del.bpm);
+			*m_del.delay, *m_del.feedb, get_bpm(*m_del.bpm));
 	}
 
 	// reverb
@@ -2266,6 +2283,18 @@ void synthv1::setBufferSize ( uint32_t nsize )
 uint32_t synthv1::bufferSize (void) const
 {
 	return m_pImpl->bufferSize();
+}
+
+
+void synthv1::setTempo ( float bpm )
+{
+	m_pImpl->setTempo(bpm);
+}
+
+
+float synthv1::tempo (void) const
+{
+	return m_pImpl->tempo();
 }
 
 

@@ -6,13 +6,13 @@ ChangeLog
 
 GIT HEAD
 
+- All BPM sync options to current transport (Auto) have been
+  refactored to new special minimum value (which is now zero).
 - In compliance to the LV2 spec. MIDI Controllers now affect
   cached parameter values only, via shadow ports, instead of
   input control ports directly, mitigating their read-only
   restriction. (EXPERIMENTAL)
-  
 - Make sure LV2 plug-in state is properly reset on restore.
-
 - Dropped the --enable-qt5 from configure as found redundant
   given that's the build default anyway (suggestion by Guido
   Scholz, while for Qtractor, thanks).

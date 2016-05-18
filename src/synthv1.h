@@ -54,6 +54,9 @@ public:
 	void setBufferSize(uint32_t nsize);
 	uint32_t bufferSize() const;
 
+	void setTempo(float bpm);
+	float tempo() const;
+
 	enum ParamIndex	 {
 
 		DCO1_SHAPE1 = 0,
@@ -95,7 +98,6 @@ public:
 		LFO1_DECAY,
 		LFO1_SUSTAIN,
 		LFO1_RELEASE,
-		LFO1_BPMSYNC,
 		DCA1_VOLUME,
 		DCA1_ATTACK,
 		DCA1_DECAY,
@@ -152,7 +154,6 @@ public:
 		LFO2_DECAY,
 		LFO2_SUSTAIN,
 		LFO2_RELEASE,
-		LFO2_BPMSYNC,
 		DCA2_VOLUME,
 		DCA2_ATTACK,
 		DCA2_DECAY,
@@ -188,7 +189,6 @@ public:
 		DEL1_DELAY,
 		DEL1_FEEDB,
 		DEL1_BPM,
-		DEL1_BPMSYNC,
 		REV1_WET,
 		REV1_ROOM,
 		REV1_DAMP,

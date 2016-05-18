@@ -214,21 +214,8 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 	jack_transport_query(m_client, &pos);
 	if (pos.valid & JackPositionBBT) {
 		const float host_bpm = float(pos.beats_per_minute);
-		if (paramValue(synthv1::LFO1_BPMSYNC) > 0.0f) {
-			const float bpm = paramValue(synthv1::LFO1_BPM);
-			if (::fabsf(host_bpm - bpm) > 0.01f)
-				setParamValue(synthv1::LFO1_BPM, host_bpm, true); // Cached!
-		}
-		if (paramValue(synthv1::LFO2_BPMSYNC) > 0.0f) {
-			const float bpm = paramValue(synthv1::LFO2_BPM);
-			if (::fabsf(host_bpm - bpm) > 0.01f)
-				setParamValue(synthv1::LFO2_BPM, host_bpm, true); // Cached!
-		}
-		if (paramValue(synthv1::DEL1_BPMSYNC) > 0.0f) {
-			const float bpm = paramValue(synthv1::DEL1_BPM);
-			if (bpm > 0.0f && ::fabsf(host_bpm - bpm) > 0.01f)
-				setParamValue(synthv1::DEL1_BPM, host_bpm, true); // Cached!
-		}
+		if (::fabsf(host_bpm - synthv1::tempo()) > 0.001f)
+			synthv1::setTempo(host_bpm);
 	}
 
 	uint32_t ndelta = 0;
