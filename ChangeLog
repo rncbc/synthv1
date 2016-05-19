@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- All changes to most continuous parameter values are now
+  smoothed to a fast but finite slew rate. (EXPERIMENTAL)
 - All BPM sync options to current transport (Auto) have been
   refactored to new special minimum value (which is now zero).
 - In compliance to the LV2 spec. MIDI Controllers now affect
