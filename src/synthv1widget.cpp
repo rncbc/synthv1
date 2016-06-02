@@ -957,7 +957,7 @@ void synthv1widget::resetParams (void)
 			fValue = pKnob->defaultValue();
 		setParamValue(index, fValue);
 		updateParam(index, fValue);
-		m_params_ab[index] = fValue;
+		m_params_ab[i] = fValue;
 	}
 
 	m_ui.StatusBar->showMessage(tr("Reset preset"), 5000);
@@ -981,10 +981,10 @@ void synthv1widget::swapParams ( bool bOn )
 		synthv1widget_knob *pKnob = paramKnob(index);
 		if (pKnob) {
 			const float fOldValue = pKnob->value();
-			const float fNewValue = m_params_ab[index];
+			const float fNewValue = m_params_ab[i];
 			setParamValue(index, fNewValue);
 			updateParam(index, fNewValue);
-			m_params_ab[index] = fOldValue;
+			m_params_ab[i] = fOldValue;
 		}
 	}
 
@@ -1018,7 +1018,7 @@ void synthv1widget::updateParamValues (void)
 		setParamValue(index, fValue, true);
 		updateParam(index, fValue);
 	//	updateParamEx(index, fValue);
-		m_params_ab[index] = fValue;
+		m_params_ab[i] = fValue;
 	}
 }
 
@@ -1033,7 +1033,7 @@ void synthv1widget::resetParamValues (void)
 		const float fValue = synthv1_param::paramDefaultValue(index);
 		setParamValue(index, fValue, true);
 		updateParam(index, fValue);
-		m_params_ab[index] = fValue;
+		m_params_ab[i] = fValue;
 	}
 }
 
