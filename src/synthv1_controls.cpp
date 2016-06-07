@@ -1,7 +1,7 @@
 // synthv1_controls.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2016, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -516,7 +516,7 @@ private:
 #include <math.h>
 
 synthv1_controls::synthv1_controls ( synthv1 *pSynth )
-	: m_pImpl(new synthv1_controls::Impl()), m_mode(0),
+	: m_pImpl(new synthv1_controls::Impl()), m_enabled(false),
 		m_sched_in(pSynth), m_sched_out(pSynth),
 		m_timeout(0), m_timein(0)
 {

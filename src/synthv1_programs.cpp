@@ -1,7 +1,7 @@
 // synthv1_programs.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2016, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@
 
 // ctor.
 synthv1_programs::synthv1_programs ( synthv1 *pSynth )
-	: m_mode(0), m_sched(pSynth),
+	: m_enabled(false), m_sched(pSynth),
 		m_bank_msb(0), m_bank_lsb(0), m_bank(0), m_prog(0)
 {
 }
