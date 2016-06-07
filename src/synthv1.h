@@ -206,7 +206,7 @@ public:
 	synthv1_controls *controls() const;
 	synthv1_programs *programs() const;
 
-	void setParamValue(ParamIndex index, float fValue, bool bCache = false);
+	void setParamValue(ParamIndex index, float fValue);
 	float paramValue(ParamIndex index) const;
 
 	void reset();

@@ -145,7 +145,7 @@ class synthv1_port
 {
 public:
 
-	synthv1_port() : m_port(NULL), m_value(0.0f), m_changed(0) {}
+	synthv1_port() : m_port(NULL), m_value(0.0f), m_vport(0.0f) {}
 
 	virtual ~synthv1_port() {}
 
@@ -154,33 +154,16 @@ public:
 	float *port() const
 		{ return m_port; }
 
-	virtual void set_value(float value, bool cached)
-	{
-		m_value = value;
-
-		if (!cached && m_port) {
-			*m_port = m_value;
-			m_changed = 0;
-		}
-		else ++m_changed;
-	}
+	virtual void set_value(float value)
+		{ m_value = value; if (m_port) m_vport = *m_port; }
 
 	float value() const
 		{ return m_value; }
 
 	virtual float tick(uint32_t /*nstep*/ = 1)
 	{
-		if (m_port) {
-			if (m_changed > 0) {
-				*m_port = m_value;
-				m_changed = 0;
-			}
-			else
-			if (::fabsf(*m_port - m_value) > 0.001f) {
-				set_value(*m_port, true);
-				m_changed = 0;
-			}
-		}
+		if (m_port && ::fabsf(*m_port - m_vport) > 0.001f)
+			set_value(*m_port);
 
 		return m_value;
 	}
@@ -190,9 +173,9 @@ public:
 
 private:
 
-	float   *m_port;
-	float    m_value;
-	uint32_t m_changed;
+	float *m_port;
+	float  m_value;
+	float  m_vport;
 };
 
 
@@ -204,19 +187,14 @@ public:
 
 	synthv1_port2() : m_vtick(0.0f), m_vstep(0.0f), m_nstep(0) {}
 
-	void set_value(float value, bool cached)
+	void set_value(float value)
 	{
 		m_vtick = synthv1_port::value();
 
-		if (cached) {
-			m_nstep = NSTEP;
-			m_vstep = (value - m_vtick) / float(m_nstep);
-		} else {
-			m_nstep = 0;
-			m_vstep = 0.0f;
-		}
+		m_nstep = NSTEP;
+		m_vstep = (value - m_vtick) / float(m_nstep);
 
-		synthv1_port::set_value(value, cached);
+		synthv1_port::set_value(value);
 	}
 
 	float tick(uint32_t nstep = NSTEP)
@@ -774,7 +752,7 @@ public:
 	void setParamPort(synthv1::ParamIndex index, float *pfParam);
 	synthv1_port *paramPort(synthv1::ParamIndex index);
 
-	void setParamValue(synthv1::ParamIndex index, float fValue, bool bCache);
+	void setParamValue(synthv1::ParamIndex index, float fValue);
 	float paramValue(synthv1::ParamIndex index);
 
 	synthv1_controls *controls();
@@ -1367,12 +1345,11 @@ synthv1_port *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 }
 
 
-void synthv1_impl::setParamValue (
-	synthv1::ParamIndex index, float fValue, bool bCache )
+void synthv1_impl::setParamValue ( synthv1::ParamIndex index, float fValue )
 {
 	synthv1_port *pParamPort = paramPort(index);
 	if (pParamPort)
-		pParamPort->set_value(fValue, bCache);
+		pParamPort->set_value(fValue);
 }
 
 
@@ -2379,9 +2356,9 @@ synthv1_port *synthv1::paramPort ( ParamIndex index ) const
 }
 
 
-void synthv1::setParamValue ( ParamIndex index, float fValue, bool bCache )
+void synthv1::setParamValue ( ParamIndex index, float fValue )
 {
-	m_pImpl->setParamValue(index, fValue, bCache);
+	m_pImpl->setParamValue(index, fValue);
 }
 
 float synthv1::paramValue ( ParamIndex index ) const
