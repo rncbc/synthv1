@@ -516,7 +516,7 @@ private:
 #include <math.h>
 
 synthv1_controls::synthv1_controls ( synthv1 *pSynth )
-	: m_pImpl(new synthv1_controls::Impl()), m_enabled(false),
+	: m_pImpl(new synthv1_controls::Impl()), m_mode(0),
 		m_sched_in(pSynth), m_sched_out(pSynth),
 		m_timeout(0), m_timein(0)
 {

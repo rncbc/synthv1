@@ -28,7 +28,7 @@
 
 // ctor.
 synthv1_programs::synthv1_programs ( synthv1 *pSynth )
-	: m_enabled(false), m_sched(pSynth),
+	: m_mode(0), m_sched(pSynth),
 		m_bank_msb(0), m_bank_lsb(0), m_bank(0), m_prog(0)
 {
 }

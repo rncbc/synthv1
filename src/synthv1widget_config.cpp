@@ -170,6 +170,8 @@ void synthv1widget_config::setControls ( synthv1_controls *pControls )
 	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig && m_pControls) {
 		m_ui.ControlsTreeWidget->loadControls(m_pControls);
+		const bool bControlsOptional = m_pControls->optional();
+		m_ui.ControlsEnabledCheckBox->setEnabled(bControlsOptional);
 		m_ui.ControlsEnabledCheckBox->setChecked(m_pControls->enabled());
 	}
 
@@ -255,7 +257,7 @@ void synthv1widget_config::controlsContextMenuRequested ( const QPoint& pos )
 
 void synthv1widget_config::controlsEnabled ( bool bOn )
 {
-	if (m_pControls)
+	if (m_pControls && m_pControls->optional())
 		m_pControls->enabled(bOn);
 
 	controlsChanged();
@@ -279,6 +281,9 @@ void synthv1widget_config::setPrograms ( synthv1_programs *pPrograms )
 	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig && m_pPrograms) {
 		m_ui.ProgramsTreeWidget->loadPrograms(m_pPrograms);
+		const bool bProgramsOptional = m_pPrograms->optional();
+		m_ui.ProgramsEnabledCheckBox->setEnabled(bProgramsOptional);
+		m_ui.ProgramsPreviewCheckBox->setEnabled(!bProgramsOptional);
 		m_ui.ProgramsEnabledCheckBox->setChecked(m_pPrograms->enabled());
 	}
 
@@ -376,7 +381,7 @@ void synthv1widget_config::programsContextMenuRequested ( const QPoint& pos )
 
 void synthv1widget_config::programsEnabled ( bool bOn )
 {
-	if (m_pPrograms)
+	if (m_pPrograms && m_pPrograms->optional())
 		m_pPrograms->enabled(bOn);
 
 	programsChanged();
