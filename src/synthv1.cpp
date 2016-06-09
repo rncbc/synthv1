@@ -150,7 +150,7 @@ public:
 	virtual ~synthv1_port() {}
 
 	void set_port(float *port)
-		{ m_port = port; update_port(); }
+		{ m_port = port; }
 	float *port() const
 		{ return m_port; }
 
