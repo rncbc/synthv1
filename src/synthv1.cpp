@@ -149,8 +149,8 @@ public:
 
 	virtual ~synthv1_port() {}
 
-	void set_port(float *port)
-		{ m_port = port; }
+	void set_port(float *port, bool update = false)
+		{ m_port = port; if (update) update_port(); }
 	float *port() const
 		{ return m_port; }
 
@@ -398,20 +398,20 @@ struct synthv1_aux
 
 struct synthv1_dco
 {
-	synthv1_port  shape1;
-	synthv1_port2 width1;
-	synthv1_port  bandl1;
-	synthv1_port  shape2;
-	synthv1_port2 width2;
-	synthv1_port  bandl2;
-	synthv1_port2 balance;
-	synthv1_port2 detune;
-	synthv1_port2 phase;
-	synthv1_port2 ringmod;
-	synthv1_port2 octave;
-	synthv1_port2 tuning;
-	synthv1_port2 glide;
-	synthv1_port  envtime;
+	synthv1_port shape1;
+	synthv1_port width1;
+	synthv1_port bandl1;
+	synthv1_port shape2;
+	synthv1_port width2;
+	synthv1_port bandl2;
+	synthv1_port balance;
+	synthv1_port detune;
+	synthv1_port phase;
+	synthv1_port ringmod;
+	synthv1_port octave;
+	synthv1_port tuning;
+	synthv1_port glide;
+	synthv1_port envtime;
 
 	float envtime0;
 };
@@ -436,7 +436,7 @@ struct synthv1_dcf
 struct synthv1_lfo
 {
 	synthv1_port  shape;
-	synthv1_port2 width;
+	synthv1_port  width;
 	synthv1_port2 bpm;
 	synthv1_port2 rate;
 	synthv1_port  sync;
