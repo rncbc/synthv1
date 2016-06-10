@@ -180,9 +180,9 @@ void synthv1_formant::Impl::vtab_coeffs (
 // reset method impl.
 void synthv1_formant::Impl::reset_coeffs (void)
 {
-	const float   fK = m_cutoff * float(NUM_VTABS);
+	const float   fK = m_cutoff * float(NUM_VTABS - 1);
 	const uint32_t k = uint32_t(fK);
-	const float   fJ = (fK - float(k)) * float(NUM_VOWELS);
+	const float   fJ = (fK - float(k)) * float(NUM_VOWELS - 1);
 	const uint32_t j = uint32_t(fJ);
 	const float   dJ = (fJ - float(j)); // vowel morph fraction
 
