@@ -159,6 +159,8 @@ public:
 
 	float value() const
 		{ return m_value; }
+	float *value_ptr()
+		{ return &m_value; }
 
 	virtual float tick(uint32_t /*nstep*/ = 1)
 	{
@@ -1161,36 +1163,36 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::OUT1_VOLUME:
 	case synthv1::DCA1_VOLUME:
 		m_vol1.reset(
-			m_out1.volume.port(),
-			m_dca1.volume.port(),
+			m_out1.volume.value_ptr(),
+			m_dca1.volume.value_ptr(),
 			&m_ctl1.volume,
 			&m_aux1.volume);
 		break;
 	case synthv1::OUT1_WIDTH:
 		m_wid1.reset(
-			m_out1.width.port());
+			m_out1.width.value_ptr());
 		break;
 	case synthv1::OUT1_PANNING:
 		m_pan1.reset(
-			m_out1.panning.port(),
+			m_out1.panning.value_ptr(),
 			&m_ctl1.panning,
 			&m_aux1.panning);
 		break;
 	case synthv1::OUT2_VOLUME:
 	case synthv1::DCA2_VOLUME:
 		m_vol2.reset(
-			m_out2.volume.port(),
-			m_dca2.volume.port(),
+			m_out2.volume.value_ptr(),
+			m_dca2.volume.value_ptr(),
 			&m_ctl2.volume,
 			&m_aux2.volume);
 		break;
 	case synthv1::OUT2_WIDTH:
 		m_wid2.reset(
-			m_out2.width.port());
+			m_out2.width.value_ptr());
 		break;
 	case synthv1::OUT2_PANNING:
 		m_pan2.reset(
-			m_out2.panning.port(),
+			m_out2.panning.value_ptr(),
 			&m_ctl2.panning,
 			&m_aux2.panning);
 		break;
@@ -1476,11 +1478,11 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					pv->note1 = key;
 					pv->vel1 = synthv1_velocity(vel, *m_def1.velocity);
 					// balance
-					pv->dco1_bal.reset(m_dco1.balance.port());
+					pv->dco1_bal.reset(m_dco1.balance.value_ptr());
 					// pressure/after-touch
 					pv->pre1 = 0.0f;
 					pv->dca1_pre.reset(
-						m_def1.pressure.port(),
+						m_def1.pressure.value_ptr(),
 						&m_ctl1.pressure, &pv->pre1);
 					// frequencies
 					const float note1 = float(key)
@@ -1531,11 +1533,11 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					pv->note2 = key;
 					pv->vel2 = synthv1_velocity(vel, *m_def2.velocity);
 					// balance
-					pv->dco2_bal.reset(m_dco2.balance.port());
+					pv->dco2_bal.reset(m_dco2.balance.value_ptr());
 					// pressure/after-touch
 					pv->pre2 = 0.0f;
 					pv->dca2_pre.reset(
-						m_def2.pressure.port(),
+						m_def2.pressure.value_ptr(),
 						&m_ctl2.pressure, &pv->pre2);
 					// frequencies
 					const float note2 = float(key)
@@ -1880,27 +1882,27 @@ synthv1_programs *synthv1_impl::programs (void)
 void synthv1_impl::reset (void)
 {
 	m_vol1.reset(
-		m_out1.volume.port(),
-		m_dca1.volume.port(),
+		m_out1.volume.value_ptr(),
+		m_dca1.volume.value_ptr(),
 		&m_ctl1.volume, &m_aux1.volume);
 	m_pan1.reset(
-		m_out1.panning.port(),
+		m_out1.panning.value_ptr(),
 		&m_ctl1.panning,
 		&m_aux1.panning);
 	m_wid1.reset(
-		m_out1.width.port());
+		m_out1.width.value_ptr());
 
 	m_vol2.reset(
-		m_out2.volume.port(),
-		m_dca2.volume.port(),
+		m_out2.volume.value_ptr(),
+		m_dca2.volume.value_ptr(),
 		&m_ctl2.volume,
 		&m_aux2.volume);
 	m_pan2.reset(
-		m_out2.panning.port(),
+		m_out2.panning.value_ptr(),
 		&m_ctl2.panning,
 		&m_aux2.panning);
 	m_wid2.reset(
-		m_out2.width.port());
+		m_out2.width.value_ptr());
 	
 	// flangers
 	if (m_flanger == NULL)
