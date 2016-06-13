@@ -160,7 +160,7 @@ public:
 	float value() const
 		{ return m_value; }
 	float *value_ptr()
-		{ return &m_value; }
+		{ tick(); return &m_value; }
 
 	virtual float tick(uint32_t /*nstep*/ = 1)
 	{
@@ -2270,9 +2270,19 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	// post-processing
 	m_phasor.process(nframes);
 
+	m_dca1.volume.tick(nframes);
+	m_out1.width.tick(nframes);
+	m_out1.panning.tick(nframes);
+	m_out1.volume.tick(nframes);
+
 	m_wid1.process(nframes);
 	m_pan1.process(nframes);
 	m_vol1.process(nframes);
+
+	m_dca2.volume.tick(nframes);
+	m_out2.width.tick(nframes);
+	m_out2.panning.tick(nframes);
+	m_out2.volume.tick(nframes);
 
 	m_wid2.process(nframes);
 	m_pan2.process(nframes);
