@@ -4,7 +4,7 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.7.5  2016-06-16  The Tenth official beta.
 
 - All changes to most continuous parameter values are now
   smoothed to a fast but finite slew rate. (EXPERIMENTAL)
