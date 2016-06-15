@@ -7,13 +7,13 @@ ChangeLog
 0.7.5  2016-06-16  The Tenth official beta.
 
 - All changes to most continuous parameter values are now
-  smoothed to a fast but finite slew rate. (EXPERIMENTAL)
+  smoothed to a fast but finite slew rate.
 - All BPM sync options to current transport (Auto) have been
   refactored to new special minimum value (which is now zero).
 - In compliance to the LV2 spec. MIDI Controllers now affect
   cached parameter values only, via shadow ports, instead of
   input control ports directly, mitigating their read-only
-  restriction. (EXPERIMENTAL)
+  restriction.
 - Make sure LV2 plug-in state is properly reset on restore.
 - Dropped the --enable-qt5 from configure as found redundant
   given that's the build default anyway (suggestion by Guido
