@@ -10,7 +10,6 @@ include(src_lv2.pri)
 
 HEADERS = \
 	config.h \
-	synthv1_lv2.h \
 	synthv1_lv2ui.h \
 	synthv1widget.h \
 	synthv1widget_env.h \

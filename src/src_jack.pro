@@ -9,9 +9,8 @@ include(src_jack.pri)
 
 HEADERS = \
 	config.h \
-	synthv1.h \
-	synthv1_jack.h \
 	synthv1_nsm.h \
+	synthv1_jack.h \
 	synthv1widget.h \
 	synthv1widget_env.h \
 	synthv1widget_filt.h \
@@ -26,8 +25,8 @@ HEADERS = \
 	synthv1widget_jack.h
 
 SOURCES = \
-	synthv1_jack.cpp \
 	synthv1_nsm.cpp \
+	synthv1_jack.cpp \
 	synthv1widget.cpp \
 	synthv1widget_env.cpp \
 	synthv1widget_filt.cpp \
