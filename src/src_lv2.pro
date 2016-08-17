@@ -14,7 +14,7 @@ HEADERS = \
 	synthv1_lv2.h
 
 SOURCES = \
-	synthv1_lv2.cpp \
+	synthv1_lv2.cpp
 
 
 unix {
