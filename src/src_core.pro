@@ -48,23 +48,12 @@ unix {
 	}
 
 	isEmpty(LIBDIR) {
-		TARGET_PATH = $${PREFIX}/lib
-	} else {
-		TARGET_PATH = $${LIBDIR}
+		LIBDIR = $${PREFIX}/lib
 	}
-
-	isEmpty(QMAKE_EXTENSION_SHLIB) {
-		QMAKE_EXTENSION_SHLIB = so
-	}
-
-	TARGET_FILES = lib$${TARGET}.$${QMAKE_EXTENSION_SHLIB}
 
 	INSTALLS += target
 
-	target.path  = $${TARGET_PATH}
-	target.files = $${TARGET_FILES}
-
-	QMAKE_CLEAN += $${TARGET_FILES}
+	target.path = $${LIBDIR}
 }
 
 QT -= gui
