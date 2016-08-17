@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(synthv1, 0.7.5.3, rncbc@rncbc.org)
+AC_INIT(synthv1, 0.7.5.4, rncbc@rncbc.org)
 
 AC_CONFIG_SRCDIR(src/synthv1.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -449,7 +449,7 @@ if test "x$ac_lv2" = "xyes"; then
       AC_MSG_WARN([*** LV2 header files not found.])
    else
       AC_DEFINE(CONFIG_LV2, 1, [Define if LV2 plug-in build is enabled.])
-      ac_all_targets="lv2 lv2ui $ac_all_targets"
+      ac_all_targets="lv2 $ac_all_targets"
       ac_install_targets="install_lv2 $ac_install_targets"
       ac_uninstall_targets="uninstall_lv2 $ac_uninstall_targets"
       ac_clean_targets="clean_lv2 $ac_clean_targets"

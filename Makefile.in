@@ -1,10 +1,9 @@
-prefix  = @ac_prefix@
+prefix    = @ac_prefix@
 
-name    = synthv1
+name      = synthv1
 
-name_lv2   = $(name)_lv2
-name_lv2ui = $(name)_lv2ui
-name_jack  = $(name)_jack
+name_lv2  = $(name)_lv2
+name_jack = $(name)_jack
 
 headers = \
 	src/config.h \
@@ -67,22 +66,14 @@ resources = \
 
 headers_lv2 = \
 	$(headers) \
-	src/$(name)_lv2.h
+	$(headers_ui) \
+	src/$(name)_lv2.h \
+	src/$(name)_param.h \
+	src/$(name)widget_lv2.h
 
 sources_lv2 = \
 	$(sources) \
-	src/$(name)_lv2.cpp
-
-
-headers_lv2ui = \
-	$(headers_ui) \
-	src/$(name)_param.h \
-	src/$(name)_lv2.h \
-	src/$(name)widget_lv2.h
-
-sources_lv2ui = \
 	$(sources_ui) \
-	src/$(name)_param.cpp \
 	src/$(name)_lv2.cpp \
 	src/$(name)widget_lv2.cpp
 
@@ -92,6 +83,7 @@ headers_jack = \
 	$(headers_ui) \
 	src/$(name)_nsm.h \
 	src/$(name)_jack.h \
+	src/$(name)_param.h \
 	src/$(name)widget_jack.h
 
 sources_jack = \
@@ -115,11 +107,8 @@ export LRELEASE = @ac_lrelease@
 all:	@ac_all_targets@
 
 
-lv2:	$(name_lv2).mak $(sources_lv2) $(headers_lv2)
+lv2:	$(name_lv2).mak $(resources) ${forms} $(sources_lv2) $(headers_lv2)
 	@$(MAKE) -f $(name_lv2).mak
-
-lv2ui:	$(name_lv2ui).mak $(resources) ${forms} $(sources_lv2ui) $(headers_lv2ui) lv2
-	@$(MAKE) -f $(name_lv2ui).mak
 
 jack:	$(name_jack).mak $(resources) ${forms} $(sources_jack) $(headers_jack)
 	@$(MAKE) -f $(name_jack).mak
@@ -128,16 +117,12 @@ jack:	$(name_jack).mak $(resources) ${forms} $(sources_jack) $(headers_jack)
 $(name_lv2).mak:	$(name_lv2).pro
 	@$(QMAKE) -o $(name_lv2).mak $(name_lv2).pro
 
-$(name_lv2ui).mak:	$(name_lv2ui).pro
-	@$(QMAKE) -o $(name_lv2ui).mak $(name_lv2ui).pro
-
 $(name_jack).mak:	$(name_jack).pro
 	@$(QMAKE) -o $(name_jack).mak $(name_jack).pro
 
 
-install_lv2:	lv2 lv2ui
+install_lv2:	lv2
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_lv2).mak install
-	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_lv2ui).mak install
 
 install_jack:	jack $(name).1
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_jack).mak install
@@ -146,20 +131,17 @@ install_jack:	jack $(name).1
 	@gzip -vf $(DESTDIR)$(mandir)/man1/$(name).1
 
 
-uninstall_lv2:	lv2 lv2ui
+uninstall_lv2:	lv2
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_lv2).mak uninstall
-	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_lv2ui).mak uninstall
 
 uninstall_jack:	jack
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_jack).mak uninstall
 	@rm -vf $(DESTDIR)$(mandir)/man1/$(name).*
 
 
-clean_lv2:	$(name_lv2).mak $(name_lv2ui).mak
+clean_lv2:	$(name_lv2).mak
 	@$(MAKE) -f $(name_lv2).mak distclean
-	@$(MAKE) -f $(name_lv2ui).mak distclean
 	@rm -f $(name_lv2).mak
-	@rm -f $(name_lv2ui).mak
 
 clean_jack:	$(name_jack).mak
 	@$(MAKE) -f $(name_jack).mak distclean
