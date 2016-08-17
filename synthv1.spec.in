@@ -50,9 +50,16 @@ BuildRequires:	liblo-devel
 %clean
 [ -d %{buildroot} -a "%{buildroot}" != "" ] && %__rm -rf %{buildroot}
 
+%post
+/sbin/ldconfig
+
+%postun
+/sbin/ldconfig
+
 %files
 %defattr(-,root,root)
 %doc AUTHORS COPYING ChangeLog README TODO
+%{_liibdir}/lib%{name}.so*
 %dir %{_libdir}/lv2
 %dir %{_libdir}/lv2/%{name}.lv2
 %{_libdir}/lv2/%{name}.lv2/manifest.ttl
