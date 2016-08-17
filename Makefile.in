@@ -1,7 +1,6 @@
 prefix    = @ac_prefix@
 
 name      = synthv1
-
 name_lv2  = $(name)_lv2
 name_jack = $(name)_jack
 
@@ -104,15 +103,20 @@ export LUPDATE = @ac_lupdate@
 export LRELEASE = @ac_lrelease@
 
 
-all:	@ac_all_targets@
+all:	core @ac_all_targets@
 
+core:	$(name).mak $(sources) $(headers)
+	@$(MAKE) -f $(name).mak
 
-lv2:	$(name_lv2).mak $(resources) ${forms} $(sources_lv2) $(headers_lv2)
+lv2:	$(name_lv2).mak $(sources_lv2) $(headers_lv2) $(resources) ${forms} core
 	@$(MAKE) -f $(name_lv2).mak
 
-jack:	$(name_jack).mak $(resources) ${forms} $(sources_jack) $(headers_jack)
+jack:	$(name_jack).mak $(sources_jack) $(headers_jack) $(resources) ${forms} core
 	@$(MAKE) -f $(name_jack).mak
 
+
+$(name).mak:	$(name).pro
+	@$(QMAKE) -o $(name).mak $(name).pro
 
 $(name_lv2).mak:	$(name_lv2).pro
 	@$(QMAKE) -o $(name_lv2).mak $(name_lv2).pro
@@ -120,6 +124,9 @@ $(name_lv2).mak:	$(name_lv2).pro
 $(name_jack).mak:	$(name_jack).pro
 	@$(QMAKE) -o $(name_jack).mak $(name_jack).pro
 
+
+install_core:	core
+	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name).mak install
 
 install_lv2:	lv2
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_lv2).mak install
@@ -131,6 +138,9 @@ install_jack:	jack $(name).1
 	@gzip -vf $(DESTDIR)$(mandir)/man1/$(name).1
 
 
+uninstall_core:	core
+	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name).mak uninstall
+
 uninstall_lv2:	lv2
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_lv2).mak uninstall
 
@@ -138,6 +148,10 @@ uninstall_jack:	jack
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_jack).mak uninstall
 	@rm -vf $(DESTDIR)$(mandir)/man1/$(name).*
 
+
+clean_core:	$(name).mak
+	@$(MAKE) -f $(name).mak distclean
+	@rm -f $(name).mak
 
 clean_lv2:	$(name_lv2).mak
 	@$(MAKE) -f $(name_lv2).mak distclean
@@ -148,8 +162,8 @@ clean_jack:	$(name_jack).mak
 	@rm -f $(name_jack).mak
 
 
-install:	@ac_install_targets@
+install:	install_core @ac_install_targets@
 
-uninstall:	@ac_uninstall_targets@
+uninstall:	uninstall_core @ac_uninstall_targets@
 
-clean:	@ac_clean_targets@
+clean:	clean_core @ac_clean_targets@

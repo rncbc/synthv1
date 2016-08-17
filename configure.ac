@@ -3,7 +3,7 @@ AC_INIT(synthv1, 0.7.5.4, rncbc@rncbc.org)
 
 AC_CONFIG_SRCDIR(src/synthv1.cpp)
 AC_CONFIG_HEADERS(src/config.h)
-AC_CONFIG_FILES(Makefile synthv1.spec src/src_jack.pri src/src_lv2.pri src/synthv1.desktop)
+AC_CONFIG_FILES(Makefile synthv1.spec src/src_core.pri src/src_jack.pri src/src_lv2.pri src/synthv1.desktop)
 
 # Set default installation prefix.
 AC_PREFIX_DEFAULT(/usr/local)

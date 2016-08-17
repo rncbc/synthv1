@@ -1,0 +1,10 @@
+# synthv1.pri
+#
+
+PREFIX  = @ac_prefix@
+LIBDIR  = @ac_libdir@
+CONFIG += @ac_debug@
+
+# Extra optimization flags
+QMAKE_CXXFLAGS += @ac_cflags@
+QMAKE_LFLAGS += @ac_ldflags@
