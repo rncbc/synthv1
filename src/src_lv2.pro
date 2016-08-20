@@ -43,20 +43,6 @@ unix {
 
 	TARGET_LV2 = $${NAME}.lv2/$${NAME}
 
-	!exists($${TARGET_LV2}.so) {
-		system(touch $${TARGET_LV2}.so)
-	}
-
-	TARGET_LIB = $${NAME}.lv2/lib$${NAME}.a
-
-	!exists($${TARGET_LIB}) {
-		system(touch $${TARGET_LIB})
-	}
-
-	QMAKE_POST_LINK += $${QMAKE_COPY} -vp $(TARGET) $${TARGET_LV2}.so;\
-		$${QMAKE_DEL_FILE} -vf $${TARGET_LIB};\
-		ar -r $${TARGET_LIB} $${TARGET_LV2}.so
-
 	INSTALLS += target
 
 	target.path  = $${LV2DIR}/$${NAME}.lv2
@@ -64,7 +50,9 @@ unix {
 		$${TARGET_LV2}.ttl \
 		$${NAME}.lv2/manifest.ttl
 
-	QMAKE_CLEAN += $${TARGET_LV2}.so $${TARGET_LIB}
+	QMAKE_POST_LINK += $${QMAKE_COPY} -vp $(TARGET) $${TARGET_LV2}.so
+
+	QMAKE_CLEAN += $${TARGET_LV2}.so
 
 	LIBS += -L. -l$${NAME}
 }

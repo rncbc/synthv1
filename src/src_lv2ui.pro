@@ -74,13 +74,10 @@ unix {
 
 	TARGET_LV2UI = $${NAME}.lv2/$${NAME}_ui
 
-	!exists($${TARGET_LV2UI}.so) {
-		system(touch $${TARGET_LV2UI}.so)
-	}
+	INSTALLS += target
 
-	!exists($${TARGET_LV2UI}.ttl) {
-		system(touch $${TARGET_LV2UI}.ttl)
-	}
+	target.path  = $${LV2DIR}/$${NAME}.lv2
+	target.files = $${TARGET_LV2UI}.so $${TARGET_LV2UI}.ttl
 
 	QMAKE_POST_LINK += $${QMAKE_COPY} -vp $(TARGET) $${TARGET_LV2UI}.so
 
@@ -91,11 +88,6 @@ unix {
 		QMAKE_POST_LINK += ;\
 			$${QMAKE_COPY} -vp $${TARGET_LV2UI}-qt4.ttl $${TARGET_LV2UI}.ttl
 	}
-
-	INSTALLS += target
-
-	target.path  = $${LV2DIR}/$${NAME}.lv2
-	target.files = $${TARGET_LV2UI}.so $${TARGET_LV2UI}.ttl
 
 	QMAKE_CLEAN += $${TARGET_LV2UI}.so $${TARGET_LV2UI}.ttl
 
