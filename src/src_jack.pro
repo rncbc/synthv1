@@ -9,6 +9,12 @@ include(src_jack.pri)
 
 HEADERS = \
 	config.h \
+	synthv1.h \
+	synthv1_ui.h \
+	synthv1_config.h \
+	synthv1_param.h \
+	synthv1_programs.h \
+	synthv1_controls.h \
 	synthv1_nsm.h \
 	synthv1_jack.h \
 	synthv1widget.h \
@@ -44,7 +50,6 @@ FORMS = \
 	synthv1widget.ui \
 	synthv1widget_control.ui \
 	synthv1widget_config.ui
-
 
 RESOURCES += synthv1.qrc
 

@@ -10,6 +10,11 @@ include(src_lv2.pri)
 
 HEADERS = \
 	config.h \
+	synthv1.h \
+	synthv1_config.h \
+	synthv1_param.h \
+	synthv1_programs.h \
+	synthv1_controls.h \
 	synthv1_lv2.h
 
 SOURCES = \

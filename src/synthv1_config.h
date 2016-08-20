@@ -25,7 +25,7 @@
 #include "config.h"
 
 #define SYNTHV1_TITLE	PACKAGE_NAME
-#define SYNTHV1_VERSION	PACKAGE_VERSION
+#define SYNTHV1_VERSION	PACKAGE_VERSION "-xcore"
 
 #define SYNTHV1_SUBTITLE     "an old-school polyphonic synthesizer."
 #define SYNTHV1_WEBSITE      "http://synthv1.sourceforge.net"

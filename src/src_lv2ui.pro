@@ -10,6 +10,11 @@ include(src_lv2.pri)
 
 HEADERS = \
 	config.h \
+	synthv1_ui.h \
+	synthv1_config.h \
+	synthv1_param.h \
+	synthv1_programs.h \
+	synthv1_controls.h \
 	synthv1_lv2ui.h \
 	synthv1widget.h \
 	synthv1widget_env.h \
@@ -43,7 +48,6 @@ FORMS = \
 	synthv1widget.ui \
 	synthv1widget_control.ui \
 	synthv1widget_config.ui
-
 
 RESOURCES += synthv1.qrc
 
