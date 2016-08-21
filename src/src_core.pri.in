@@ -5,6 +5,8 @@ PREFIX  = @ac_prefix@
 LIBDIR  = @ac_libdir@
 CONFIG += @ac_debug@
 
+VERSION = @ac_version@
+
 # Extra optimization flags
 QMAKE_CXXFLAGS += @ac_cflags@
 QMAKE_LFLAGS += @ac_ldflags@

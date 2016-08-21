@@ -4,7 +4,7 @@ NAME = synthv1
 
 TARGET = $${NAME}
 TEMPLATE = lib
-CONFIG += shared plugin
+CONFIG += shared
 
 include(src_core.pri)
 

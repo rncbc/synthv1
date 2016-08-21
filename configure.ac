@@ -5,6 +5,10 @@ AC_CONFIG_SRCDIR(src/synthv1.cpp)
 AC_CONFIG_HEADERS(src/config.h)
 AC_CONFIG_FILES(Makefile synthv1.spec src/src_core.pri src/src_jack.pri src/src_lv2.pri src/synthv1.desktop)
 
+# Sanitize version string.
+ac_version=$(echo $PACKAGE_VERSION | sed -r 's/^([0-9|\.]+).*$/\1/')
+AC_SUBST(ac_version)
+
 # Set default installation prefix.
 AC_PREFIX_DEFAULT(/usr/local)
 ac_prefix=$prefix
