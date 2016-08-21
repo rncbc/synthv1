@@ -62,17 +62,25 @@ unix {
 		PREFIX = /usr/local
 	}
 
+	isEmpty(LIBDIR) {
+		LIBDIR = $${PREFIX}/lib
+	}
+
 	contains(PREFIX, $$system(echo $HOME)) {
 		LV2DIR = $${PREFIX}/.lv2
 	} else {
-		isEmpty(LIBDIR) {
-			LV2DIR = $${PREFIX}/lib/lv2
-		} else {
-			LV2DIR = $${LIBDIR}/lv2
-		}
+		LV2DIR = $${LIBDIR}/lv2
 	}
 
 	TARGET_LV2UI = $${NAME}.lv2/$${NAME}_ui
+
+	!exists($${TARGET_LV2UI}.so) {
+		system(touch $${TARGET_LV2UI}.so)
+	}
+
+	!exists($${TARGET_LV2UI}.ttl) {
+		system(touch $${TARGET_LV2UI}.ttl)
+	}
 
 	INSTALLS += target
 
@@ -91,7 +99,7 @@ unix {
 
 	QMAKE_CLEAN += $${TARGET_LV2UI}.so $${TARGET_LV2UI}.ttl
 
-	LIBS += -L. -l$${NAME} -L$${NAME}.lv2 -Wl,-rpath,$${LV2DIR}/$${NAME}.lv2
+	LIBS += -L. -l$${NAME} -L$${NAME}.lv2 -Wl,-rpath,$${LIBDIR}:$${LV2DIR}/$${NAME}.lv2
 }
 
 QT += xml

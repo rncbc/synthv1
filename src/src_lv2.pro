@@ -31,17 +31,21 @@ unix {
 		PREFIX = /usr/local
 	}
 
+	isEmpty(LIBDIR) {
+		LIBDIR = $${PREFIX}/lib
+	}
+
 	contains(PREFIX, $$system(echo $HOME)) {
 		LV2DIR = $${PREFIX}/.lv2
 	} else {
-		isEmpty(LIBDIR) {
-			LV2DIR = $${PREFIX}/lib/lv2
-		} else {
-			LV2DIR = $${LIBDIR}/lv2
-		}
+		LV2DIR = $${LIBDIR}/lv2
 	}
 
 	TARGET_LV2 = $${NAME}.lv2/$${NAME}
+
+	!exists($${TARGET_LV2}.so) {
+		system(touch $${TARGET_LV2}.so)
+	}
 
 	INSTALLS += target
 
@@ -54,7 +58,7 @@ unix {
 
 	QMAKE_CLEAN += $${TARGET_LV2}.so
 
-	LIBS += -L. -l$${NAME}
+	LIBS += -L. -l$${NAME} -Wl,-rpath,$${LIBDIR}
 }
 
 QT -= gui

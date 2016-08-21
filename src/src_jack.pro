@@ -64,8 +64,17 @@ unix {
 		PREFIX = /usr/local
 	}
 
-	BINDIR = $${PREFIX}/bin
-	DATADIR = $${PREFIX}/share
+	isEmpty(LIBDIR) {
+		LIBDIR = $${PREFIX}/lib
+	}
+
+	isEmpty(BINDIR) {
+		BINDIR = $${PREFIX}/bin
+	}
+
+	isEmpty(DATADIR) {
+		DATADIR = $${PREFIX}/share
+	}
 
 	DEFINES += DATADIR=\"$${DATADIR}\"
 
@@ -95,7 +104,7 @@ unix {
 	mimetypes_scalable.path = $${DATADIR}/icons/hicolor/scalable/mimetypes
 	mimetypes_scalable.files += mimetypes/application-x-$${NAME}-preset.svg
 
-	LIBS += -L. -l$${NAME}
+	LIBS += -L. -l$${NAME} -Wl,-rpath,$${LIBDIR}
 }
 
 QT += xml
