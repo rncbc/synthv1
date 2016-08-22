@@ -5,6 +5,8 @@ PREFIX  = @ac_prefix@
 LIBDIR  = @ac_libdir@
 CONFIG += @ac_debug@
 
+VERSION = @ac_version@
+
 INCLUDEPATH = @ac_jack_incpath@
 LIBS += @ac_jack_libs@
 
