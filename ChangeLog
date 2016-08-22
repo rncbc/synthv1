@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- The core engine implementation is now delivered as a shared
+  object library, common to both the JACK stand-alone client
+  and the LV2 instrument plug-in. (EXPERIMENTAL)
 - Discretely fixed MIDI Controlllers catch-up algorithm.
 
 
