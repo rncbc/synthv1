@@ -50,12 +50,6 @@ BuildRequires:	liblo-devel
 %clean
 [ -d %{buildroot} -a "%{buildroot}" != "" ] && %__rm -rf %{buildroot}
 
-%post
-/sbin/ldconfig
-
-%postun
-/sbin/ldconfig
-
 %files
 %defattr(-,root,root)
 %doc AUTHORS COPYING ChangeLog README TODO
