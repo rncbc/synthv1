@@ -53,7 +53,7 @@ BuildRequires:	liblo-devel
 %files
 %defattr(-,root,root)
 %doc AUTHORS COPYING ChangeLog README TODO
-%{_liibdir}/lib%{name}.so*
+%{_libdir}/lib%{name}.so*
 %dir %{_libdir}/lv2
 %dir %{_libdir}/lv2/%{name}.lv2
 %{_libdir}/lv2/%{name}.lv2/manifest.ttl
