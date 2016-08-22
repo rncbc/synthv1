@@ -373,6 +373,7 @@ else
    ac_nsm="no"
 fi
 
+AC_SUBST(ac_libs)
 AC_SUBST(ac_jack_libs)
 AC_SUBST(ac_lv2_libs)
 
@@ -534,6 +535,7 @@ AC_SUBST(ac_install_targets)
 AC_SUBST(ac_uninstall_targets)
 AC_SUBST(ac_clean_targets)
 
+AC_SUBST(ac_incpath)
 AC_SUBST(ac_jack_incpath)
 AC_SUBST(ac_lv2_incpath)
 

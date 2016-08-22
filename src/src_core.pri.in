@@ -7,6 +7,9 @@ CONFIG += @ac_debug@
 
 VERSION = @ac_version@
 
+INCLUDEPATH = @ac_incpath@
+LIBS += @ac_libs@
+
 # Extra optimization flags
 QMAKE_CXXFLAGS += @ac_cflags@
 QMAKE_LFLAGS += @ac_ldflags@
