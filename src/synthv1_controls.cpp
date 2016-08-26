@@ -413,12 +413,12 @@ public:
 		if (event.key.param > CC14_MSB_MIN &&
 			event.key.param < CC14_MSB_MAX) {
 			xrpn_item& item = get_item(channel);
-			if (item.type() != synthv1_controls::CC14) {
-				if (item.is_ready())
-					enqueue(item);
+			if (item.is_any() && item.type() != synthv1_controls::CC14) {
+				enqueue(item);
 				item.clear();
 				--m_count;
 			}
+			else
 			if (item.is_param_msb() || item.is_value_msb()
 				|| (item.type() == synthv1_controls::CC14
 					&& item.param_lsb() != event.key.param + CC14_LSB_MIN))
@@ -437,12 +437,12 @@ public:
 		if (event.key.param > CC14_LSB_MIN &&
 			event.key.param < CC14_LSB_MAX) {
 			xrpn_item& item = get_item(channel);
-			if (item.type() != synthv1_controls::CC14) {
-				if (item.is_ready())
-					enqueue(item);
+			if (item.is_any() && item.type() != synthv1_controls::CC14) {
+				enqueue(item);
 				item.clear();
 				--m_count;
 			}
+			else
 			if (item.is_param_lsb() || item.is_value_lsb()
 				|| (item.type() == synthv1_controls::CC14
 					&& item.param_msb() != event.key.param - CC14_LSB_MIN))
