@@ -176,6 +176,9 @@ public:
 	bool is_14bit() const
 		{ return m_param.is_any() && m_value.is_14bit(); }
 
+	void clear_value()
+		{ m_value.clear(); }
+
 private:
 
 	unsigned short m_status;
@@ -381,9 +384,8 @@ public:
 			xrpn_item& item = get_item(channel);
 			if (item.type() == synthv1_controls::None)
 				return false;
-			if (item.is_value_msb()
-				|| (item.type() != synthv1_controls::RPN
-				 && item.type() != synthv1_controls::NRPN)) {
+			if (item.type() != synthv1_controls::RPN &&
+				item.type() != synthv1_controls::NRPN) {
 				enqueue(item);
 				return false;
 			}
@@ -397,9 +399,8 @@ public:
 			xrpn_item& item = get_item(channel);
 			if (item.type() == synthv1_controls::None)
 				return false;
-			if (item.is_value_lsb()
-				|| (item.type() != synthv1_controls::RPN
-				 && item.type() != synthv1_controls::NRPN)) {
+			if (item.type() != synthv1_controls::RPN &&
+				item.type() != synthv1_controls::NRPN) {
 				enqueue(item);
 				return false;
 			}
@@ -412,8 +413,13 @@ public:
 		if (event.key.param > CC14_MSB_MIN &&
 			event.key.param < CC14_MSB_MAX) {
 			xrpn_item& item = get_item(channel);
+			if (item.type() != synthv1_controls::CC14) {
+				if (item.is_ready())
+					enqueue(item);
+				item.clear();
+				--m_count;
+			}
 			if (item.is_param_msb() || item.is_value_msb()
-				|| (item.is_any() && item.type() != synthv1_controls::CC14)
 				|| (item.type() == synthv1_controls::CC14
 					&& item.param_lsb() != event.key.param + CC14_LSB_MIN))
 				enqueue(item);
@@ -431,8 +437,13 @@ public:
 		if (event.key.param > CC14_LSB_MIN &&
 			event.key.param < CC14_LSB_MAX) {
 			xrpn_item& item = get_item(channel);
+			if (item.type() != synthv1_controls::CC14) {
+				if (item.is_ready())
+					enqueue(item);
+				item.clear();
+				--m_count;
+			}
 			if (item.is_param_lsb() || item.is_value_lsb()
-				|| (item.is_any() && item.type() != synthv1_controls::CC14)
 				|| (item.type() == synthv1_controls::CC14
 					&& item.param_msb() != event.key.param - CC14_LSB_MIN))
 				enqueue(item);
@@ -471,10 +482,14 @@ protected:
 				if (item.is_value_lsb())
 					m_queue.push(status, item.param_lsb(), item.value_lsb());
 			}
+			item.clear();
+			--m_count;
 		}
 		else
 		if (item.is_ready()) {
 			m_queue.push(item.status(), item.param(), item.value());
+			item.clear_value();
+		//	--m_count;
 		} else {
 			const unsigned short status
 				= synthv1_controls::CC | item.channel();
@@ -495,10 +510,9 @@ protected:
 				m_queue.push(status, DATA_MSB, item.value_msb());
 			if (item.is_value_lsb())
 				m_queue.push(status, DATA_LSB, item.value_lsb());
+			item.clear();
+			--m_count;
 		}
-
-		item.clear();
-		--m_count;
 	}
 
 private:

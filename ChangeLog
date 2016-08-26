@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- MIDI RPN/NRPN running status is now supported (input only).
+  (EXPERIMENTAL)
 - The core engine implementation is now delivered as a shared
   object library, common to both the JACK stand-alone client
   and the LV2 instrument plug-in. (EXPERIMENTAL)
