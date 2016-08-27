@@ -330,8 +330,7 @@ public:
 
 		if (event.key.param == RPN_MSB) {
 			xrpn_item& item = get_item(channel);
-			if (item.is_param_msb()
-				|| (item.is_any() && item.type() != synthv1_controls::RPN))
+			if (item.is_any() && item.type() != synthv1_controls::RPN)
 				enqueue(item);
 			if (item.type() == synthv1_controls::None) {
 				item.set_status(synthv1_controls::RPN | channel);
@@ -343,8 +342,7 @@ public:
 		else
 		if (event.key.param == RPN_LSB) {
 			xrpn_item& item = get_item(channel);
-			if (item.is_param_lsb()
-				|| (item.is_any() && item.type() != synthv1_controls::RPN))
+			if (item.is_any() && item.type() != synthv1_controls::RPN)
 				enqueue(item);
 			if (item.type() == synthv1_controls::None) {
 				item.set_status(synthv1_controls::RPN | channel);
@@ -356,8 +354,7 @@ public:
 		else
 		if (event.key.param == NRPN_MSB) {
 			xrpn_item& item = get_item(channel);
-			if (item.is_param_msb()
-				|| (item.is_any() && item.type() != synthv1_controls::NRPN))
+			if (item.is_any() && item.type() != synthv1_controls::NRPN)
 				enqueue(item);
 			if (item.type() == synthv1_controls::None) {
 				item.set_status(synthv1_controls::NRPN | channel);
@@ -369,8 +366,7 @@ public:
 		else
 		if (event.key.param == NRPN_LSB) {
 			xrpn_item& item = get_item(channel);
-			if (item.is_param_lsb()
-				|| (item.is_any() && item.type() != synthv1_controls::NRPN))
+			if (item.is_any() && item.type() != synthv1_controls::NRPN)
 				enqueue(item);
 			if (item.type() == synthv1_controls::None) {
 				item.set_status(synthv1_controls::NRPN | channel);
@@ -382,8 +378,6 @@ public:
 		else
 		if (event.key.param == DATA_MSB) {
 			xrpn_item& item = get_item(channel);
-			if (item.type() == synthv1_controls::None)
-				return false;
 			if (item.type() != synthv1_controls::RPN &&
 				item.type() != synthv1_controls::NRPN) {
 				enqueue(item);
@@ -397,8 +391,6 @@ public:
 		else
 		if (event.key.param == DATA_LSB) {
 			xrpn_item& item = get_item(channel);
-			if (item.type() == synthv1_controls::None)
-				return false;
 			if (item.type() != synthv1_controls::RPN &&
 				item.type() != synthv1_controls::NRPN) {
 				enqueue(item);
