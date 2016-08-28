@@ -356,6 +356,17 @@ public:
 			xrpn_item& item = get_item(channel);
 			if (item.is_any() && item.type() != synthv1_controls::NRPN)
 				enqueue(item);
+			if (item.type() == synthv1_controls::RPN && item.is_param_lsb()
+				&& item.param_lsb() == 0x7f && event.value == 0x7f) {
+				item.clear();
+				--m_count;
+				return true;
+			}
+			if (item.type() == synthv1_controls::NRPN) {
+				item.clear();
+				item.set_status(synthv1_controls::RPN | channel);
+			}
+			else
 			if (item.type() == synthv1_controls::None) {
 				item.set_status(synthv1_controls::NRPN | channel);
 				++m_count;
@@ -368,6 +379,17 @@ public:
 			xrpn_item& item = get_item(channel);
 			if (item.is_any() && item.type() != synthv1_controls::NRPN)
 				enqueue(item);
+			if (item.type() == synthv1_controls::RPN && item.is_param_msb()
+				&& item.param_msb() == 0x7f && event.value == 0x7f) {
+				item.clear();
+				--m_count;
+				return true;
+			}
+			if (item.type() == synthv1_controls::NRPN) {
+				item.clear();
+				item.set_status(synthv1_controls::RPN | channel);
+			}
+			else
 			if (item.type() == synthv1_controls::None) {
 				item.set_status(synthv1_controls::NRPN | channel);
 				++m_count;
@@ -415,6 +437,11 @@ public:
 				|| (item.type() == synthv1_controls::CC14
 					&& item.param_lsb() != event.key.param + CC14_LSB_MIN))
 				enqueue(item);
+			if (item.type() == synthv1_controls::RPN) {
+				item.clear();
+				item.set_status(synthv1_controls::NRPN | channel);
+			}
+			else
 			if (item.type() == synthv1_controls::None) {
 				item.set_status(synthv1_controls::CC14 | channel);
 				++m_count;
@@ -439,6 +466,11 @@ public:
 				|| (item.type() == synthv1_controls::CC14
 					&& item.param_msb() != event.key.param - CC14_LSB_MIN))
 				enqueue(item);
+			if (item.type() == synthv1_controls::RPN) {
+				item.clear();
+				item.set_status(synthv1_controls::NRPN | channel);
+			}
+			else
 			if (item.type() == synthv1_controls::None) {
 				item.set_status(synthv1_controls::CC14 | channel);
 				++m_count;
