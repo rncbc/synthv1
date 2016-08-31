@@ -973,11 +973,11 @@ synthv1_impl::~synthv1_impl (void)
 
 	delete [] m_voices;
 
-	// deallocate channels
-	setChannels(0);
-
 	// deallocate local buffers
 	alloc_sfxs(0);
+
+	// deallocate channels
+	setChannels(0);
 }
 
 
