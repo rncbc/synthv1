@@ -4,13 +4,13 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.7.6  2016-09-19  The Eleventh official beta.
 
 - MIDI RPN/NRPN running status and RPN NULL reset command
-  are now supported (input only). (EXPERIMENTAL)
+  are now supported (input only).
 - The core engine implementation is now delivered as a shared
   object library, common to both the JACK stand-alone client
-  and the LV2 instrument plug-in. (EXPERIMENTAL)
+  and the LV2 instrument plug-in.
 - Discretely fixed MIDI Controlllers catch-up algorithm.
 
 
