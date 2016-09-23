@@ -4,6 +4,14 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Almost complete overhaul on the configure script command
+  line options, wrt. installation directories specification,
+  eg. --prefix, --bindir, --libdir, --datadir and --mandir.
+  (EXPERIMENTAL)
+
+
 0.7.6  2016-09-19  The Eleventh official beta.
 
 - MIDI RPN/NRPN running status and RPN NULL reset command

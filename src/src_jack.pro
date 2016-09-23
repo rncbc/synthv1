@@ -64,19 +64,24 @@ unix {
 		PREFIX = /usr/local
 	}
 
-	isEmpty(LIBDIR) {
-		LIBDIR = $${PREFIX}/lib
-	}
-
 	isEmpty(BINDIR) {
 		BINDIR = $${PREFIX}/bin
+	}
+
+	isEmpty(LIBDIR) {
+		TARGET_ARCH = $$system(uname -m)
+		contains(TARGET_ARCH, x86_64) {
+			LIBDIR = $${PREFIX}/lib64
+		} else {
+			LIBDIR = $${PREFIX}/lib
+		}
 	}
 
 	isEmpty(DATADIR) {
 		DATADIR = $${PREFIX}/share
 	}
 
-	DEFINES += DATADIR=\"$${DATADIR}\"
+	#DEFINES += DATADIR=\"$${DATADIR}\"
 
 	INSTALLS += target desktop icon appdata \
 		icon_scalable mimeinfo mimetypes mimetypes_scalable

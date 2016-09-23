@@ -63,7 +63,12 @@ unix {
 	}
 
 	isEmpty(LIBDIR) {
-		LIBDIR = $${PREFIX}/lib
+		TARGET_ARCH = $$system(uname -m)
+		contains(TARGET_ARCH, x86_64) {
+			LIBDIR = $${PREFIX}/lib64
+		} else {
+			LIBDIR = $${PREFIX}/lib
+		}
 	}
 
 	contains(PREFIX, $$system(echo $HOME)) {

@@ -1,13 +1,15 @@
 # synthv1_lv2.pri
 #
-
 PREFIX  = @ac_prefix@
+BINDIR  = @ac_bindir@
 LIBDIR  = @ac_libdir@
-CONFIG += @ac_debug@
+DATADIR = @ac_datadir@
+MANDIR  = @ac_mandir@
 
 VERSION = @ac_version@
+CONFIG += @ac_debug@
 
-INCLUDEPATH = @ac_lv2_incpath@
+INCLUDEPATH += @ac_lv2_incpath@
 LIBS += @ac_lv2_libs@
 
 # Extra optimization flags
