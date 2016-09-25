@@ -354,7 +354,7 @@ ac_clean_targets=""
 
 # Check for JACK libraries.
 if test "x$ac_jack" = "xyes"; then
-   PKG_CHECK_MODULES([JACK], [jack >= 0.80.0], [ac_jack="yes"], [ac_jack="no"])
+   PKG_CHECK_MODULES([JACK], [jack >= 0.100.0], [ac_jack="yes"], [ac_jack="no"])
    if test "x$ac_jack" = "xyes"; then
       AC_DEFINE(CONFIG_JACK, 1, [Define if JACK library is available.])
       ac_jack_cflags="$ac_jack_cflags $JACK_CFLAGS"
