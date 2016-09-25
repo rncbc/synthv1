@@ -26,7 +26,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	qt5-qtbase-devel >= 5.1, qt5-linguist
 BuildRequires:	alsa-lib-devel
 %else
-BuildRequires:	pkg—config
+BuildRequires:	pkg-config
 BuildRequires:	libqt5-qtbase-devel >= 5.1, libqt5-linguist
 BuildRequires:	alsa-devel
 %endif
