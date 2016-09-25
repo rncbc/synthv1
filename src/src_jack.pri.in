@@ -13,5 +13,5 @@ INCLUDEPATH += @ac_jack_incpath@
 LIBS += @ac_jack_libs@
 
 # Extra optimization flags
-QMAKE_CXXFLAGS += @ac_cflags@
-QMAKE_LFLAGS += @ac_ldflags@
+QMAKE_CXXFLAGS += @ac_jack_cflags@
+QMAKE_LFLAGS += @ac_jack_ldflags@

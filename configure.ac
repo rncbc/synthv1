@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(synthv1, 0.7.6.2, rncbc@rncbc.org)
+AC_INIT(synthv1, 0.7.6.3, rncbc@rncbc.org)
 
 AC_CONFIG_SRCDIR(src/synthv1.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -182,6 +182,8 @@ AC_PROG_CXXCPP
 # Checks for languages.
 AC_LANG_CPLUSPLUS
 
+# Check for pkg-config.
+PKG_PROG_PKG_CONFIG
 
 # Check for proper flags.
 ac_arch=`uname -m`
@@ -327,26 +329,39 @@ fi
 AC_SUBST(ac_lrelease)
 
 
-ac_cflags="-ffast-math $ac_cflags"
-AC_SUBST(ac_cflags)
-
-
 # Checks for libraries.
 AC_CHECK_LIB(m, main)
 AC_CHECK_LIB(X11, main)
 AC_CHECK_LIB(Xext, main)
 
+ac_cflags="-ffast-math $ac_cflags"
+
+ac_jack_cflags="$ac_cflags"
+ac_jack_ldflags="$ac_ldflags"
+ac_jack_incpath="$ac_incpath"
 ac_jack_libs="$ac_libs"
+
+ac_lv2_cflags="$ac_cflags"
+ac_lv2_ldflags="$ac_ldflags"
+ac_lv2_incpath="$ac_incpath"
 ac_lv2_libs="$ac_libs"
+
+ac_all_targets=""
+ac_install_targets=""
+ac_uninstall_targets=""
+ac_clean_targets=""
+
 
 # Check for JACK libraries.
 if test "x$ac_jack" = "xyes"; then
-   AC_CHECK_LIB(jack, main, [ac_jack="yes"], [ac_jack="no"])
-   if test "x$ac_jack" = "xno"; then
+   PKG_CHECK_MODULES([JACK], [jack >= 0.80.0], [ac_jack="yes"], [ac_jack="no"])
+   if test "x$ac_jack" = "xyes"; then
+      AC_DEFINE(CONFIG_JACK, 1, [Define if JACK library is available.])
+      ac_jack_cflags="$ac_jack_cflags $JACK_CFLAGS"
+      ac_jack_libs="$ac_jack_libs $JACK_LIBS"
+   else
       AC_MSG_WARN([*** JACK library not found.])
       AC_MSG_WARN([*** JACK stand-alone build will be disabled.])
-   else
-      ac_jack_libs="$ac_jack_libs -ljack"
    fi
 fi
 
@@ -359,27 +374,44 @@ if test "x$ac_jack" = "xyes"; then
    fi
    # Check for ALSA libraries.
    if test "x$ac_alsa_midi" = "xyes"; then
-      AC_CHECK_LIB(pthread, main, [ac_alsa_midi="yes"], [ac_alsa_midi="no"])
+      PKG_CHECK_MODULES([ALSA], [alsa], [ac_alsa_midi="yes"], [ac_alsa_midi="no"])
    fi
    if test "x$ac_alsa_midi" = "xyes"; then
       AC_CHECK_LIB(asound, main, [ac_alsa_midi="yes"], [ac_alsa_midi="no"])
-      if test "x$ac_alsa_midi" = "xno"; then
+      if test "x$ac_alsa_midi" = "xyes"; then
+         AC_DEFINE(CONFIG_ALSA_MIDI, 1, [Define if ALSA MIDI support is enabled.])
+         ac_jack_cflags="$ac_jack_cflags $ALSA_CFLAGS"
+         ac_jack_libs="$ac_jack_libs $ALSA_LIBS"
+      else
          AC_MSG_WARN([*** ALSA library not found.])
          AC_MSG_WARN([*** ALSA MIDI support will be disabled.])
-      else
-         ac_jack_libs="$ac_jack_libs -lasound -lpthread"
       fi
    fi
 fi
 
-# Check for optional liblo library.
+# Check for JACK build support.
+if test "x$ac_jack" = "xyes"; then
+   ac_all_targets="jack $ac_all_targets"
+   ac_install_targets="install_jack $ac_install_targets"
+   ac_uninstall_targets="uninstall_jack $ac_uninstall_targets"
+   ac_clean_targets="clean_jack $ac_clean_targets"
+else
+  ac_jack_session="no"
+  ac_jack_midi="no"
+  ac_alsa_midi="no"
+  ac_liblo="no"
+  ac_nsm="no"
+fi
+
+# Check for optional LIBLO library.
 if test "x$ac_liblo" = "xyes"; then
-   AC_CHECK_LIB(lo, main, [ac_liblo="yes"], [ac_liblo="no"])
+   PKG_CHECK_MODULES([LIBLO], [liblo], [ac_liblo="yes"], [ac_liblo="no"])
    if test "x$ac_liblo" = "xyes"; then
-      AC_DEFINE(CONFIG_LIBLO, 1, [Define if liblo is available.])
-      ac_jack_libs="$ac_jack_libs -llo"
+      AC_DEFINE(CONFIG_LIBLO, 1, [Define if LIBLO library is available.])
+      ac_jack_cflags="$ac_jack_cflags $LIBLO_CFLAGS"
+      ac_jack_libs="$ac_jack_libs $LIBLO_LIBS"
    else
-      AC_MSG_WARN([*** liblo library not found.])
+      AC_MSG_WARN([*** LIBLO library not found.])
       AC_MSG_WARN([*** OSC service support will be disabled.])
       ac_nsm="no"
    fi
@@ -387,46 +419,12 @@ else
    ac_nsm="no"
 fi
 
-AC_SUBST(ac_libs)
-AC_SUBST(ac_jack_libs)
-AC_SUBST(ac_lv2_libs)
-
 
 # Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS(fcntl.h sys/ioctl.h sys/stat.h unistd.h signal.h)
 
-ac_jack_incpath="$ac_incpath"
-ac_lv2_incpath="$ac_incpath"
-
-ac_all_targets=""
-ac_install_targets=""
-ac_uninstall_targets=""
-ac_clean_targets=""
-
-# Check for JACK headers.
-if test "x$ac_jack" = "xyes"; then
-   AC_CHECK_HEADERS(jack/jack.h, [ac_jack="yes"], [ac_jack="no"])
-   if test "x$ac_jack" = "xno"; then
-      AC_MSG_WARN([*** JACK header files not found.])
-      AC_MSG_WARN([*** JACK stand-alone build will be disabled.])
-   else
-      AC_DEFINE(CONFIG_JACK, 1, [Define if JACK stand-alone build is enabled.])
-      ac_all_targets="jack $ac_all_targets"
-      ac_install_targets="install_jack $ac_install_targets"
-      ac_uninstall_targets="uninstall_jack $ac_uninstall_targets"
-      ac_clean_targets="clean_jack $ac_clean_targets"
-   fi
-fi
-
-if test "x$ac_jack" = "xno"; then
-  ac_jack_session="no"
-  ac_jack_midi="no"
-  ac_alsa_midi="no"
-  ac_liblo="no"
-  ac_nsm="no"
-fi
 
 # Check for JACK session headers availability.
 if test "x$ac_jack_session" = "xyes"; then
@@ -447,17 +445,6 @@ if test "x$ac_jack_midi" = "xyes"; then
    else
       AC_MSG_WARN([*** JACK MIDI header files not found.])
       AC_MSG_WARN([*** JACK MIDI support will be disabled.])
-   fi
-fi
-
-# Check for ALSA MIDI headers availability.
-if test "x$ac_alsa_midi" = "xyes"; then
-   AC_CHECK_HEADER(alsa/asoundlib.h, [ac_alsa_midi="yes"], [ac_alsa_midi="no"])
-   if test "x$ac_alsa_midi" = "xyes"; then
-      AC_DEFINE(CONFIG_ALSA_MIDI, 1, [Define if ALSA MIDI support is enabled.])
-   else
-      AC_MSG_WARN([*** ALSA MIDI header files not found.])
-      AC_MSG_WARN([*** ALSA MIDI support will be disabled.])
    fi
 fi
 
@@ -529,30 +516,11 @@ if test "x$ac_lv2_programs" = "xyes"; then
    AC_CHECK_HEADER(lv2_programs.h, [ac_lv2_programs="yes"], [ac_lv2_programs="no"])
    if test "x$ac_lv2_programs" = "xyes"; then
       AC_DEFINE(CONFIG_LV2_PROGRAMS, 1, [Define if LV2 Programs extension is available.])
+      ac_lv2_incpath="lv2 $ac_lv2_incpath"
    else
       AC_MSG_WARN([*** LV2 Programs extension will be disabled.])
    fi
 fi
-
-# Check for liblo headers.
-if test "x$ac_liblo" = "xyes"; then
-   AC_CHECK_HEADER(lo/lo.h, [ac_lo_h="yes"], [ac_lo_h="no"])
-   if test "x$ac_lo_h" = "xno"; then
-      AC_MSG_ERROR([lo.h header file not found.])
-      ac_liblo="no"
-      ac_nsm="no"
-   fi
-fi
-
-AC_SUBST(ac_all_targets)
-AC_SUBST(ac_install_targets)
-AC_SUBST(ac_uninstall_targets)
-AC_SUBST(ac_clean_targets)
-
-AC_SUBST(ac_incpath)
-AC_SUBST(ac_jack_incpath)
-AC_SUBST(ac_lv2_incpath)
-
 
 # Check for NSM support.
 if test "x$ac_nsm" = "xyes"; then
@@ -573,6 +541,23 @@ fi
 
 AC_SUBST(ac_cflags)
 AC_SUBST(ac_ldflags)
+AC_SUBST(ac_incpath)
+AC_SUBST(ac_libs)
+
+AC_SUBST(ac_jack_cflags)
+AC_SUBST(ac_jack_ldflags)
+AC_SUBST(ac_jack_incpath)
+AC_SUBST(ac_jack_libs)
+
+AC_SUBST(ac_lv2_cflags)
+AC_SUBST(ac_lv2_ldflags)
+AC_SUBST(ac_lv2_incpath)
+AC_SUBST(ac_lv2_libs)
+
+AC_SUBST(ac_all_targets)
+AC_SUBST(ac_install_targets)
+AC_SUBST(ac_uninstall_targets)
+AC_SUBST(ac_clean_targets)
 
 
 # Checks for typedefs, structures, and compiler characteristics.
