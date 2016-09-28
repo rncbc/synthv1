@@ -512,6 +512,7 @@ if test "x$ac_lv2_ui_show" = "xyes"; then
       AC_MSG_WARN([*** LV2 UI Show interface support will be disabled.])
    fi
 fi
+
 if test "x$ac_lv2_programs" = "xyes"; then
    AC_CHECK_HEADER(lv2_programs.h, [ac_lv2_programs="yes"], [ac_lv2_programs="no"])
    if test "x$ac_lv2_programs" = "xyes"; then
