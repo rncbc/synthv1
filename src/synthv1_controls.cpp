@@ -121,15 +121,17 @@ public:
 		m_value.clear();
 	}
 
+	bool is_status () const
+		{ return (m_status & 0x800) && (m_status & 0x700); }
 	void set_status(unsigned short status)
-		{ m_status = status; }
+		{ m_status = (status & 0x7ff) | 0x800; }
 	unsigned short status() const
-		{ return m_status; }
+		{ return (m_status & 0x7ff); }
 
 	synthv1_controls::Type type() const
-		{ return synthv1_controls::Type(m_status & 0xf00); }
+		{ return synthv1_controls::Type(status() & 0x700); }
 	unsigned short channel() const
-		{ return (m_status & 0x1f); }
+		{ return (status() & 0x1f); }
 
 	bool is_param_msb() const
 		{ return m_param.is_msb(); }
@@ -177,7 +179,7 @@ public:
 		{ return m_param.is_any() && m_value.is_14bit(); }
 
 	void clear_value()
-		{ m_value.clear(); }
+		{ m_status &= 0x7ff; m_value.clear(); }
 
 private:
 
@@ -332,7 +334,19 @@ public:
 			xrpn_item& item = get_item(channel);
 			if (item.is_any() && item.type() != synthv1_controls::RPN)
 				enqueue(item);
-			if (item.type() == synthv1_controls::None) {
+			if (item.is_status() // RPN NULL [MSB]
+				&& item.type() == synthv1_controls::RPN && item.is_param_lsb()
+				&& item.param_lsb() == 0x7f && event.value == 0x7f) {
+				item.clear();
+				--m_count;
+				return true;
+			}
+			if (item.type() == synthv1_controls::NRPN) {
+				item.clear();
+				item.set_status(synthv1_controls::RPN | channel);
+			}
+			else
+			if (!item.is_status()) {
 				item.set_status(synthv1_controls::RPN | channel);
 				++m_count;
 			}
@@ -344,7 +358,19 @@ public:
 			xrpn_item& item = get_item(channel);
 			if (item.is_any() && item.type() != synthv1_controls::RPN)
 				enqueue(item);
-			if (item.type() == synthv1_controls::None) {
+			if (item.is_status() // RPN NULL [LSB]
+				&& item.type() == synthv1_controls::RPN && item.is_param_msb()
+				&& item.param_msb() == 0x7f && event.value == 0x7f) {
+				item.clear();
+				--m_count;
+				return true;
+			}
+			if (item.type() == synthv1_controls::NRPN) {
+				item.clear();
+				item.set_status(synthv1_controls::RPN | channel);
+			}
+			else
+			if (!item.is_status()) {
 				item.set_status(synthv1_controls::RPN | channel);
 				++m_count;
 			}
@@ -356,18 +382,12 @@ public:
 			xrpn_item& item = get_item(channel);
 			if (item.is_any() && item.type() != synthv1_controls::NRPN)
 				enqueue(item);
-			if (item.type() == synthv1_controls::RPN && item.is_param_lsb()
-				&& item.param_lsb() == 0x7f && event.value == 0x7f) {
+			if (item.type() == synthv1_controls::RPN) {
 				item.clear();
-				--m_count;
-				return true;
-			}
-			if (item.type() == synthv1_controls::NRPN) {
-				item.clear();
-				item.set_status(synthv1_controls::RPN | channel);
+				item.set_status(synthv1_controls::NRPN | channel);
 			}
 			else
-			if (item.type() == synthv1_controls::None) {
+			if (!item.is_status()) {
 				item.set_status(synthv1_controls::NRPN | channel);
 				++m_count;
 			}
@@ -379,18 +399,12 @@ public:
 			xrpn_item& item = get_item(channel);
 			if (item.is_any() && item.type() != synthv1_controls::NRPN)
 				enqueue(item);
-			if (item.type() == synthv1_controls::RPN && item.is_param_msb()
-				&& item.param_msb() == 0x7f && event.value == 0x7f) {
+			if (item.type() == synthv1_controls::RPN) {
 				item.clear();
-				--m_count;
-				return true;
-			}
-			if (item.type() == synthv1_controls::NRPN) {
-				item.clear();
-				item.set_status(synthv1_controls::RPN | channel);
+				item.set_status(synthv1_controls::NRPN | channel);
 			}
 			else
-			if (item.type() == synthv1_controls::None) {
+			if (!item.is_status()) {
 				item.set_status(synthv1_controls::NRPN | channel);
 				++m_count;
 			}
@@ -405,6 +419,8 @@ public:
 				enqueue(item);
 				return false;
 			}
+			if (!item.is_status())
+				item.set_status(item.type() | channel);
 			item.set_value_msb(event.value);
 			if (item.is_14bit())
 				enqueue(item);
@@ -418,14 +434,15 @@ public:
 				enqueue(item);
 				return false;
 			}
+			if (!item.is_status())
+				item.set_status(item.type() | channel);
 			item.set_value_lsb(event.value);
 			if (item.is_14bit())
 				enqueue(item);
 			return true;
 		}
 		else
-		if (event.key.param > CC14_MSB_MIN &&
-			event.key.param < CC14_MSB_MAX) {
+		if (event.key.param > CC14_MSB_MIN && event.key.param < CC14_MSB_MAX) {
 			xrpn_item& item = get_item(channel);
 			if (item.is_any() && item.type() != synthv1_controls::CC14) {
 				enqueue(item);
@@ -437,12 +454,7 @@ public:
 				|| (item.type() == synthv1_controls::CC14
 					&& item.param_lsb() != event.key.param + CC14_LSB_MIN))
 				enqueue(item);
-			if (item.type() == synthv1_controls::RPN) {
-				item.clear();
-				item.set_status(synthv1_controls::NRPN | channel);
-			}
-			else
-			if (item.type() == synthv1_controls::None) {
+			if (!item.is_status()) {
 				item.set_status(synthv1_controls::CC14 | channel);
 				++m_count;
 			}
@@ -453,8 +465,7 @@ public:
 			return true;
 		}
 		else
-		if (event.key.param > CC14_LSB_MIN &&
-			event.key.param < CC14_LSB_MAX) {
+		if (event.key.param > CC14_LSB_MIN && event.key.param < CC14_LSB_MAX) {
 			xrpn_item& item = get_item(channel);
 			if (item.is_any() && item.type() != synthv1_controls::CC14) {
 				enqueue(item);
@@ -466,12 +477,7 @@ public:
 				|| (item.type() == synthv1_controls::CC14
 					&& item.param_msb() != event.key.param - CC14_LSB_MIN))
 				enqueue(item);
-			if (item.type() == synthv1_controls::RPN) {
-				item.clear();
-				item.set_status(synthv1_controls::NRPN | channel);
-			}
-			else
-			if (item.type() == synthv1_controls::None) {
+			if (!item.is_status()) {
 				item.set_status(synthv1_controls::CC14 | channel);
 				++m_count;
 			}
@@ -492,7 +498,7 @@ protected:
 
 	void enqueue ( xrpn_item& item )
 	{
-		if (item.type() == synthv1_controls::None)
+		if (!item.is_status())
 			return;
 
 		if (item.type() == synthv1_controls::CC14) {
