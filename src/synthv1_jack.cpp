@@ -672,8 +672,12 @@ bool synthv1_jack_application::parse_args (void)
 		}
 		else
 		if (sArg == "-v" || sArg == "-V" || sArg == "--version") {
-			out << QObject::tr("Qt: %1\n").arg(qVersion());
-			out << QObject::tr(SYNTHV1_TITLE ": %1\n").arg(SYNTHV1_VERSION);
+			out << QObject::tr("Qt: %1\n")
+				.arg(qVersion());
+			out << QObject::tr("%1: %2  (%3)\n")
+				.arg(SYNTHV1_TITLE)
+				.arg(SYNTHV1_VERSION)
+				.arg(CONFIG_BUILD_DATE);
 			return false;
 		}
 	}

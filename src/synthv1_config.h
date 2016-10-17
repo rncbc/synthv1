@@ -24,14 +24,14 @@
 
 #include "config.h"
 
-#define SYNTHV1_TITLE	PACKAGE_NAME
-#define SYNTHV1_VERSION	PACKAGE_VERSION
+#define SYNTHV1_TITLE       PACKAGE_NAME
+#define SYNTHV1_VERSION     PACKAGE_VERSION
 
-#define SYNTHV1_SUBTITLE     "an old-school polyphonic synthesizer."
-#define SYNTHV1_WEBSITE      "http://synthv1.sourceforge.net"
-#define SYNTHV1_COPYRIGHT    "Copyright (C) 2012-2016, rncbc aka Rui Nuno Capela. All rights reserved."
+#define SYNTHV1_SUBTITLE    "an old-school polyphonic synthesizer."
+#define SYNTHV1_WEBSITE     "http://synthv1.sourceforge.net"
+#define SYNTHV1_COPYRIGHT   "Copyright (C) 2012-2016, rncbc aka Rui Nuno Capela. All rights reserved."
 
-#define SYNTHV1_DOMAIN	"rncbc.org"
+#define SYNTHV1_DOMAIN      "rncbc.org"
 
 
 //-------------------------------------------------------------------------
