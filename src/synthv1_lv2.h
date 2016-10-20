@@ -89,7 +89,7 @@ private:
 
 	} m_urids;
 
-	LV2_Atom_Sequence *m_atom_sequence;
+	LV2_Atom_Sequence *m_atom_in;
 
 	float **m_ins;
 	float **m_outs;

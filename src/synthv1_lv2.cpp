@@ -45,7 +45,7 @@ synthv1_lv2::synthv1_lv2 (
 {
 	::memset(&m_urids, 0, sizeof(m_urids));
 
-	m_atom_sequence = NULL;
+	m_atom_in = NULL;
 
 	const LV2_Options_Option *host_options = NULL;
 
@@ -130,7 +130,7 @@ void synthv1_lv2::connect_port ( uint32_t port, void *data )
 {
 	switch(PortIndex(port)) {
 	case MidiIn:
-		m_atom_sequence = (LV2_Atom_Sequence *) data;
+		m_atom_in = (LV2_Atom_Sequence *) data;
 		break;
 	case AudioInL:
 		m_ins[0] = (float *) data;
@@ -162,8 +162,8 @@ void synthv1_lv2::run ( uint32_t nframes )
 
 	uint32_t ndelta = 0;
 
-	if (m_atom_sequence) {
-		LV2_ATOM_SEQUENCE_FOREACH(m_atom_sequence, event) {
+	if (m_atom_in) {
+		LV2_ATOM_SEQUENCE_FOREACH(m_atom_in, event) {
 			if (event == NULL)
 				continue;
 			if (event->body.type == m_urids.midi_MidiEvent) {
@@ -198,7 +198,7 @@ void synthv1_lv2::run ( uint32_t nframes )
 				}
 			}
 		}
-	//	m_atom_sequence = NULL;
+	//	m_atom_in = NULL;
 	}
 
 	if (nframes > ndelta)
