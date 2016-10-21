@@ -454,15 +454,45 @@ fi
 
 # Check for LV2 headers.
 if test "x$ac_lv2" = "xyes"; then
-   AC_CHECK_HEADERS(lv2.h, [ac_lv2="yes"], [ac_lv2="no"])
-   if test "x$ac_lv2" = "xno"; then
-      AC_MSG_WARN([*** LV2 header files not found.])
-   else
+   AC_CHECK_HEADERS(lv2.h \
+      lv2/lv2plug.in/ns/ext/atom/atom.h \
+      lv2/lv2plug.in/ns/ext/atom/forge.h \
+      lv2/lv2plug.in/ns/ext/atom/util.h,
+      [ac_lv2="yes"], [ac_lv2="no"])
+   if test "x$ac_lv2" = "xyes"; then
       AC_DEFINE(CONFIG_LV2, 1, [Define if LV2 plug-in build is enabled.])
       ac_all_targets="lv2 $ac_all_targets"
       ac_install_targets="install_lv2 $ac_install_targets"
       ac_uninstall_targets="uninstall_lv2 $ac_uninstall_targets"
       ac_clean_targets="clean_lv2 $ac_clean_targets"
+      AC_CACHE_CHECK([for lv2_atom_forge_object],
+         ac_cv_lv2_atom_forge_object, [
+         AC_TRY_LINK([#include "lv2/lv2plug.in/ns/ext/atom/forge.h"], [
+            // Checking for lv2_atom_forge_object...
+            LV2_Atom_Forge *forge;
+            LV2_Atom_Forge_Frame *frame;
+            lv2_atom_forge_object(forge, frame, 0, 101);
+         ], ac_cv_lv2_atom_forge_object="yes", ac_cv_lv2_atom_forge_object="no")
+      ])
+      ac_lv2_atom_forge_object=$ac_cv_lv2_atom_forge_object
+      if test "x$ac_lv2_atom_forge_object" = "xyes"; then
+         AC_DEFINE(CONFIG_LV2_ATOM_FORGE_OBJECT, 1, [Define if lv2_atom_forge_object is available.])
+      fi
+      AC_CACHE_CHECK([for lv2_atom_forge_key],
+         ac_cv_lv2_atom_forge_key, [
+         AC_TRY_LINK([#include "lv2/lv2plug.in/ns/ext/atom/forge.h"], [
+            // Checking for lv2_atom_forge_key...
+            LV2_Atom_Forge *forge;
+            lv2_atom_forge_key(forge, 102);
+         ], ac_cv_lv2_atom_forge_key="yes", ac_cv_lv2_atom_forge_key="no")
+      ])
+      ac_lv2_atom_forge_key=$ac_cv_lv2_atom_forge_key
+      if test "x$ac_lv2_atom_forge_key" = "xyes"; then
+         AC_DEFINE(CONFIG_LV2_ATOM_FORGE_KEY, 1, [Define if lv2_atom_forge_key is available.])
+      fi
+   else
+      AC_MSG_WARN([*** LV2 header files not found.])
+      AC_MSG_WARN([*** LV2 plug-in build will be disabled.])
    fi
 fi
 
