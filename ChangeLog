@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- LV2_STATE__StateChanged is now transmitted as a regular
+  atom notification event, as far as to give some careful
+  hosts enough slack to raise a dirty flag. (EXPERIMENTAL)
 - Fixed input MIDI RPN/NRPN running status processing.
 - Almost complete overhaul on the configure script command
   line options, wrt. installation directories specification,

@@ -43,7 +43,7 @@ public:
 
 	synthv1(uint16_t nchannels = 2, float srate = 44100.0f);
 
-	~synthv1();
+	virtual ~synthv1();
 
 	void setChannels(uint16_t nchannels);
 	uint16_t channels() const;
@@ -213,6 +213,8 @@ public:
 
 	void process_midi(uint8_t *data, uint32_t size);
 	void process(float **ins, float **outs, uint32_t nframes);
+
+	virtual void updatePreset(bool bDirty) = 0;
 
 private:
 

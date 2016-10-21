@@ -67,6 +67,10 @@ public:
 	void sessionEvent(void *pvSessionArg);
 #endif
 
+protected:
+ 
+	void updatePreset(bool bDirty);
+
 private:
 
 	jack_client_t *m_client;

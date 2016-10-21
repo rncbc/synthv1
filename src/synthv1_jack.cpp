@@ -597,6 +597,12 @@ void synthv1_jack::sessionEvent ( void *pvSessionArg )
 #endif	// CONFIG_JACK_SESSION
 
 
+void synthv1_jack::updatePreset ( bool /*bDirty*/ )
+{
+	// nothing to do here...
+}
+
+
 //-------------------------------------------------------------------------
 // synthv1_jack_application -- Singleton application instance.
 //

@@ -27,6 +27,9 @@
 #include "lv2.h"
 #include "lv2/lv2plug.in/ns/ext/urid/urid.h"
 #include "lv2/lv2plug.in/ns/ext/atom/atom.h"
+#include "lv2/lv2plug.in/ns/ext/atom/forge.h"
+
+#include "lv2/lv2plug.in/ns/ext/worker/worker.h"
 
 #define SYNTHV1_LV2_URI "http://synthv1.sourceforge.net/lv2"
 #define SYNTHV1_LV2_PREFIX SYNTHV1_LV2_URI "#"
@@ -53,6 +56,7 @@ public:
 	enum PortIndex {
 
 		MidiIn = 0,
+		Notify,
 		AudioInL,
 		AudioInR,
 		AudioOutL,
@@ -67,12 +71,25 @@ public:
 	void activate();
 	void deactivate();
 
+	uint32_t urid_map(const char *uri) const;
+
 #ifdef CONFIG_LV2_PROGRAMS
 	const LV2_Program_Descriptor *get_program(uint32_t index);
 	void select_program(uint32_t bank, uint32_t program);
 #endif
 
+	bool worker_work(const void *data, uint32_t size);
+	bool worker_response(const void *data, uint32_t size);
+
+protected:
+
+	void updatePreset(bool bDirty);
+
+	bool state_changed();
+
 private:
+
+	LV2_URID_Map *m_urid_map;
 
 	struct lv2_urids
 	{
@@ -86,10 +103,19 @@ private:
 		LV2_URID bufsz_minBlockLength;
 		LV2_URID bufsz_maxBlockLength;
 		LV2_URID bufsz_nominalBlockLength;
+		LV2_URID state_StateChanged;
 
 	} m_urids;
 
+	LV2_Atom_Forge m_forge;
+	LV2_Atom_Forge_Frame m_notify_frame;
+
+	LV2_Worker_Schedule *m_schedule;
+
+	uint32_t m_ndelta;
+
 	LV2_Atom_Sequence *m_atom_in;
+	LV2_Atom_Sequence *m_atom_out;
 
 	float **m_ins;
 	float **m_outs;
