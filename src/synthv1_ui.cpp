@@ -66,4 +66,10 @@ void synthv1_ui::reset (void)
 }
 
 
+void synthv1_ui::updatePreset ( bool bDirty )
+{
+	m_pSynth->updatePreset(bDirty);
+}
+
+
 // end of synthv1_ui.cpp

@@ -45,6 +45,8 @@ public:
 
 	void reset();
 
+	void updatePreset(bool bDirty);
+
 private:
 
 	synthv1 *m_pSynth;

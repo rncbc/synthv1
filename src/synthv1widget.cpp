@@ -1247,6 +1247,10 @@ void synthv1widget::helpAboutQt (void)
 // Dirty flag (overridable virtual) methods.
 void synthv1widget::updateDirtyPreset ( bool bDirtyPreset )
 {
+	synthv1_ui *pSynthUi = ui_instance();
+	if (pSynthUi)
+		pSynthUi->updatePreset(bDirtyPreset);
+
 	m_ui.StatusBar->setModified(bDirtyPreset);
 	m_ui.Preset->setDirtyPreset(bDirtyPreset);
 }
