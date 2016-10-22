@@ -9,6 +9,7 @@
 @prefix lv2atom: <http://lv2plug.in/ns/ext/atom#> .
 @prefix lv2midi: <http://lv2plug.in/ns/ext/midi#> .
 @prefix lv2time: <http://lv2plug.in/ns/ext/time#> .
+@prefix lv2worker: <http://lv2plug.in/ns/ext/worker#> .
 @prefix lv2pg:   <http://lv2plug.in/ns/ext/port-groups#> .
 
 @prefix synthv1_lv2: <http://synthv1.sourceforge.net/lv2#> .
@@ -21,8 +22,9 @@
 		foaf:homepage <http://www.rncbc.org> ;
 		foaf:mbox <mailto:rncbc@rncbc.org> ;
 	] ;
-	lv2:requiredFeature lv2urid:map ;
+	lv2:requiredFeature lv2urid:map, lv2worker:schedule ;
 	lv2:optionalFeature lv2:hardRTCapable ;
+	lv2:extensionData lv2worker:interface ;
 	lv2ui:ui synthv1_lv2:ui, synthv1_lv2:ui_external ;
 	lv2:port [
 		a lv2:InputPort, lv2atom:AtomPort ;

@@ -309,9 +309,9 @@ uint32_t synthv1_lv2::urid_map ( const char *uri ) const
 // synthv1_lv2 - LV2 State (bogus) interface.
 //
 
-void synthv1_lv2::updatePreset ( bool bDirty )
+void synthv1_lv2::updatePreset ( bool /*bDirty*/ )
 {
-	if (m_schedule && bDirty) {
+	if (m_schedule /*&& bDirty*/) {
 		synthv1_lv2_worker_message mesg;
 		mesg.atom.type = m_urids.state_StateChanged;
 		mesg.atom.size = 0; // nothing else matters.
