@@ -323,7 +323,7 @@ void synthv1_param::savePreset ( synthv1 *pSynth, const QString& sFilename )
 	QDomDocument doc(SYNTHV1_TITLE);
 	QDomElement ePreset = doc.createElement("preset");
 	ePreset.setAttribute("name", fi.completeBaseName());
-	ePreset.setAttribute("version", SYNTHV1_VERSION);
+	ePreset.setAttribute("version", CONFIG_BUILD_VERSION);
 
 	QDomElement eParams = doc.createElement("params");
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {

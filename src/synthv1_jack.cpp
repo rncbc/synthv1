@@ -682,7 +682,7 @@ bool synthv1_jack_application::parse_args (void)
 				.arg(qVersion());
 			out << QObject::tr("%1: %2  (%3)\n")
 				.arg(SYNTHV1_TITLE)
-				.arg(SYNTHV1_VERSION)
+				.arg(CONFIG_BUILD_VERSION)
 				.arg(CONFIG_BUILD_DATE);
 			return false;
 		}

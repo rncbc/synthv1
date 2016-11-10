@@ -330,7 +330,7 @@ void synthv1_config::load (void)
 void synthv1_config::save (void)
 {
 	QSettings::beginGroup("/Program");
-	QSettings::setValue("/Version", SYNTHV1_VERSION);
+	QSettings::setValue("/Version", CONFIG_BUILD_VERSION);
 	QSettings::endGroup();
 
 	QSettings::beginGroup("/Default");

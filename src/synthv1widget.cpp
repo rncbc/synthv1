@@ -1214,7 +1214,7 @@ void synthv1widget::helpAbout (void)
 	QString sText = "<p>\n";
 	sText += "<b>" SYNTHV1_TITLE "</b> - " + tr(SYNTHV1_SUBTITLE) + "<br />\n";
 	sText += "<br />\n";
-	sText += tr("Version") + ": <b>" SYNTHV1_VERSION "</b><br />\n";
+	sText += tr("Version") + ": <b>" CONFIG_BUILD_VERSION "</b><br />\n";
 	sText += "<small>" + tr("Build") + ": " CONFIG_BUILD_DATE "</small><br />\n";
 	QStringListIterator iter(list);
 	while (iter.hasNext()) {
