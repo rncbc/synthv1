@@ -40,7 +40,7 @@ BuildRequires:	lv2-devel
 
 %prep
 %setup
-[ -f Makefile.git ] && %__make -f Makefile.git
+[ -x ./autogen.sh ] && ./autogen.sh
 
 %build
 %configure
