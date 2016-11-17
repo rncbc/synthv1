@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 29
+%define release 30
 
 %define _prefix	@ac_prefix@
 
@@ -87,6 +87,8 @@ BuildRequires:	lv2-devel
 %{_datadir}/man/man1/%{name}.1.gz
 
 %changelog
+* Thu Nov 17 2016 Rui Nuno Capela <rncbc@rncbc.org> 0.8.0
+- A Fall'16 release.
 * Mon Sep 19 2016 Rui Nuno Capela <rncbc@rncbc.org> 0.7.6
 - The eleventh official beta.
 * Thu Jun 16 2016 Rui Nuno Capela <rncbc@rncbc.org> 0.7.5

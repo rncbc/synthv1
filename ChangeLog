@@ -4,16 +4,15 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.8.0  2016-11-17  A Fall'16 release.
 
 - LV2_STATE__StateChanged is now transmitted as a regular
   atom notification event, as far as to give some careful
-  hosts enough slack to raise a dirty flag. (EXPERIMENTAL)
+  hosts enough slack to raise a dirty flag.
 - Fixed input MIDI RPN/NRPN running status processing.
 - Almost complete overhaul on the configure script command
   line options, wrt. installation directories specification,
   eg. --prefix, --bindir, --libdir, --datadir and --mandir.
-  (EXPERIMENTAL)
 
 
 0.7.6  2016-09-19  The Eleventh official beta.
