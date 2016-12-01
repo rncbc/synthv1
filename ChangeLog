@@ -4,6 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Make builds reproducible byte for byte, by getting rid of
+  the configure build date and time stamps.
+
+
 0.8.0  2016-11-17  A Fall'16 release.
 
 - LV2_STATE__StateChanged is now transmitted as a regular

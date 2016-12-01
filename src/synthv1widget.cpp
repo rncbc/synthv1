@@ -1215,12 +1215,12 @@ void synthv1widget::helpAbout (void)
 	sText += "<b>" SYNTHV1_TITLE "</b> - " + tr(SYNTHV1_SUBTITLE) + "<br />\n";
 	sText += "<br />\n";
 	sText += tr("Version") + ": <b>" CONFIG_BUILD_VERSION "</b><br />\n";
-	sText += "<small>" + tr("Build") + ": " CONFIG_BUILD_DATE "</small><br />\n";
-	QStringListIterator iter(list);
-	while (iter.hasNext()) {
+//	sText += "<small>" + tr("Build") + ": " CONFIG_BUILD_DATE "</small><br />\n";
+	if (!list.isEmpty()) {
+		sText += "<br />\n";
 		sText += "<small><font color=\"red\">";
-		sText += iter.next();
-		sText += "</font></small><br />";
+		sText += list.join("<br />\n");
+		sText += "</font></small><br />\n";
 	}
 	sText += "<br />\n";
 	sText += tr("Website") + ": <a href=\"" SYNTHV1_WEBSITE "\">" SYNTHV1_WEBSITE "</a><br />\n";

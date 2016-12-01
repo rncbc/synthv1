@@ -5,15 +5,9 @@ AC_CONFIG_SRCDIR(src/synthv1.cpp)
 AC_CONFIG_HEADERS(src/config.h)
 AC_CONFIG_FILES(Makefile synthv1.spec src/src_core.pri src/src_jack.pri src/src_lv2.pri src/synthv1.desktop)
 
-# Build date and time.
-AC_CACHE_VAL([ac_cv_build_date],
-   [ac_cv_build_date=$(date +"%b %d %Y %H:%M %z")])
-ac_build_date="$ac_cv_build_date"
-AC_DEFINE_UNQUOTED(CONFIG_BUILD_DATE, ["$ac_build_date"], [Build date and time.])
-
 # Build version string.
 AC_CACHE_VAL([ac_cv_build_version], [
-   ac_cv_build_version=$(git describe --tags --abbrev=6 2>/dev/null)
+   ac_cv_build_version=$(git describe --tags --dirty --abbrev=6 2>/dev/null)
    if test -n "$ac_cv_build_version"; then
       ac_cv_build_version=$(echo $ac_cv_build_version | sed -r 's/^[[^_]]+_//')
       ac_cv_build_version=$(echo $ac_cv_build_version | sed -r 's/-g/git./')
@@ -653,7 +647,7 @@ AC_OUTPUT
 # Output summary message
 
 echo
-echo "  $PACKAGE_NAME $ac_build_version  ($ac_build_date)"
+echo "  $PACKAGE_NAME $ac_build_version"
 echo
 echo "  Build target . . . . . . . . . . . . . . . . . . .: $ac_debug"
 echo
