@@ -77,7 +77,7 @@ installation:
 
   - if checking out from git, prepare the configure script with:
 
-    make -f Makefile.git
+    ./autogen.sh
 
 
 acknowledgements:
