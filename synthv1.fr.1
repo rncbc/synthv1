@@ -1,0 +1,42 @@
+.TH SYNTHV1 "1" "Juin 17, 2014"
+.SH NOM
+synthv1 \- un synthétiseur polyphonique à l'ancienne
+.SH SYNOPSIS
+.B synthv1_jack
+[\fIoptions\fR] [\fIfichier-de-pré-réglage\fR]
+.SH DESCRIPTION
+Cette page de manuel documente rapidement la commande
+.B synthv1_jack
+.
+.PP
+\fBsynthv1\fP est un synthétiseur polyphonique soustractif 4-oscillateurs à
+l'ancienne, avec des effets stéréo.
+.PP
+fonctionnalités :
+.IP
+un client JACK autonome pur avec JACK-session, NSM, et un support d'entrée
+JACK MIDI ainsi que ALSA MIDI;
+.IP
+un greffon d'instrument LV2.
+URI : http://synthv1.sourceforge.net/lv2
+.SH OPTIONS
+.HP
+\fB\-g\fR, \fB\-\-no\-gui\fR
+.IP
+Désactive l'interface graphique utilisateur
+.HP
+\fB\-h\fR, \fB\-\-help\fR
+.IP
+Affiche de l'aide à propos des options de ligne de commande
+.HP
+\fB\-v\fR, \fB\-\-version\fR
+.IP
+Affiche des informations de version
+.SH FICHIERS
+Les paramètres de configuration sont stockés dans ~/.config/rncbc.org/synthv1.conf
+.SH AUTEUR
+synthv1 a été écrit par Rui Nuno Capela.
+.PP
+La version française de cette page de manuel a été traduite par Olivier Humbert
+<trebmuh@tuxfamily.org>, pour le projet LibraZiK (mais peut être utilisée par
+d'autres).
