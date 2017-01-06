@@ -2,7 +2,7 @@
 Name=@PACKAGE_NAME@
 Version=1.0
 GenericName=MIDI
-Comment=synthv1 is an old school polyphonic synthtesizer
+Comment=synthv1 is an old school polyphonic synthesizer
 Comment[fr]=synthv1 est un synthétiseur polyphonique à l'ancienne
 Exec=@ac_prefix@/bin/synthv1_jack
 Icon=synthv1
