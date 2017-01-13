@@ -404,6 +404,9 @@ if test "x$ac_jack" = "xyes"; then
       AC_DEFINE(CONFIG_JACK, 1, [Define if JACK library is available.])
       ac_jack_cflags="$ac_jack_cflags $JACK_CFLAGS"
       ac_jack_libs="$ac_jack_libs $JACK_LIBS"
+      CFLAGS="$CFLAGS $JACK_CFLAGS"
+      CPPFLAGS="$CPPFLAGS $JACK_CFLAGS"
+      LIBS="$LIBS $JACK_LIBS"
    else
       AC_MSG_WARN([*** JACK library not found.])
       AC_MSG_WARN([*** JACK stand-alone build will be disabled.])
