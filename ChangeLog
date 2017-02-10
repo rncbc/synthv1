@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- Help/Configure.../Options/Use desktop environment native
+  dialogs option is now set initially off by default.
+
 - Added French man page (by Olivier Humbert, thanks).
 
 - Make builds reproducible byte for byte, by getting rid of
