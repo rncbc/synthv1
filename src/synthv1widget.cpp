@@ -1,7 +1,7 @@
 // synthv1widget.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2016, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -953,7 +953,7 @@ void synthv1widget::resetParams (void)
 		const synthv1::ParamIndex index = synthv1::ParamIndex(i);
 		float fValue = synthv1_param::paramDefaultValue(index);
 		synthv1widget_knob *pKnob = paramKnob(index);
-		if (pKnob)
+		if (pKnob && pKnob->isDefaultValue())
 			fValue = pKnob->defaultValue();
 		setParamValue(index, fValue);
 		updateParam(index, fValue);
@@ -1033,6 +1033,7 @@ void synthv1widget::resetParamValues (void)
 		const float fValue = synthv1_param::paramDefaultValue(index);
 		setParamValue(index, fValue, true);
 		updateParam(index, fValue);
+	//	updateParamEx(index, fValue);
 		m_params_ab[i] = fValue;
 	}
 }

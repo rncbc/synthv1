@@ -1,7 +1,7 @@
 // synthv1widget_knob.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -191,13 +191,13 @@ void synthv1widget_knob::setValue ( float fValue, bool bDefault )
 	m_pDial->setValue(scaleFromValue(fValue));
 
 	QPalette pal;
-	if (m_iDefaultValue < 1 || bDefault) {
+	if (bDefault) {
 		m_fDefaultValue = fValue;
 		m_iDefaultValue++;
 	}
 	else
 	if (QWidget::isEnabled()
-		&& ::fabsf(fValue - m_fDefaultValue) > 0.0001f) {
+		&& ::fabsf(fValue - m_fDefaultValue) > 0.001f) {
 		pal.setColor(QPalette::Base,
 			(pal.window().color().value() < 0x7f
 				? QColor(Qt::darkYellow).darker()
@@ -205,7 +205,8 @@ void synthv1widget_knob::setValue ( float fValue, bool bDefault )
 	}
 	QWidget::setPalette(pal);
 
-	emit valueChanged(fValue);
+	if (::fabsf(fValue - value()) > 0.001f)
+		emit valueChanged(fValue);
 
 	m_pDial->blockSignals(bDialBlock);
 }
@@ -251,6 +252,12 @@ void synthv1widget_knob::resetDefaultValue (void)
 {
 	m_fDefaultValue = 0.0f;
 	m_iDefaultValue = 0;
+}
+
+
+bool synthv1widget_knob::isDefaultValue (void) const
+{
+	return (m_iDefaultValue > 0);
 }
 
 
@@ -363,13 +370,9 @@ synthv1widget_spin::synthv1widget_spin ( QWidget *pParent )
 // Virtual accessors.
 void synthv1widget_spin::setValue ( float fValue, bool bDefault )
 {
-	const float fSpinValue = scaleFromValue(fValue);
-	if (::fabsf(fSpinValue - float(m_pSpinBox->value())) < 0.001f)
-		return;
-
 	const bool bSpinBlock = m_pSpinBox->blockSignals(true);
-	m_pSpinBox->setValue(fSpinValue);
 	synthv1widget_knob::setValue(fValue, bDefault);
+	m_pSpinBox->setValue(scaleFromValue(fValue));
 	m_pSpinBox->blockSignals(bSpinBlock);
 }
 
@@ -473,13 +476,9 @@ synthv1widget_combo::synthv1widget_combo ( QWidget *pParent )
 // Virtual accessors.
 void synthv1widget_combo::setValue ( float fValue, bool bDefault )
 {
-	const int iComboValue = iroundf(fValue);
-	if (iComboValue == m_pComboBox->currentIndex())
-		return;
-
 	const bool bComboBlock = m_pComboBox->blockSignals(true);
-	m_pComboBox->setCurrentIndex(iComboValue);
-	synthv1widget_knob::setValue(float(iComboValue), bDefault);
+	synthv1widget_knob::setValue(fValue, bDefault);
+	m_pComboBox->setCurrentIndex(iroundf(fValue));
 	m_pComboBox->blockSignals(bComboBlock);
 }
 
