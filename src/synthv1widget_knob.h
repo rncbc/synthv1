@@ -144,6 +144,9 @@ private:
 
 	synthv1widget_dial *m_pDial;
 
+	// Current value.
+	float m_fValue;
+
 	// Default value.
 	float m_fDefaultValue;
 	int   m_iDefaultValue;

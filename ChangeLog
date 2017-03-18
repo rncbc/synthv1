@@ -6,8 +6,12 @@ ChangeLog
 
 GIT HEAD
 
+- Fixed a probable old miss about changing spin-box and
+  drop-down list not reflecting changes immediately into
+  the respective parameter dial knobs.
+
 - Fixed middle-button clicking on the dial-knobs to reset
-  to the current default parameter value. (EXPERIMENTAL)
+  to the current default parameter value.
 
 - Help/Configure.../Options/Use desktop environment native
   dialogs option is now set initially off by default.

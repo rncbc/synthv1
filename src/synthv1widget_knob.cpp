@@ -147,13 +147,14 @@ synthv1widget_knob::synthv1widget_knob ( QWidget *pParent ) : QWidget(pParent)
 	QWidget::setFont(font2);
 
 	m_pLabel = new QLabel();
-	m_pDial  = new synthv1widget_dial();
+	m_pLabel->setAlignment(Qt::AlignCenter);
 
+	m_fValue = 0.0f;
 	m_fScale = 100.0f;
 
 	resetDefaultValue();
 
-	m_pLabel->setAlignment(Qt::AlignCenter);
+	m_pDial = new synthv1widget_dial();
 	m_pDial->setNotchesVisible(true);
 	m_pDial->setMaximumSize(QSize(48, 42));
 
@@ -186,35 +187,36 @@ QString synthv1widget_knob::text (void) const
 
 void synthv1widget_knob::setValue ( float fValue, bool bDefault )
 {
-	const bool bDialBlock = m_pDial->blockSignals(true);
-
-	m_pDial->setValue(scaleFromValue(fValue));
-
 	QPalette pal;
+
 	if (bDefault) {
 		m_fDefaultValue = fValue;
 		m_iDefaultValue++;
 	}
 	else
 	if (QWidget::isEnabled()
-		&& ::fabsf(fValue - m_fDefaultValue) > 0.001f) {
+		&& ::fabsf(fValue - m_fDefaultValue) > 0.0001f) {
 		pal.setColor(QPalette::Base,
 			(pal.window().color().value() < 0x7f
 				? QColor(Qt::darkYellow).darker()
 				: QColor(Qt::yellow).lighter()));
 	}
+
 	QWidget::setPalette(pal);
 
-	if (::fabsf(fValue - value()) > 0.001f)
-		emit valueChanged(fValue);
-
-	m_pDial->blockSignals(bDialBlock);
+	if (::fabsf(fValue - m_fValue) > 0.0001f) {
+		const bool bDialBlock = m_pDial->blockSignals(true);
+		m_pDial->setValue(scaleFromValue(fValue));
+		m_fValue = fValue;
+		m_pDial->blockSignals(bDialBlock);
+		emit valueChanged(m_fValue);
+	}
 }
 
 
 float synthv1widget_knob::value (void) const
 {
-	return valueFromScale(m_pDial->value());
+	return m_fValue;
 }
 
 
