@@ -429,6 +429,7 @@ void synthv1widget_spin::setDecimals ( int iDecimals )
 {
 	m_pSpinBox->setDecimals(iDecimals);
 	m_pSpinBox->setSingleStep(::powf(10.0f, - float(iDecimals)));
+
 	setSingleStep(0.1f);
 }
 
@@ -487,13 +488,12 @@ void synthv1widget_combo::insertItems ( int iIndex, const QStringList& items )
 	setMinimum(0.0f);
 
 	const int iItemCount = m_pComboBox->count();
-	if (iItemCount > 0) {
+	if (iItemCount > 0)
 		setMaximum(float(iItemCount - 1));
-		setSingleStep(5.0f / float(iItemCount));
-	} else {
+	else
 		setMaximum(1.0f);
-		setSingleStep(1.0f);
-	}
+
+	setSingleStep(1.0f);
 }
 
 
