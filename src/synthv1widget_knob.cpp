@@ -146,13 +146,15 @@ synthv1widget_knob::synthv1widget_knob ( QWidget *pParent ) : QWidget(pParent)
 	const QFont font2(font.family(), font.pointSize() - 2);
 	QWidget::setFont(font2);
 
-	m_pLabel = new QLabel();
-	m_pLabel->setAlignment(Qt::AlignCenter);
-
 	m_fValue = 0.0f;
-	m_fScale = 100.0f;
+	m_fScale = 1.0f;
 
 	resetDefaultValue();
+
+	QWidget::setMaximumSize(QSize(52, 72));
+
+	m_pLabel = new QLabel();
+	m_pLabel->setAlignment(Qt::AlignCenter);
 
 	m_pDial = new synthv1widget_dial();
 	m_pDial->setNotchesVisible(true);
@@ -164,8 +166,6 @@ synthv1widget_knob::synthv1widget_knob ( QWidget *pParent ) : QWidget(pParent)
 	pGridLayout->addWidget(m_pLabel, 0, 0, 1, 3);
 	pGridLayout->addWidget(m_pDial,  1, 0, 1, 3);
 	QWidget::setLayout(pGridLayout);
-
-	QWidget::setMaximumSize(QSize(52, 72));
 
 	QObject::connect(m_pDial,
 		SIGNAL(valueChanged(int)),
@@ -303,20 +303,10 @@ void synthv1widget_knob::mousePressEvent ( QMouseEvent *pMouseEvent )
 }
 
 
-// Internal widget slots.
-void synthv1widget_knob::dialValueChanged ( int iDialValue )
-{
-	setValue(valueFromScale(iDialValue));
-}
-
-
-
-// Scale multiplier (default=100).
+// Scale multiplier accessors.
 void synthv1widget_knob::setScale ( float fScale )
 {
 	m_fScale = fScale;
-
-	m_pDial->setNotchTarget(valueFromScale(33.3f));
 }
 
 
@@ -339,6 +329,13 @@ float synthv1widget_knob::valueFromScale ( float fScale ) const
 }
 
 
+// Dial change slot.
+void synthv1widget_knob::dialValueChanged ( int iDialValue )
+{
+	setValue(valueFromScale(iDialValue));
+}
+
+
 //-------------------------------------------------------------------------
 // synthv1widget_spin - Custom knob/spin-box widget.
 //
@@ -355,8 +352,10 @@ synthv1widget_spin::synthv1widget_spin ( QWidget *pParent )
 	m_pSpinBox->setMaximumHeight(fm.height() + 6);
 
 	QGridLayout *pGridLayout
-		= static_cast<QGridLayout *> (QWidget::layout());
+		= static_cast<QGridLayout *> (synthv1widget_knob::layout());
 	pGridLayout->addWidget(m_pSpinBox, 2, 1, 1, 1);
+
+	setScale(100.0f);
 
 	setMinimum(0.0f);
 	setMaximum(1.0f);
@@ -393,22 +392,9 @@ void synthv1widget_spin::setMinimum ( float fMinimum )
 }
 
 
-void synthv1widget_spin::setSingleStep ( float fSingleStep )
-{
-	m_pSpinBox->setSingleStep(fSingleStep);
-	synthv1widget_knob::setSingleStep(fSingleStep);
-}
-
-
 QString synthv1widget_spin::valueText (void) const
 {
 	return QString::number(m_pSpinBox->value(), 'f', 1);
-}
-
-
-float synthv1widget_spin::value (void) const
-{
-	return valueFromScale(m_pSpinBox->value());
 }
 
 
@@ -442,8 +428,8 @@ bool synthv1widget_spin::isSpecialValue (void) const
 void synthv1widget_spin::setDecimals ( int iDecimals )
 {
 	m_pSpinBox->setDecimals(iDecimals);
-
-	setSingleStep(::powf(10.0f, - float(iDecimals)));
+	m_pSpinBox->setSingleStep(::powf(10.0f, - float(iDecimals)));
+	setSingleStep(0.1f);
 }
 
 int synthv1widget_spin::decimals (void) const
@@ -466,8 +452,10 @@ synthv1widget_combo::synthv1widget_combo ( QWidget *pParent )
 	m_pComboBox->setMaximumHeight(fm.height() + 6);
 
 	QGridLayout *pGridLayout
-		= static_cast<QGridLayout *> (QWidget::layout());
+		= static_cast<QGridLayout *> (synthv1widget_knob::layout());
 	pGridLayout->addWidget(m_pComboBox, 2, 0, 1, 3);
+
+//	setScale(1.0f);
 
 	QObject::connect(m_pComboBox,
 		SIGNAL(activated(int)),
@@ -488,12 +476,6 @@ void synthv1widget_combo::setValue ( float fValue, bool bDefault )
 QString synthv1widget_combo::valueText (void) const
 {
 	return m_pComboBox->currentText();
-}
-
-
-float synthv1widget_combo::value (void) const
-{
-	return float(m_pComboBox->currentIndex());
 }
 
 

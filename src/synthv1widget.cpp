@@ -194,7 +194,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_ui.Lfo1BpmKnob->setScale(1.0f);
 	m_ui.Lfo1BpmKnob->setMinimum(0.0f);
 	m_ui.Lfo1BpmKnob->setMaximum(360.0f);
-	m_ui.Lfo1BpmKnob->setSingleStep(1.0f);
+//	m_ui.Lfo1BpmKnob->setSingleStep(1.0f);
 	m_ui.Lfo1SweepKnob->setMinimum(-1.0f);
 	m_ui.Lfo1SweepKnob->setMaximum(+1.0f);
 	m_ui.Lfo1CutoffKnob->setMinimum(-1.0f);
@@ -213,7 +213,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_ui.Lfo2BpmKnob->setScale(1.0f);
 	m_ui.Lfo2BpmKnob->setMinimum(0.0f);
 	m_ui.Lfo2BpmKnob->setMaximum(360.0f);
-	m_ui.Lfo2BpmKnob->setSingleStep(1.0f);
+//	m_ui.Lfo2BpmKnob->setSingleStep(1.0f);
 	m_ui.Lfo2SweepKnob->setMinimum(-1.0f);
 	m_ui.Lfo2SweepKnob->setMaximum(+1.0f);
 	m_ui.Lfo2CutoffKnob->setMinimum(-1.0f);
@@ -261,7 +261,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_ui.Del1BpmKnob->setScale(1.0f);
 	m_ui.Del1BpmKnob->setMinimum(0.0f);
 	m_ui.Del1BpmKnob->setMaximum(360.0f);
-	m_ui.Del1BpmKnob->setSingleStep(1.0f);
+//	m_ui.Del1BpmKnob->setSingleStep(1.0f);
 
 	// Reverb (stereo-)width limits.
 	m_ui.Rev1WidthKnob->setMinimum(-1.0f);

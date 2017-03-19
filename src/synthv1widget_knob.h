@@ -91,8 +91,8 @@ public:
 	synthv1widget_knob(QWidget *pParent = 0);
 
 	// Accessors.
-	void setText(const QString& sText);
-	QString text() const;
+	virtual void setText(const QString& sText);
+	virtual QString text() const;
 
 	virtual void setMaximum(float fMaximum);
 	float maximum() const;
@@ -100,33 +100,32 @@ public:
 	virtual void setMinimum(float fMinimum);
 	float minimum() const;
 
-	virtual void setSingleStep(float fSingleStep);
-	float singleStep() const;
-
 	void resetDefaultValue();
 	bool isDefaultValue() const;
 	void setDefaultValue(float fDefaultValue);
 	float defaultValue() const;
 
 	virtual QString valueText() const;
-	virtual float value() const;
+	float value() const;
 
+	// Scale multiplier accessors.
 	void setScale(float fScale);
 	float scale() const;
 
 public slots:
 
+	// Virtual accessor.
 	virtual void setValue(float fValue, bool bDefault = false);
+
+protected slots:
+
+	// Dial change slot.
+	void dialValueChanged(int);
 
 signals:
 
 	// Change signal.
 	void valueChanged(float);
-
-protected slots:
-
-	// Change slot.
-	void dialValueChanged(int);
 
 protected:
 
@@ -136,6 +135,12 @@ protected:
 	// Scale/value converters.
 	float scaleFromValue(float fValue) const;
 	float valueFromScale(float fScale) const;
+
+protected:
+
+	// Scale-step accessors.
+	void setSingleStep(float fSingleStep);
+	float singleStep() const;
 
 private:
 
@@ -172,10 +177,7 @@ public:
 	void setMaximum(float fMaximum);
 	void setMinimum(float fMinimum);
 
-	void setSingleStep(float fSingleStep);
-
 	QString valueText() const;
-	float value() const;
 
 	// Specialized accessors.
 	void setSpecialValueText(const QString& sText);
@@ -217,7 +219,6 @@ public:
 
 	// Virtual accessors.
 	QString valueText() const;
-	float value() const;
 
 	// Specialized accessors.
 	void insertItems(int iIndex, const QStringList& items);
