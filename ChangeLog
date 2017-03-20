@@ -4,7 +4,7 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.8.1  2017-03-21  A Spring'17 release.
 
 - Fixed a probable old miss about changing spin-box and
   drop-down list not reflecting changes immediately into
