@@ -1,7 +1,7 @@
 // synthv1_ui.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2016, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -69,6 +69,12 @@ void synthv1_ui::reset (void)
 void synthv1_ui::updatePreset ( bool bDirty )
 {
 	m_pSynth->updatePreset(bDirty);
+}
+
+
+uint32_t synthv1_ui::midiInCount (void)
+{
+	return m_pSynth->midiInCount();
 }
 
 

@@ -1,5 +1,7 @@
 <RCC version="1.0">
 	<qresource>
+		<file>images/ledOn.png</file>
+		<file>images/ledOff.png</file>
 		<file>images/presetNew.png</file>
 		<file>images/presetOpen.png</file>
 		<file>images/presetSave.png</file>

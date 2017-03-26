@@ -1,7 +1,7 @@
 // synthv1widget_status.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -32,6 +32,20 @@
 synthv1widget_status::synthv1widget_status ( QWidget *pParent )
 	: QStatusBar (pParent)
 {
+	m_midiInLed.addPixmap(
+		QPixmap(":/images/ledOff.png"), QIcon::Normal, QIcon::Off);
+	m_midiInLed.addPixmap(
+		QPixmap(":/images/ledOn.png"), QIcon::Normal, QIcon::On);
+
+	const QString sMidiIn(tr("MIDI In"));
+	m_pMidiInLedLabel = new QLabel();
+	m_pMidiInLedLabel->setAlignment(Qt::AlignHCenter);
+	m_pMidiInLedLabel->setPixmap(m_midiInLed.pixmap(16, 16));
+	m_pMidiInLedLabel->setToolTip(tr("%1 status").arg(sMidiIn));
+	m_pMidiInLedLabel->setAutoFillBackground(true);
+	QStatusBar::addWidget(m_pMidiInLedLabel);
+	QStatusBar::addWidget(new QLabel(sMidiIn));
+
 	const QFontMetrics fm(QStatusBar::font());
 	m_pModifiedLabel = new QLabel();
 	m_pModifiedLabel->setAlignment(Qt::AlignHCenter);
@@ -43,18 +57,24 @@ synthv1widget_status::synthv1widget_status ( QWidget *pParent )
 
 
 // Permanent widgets accessors.
-void synthv1widget_status::setModified ( bool bModified )
+void synthv1widget_status::midiInLed ( bool bMidiInLed )
+{
+	if (bMidiInLed) {
+		m_pMidiInLedLabel->setPixmap(
+			m_midiInLed.pixmap(16, 16, QIcon::Normal, QIcon::On));
+	} else {
+		m_pMidiInLedLabel->setPixmap(
+			m_midiInLed.pixmap(16, 16, QIcon::Normal, QIcon::Off));
+	}
+}
+
+
+void synthv1widget_status::modified ( bool bModified )
 {
 	if (bModified)
 		m_pModifiedLabel->setText(tr("MOD"));
 	else
 		m_pModifiedLabel->clear();
-}
-
-
-bool synthv1widget_status::isModified (void) const
-{
-	return !m_pModifiedLabel->text().isEmpty();
 }
 
 

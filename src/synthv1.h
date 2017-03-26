@@ -216,6 +216,8 @@ public:
 
 	virtual void updatePreset(bool bDirty) = 0;
 
+	uint32_t midiInCount();
+
 private:
 
 	synthv1_impl *m_pImpl;

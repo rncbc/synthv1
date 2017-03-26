@@ -93,6 +93,9 @@ protected slots:
 	// Schedule notification updater.
 	void updateSchedNotify(int stype, int sid);
 
+	// MIDI In LED timeout.
+	void midiInLedTimeout();
+
 	// Param knob context menu.
 	void paramContextMenu(const QPoint& pos);
 

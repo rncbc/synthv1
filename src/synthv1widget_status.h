@@ -1,7 +1,7 @@
 // synthv1widget_status.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 #define __synthv1widget_status_h
 
 #include <QStatusBar>
+#include <QIcon>
 
 // Forward declarations.
 class QLabel;
@@ -41,12 +42,15 @@ public:
 	synthv1widget_status(QWidget *pParent = 0);
 
 	// Permanent widgets accessors.
-	void setModified(bool bModified);
-	bool isModified() const;
+	void midiInLed(bool bMidiInLed);
+	void modified(bool bModified);
 
 private:
 
 	// Permanent widgets.
+	QIcon   m_midiInLed;
+
+	QLabel *m_pMidiInLedLabel;
 	QLabel *m_pModifiedLabel;
 };
 

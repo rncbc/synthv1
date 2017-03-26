@@ -30,6 +30,7 @@
 
 #include <QMessageBox>
 #include <QDir>
+#include <QTimer>
 
 
 //-------------------------------------------------------------------------
@@ -773,7 +774,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	// QWidget::adjustSize();
 
 	m_ui.StatusBar->showMessage(tr("Ready"), 5000);
-	m_ui.StatusBar->setModified(false);
+	m_ui.StatusBar->modified(false);
 	m_ui.Preset->setDirtyPreset(false);
 }
 
@@ -1145,6 +1146,12 @@ void synthv1widget::updateSchedNotify ( int stype, int sid )
 #endif
 
 	switch (synthv1_sched::Type(stype)) {
+	case synthv1_sched::MidiIn:
+		if (pSynthUi->midiInCount() > 0) {
+			m_ui.StatusBar->midiInLed(true);
+			QTimer::singleShot(200, this, SLOT(midiInLedTimeout()));
+		}
+		break;
 	case synthv1_sched::Controller: {
 		synthv1widget_control *pInstance
 			= synthv1widget_control::getInstance();
@@ -1169,6 +1176,13 @@ void synthv1widget::updateSchedNotify ( int stype, int sid )
 	default:
 		break;
 	}
+}
+
+
+// MIDI In LED timeout.
+void synthv1widget::midiInLedTimeout (void)
+{
+	m_ui.StatusBar->midiInLed(false);
 }
 
 
@@ -1251,7 +1265,7 @@ void synthv1widget::updateDirtyPreset ( bool bDirtyPreset )
 	if (pSynthUi)
 		pSynthUi->updatePreset(bDirtyPreset);
 
-	m_ui.StatusBar->setModified(bDirtyPreset);
+	m_ui.StatusBar->modified(bDirtyPreset);
 	m_ui.Preset->setDirtyPreset(bDirtyPreset);
 }
 

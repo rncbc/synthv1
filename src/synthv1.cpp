@@ -36,6 +36,8 @@
 #include "synthv1_controls.h"
 #include "synthv1_programs.h"
 
+#include "synthv1_sched.h"
+
 
 #ifdef CONFIG_DEBUG_0
 #include <stdio.h>
@@ -765,6 +767,8 @@ public:
 
 	void reset();
 
+	uint32_t midiInCount();
+
 	synthv1_wave dco1_wave1, dco1_wave2;
 	synthv1_wave dco2_wave1, dco2_wave2;
 
@@ -824,6 +828,8 @@ private:
 	uint16_t m_nchannels;
 	float    m_srate;
 	float    m_bpm;
+
+	volatile uint32_t m_midiInCount;
 
 	synthv1_ctl m_ctl1, m_ctl2;
 
@@ -954,6 +960,9 @@ synthv1_impl::synthv1_impl (
 	// reset all voices
 	allControllersOff();
 	allNotesOff();
+
+	// MIDI input event count
+	m_midiInCount = 0;
 }
 
 
@@ -1709,6 +1718,9 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 
 	// process pending controllers...
 	m_controls.process_dequeue();
+
+	// rogue MIDI input count...
+	++m_midiInCount;
 }
 
 
@@ -1930,6 +1942,7 @@ void synthv1_impl::reset (void)
 //	allControllersOff();
 	allNotesOff();
 }
+
 
 
 // synthesize
@@ -2292,6 +2305,15 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 }
 
 
+// MIDI input event count
+
+uint32_t synthv1_impl::midiInCount (void)
+{
+	const uint32_t ret = m_midiInCount;
+	m_midiInCount = 0;
+	return ret;
+}
+
 
 //-------------------------------------------------------------------------
 // synthv1 - decl.
@@ -2389,6 +2411,9 @@ void synthv1::process_midi ( uint8_t *data, uint32_t size )
 #endif
 
 	m_pImpl->process_midi(data, size);
+
+	// rogue MIDi input count...
+	synthv1_sched::sync_notify(this, synthv1_sched::MidiIn, 0);
 }
 
 
@@ -2419,6 +2444,14 @@ synthv1_programs *synthv1::programs (void) const
 void synthv1::reset (void)
 {
 	m_pImpl->reset();
+}
+
+
+// MIDI input event count
+
+uint32_t synthv1::midiInCount (void)
+{
+	return m_pImpl->midiInCount();
 }
 
 
