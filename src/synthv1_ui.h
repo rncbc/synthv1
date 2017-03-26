@@ -47,6 +47,7 @@ public:
 
 	void updatePreset(bool bDirty);
 
+	void midiInCountOn(bool bMidiInCountOn);
 	uint32_t midiInCount();
 
 private:

@@ -72,6 +72,11 @@ void synthv1_ui::updatePreset ( bool bDirty )
 }
 
 
+void synthv1_ui::midiInCountOn ( bool bMidiInCountOn )
+{
+	m_pSynth->midiInCountOn(bMidiInCountOn);
+}
+
 uint32_t synthv1_ui::midiInCount (void)
 {
 	return m_pSynth->midiInCount();
