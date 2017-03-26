@@ -1,7 +1,7 @@
 // synthv1widget_jack.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -78,12 +78,16 @@ synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 	// Initialize preset stuff...
 	// initPreset();
 	updateParamValues();
+
+	m_pSynthUi->midiInCountOn(true);
 }
 
 
 // Destructor.
 synthv1widget_jack::~synthv1widget_jack (void)
 {
+	m_pSynthUi->midiInCountOn(false);
+
 	delete m_pSynthUi;
 }
 
