@@ -72,22 +72,15 @@ synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 	// Initialize (user) interface stuff...
 	m_pSynthUi = new synthv1_ui(m_pSynth);
 
-	// May initialize the scheduler/work notifier.
-	initSchedNotifier();
-
 	// Initialize preset stuff...
 	// initPreset();
 	updateParamValues();
-
-	m_pSynthUi->midiInCountOn(true);
 }
 
 
 // Destructor.
 synthv1widget_jack::~synthv1widget_jack (void)
 {
-	m_pSynthUi->midiInCountOn(false);
-
 	delete m_pSynthUi;
 }
 

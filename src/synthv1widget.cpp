@@ -32,6 +32,9 @@
 #include <QDir>
 #include <QTimer>
 
+#include <QShowEvent>
+#include <QHideEvent>
+
 
 //-------------------------------------------------------------------------
 // synthv1widget - impl.
@@ -787,14 +790,9 @@ synthv1widget::~synthv1widget (void)
 }
 
 
-// Create/initialize the scheduler/work notifier.
-void synthv1widget::initSchedNotifier (void)
+// Open/close the scheduler/work notifier.
+void synthv1widget::openSchedNotifier (void)
 {
-	if (m_sched_notifier) {
-		delete m_sched_notifier;
-		m_sched_notifier = NULL;
-	}
-
 	synthv1_ui *pSynthUi = ui_instance();
 	if (pSynthUi == NULL)
 		return;
@@ -804,6 +802,38 @@ void synthv1widget::initSchedNotifier (void)
 	QObject::connect(m_sched_notifier,
 		SIGNAL(notify(int, int)),
 		SLOT(updateSchedNotify(int, int)));
+
+	pSynthUi->midiInCountOn(true);
+}
+
+
+void synthv1widget::closeSchedNotifier (void)
+{
+	if (m_sched_notifier) {
+		delete m_sched_notifier;
+		m_sched_notifier = NULL;
+	}
+
+	synthv1_ui *pSynthUi = ui_instance();
+	if (pSynthUi)
+		pSynthUi->midiInCountOn(false);
+}
+
+
+// Show/hide widget handlers.
+void synthv1widget::showEvent ( QShowEvent *pShowEvent )
+{
+	QWidget::showEvent(pShowEvent);
+
+	openSchedNotifier();
+}
+
+
+void synthv1widget::hideEvent ( QHideEvent *pHideEvent )
+{
+	closeSchedNotifier();
+
+	QWidget::hideEvent(pHideEvent);
 }
 
 
