@@ -793,6 +793,9 @@ synthv1widget::~synthv1widget (void)
 // Open/close the scheduler/work notifier.
 void synthv1widget::openSchedNotifier (void)
 {
+	if (m_sched_notifier)
+		return;
+
 	synthv1_ui *pSynthUi = ui_instance();
 	if (pSynthUi == NULL)
 		return;
