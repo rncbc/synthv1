@@ -800,7 +800,6 @@ public:
 	void reset();
 
 	void midiInEnabled(bool on);
-	bool midiInNote(int note) const;
 	uint32_t midiInCount();
 
 	synthv1_wave dco1_wave1, dco1_wave2;
@@ -1981,11 +1980,6 @@ void synthv1_impl::midiInEnabled ( bool on )
 	m_midi_in.enabled(on);
 }
 
-bool synthv1_impl::midiInNote ( int note ) const
-{
-	return (m_note1[note] != NULL || m_note2[note] != NULL);
-}
-
 uint32_t synthv1_impl::midiInCount (void)
 {
 	return m_midi_in.count();
@@ -2488,10 +2482,6 @@ void synthv1::midiInEnabled ( bool on )
 	m_pImpl->midiInEnabled(on);
 }
 
-bool synthv1::midiInNote ( int note ) const
-{
-	return m_pImpl->midiInNote(note);
-}
 
 uint32_t synthv1::midiInCount (void)
 {
@@ -2500,4 +2490,3 @@ uint32_t synthv1::midiInCount (void)
 
 
 // end of synthv1.cpp
-

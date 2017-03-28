@@ -77,10 +77,6 @@ void synthv1_ui::midiInEnabled ( bool bEnabled )
 	m_pSynth->midiInEnabled(bEnabled);
 }
 
-bool synthv1_ui::midiInNote ( int note ) const
-{
-	return m_pSynth->midiInNote(note);
-}
 
 uint32_t synthv1_ui::midiInCount (void)
 {
