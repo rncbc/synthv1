@@ -731,6 +731,38 @@ struct synthv1_voice : public synthv1_list<synthv1_voice>
 };
 
 
+// MIDI input asynchronous status notification
+
+class synthv1_midi_in : public synthv1_sched
+{
+public:
+
+	synthv1_midi_in (synthv1 *pSynth)
+		: synthv1_sched(pSynth, MidiIn),
+			m_enabled(false), m_count(0) {}
+
+	void schedule_event()
+		{ if (m_enabled && ++m_count < 2) schedule(-1); }
+
+	void process(int) {}
+
+	void enabled(bool on)
+		{ m_enabled = on; m_count = 0; }
+
+	uint32_t count()
+	{
+		const uint32_t ret = m_count;
+		m_count = 0;
+		return ret;
+	}
+
+private:
+
+	bool     m_enabled;
+	uint32_t m_count;
+};
+
+
 // polyphonic synth implementation
 
 class synthv1_impl
@@ -766,6 +798,10 @@ public:
 	void process(float **ins, float **outs, uint32_t nframes);
 
 	void reset();
+
+	void midiInEnabled(bool on);
+	bool midiInNote(int note) const;
+	uint32_t midiInCount();
 
 	synthv1_wave dco1_wave1, dco1_wave2;
 	synthv1_wave dco2_wave1, dco2_wave2;
@@ -822,6 +858,7 @@ private:
 	synthv1_config   m_config;
 	synthv1_controls m_controls;
 	synthv1_programs m_programs;
+	synthv1_midi_in  m_midi_in;
 
 	uint16_t m_nchannels;
 	float    m_srate;
@@ -905,7 +942,7 @@ synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
 
 synthv1_impl::synthv1_impl (
 	synthv1 *pSynth, uint16_t nchannels, float srate )
-	: m_controls(pSynth), m_programs(pSynth), m_bpm(180.0f)
+	: m_controls(pSynth), m_programs(pSynth), m_midi_in(pSynth), m_bpm(180.0f)
 {
 	// max env. stage length (default)
 	m_dco1.envtime0 = m_dco2.envtime0 = 0.0001f * MAX_ENV_MSECS;
@@ -1711,6 +1748,9 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 
 	// process pending controllers...
 	m_controls.process_dequeue();
+
+	// asynchronous event notification...
+	m_midi_in.schedule_event();
 }
 
 
@@ -1933,6 +1973,23 @@ void synthv1_impl::reset (void)
 	allNotesOff();
 }
 
+
+// MIDI input asynchronous status notification accessors
+
+void synthv1_impl::midiInEnabled ( bool on )
+{
+	m_midi_in.enabled(on);
+}
+
+bool synthv1_impl::midiInNote ( int note ) const
+{
+	return (m_note1[note] != NULL || m_note2[note] != NULL);
+}
+
+uint32_t synthv1_impl::midiInCount (void)
+{
+	return m_midi_in.count();
+}
 
 
 // synthesize
@@ -2302,9 +2359,6 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 synthv1::synthv1 ( uint16_t nchannels, float srate )
 {
 	m_pImpl = new synthv1_impl(this, nchannels, srate);
-
-	// MIDI input event count...
-	midiInCountOn(false);
 }
 
 
@@ -2394,10 +2448,6 @@ void synthv1::process_midi ( uint8_t *data, uint32_t size )
 #endif
 
 	m_pImpl->process_midi(data, size);
-
-	// rogue MIDi input count...
-	if (m_midiInCountOn && ++m_midiInCount < 2)
-		synthv1_sched::sync_notify(this, synthv1_sched::MidiIn, 0);
 }
 
 
@@ -2431,19 +2481,21 @@ void synthv1::reset (void)
 }
 
 
-// MIDI input event count
+// MIDI input asynchronous status notification accessors
 
-void synthv1::midiInCountOn ( bool bMidiInCountOn )
+void synthv1::midiInEnabled ( bool on )
 {
-	m_midiInCountOn = bMidiInCountOn;
-	m_midiInCount = 0;
+	m_pImpl->midiInEnabled(on);
+}
+
+bool synthv1::midiInNote ( int note ) const
+{
+	return m_pImpl->midiInNote(note);
 }
 
 uint32_t synthv1::midiInCount (void)
 {
-	const uint32_t ret = m_midiInCount;
-	m_midiInCount = 0;
-	return ret;
+	return m_pImpl->midiInCount();
 }
 
 
