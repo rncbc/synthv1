@@ -22,6 +22,7 @@
 #include "synthv1widget_status.h"
 
 #include <QLabel>
+#include <QHBoxLayout>
 
 
 //-------------------------------------------------------------------------
@@ -38,13 +39,30 @@ synthv1widget_status::synthv1widget_status ( QWidget *pParent )
 		QPixmap(":/images/ledOn.png"), QIcon::Normal, QIcon::On);
 
 	const QString sMidiIn(tr("MIDI In"));
+
+	QWidget *pMidiInWidget = new QWidget();
+	pMidiInWidget->setToolTip(tr("%1 status").arg(sMidiIn));
+
+	QHBoxLayout *pMidiInLayout = new QHBoxLayout();
+	pMidiInLayout->setMargin(0);
+	pMidiInLayout->setSpacing(0);
+
 	m_pMidiInLedLabel = new QLabel();
-	m_pMidiInLedLabel->setAlignment(Qt::AlignHCenter);
+	m_pMidiInLedLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 	m_pMidiInLedLabel->setPixmap(m_midiInLed.pixmap(16, 16));
-	m_pMidiInLedLabel->setToolTip(tr("%1 status").arg(sMidiIn));
+	m_pMidiInLedLabel->setFrameStyle(QFrame::NoFrame | QFrame::Plain);
 	m_pMidiInLedLabel->setAutoFillBackground(true);
-	QStatusBar::addWidget(m_pMidiInLedLabel);
-	QStatusBar::addWidget(new QLabel(sMidiIn));
+	pMidiInLayout->addWidget(m_pMidiInLedLabel);
+
+	QLabel *pMidiInTextLabel = new QLabel(sMidiIn);
+	pMidiInTextLabel->setMargin(2);
+	pMidiInTextLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+	pMidiInTextLabel->setFrameStyle(QFrame::NoFrame | QFrame::Plain);
+	pMidiInTextLabel->setAutoFillBackground(true);
+	pMidiInLayout->addWidget(pMidiInTextLabel);
+
+	pMidiInWidget->setLayout(pMidiInLayout);
+	QStatusBar::addWidget(pMidiInWidget);
 
 	const QFontMetrics fm(QStatusBar::font());
 	m_pModifiedLabel = new QLabel();
@@ -59,13 +77,9 @@ synthv1widget_status::synthv1widget_status ( QWidget *pParent )
 // Permanent widgets accessors.
 void synthv1widget_status::midiInLed ( bool bMidiInLed )
 {
-	if (bMidiInLed) {
-		m_pMidiInLedLabel->setPixmap(
-			m_midiInLed.pixmap(16, 16, QIcon::Normal, QIcon::On));
-	} else {
-		m_pMidiInLedLabel->setPixmap(
-			m_midiInLed.pixmap(16, 16, QIcon::Normal, QIcon::Off));
-	}
+	m_pMidiInLedLabel->setPixmap(
+		m_midiInLed.pixmap(16, 16, QIcon::Normal,
+			bMidiInLed ? QIcon::On : QIcon::Off));
 }
 
 
