@@ -4,20 +4,22 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- A MIDI In(put) status fake-LED is now featured on the
+  bottom-left status bar, adding up to eye-candy as usual.
+
+
 0.8.1  2017-03-21  A Spring'17 release.
 
 - Fixed a probable old miss about changing spin-box and
   drop-down list not reflecting changes immediately into
   the respective parameter dial knobs.
-
 - Fixed middle-button clicking on the dial-knobs to reset
   to the current default parameter value.
-
 - Help/Configure.../Options/Use desktop environment native
   dialogs option is now set initially off by default.
-
 - Added French man page (by Olivier Humbert, thanks).
-
 - Make builds reproducible byte for byte, by getting rid of
   the configure build date and time stamps.
 
