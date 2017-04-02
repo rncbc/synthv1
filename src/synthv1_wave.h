@@ -1,7 +1,7 @@
 // synthv1_wave.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -65,13 +65,14 @@ public:
 
 	// init.
 	void reset(Shape shape, float width, bool bandl = false);
-	// init.synch.
-	void reset_sync(Shape shape, float width, bool bandl = false);
+	// init.sync.
+	void reset_sync();
 
 	// init.test
 	void reset_test(Shape shape, float width, bool bandl = false)
 	{
-		if (shape != m_shape || width != m_width || bandl != m_bandl)
+		if (shape != m_shape || width != m_width
+			|| (m_ntabs > 0 && bandl != m_bandl))
 			reset(shape, width, bandl);
 	}
 

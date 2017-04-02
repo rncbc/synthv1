@@ -1,7 +1,7 @@
 // synthv1_wave.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -24,7 +24,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-
 //-------------------------------------------------------------------------
 // synthv1_wave_sched - local module schedule thread stuff.
 //
@@ -37,32 +36,17 @@ class synthv1_wave_sched : public synthv1_sched
 public:
 
 	// ctor.
-	synthv1_wave_sched (synthv1_wave *wave)	: synthv1_sched(NULL, Wave),
-		m_wave(wave), m_shape(synthv1_wave::Pulse), m_width(1.0f) {}
-
-	// schedule reset.
-	void reset(synthv1_wave::Shape shape, float width, bool bandl)
-	{
-		m_shape = shape;
-		m_width = width;
-		m_bandl = bandl;
-
-		schedule();
-	}
+	synthv1_wave_sched (synthv1_wave *wave)
+		: synthv1_sched(NULL, Wave), m_wave(wave) {}
 
 	// process reset (virtual).
 	void process(int)
-	{
-		m_wave->reset_sync(m_shape, m_width, m_bandl);
-	}
+		{ m_wave->reset_sync(); }
 
 private:
 
 	// instance variables.
 	synthv1_wave *m_wave;
-	synthv1_wave::Shape m_shape;
-	float m_width;
-	bool m_bandl;
 };
 
 
@@ -84,10 +68,10 @@ synthv1_wave::synthv1_wave ( uint32_t nsize, uint16_t nover, uint16_t ntabs )
 	for (uint16_t itab = 0; itab < ntabs1; ++itab)
 		m_tables[itab] = new float [m_nsize + 4];
 
-	reset(m_shape, m_width, m_bandl);
-
 	if (m_ntabs > 0)
 		m_sched = new synthv1_wave_sched(this);
+
+	reset_sync();
 }
 
 
@@ -109,20 +93,19 @@ synthv1_wave::~synthv1_wave (void)
 // init.
 void synthv1_wave::reset ( Shape shape, float width, bool bandl )
 {
+	m_shape = shape;
+	m_width = width;
+	m_bandl = bandl;
+
 	if (m_sched)
-		m_sched->reset(shape, width, bandl);
+		m_sched->schedule();
 	else
-		reset_sync(shape, width, bandl);
+		reset_sync();
 }
 
 
-void synthv1_wave::reset_sync ( Shape shape, float width, bool bandl )
+void synthv1_wave::reset_sync (void)
 {
-	m_shape = shape;
-	m_width = width;
-
-	m_bandl = (m_ntabs > 0 ? bandl : false);
-
 	switch (m_shape) {
 	case Pulse:
 		reset_pulse();
