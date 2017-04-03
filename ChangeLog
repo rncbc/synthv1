@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- Alias-free/band-limited wavetable oscillators have been
+  fixed to prevent cross-octave, polyphonic interference.
+  (EXPERIMENTAL) 
 - A MIDI In(put) status fake-LED is now featured on the
   bottom-left status bar, adding up to eye-candy as usual.
 

@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+
 //-------------------------------------------------------------------------
 // synthv1_wave_sched - local module schedule thread stuff.
 //
@@ -59,8 +60,7 @@ synthv1_wave::synthv1_wave ( uint32_t nsize, uint16_t nover, uint16_t ntabs )
 	: m_nsize(nsize), m_nover(nover), m_ntabs(ntabs),
 		m_shape(Saw), m_width(1.0f), m_bandl(false),
 		m_srate(44100.0f), m_srand(0),
-		m_min_freq(0.0f), m_max_freq(0.0f),
-		m_ftab(0.0f), m_itab(0), m_sched(NULL)
+		m_min_freq(0.0f), m_max_freq(0.0f), m_sched(NULL)
 {
 	const uint16_t ntabs1 = m_ntabs + 1;
 

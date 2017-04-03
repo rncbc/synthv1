@@ -76,37 +76,47 @@ public:
 			reset(shape, width, bandl);
 	}
 
+	// phasor.
+	struct Phase
+	{
+		float    phase;
+		float    ftab;
+		uint16_t itab;
+
+		void reset() { phase = ftab = 0.0f; itab =  0; }
+	};
+
 	// begin.
-	float start(float& phase, float pshift = 0.0f, float freq = 0.0f)
+	float start(Phase& phase, float pshift = 0.0f, float freq = 0.0f)
 	{
 		const float p0 = float(m_nsize);
 
-		update(freq);
+		update(phase, freq);
 
-		phase = m_phase0 + pshift * p0;
-		if (phase >= p0)
-			phase -= p0;
+		phase.phase = m_phase0 + pshift * p0;
+		if (phase.phase >= p0)
+			phase.phase -= p0;
 
 		return sample(phase, freq);
 	}
 
 	// iterate.
-	float sample(float& phase, float freq) const
+	float sample(Phase& phase, float freq) const
 	{
-		const uint32_t i = uint32_t(phase);
-		const float alpha = phase - float(i);
+		const uint32_t i = uint32_t(phase.phase);
+		const float alpha = phase.phase - float(i);
 		const float p0 = float(m_nsize);
 
-		phase += p0 * freq / m_srate;
-		if (phase >= p0)
-			phase -= p0;
+		phase.phase += p0 * freq / m_srate;
+		if (phase.phase >= p0)
+			phase.phase -= p0;
 
-		if (m_itab < m_ntabs) {
-			const float x0 = interp(i, m_itab, alpha);
-			const float x1 = interp(i, m_itab + 1, alpha);
-			return x0 + m_ftab * (x1 - x0);
+		if (phase.itab < m_ntabs) {
+			const float x0 = interp(i, phase.itab, alpha);
+			const float x1 = interp(i, phase.itab + 1, alpha);
+			return x0 + phase.ftab * (x1 - x0);
 		} else {
-			return interp(i, m_itab, alpha);
+			return interp(i, phase.itab, alpha);
 		}
 	}
 
@@ -147,18 +157,18 @@ public:
 	}
 
 	// post-iter.
-	void update(float freq)
+	void update(Phase& phase, float freq)
 	{
 		if (freq < m_min_freq) {
-			m_itab  = m_ntabs;
-			m_ftab  = 0.0f;
+			phase.itab  = m_ntabs;
+			phase.ftab  = 0.0f;
 		} else if (freq < m_max_freq) {
-			m_ftab  = fast_flog2f(m_max_freq / freq);
-			m_itab  = uint16_t(m_ftab);
-			m_ftab -= float(m_itab);
+			phase.ftab  = fast_flog2f(m_max_freq / freq);
+			phase.itab  = uint16_t(phase.ftab);
+			phase.ftab -= float(phase.itab);
 		} else {
-			m_itab  = 0;
-			m_ftab  = 0.0f;
+			phase.itab  = 0;
+			phase.ftab  = 0.0f;
 		}
 	}
 
@@ -227,9 +237,6 @@ private:
 	float    m_min_freq;
 	float    m_max_freq;
 
-	float    m_ftab;
-	uint16_t m_itab;
-
 	synthv1_wave_sched *m_sched;
 };
 
@@ -261,7 +268,7 @@ public:
 
 	// wave and phase accessors.
 	void reset(synthv1_wave *wave)
-		{ m_wave = wave; m_phase = 0.0f; }
+		{ m_wave = wave; m_phase.reset(); }
 
 	synthv1_wave *wave() const
 		{ return m_wave; }
@@ -276,13 +283,13 @@ public:
 
 	// post-iter.
 	void update(float freq)
-		{ m_wave->update(freq); }
+		{ m_wave->update(m_phase, freq); }
 
 private:
 
 	synthv1_wave *m_wave;
 
-	float m_phase;
+	synthv1_wave::Phase m_phase;
 };
 
 
