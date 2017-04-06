@@ -1,4 +1,4 @@
-// synthv1widget_knob.h
+// synthv1widget_param.h
 //
 /****************************************************************************
    Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
@@ -19,8 +19,8 @@
 
 *****************************************************************************/
 
-#ifndef __synthv1widget_knob_h
-#define __synthv1widget_knob_h
+#ifndef __synthv1widget_param_h
+#define __synthv1widget_param_h
 
 #include <QWidget>
 #include <QDial>
@@ -79,16 +79,16 @@ private:
 
 
 //-------------------------------------------------------------------------
-// synthv1widget_knob - Custom composite widget.
+// synthv1widget_param - Custom composite widget.
 
-class synthv1widget_knob : public QWidget
+class synthv1widget_param : public QWidget
 {
 	Q_OBJECT
 
 public:
 
 	// Constructor.
-	synthv1widget_knob(QWidget *pParent = 0);
+	synthv1widget_param(QWidget *pParent = 0);
 
 	// Accessors.
 	virtual void setText(const QString& sText);
@@ -164,7 +164,7 @@ private:
 //-------------------------------------------------------------------------
 // synthv1widget_spin - Custom knob/spin-box widget.
 
-class synthv1widget_spin : public synthv1widget_knob
+class synthv1widget_spin : public synthv1widget_param
 {
 	Q_OBJECT
 
@@ -208,7 +208,7 @@ private:
 //-------------------------------------------------------------------------
 // synthv1widget_combo - Custom knob/combo-box widget.
 
-class synthv1widget_combo : public synthv1widget_knob
+class synthv1widget_combo : public synthv1widget_param
 {
 	Q_OBJECT
 
@@ -246,6 +246,6 @@ private:
 };
 
 
-#endif  // __synthv1widget_knob_h
+#endif  // __synthv1widget_param_h
 
-// end of synthv1widget_knob.h
+// end of synthv1widget_param.h

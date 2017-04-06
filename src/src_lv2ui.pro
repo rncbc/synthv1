@@ -20,7 +20,7 @@ HEADERS = \
 	synthv1widget_env.h \
 	synthv1widget_filt.h \
 	synthv1widget_wave.h \
-	synthv1widget_knob.h \
+	synthv1widget_param.h \
 	synthv1widget_preset.h \
 	synthv1widget_status.h \
 	synthv1widget_programs.h \
@@ -35,7 +35,7 @@ SOURCES = \
 	synthv1widget_env.cpp \
 	synthv1widget_filt.cpp \
 	synthv1widget_wave.cpp \
-	synthv1widget_knob.cpp \
+	synthv1widget_param.cpp \
 	synthv1widget_preset.cpp \
 	synthv1widget_status.cpp \
 	synthv1widget_programs.cpp \

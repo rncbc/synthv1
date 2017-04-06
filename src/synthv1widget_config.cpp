@@ -1,7 +1,7 @@
 // synthv1widget_config.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2016, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 *****************************************************************************/
 
 #include "synthv1widget_config.h"
-#include "synthv1widget_knob.h"
+#include "synthv1widget_param.h"
 
 #include <QPushButton>
 #include <QMessageBox>

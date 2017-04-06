@@ -60,8 +60,8 @@ public:
 	float paramValue(synthv1::ParamIndex index) const;
 
 	// Param kbob (widget) mapper.
-	void setParamKnob(synthv1::ParamIndex index, synthv1widget_knob *pKnob);
-	synthv1widget_knob *paramKnob(synthv1::ParamIndex index) const;
+	void setParamKnob(synthv1::ParamIndex index, synthv1widget_param *pKnob);
+	synthv1widget_param *paramKnob(synthv1::ParamIndex index) const;
 
 	// Preset init.
 	void initPreset();
@@ -147,8 +147,8 @@ private:
 
 	synthv1widget_sched *m_sched_notifier;
 
-	QHash<synthv1::ParamIndex, synthv1widget_knob *> m_paramKnobs;
-	QHash<synthv1widget_knob *, synthv1::ParamIndex> m_knobParams;
+	QHash<synthv1::ParamIndex, synthv1widget_param *> m_paramKnobs;
+	QHash<synthv1widget_param *, synthv1::ParamIndex> m_knobParams;
 
 	float m_params_ab[synthv1::NUM_PARAMS];
 

@@ -35,7 +35,7 @@ headers_ui = \
 	src/$(name)widget.h \
 	src/$(name)widget_env.h \
 	src/$(name)widget_filt.h \
-	src/$(name)widget_knob.h \
+	src/$(name)widget_param.h \
 	src/$(name)widget_preset.h \
 	src/$(name)widget_status.h \
 	src/$(name)widget_config.h \
@@ -47,7 +47,7 @@ sources_ui = \
 	src/$(name)widget.cpp \
 	src/$(name)widget_env.cpp \
 	src/$(name)widget_filt.cpp \
-	src/$(name)widget_knob.cpp \
+	src/$(name)widget_param.cpp \
 	src/$(name)widget_preset.cpp \
 	src/$(name)widget_status.cpp \
 	src/$(name)widget_config.cpp \

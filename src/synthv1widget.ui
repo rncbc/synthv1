@@ -2263,12 +2263,12 @@
   <customwidget>
    <class>synthv1widget_spin</class>
    <extends>QDial</extends>
-   <header>synthv1widget_knob.h</header>
+   <header>synthv1widget_param.h</header>
   </customwidget>
   <customwidget>
    <class>synthv1widget_combo</class>
    <extends>QDial</extends>
-   <header>synthv1widget_knob.h</header>
+   <header>synthv1widget_param.h</header>
   </customwidget>
   <customwidget>
    <class>synthv1widget_env</class>
