@@ -332,6 +332,9 @@ public:
 	void setText(const QString& sText);
 	QString text() const;
 
+	void setAlignment(Qt::Alignment alignment);
+	Qt::Alignment alignment() const;
+
 public slots:
 
 	// Virtual accessor.
@@ -346,6 +349,8 @@ private:
 
 	// Widget members.
 	QCheckBox *m_pCheckBox;
+
+	Qt::Alignment m_alignment;
 };
 
 
