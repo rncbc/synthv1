@@ -24,9 +24,10 @@
 #include <QLabel>
 #include <QSpinBox>
 #include <QComboBox>
+#include <QRadioButton>
+#include <QCheckBox>
 
 #include <QGridLayout>
-
 #include <QMouseEvent>
 
 #include <math.h>
@@ -147,41 +148,33 @@ synthv1widget_param::synthv1widget_param ( QWidget *pParent ) : QWidget(pParent)
 	QWidget::setFont(font2);
 
 	m_fValue = 0.0f;
+
+	m_fMinimum = 0.0f;
+	m_fMaximum = 1.0f;
+
 	m_fScale = 1.0f;
 
 	resetDefaultValue();
 
 	QWidget::setMaximumSize(QSize(52, 72));
 
-	m_pLabel = new QLabel();
-	m_pLabel->setAlignment(Qt::AlignCenter);
-
-	m_pDial = new synthv1widget_dial();
-	m_pDial->setNotchesVisible(true);
-	m_pDial->setMaximumSize(QSize(48, 42));
-
 	QGridLayout *pGridLayout = new QGridLayout();
 	pGridLayout->setMargin(0);
 	pGridLayout->setSpacing(0);
-	pGridLayout->addWidget(m_pLabel, 0, 0, 1, 3);
-	pGridLayout->addWidget(m_pDial,  1, 0, 1, 3);
 	QWidget::setLayout(pGridLayout);
-
-	QObject::connect(m_pDial,
-		SIGNAL(valueChanged(int)),
-		SLOT(dialValueChanged(int)));
 }
 
 
+// Accessors.
 void synthv1widget_param::setText ( const QString& sText )
 {
-	m_pLabel->setText(sText);
+	setValue(sText.toFloat());
 }
 
 
 QString synthv1widget_param::text (void) const
 {
-	return m_pLabel->text();
+	return QString::number(value());
 }
 
 
@@ -205,10 +198,7 @@ void synthv1widget_param::setValue ( float fValue, bool bDefault )
 	QWidget::setPalette(pal);
 
 	if (::fabsf(fValue - m_fValue) > 0.0001f) {
-		const bool bDialBlock = m_pDial->blockSignals(true);
-		m_pDial->setValue(scaleFromValue(fValue));
 		m_fValue = fValue;
-		m_pDial->blockSignals(bDialBlock);
 		emit valueChanged(m_fValue);
 	}
 }
@@ -228,25 +218,23 @@ QString synthv1widget_param::valueText (void) const
 
 void synthv1widget_param::setMaximum ( float fMaximum )
 {
-	m_pDial->setMaximum(scaleFromValue(fMaximum));
+	m_fMaximum = fMaximum;
 }
-
 
 float synthv1widget_param::maximum (void) const
 {
-	return valueFromScale(m_pDial->maximum());
+	return m_fMaximum;
 }
 
 
 void synthv1widget_param::setMinimum ( float fMinimum )
 {
-	m_pDial->setMinimum(scaleFromValue(fMinimum));
+	m_fMinimum = fMinimum;
 }
-
 
 float synthv1widget_param::minimum (void) const
 {
-	return valueFromScale(m_pDial->minimum());
+	return m_fMinimum;
 }
 
 
@@ -273,18 +261,6 @@ void synthv1widget_param::setDefaultValue ( float fDefaultValue )
 float synthv1widget_param::defaultValue (void) const
 {
 	return m_fDefaultValue;
-}
-
-
-void synthv1widget_param::setSingleStep ( float fSingleStep )
-{
-	m_pDial->setSingleStep(scaleFromValue(fSingleStep));
-}
-
-
-float synthv1widget_param::singleStep (void) const
-{
-	return valueFromScale(m_pDial->singleStep());
 }
 
 
@@ -329,8 +305,81 @@ float synthv1widget_param::valueFromScale ( float fScale ) const
 }
 
 
+//-------------------------------------------------------------------------
+// synthv1widget_knob - Custom knob/dial widget.
+//
+
+// Constructor.
+synthv1widget_knob::synthv1widget_knob ( QWidget *pParent ) : synthv1widget_param(pParent)
+{
+	m_pLabel = new QLabel();
+	m_pLabel->setAlignment(Qt::AlignCenter);
+
+	m_pDial = new synthv1widget_dial();
+	m_pDial->setNotchesVisible(true);
+	m_pDial->setMaximumSize(QSize(48, 42));
+
+	QGridLayout *pGridLayout
+		= static_cast<QGridLayout *> (synthv1widget_param::layout());
+	pGridLayout->addWidget(m_pLabel, 0, 0, 1, 3);
+	pGridLayout->addWidget(m_pDial,  1, 0, 1, 3);
+
+	QObject::connect(m_pDial,
+		SIGNAL(valueChanged(int)),
+		SLOT(dialValueChanged(int)));
+}
+
+
+void synthv1widget_knob::setText ( const QString& sText )
+{
+	m_pLabel->setText(sText);
+}
+
+
+QString synthv1widget_knob::text (void) const
+{
+	return m_pLabel->text();
+}
+
+
+void synthv1widget_knob::setValue ( float fValue, bool bDefault )
+{
+	const bool bDialBlock = m_pDial->blockSignals(true);
+	synthv1widget_param::setValue(fValue, bDefault);
+	m_pDial->setValue(scaleFromValue(fValue));
+	m_pDial->blockSignals(bDialBlock);
+}
+
+
+void synthv1widget_knob::setMaximum ( float fMaximum )
+{
+	synthv1widget_param::setMaximum(fMaximum);
+	m_pDial->setMaximum(scaleFromValue(fMaximum));
+}
+
+
+void synthv1widget_knob::setMinimum ( float fMinimum )
+{
+	synthv1widget_param::setMinimum(fMinimum);
+	m_pDial->setMinimum(scaleFromValue(fMinimum));
+}
+
+
+// Scale-step accessors.
+void synthv1widget_knob::setSingleStep ( float fSingleStep )
+{
+	m_pDial->setSingleStep(scaleFromValue(fSingleStep));
+}
+
+
+float synthv1widget_knob::singleStep (void) const
+{
+	return valueFromScale(m_pDial->singleStep());
+}
+
+
 // Dial change slot.
-void synthv1widget_param::dialValueChanged ( int iDialValue )
+void synthv1widget_knob::dialValueChanged ( int iDialValue )
 {
 	setValue(valueFromScale(iDialValue));
 }
@@ -342,17 +391,17 @@ void synthv1widget_param::dialValueChanged ( int iDialValue )
 
 // Constructor.
 synthv1widget_spin::synthv1widget_spin ( QWidget *pParent )
-	: synthv1widget_param(pParent)
+	: synthv1widget_knob(pParent)
 {
 	m_pSpinBox = new QDoubleSpinBox();
 	m_pSpinBox->setAccelerated(true);
 	m_pSpinBox->setAlignment(Qt::AlignCenter);
 
-	const QFontMetrics fm(synthv1widget_param::font());
+	const QFontMetrics fm(synthv1widget_knob::font());
 	m_pSpinBox->setMaximumHeight(fm.height() + 6);
 
 	QGridLayout *pGridLayout
-		= static_cast<QGridLayout *> (synthv1widget_param::layout());
+		= static_cast<QGridLayout *> (synthv1widget_knob::layout());
 	pGridLayout->addWidget(m_pSpinBox, 2, 1, 1, 1);
 
 	setScale(100.0f);
@@ -372,7 +421,7 @@ synthv1widget_spin::synthv1widget_spin ( QWidget *pParent )
 void synthv1widget_spin::setValue ( float fValue, bool bDefault )
 {
 	const bool bSpinBlock = m_pSpinBox->blockSignals(true);
-	synthv1widget_param::setValue(fValue, bDefault);
+	synthv1widget_knob::setValue(fValue, bDefault);
 	m_pSpinBox->setValue(scaleFromValue(fValue));
 	m_pSpinBox->blockSignals(bSpinBlock);
 }
@@ -381,14 +430,14 @@ void synthv1widget_spin::setValue ( float fValue, bool bDefault )
 void synthv1widget_spin::setMaximum ( float fMaximum )
 {
 	m_pSpinBox->setMaximum(scaleFromValue(fMaximum));
-	synthv1widget_param::setMaximum(fMaximum);
+	synthv1widget_knob::setMaximum(fMaximum);
 }
 
 
 void synthv1widget_spin::setMinimum ( float fMinimum )
 {
 	m_pSpinBox->setMinimum(scaleFromValue(fMinimum));
-	synthv1widget_param::setMinimum(fMinimum);
+	synthv1widget_knob::setMinimum(fMinimum);
 }
 
 
@@ -401,7 +450,7 @@ QString synthv1widget_spin::valueText (void) const
 // Internal widget slots.
 void synthv1widget_spin::spinBoxValueChanged ( double spinValue )
 {
-	synthv1widget_param::setValue(valueFromScale(float(spinValue)));
+	synthv1widget_knob::setValue(valueFromScale(float(spinValue)));
 }
 
 
@@ -445,15 +494,15 @@ int synthv1widget_spin::decimals (void) const
 
 // Constructor.
 synthv1widget_combo::synthv1widget_combo ( QWidget *pParent )
-	: synthv1widget_param(pParent)
+	: synthv1widget_knob(pParent)
 {
 	m_pComboBox = new QComboBox();
 
-	const QFontMetrics fm(synthv1widget_param::font());
+	const QFontMetrics fm(synthv1widget_knob::font());
 	m_pComboBox->setMaximumHeight(fm.height() + 6);
 
 	QGridLayout *pGridLayout
-		= static_cast<QGridLayout *> (synthv1widget_param::layout());
+		= static_cast<QGridLayout *> (synthv1widget_knob::layout());
 	pGridLayout->addWidget(m_pComboBox, 2, 0, 1, 3);
 
 //	setScale(1.0f);
@@ -468,7 +517,7 @@ synthv1widget_combo::synthv1widget_combo ( QWidget *pParent )
 void synthv1widget_combo::setValue ( float fValue, bool bDefault )
 {
 	const bool bComboBlock = m_pComboBox->blockSignals(true);
-	synthv1widget_param::setValue(fValue, bDefault);
+	synthv1widget_knob::setValue(fValue, bDefault);
 	m_pComboBox->setCurrentIndex(iroundf(fValue));
 	m_pComboBox->blockSignals(bComboBlock);
 }
@@ -511,7 +560,7 @@ void synthv1widget_combo::clear (void)
 // Internal widget slots.
 void synthv1widget_combo::comboBoxValueChanged ( int iComboValue )
 {
-	synthv1widget_param::setValue(float(iComboValue));
+	synthv1widget_knob::setValue(float(iComboValue));
 }
 
 
@@ -529,6 +578,230 @@ void synthv1widget_combo::wheelEvent ( QWheelEvent *pWheelEvent )
 			fValue = maximum();
 		setValue(fValue);
 	}
+}
+
+
+//-------------------------------------------------------------------------
+// synthv1widget_param_style - Custom widget style.
+//
+
+#include <QProxyStyle>
+#include <QPainter>
+#include <QIcon>
+
+
+class synthv1widget_param_style : public QProxyStyle
+{
+public:
+
+	// Constructor.
+	synthv1widget_param_style(synthv1widget_param *widget)
+		: QProxyStyle(widget->style())
+	{
+		if (g_icon.isNull()) {
+			g_icon.addPixmap(
+				QPixmap(":/images/ledOff.png"), QIcon::Normal, QIcon::Off);
+			g_icon.addPixmap(
+				QPixmap(":/images/ledOn.png"), QIcon::Normal, QIcon::On);
+		}
+	}
+
+
+	// Hints override.
+	int styleHint(StyleHint hint, const QStyleOption *option,
+		const QWidget *widget, QStyleHintReturn *retdata) const
+	{
+		if (hint == QStyle::SH_UnderlineShortcut)
+			return 0;
+		else
+			return QProxyStyle::styleHint(hint, option, widget, retdata);
+	}
+
+	// Paint job.
+	void drawPrimitive(	PrimitiveElement element,
+		const QStyleOption *option,
+		QPainter *painter, const QWidget *widget ) const
+	{
+		if (element == PE_IndicatorRadioButton ||
+			element == PE_IndicatorCheckBox) {
+			const QRect& rect = option->rect;
+			if (option->state & State_Enabled) {
+				if (option->state & State_On)
+					g_icon.paint(painter, rect,
+						Qt::AlignCenter, QIcon::Normal, QIcon::On);
+				else
+			//	if (option->state & State_Off)
+					g_icon.paint(painter, rect,
+						Qt::AlignCenter, QIcon::Normal, QIcon::Off);
+			} else {
+				g_icon.paint(painter, rect,
+					Qt::AlignCenter, QIcon::Disabled, QIcon::Off);
+			}
+		}
+		else
+		QProxyStyle::drawPrimitive(element, option, painter, widget);
+	}
+
+private:
+
+	static QIcon g_icon;
+};
+
+QIcon synthv1widget_param_style::g_icon;
+
+
+//-------------------------------------------------------------------------
+// synthv1widget_radio - Custom radio/button widget.
+//
+
+// Constructor.
+synthv1widget_radio::synthv1widget_radio ( QWidget *pParent )
+	: synthv1widget_param(pParent), m_group(this)
+{
+	synthv1widget_param::setStyle(new synthv1widget_param_style(this));
+#if 0
+	synthv1widget_param::setStyleSheet(
+	//	"QRadioButton::indicator { width: 16px; height: 16px; }"
+		"QRadioButton::indicator::unchecked { image: url(:/images/ledOff.png); }"
+		"QRadioButton::indicator::checked   { image: url(:/images/ledOn.png);  }"
+	);
+#endif
+	QObject::connect(&m_group,
+		SIGNAL(buttonClicked(int)),
+		SLOT(radioGroupValueChanged(int)));
+}
+
+
+// Virtual accessors.
+void synthv1widget_radio::setValue ( float fValue, bool bDefault )
+{
+	const int iRadioValue = iroundf(fValue);
+	QRadioButton *pRadioButton
+		= static_cast<QRadioButton *> (m_group.button(iRadioValue));
+	if (pRadioButton) {
+		const bool bRadioBlock = pRadioButton->blockSignals(true);
+		synthv1widget_param::setValue(float(iRadioValue), bDefault);
+		pRadioButton->setChecked(true);
+		pRadioButton->blockSignals(bRadioBlock);
+	}
+}
+
+
+QString synthv1widget_radio::valueText (void) const
+{
+	QString sValueText;
+	const int iRadioValue = iroundf(value());
+	QRadioButton *pRadioButton
+		= static_cast<QRadioButton *> (m_group.button(iRadioValue));
+	if (pRadioButton)
+		sValueText = pRadioButton->text();
+	return sValueText;
+}
+
+
+// Special combo-box mode accessors.
+void synthv1widget_radio::insertItems ( int iIndex, const QStringList& items )
+{
+	QGridLayout *pGridLayout
+		= static_cast<QGridLayout *> (synthv1widget_param::layout());
+
+	QStringListIterator iter(items);
+	while (iter.hasNext()) {
+		const QString& sValueText = iter.next();
+		QRadioButton *pRadioButton = new QRadioButton(sValueText);
+		pGridLayout->addWidget(pRadioButton, iIndex, 0);
+		m_group.addButton(pRadioButton, iIndex);
+		++iIndex;
+	}
+
+	setMinimum(0.0f);
+
+	const QList<QAbstractButton *> list = m_group.buttons();
+	const int iRadioCount = list.count();
+	if (iRadioCount > 0)
+		setMaximum(float(iRadioCount - 1));
+	else
+		setMaximum(1.0f);
+}
+
+
+void synthv1widget_radio::clear (void)
+{
+	const QList<QAbstractButton *> list = m_group.buttons();
+	QListIterator<QAbstractButton *> iter(list);
+	while (iter.hasNext()) {
+		QRadioButton *pRadioButton
+			= static_cast<QRadioButton *> (iter.next());
+		if (pRadioButton)
+			m_group.removeButton(pRadioButton);
+	}
+
+	setMinimum(0.0f);
+	setMaximum(1.0f);
+}
+
+
+void synthv1widget_radio::radioGroupValueChanged ( int iRadioValue )
+{
+	synthv1widget_param::setValue(float(iRadioValue));
+}
+
+
+//-------------------------------------------------------------------------
+// synthv1widget_check - Custom check-box widget.
+//
+
+// Constructor.
+synthv1widget_check::synthv1widget_check ( QWidget *pParent )
+	: synthv1widget_param(pParent)
+{
+	synthv1widget_param::setStyle(new synthv1widget_param_style(this));
+#if 0
+	synthv1widget_param::setStyleSheet(
+	//	"QCheckBox::indicator { width: 16px; height: 16px; }"
+		"QCheckBox::indicator::unchecked { image: url(:/images/ledOff.png); }"
+		"QCheckBox::indicator::checked   { image: url(:/images/ledOn.png);  }"
+	);
+#endif
+	m_pCheckBox = new QCheckBox();
+
+	QGridLayout *pGridLayout
+		= static_cast<QGridLayout *> (synthv1widget_param::layout());
+	pGridLayout->addWidget(m_pCheckBox, 0, 0);
+
+	QObject::connect(m_pCheckBox,
+		SIGNAL(toggled(bool)),
+		SLOT(checkBoxValueChanged(bool)));
+}
+
+
+// Accessors.
+void synthv1widget_check::setText ( const QString& sText )
+{
+	m_pCheckBox->setText(sText);
+}
+
+
+QString synthv1widget_check::text (void) const
+{
+	return m_pCheckBox->text();
+}
+
+
+// Virtual accessors.
+void synthv1widget_check::setValue ( float fValue, bool bDefault )
+{
+	const bool bCheckValue = (fValue > 0.5f * (maximum() + minimum()));
+	const bool bCheckBlock = m_pCheckBox->blockSignals(true);
+	synthv1widget_param::setValue(bCheckValue ? maximum() : minimum(), bDefault);
+	m_pCheckBox->setChecked(bCheckValue);
+	m_pCheckBox->blockSignals(bCheckBlock);
+}
+
+
+void synthv1widget_check::checkBoxValueChanged ( bool bCheckValue )
+{
+	synthv1widget_param::setValue(bCheckValue ? maximum() : minimum());
 }
 
 

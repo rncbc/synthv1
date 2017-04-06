@@ -24,12 +24,14 @@
 
 #include <QWidget>
 #include <QDial>
+#include <QButtonGroup>
 
 
 // Forward declarations.
 class QLabel;
 class QDoubleSpinBox;
 class QComboBox;
+class QCheckBox;
 
 
 //-------------------------------------------------------------------------
@@ -117,11 +119,6 @@ public slots:
 	// Virtual accessor.
 	virtual void setValue(float fValue, bool bDefault = false);
 
-protected slots:
-
-	// Dial change slot.
-	void dialValueChanged(int);
-
 signals:
 
 	// Change signal.
@@ -136,6 +133,53 @@ protected:
 	float scaleFromValue(float fValue) const;
 	float valueFromScale(float fScale) const;
 
+private:
+
+	// Current value.
+	float m_fValue;
+
+	// Current value range.
+	float m_fMinimum;
+	float m_fMaximum;
+
+	// Default value.
+	float m_fDefaultValue;
+	int   m_iDefaultValue;
+
+	// Scale multiplier (default=100).
+	float m_fScale;
+};
+
+
+//-------------------------------------------------------------------------
+// synthv1widget_knob - Custom knob/dial widget.
+
+class synthv1widget_knob : public synthv1widget_param
+{
+	Q_OBJECT
+
+public:
+
+	// Constructor.
+	synthv1widget_knob(QWidget *pParent = 0);
+
+	// Accessors.
+	void setText(const QString& sText);
+	QString text() const;
+
+	void setMaximum(float fMaximum);
+	void setMinimum(float fMinimum);
+
+public slots:
+
+	// Virtual accessor.
+	void setValue(float fValue, bool bDefault = false);
+
+protected slots:
+
+	// Dial change slot.
+	void dialValueChanged(int);
+
 protected:
 
 	// Scale-step accessors.
@@ -148,23 +192,13 @@ private:
 	QLabel *m_pLabel;
 
 	synthv1widget_dial *m_pDial;
-
-	// Current value.
-	float m_fValue;
-
-	// Default value.
-	float m_fDefaultValue;
-	int   m_iDefaultValue;
-
-	// Scale multiplier (default=100).
-	float m_fScale;
 };
 
 
 //-------------------------------------------------------------------------
 // synthv1widget_spin - Custom knob/spin-box widget.
 
-class synthv1widget_spin : public synthv1widget_param
+class synthv1widget_spin : public synthv1widget_knob
 {
 	Q_OBJECT
 
@@ -208,7 +242,7 @@ private:
 //-------------------------------------------------------------------------
 // synthv1widget_combo - Custom knob/combo-box widget.
 
-class synthv1widget_combo : public synthv1widget_param
+class synthv1widget_combo : public synthv1widget_knob
 {
 	Q_OBJECT
 
@@ -243,6 +277,75 @@ private:
 
 	// Widget members.
 	QComboBox *m_pComboBox;
+};
+
+
+//-------------------------------------------------------------------------
+// synthv1widget_radio - Custom radio-button widget.
+
+class synthv1widget_radio : public synthv1widget_param
+{
+	Q_OBJECT
+
+public:
+
+	// Constructor.
+	synthv1widget_radio(QWidget *pParent = 0);
+
+	// Virtual accessors.
+	QString valueText() const;
+
+	// Specialized accessors.
+	void insertItems(int iIndex, const QStringList& items);
+	void clear();
+
+public slots:
+
+	// Virtual accessor.
+	void setValue(float fValue, bool bDefault = false);
+
+protected slots:
+
+	// Change slot.
+	void radioGroupValueChanged(int);
+
+private:
+
+	// Widget members.
+	QButtonGroup m_group;
+};
+
+
+//-------------------------------------------------------------------------
+// synthv1widget_check - Custom check-box widget.
+
+class synthv1widget_check : public synthv1widget_param
+{
+	Q_OBJECT
+
+public:
+
+	// Constructor.
+	synthv1widget_check(QWidget *pParent = 0);
+
+	// Accessors.
+	void setText(const QString& sText);
+	QString text() const;
+
+public slots:
+
+	// Virtual accessor.
+	void setValue(float fValue, bool bDefault = false);
+
+protected slots:
+
+	// Change slot.
+	void checkBoxValueChanged(bool);
+
+private:
+
+	// Widget members.
+	QCheckBox *m_pCheckBox;
 };
 
 
