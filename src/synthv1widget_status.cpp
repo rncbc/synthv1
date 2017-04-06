@@ -22,6 +22,8 @@
 #include "synthv1widget_status.h"
 
 #include <QLabel>
+#include <QIcon>
+#include <QPixmap>
 #include <QHBoxLayout>
 
 
@@ -33,10 +35,17 @@
 synthv1widget_status::synthv1widget_status ( QWidget *pParent )
 	: QStatusBar (pParent)
 {
-	m_midiInLed.addPixmap(
+	QIcon icon;
+
+	icon.addPixmap(
 		QPixmap(":/images/ledOff.png"), QIcon::Normal, QIcon::Off);
-	m_midiInLed.addPixmap(
+	icon.addPixmap(
 		QPixmap(":/images/ledOn.png"), QIcon::Normal, QIcon::On);
+
+	m_midiInLed[0] = new QPixmap(
+		icon.pixmap(16, 16, QIcon::Normal, QIcon::Off));
+	m_midiInLed[1] = new QPixmap(
+		icon.pixmap(16, 16, QIcon::Normal, QIcon::On));
 
 	const QString sMidiIn(tr("MIDI In"));
 
@@ -49,7 +58,7 @@ synthv1widget_status::synthv1widget_status ( QWidget *pParent )
 
 	m_pMidiInLedLabel = new QLabel();
 	m_pMidiInLedLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-	m_pMidiInLedLabel->setPixmap(m_midiInLed.pixmap(16, 16));
+	m_pMidiInLedLabel->setPixmap(*m_midiInLed[0]);
 	m_pMidiInLedLabel->setFrameStyle(QFrame::NoFrame | QFrame::Plain);
 	m_pMidiInLedLabel->setAutoFillBackground(true);
 	pMidiInLayout->addWidget(m_pMidiInLedLabel);
@@ -74,12 +83,18 @@ synthv1widget_status::synthv1widget_status ( QWidget *pParent )
 }
 
 
+// Destructor.
+synthv1widget_status::~synthv1widget_status (void)
+{
+	delete m_midiInLed[1];
+	delete m_midiInLed[0];
+}
+
+
 // Permanent widgets accessors.
 void synthv1widget_status::midiInLed ( bool bMidiInLed )
 {
-	m_pMidiInLedLabel->setPixmap(
-		m_midiInLed.pixmap(16, 16, QIcon::Normal,
-			bMidiInLed ? QIcon::On : QIcon::Off));
+	m_pMidiInLedLabel->setPixmap(*m_midiInLed[bMidiInLed ? 1 : 0]);
 }
 
 

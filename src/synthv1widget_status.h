@@ -23,10 +23,11 @@
 #define __synthv1widget_status_h
 
 #include <QStatusBar>
-#include <QIcon>
+
 
 // Forward declarations.
 class QLabel;
+class QPixmap;
 
 
 //-------------------------------------------------------------------------
@@ -41,6 +42,9 @@ public:
 	// Constructor.
 	synthv1widget_status(QWidget *pParent = 0);
 
+	// Destructor.
+	~synthv1widget_status();
+
 	// Permanent widgets accessors.
 	void midiInLed(bool bMidiInLed);
 	void modified(bool bModified);
@@ -48,7 +52,7 @@ public:
 private:
 
 	// Permanent widgets.
-	QIcon   m_midiInLed;
+	QPixmap *m_midiInLed[2];
 
 	QLabel *m_pMidiInLedLabel;
 	QLabel *m_pModifiedLabel;
