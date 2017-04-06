@@ -128,7 +128,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	QStringList states;
 	states << tr("Off");
 	states << tr("On");
-
+#if 0
 	m_ui.Dco1Bandl1Knob->insertItems(0, states);
 	m_ui.Dco1Bandl2Knob->insertItems(0, states);
 	m_ui.Dco2Bandl1Knob->insertItems(0, states);
@@ -139,7 +139,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 
 	m_ui.Dyn1CompressKnob->insertItems(0, states);
 	m_ui.Dyn1LimiterKnob->insertItems(0, states);
-
+#endif
 	// Special values
 	const QString& sOff = states.first();
 	m_ui.Dco1RingModKnob->setSpecialValueText(sOff);
@@ -242,11 +242,11 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 
 	m_ui.Def1ChannelKnob->insertItems(0, channels);
 	m_ui.Def2ChannelKnob->insertItems(0, channels);
-
+#if 0
 	// Mono switches
 	m_ui.Def1MonoKnob->insertItems(0, states);
 	m_ui.Def2MonoKnob->insertItems(0, states);
-
+#endif
 	// Output (stereo-)width limits.
 	m_ui.Out1WidthKnob->setMinimum(-1.0f);
 	m_ui.Out1WidthKnob->setMaximum(+1.0f);

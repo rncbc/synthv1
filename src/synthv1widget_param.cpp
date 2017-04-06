@@ -666,6 +666,8 @@ synthv1widget_radio::synthv1widget_radio ( QWidget *pParent )
 		"QRadioButton::indicator::checked   { image: url(:/images/ledOn.png);  }"
 	);
 #endif
+	synthv1widget_param::setMaximumSize(QSize(64, 72));
+
 	QObject::connect(&m_group,
 		SIGNAL(buttonClicked(int)),
 		SLOT(radioGroupValueChanged(int)));
@@ -768,6 +770,8 @@ synthv1widget_check::synthv1widget_check ( QWidget *pParent )
 	QGridLayout *pGridLayout
 		= static_cast<QGridLayout *> (synthv1widget_param::layout());
 	pGridLayout->addWidget(m_pCheckBox, 0, 0);
+
+	synthv1widget_param::setMaximumSize(QSize(64, 72));
 
 	QObject::connect(m_pCheckBox,
 		SIGNAL(toggled(bool)),

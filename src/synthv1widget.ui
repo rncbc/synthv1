@@ -129,7 +129,7 @@
            </widget>
           </item>
           <item>
-           <widget class="synthv1widget_combo" name="Dco1Shape1Knob">
+           <widget class="synthv1widget_radio" name="Dco1Shape1Knob">
             <property name="toolTip">
              <string>DCO1 Wave Shape 1</string>
             </property>
@@ -149,7 +149,7 @@
            </widget>
           </item>
           <item>
-           <widget class="synthv1widget_combo" name="Dco1Bandl1Knob">
+           <widget class="synthv1widget_check" name="Dco1Bandl1Knob">
             <property name="toolTip">
              <string>DCO1 Wave Bandlimit 1</string>
             </property>
@@ -166,7 +166,7 @@
            </widget>
           </item>
           <item>
-           <widget class="synthv1widget_combo" name="Dco1Shape2Knob">
+           <widget class="synthv1widget_radio" name="Dco1Shape2Knob">
             <property name="toolTip">
              <string>DCO1 Wave Shape 2</string>
             </property>
@@ -186,7 +186,7 @@
            </widget>
           </item>
           <item>
-           <widget class="synthv1widget_combo" name="Dco1Bandl2Knob">
+           <widget class="synthv1widget_check" name="Dco1Bandl2Knob">
             <property name="toolTip">
              <string>DCO1 Wave Bandlimit 2</string>
             </property>
@@ -392,7 +392,7 @@
              </widget>
             </item>
             <item>
-             <widget class="synthv1widget_combo" name="Dcf1TypeKnob">
+             <widget class="synthv1widget_radio" name="Dcf1TypeKnob">
               <property name="toolTip">
                <string>DCF1 Type</string>
               </property>
@@ -402,7 +402,7 @@
              </widget>
             </item>
             <item>
-             <widget class="synthv1widget_combo" name="Dcf1SlopeKnob">
+             <widget class="synthv1widget_radio" name="Dcf1SlopeKnob">
               <property name="toolTip">
                <string>DCF1 Slope</string>
               </property>
@@ -493,7 +493,7 @@
              </widget>
             </item>
             <item>
-             <widget class="synthv1widget_combo" name="Lfo1ShapeKnob">
+             <widget class="synthv1widget_radio" name="Lfo1ShapeKnob">
               <property name="toolTip">
                <string>LFO1 Wave Shape</string>
               </property>
@@ -584,7 +584,7 @@
              </widget>
             </item>
             <item>
-             <widget class="synthv1widget_combo" name="Lfo1SyncKnob">
+             <widget class="synthv1widget_check" name="Lfo1SyncKnob">
               <property name="toolTip">
                <string>LFO1 Sync</string>
               </property>
@@ -856,7 +856,7 @@
            </widget>
           </item>
           <item>
-           <widget class="synthv1widget_combo" name="Def1MonoKnob">
+           <widget class="synthv1widget_check" name="Def1MonoKnob">
             <property name="toolTip">
              <string>DEF1 Mono</string>
             </property>
@@ -964,7 +964,7 @@
            </widget>
           </item>
           <item>
-           <widget class="synthv1widget_combo" name="Dco2Shape1Knob">
+           <widget class="synthv1widget_radio" name="Dco2Shape1Knob">
             <property name="toolTip">
              <string>DCO2 Wave Shape 1</string>
             </property>
@@ -984,7 +984,7 @@
            </widget>
           </item>
           <item>
-           <widget class="synthv1widget_combo" name="Dco2Bandl1Knob">
+           <widget class="synthv1widget_check" name="Dco2Bandl1Knob">
             <property name="toolTip">
              <string>DCO2 Wave Bandlimit 1</string>
             </property>
@@ -1001,7 +1001,7 @@
            </widget>
           </item>
           <item>
-           <widget class="synthv1widget_combo" name="Dco2Shape2Knob">
+           <widget class="synthv1widget_radio" name="Dco2Shape2Knob">
             <property name="toolTip">
              <string>DCO2 Wave Shape 2</string>
             </property>
@@ -1021,7 +1021,7 @@
            </widget>
           </item>
           <item>
-           <widget class="synthv1widget_combo" name="Dco2Bandl2Knob">
+           <widget class="synthv1widget_check" name="Dco2Bandl2Knob">
             <property name="toolTip">
              <string>DCO2 Wave Bandlimit 2</string>
             </property>
@@ -1227,7 +1227,7 @@
              </widget>
             </item>
             <item>
-             <widget class="synthv1widget_combo" name="Dcf2TypeKnob">
+             <widget class="synthv1widget_radio" name="Dcf2TypeKnob">
               <property name="toolTip">
                <string>DCF2 Type</string>
               </property>
@@ -1237,7 +1237,7 @@
              </widget>
             </item>
             <item>
-             <widget class="synthv1widget_combo" name="Dcf2SlopeKnob">
+             <widget class="synthv1widget_radio" name="Dcf2SlopeKnob">
               <property name="toolTip">
                <string>DCF2 Slope</string>
               </property>
@@ -1328,7 +1328,7 @@
              </widget>
             </item>
             <item>
-             <widget class="synthv1widget_combo" name="Lfo2ShapeKnob">
+             <widget class="synthv1widget_radio" name="Lfo2ShapeKnob">
               <property name="toolTip">
                <string>LFO2 Wave Shape</string>
               </property>
@@ -1419,7 +1419,7 @@
              </widget>
             </item>
             <item>
-             <widget class="synthv1widget_combo" name="Lfo2SyncKnob">
+             <widget class="synthv1widget_check" name="Lfo2SyncKnob">
               <property name="toolTip">
                <string>LFO2 Sync</string>
               </property>
@@ -1691,7 +1691,7 @@
            </widget>
           </item>
           <item>
-           <widget class="synthv1widget_combo" name="Def2MonoKnob">
+           <widget class="synthv1widget_check" name="Def2MonoKnob">
             <property name="toolTip">
              <string>DEF2 Mono</string>
             </property>
@@ -2066,48 +2066,6 @@
          </layout>
         </widget>
        </item>
-       <item row="0" column="10" rowspan="2">
-        <widget class="QGroupBox" name="Dyn1GroupBox">
-         <property name="title">
-          <string>Dynamic</string>
-         </property>
-         <layout class="QVBoxLayout">
-          <item>
-           <widget class="synthv1widget_combo" name="Dyn1CompressKnob">
-            <property name="toolTip">
-             <string>Dynamic Compressor</string>
-            </property>
-            <property name="text">
-             <string>Compress</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint">
-             <size>
-              <width>8</width>
-              <height>8</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="synthv1widget_combo" name="Dyn1LimiterKnob">
-             <property name="toolTip">
-             <string>Dynamic Limiter</string>
-            </property>
-            <property name="text">
-             <string>Limiter</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
        <item row="0" column="11" rowspan="2">
         <spacer>
          <property name="orientation">
@@ -2193,6 +2151,35 @@
          </layout>
         </widget>
        </item>
+       <item row="2" column="6" colspan="4">
+        <widget class="QGroupBox" name="Dyn1GroupBox">
+         <property name="title">
+          <string>Dynamic</string>
+         </property>
+         <layout class="QHBoxLayout">
+          <item>
+           <widget class="synthv1widget_check" name="Dyn1CompressKnob">
+            <property name="toolTip">
+             <string>Dynamic Compressor</string>
+            </property>
+            <property name="text">
+             <string>Compress</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="synthv1widget_check" name="Dyn1LimiterKnob">
+             <property name="toolTip">
+             <string>Dynamic Limiter</string>
+            </property>
+            <property name="text">
+             <string>Limiter</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
        <item row="3" column="0" colspan="12">
         <spacer>
          <property name="orientation">
@@ -2267,6 +2254,16 @@
   </customwidget>
   <customwidget>
    <class>synthv1widget_combo</class>
+   <extends>QDial</extends>
+   <header>synthv1widget_param.h</header>
+  </customwidget>
+  <customwidget>
+   <class>synthv1widget_radio</class>
+   <extends>QDial</extends>
+   <header>synthv1widget_param.h</header>
+  </customwidget>
+  <customwidget>
+   <class>synthv1widget_check</class>
    <extends>QDial</extends>
    <header>synthv1widget_param.h</header>
   </customwidget>
