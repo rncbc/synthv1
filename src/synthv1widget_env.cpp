@@ -1,7 +1,7 @@
 // synthv1widget_env.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ synthv1widget_env::synthv1widget_env (
 		m_poly(7), m_iDragNode(-1)
 {
 	setMouseTracking(true);
-	setMinimumSize(QSize(120, 60));
+	setMinimumSize(QSize(120, 72));
 
 	QFrame::setFrameShape(QFrame::Panel);
 	QFrame::setFrameShadow(QFrame::Sunken);

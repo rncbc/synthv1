@@ -317,12 +317,13 @@ synthv1widget_knob::synthv1widget_knob ( QWidget *pParent ) : synthv1widget_para
 
 	m_pDial = new synthv1widget_dial();
 	m_pDial->setNotchesVisible(true);
-	m_pDial->setMaximumSize(QSize(48, 42));
+	m_pDial->setMaximumSize(QSize(48, 48));
 
 	QGridLayout *pGridLayout
 		= static_cast<QGridLayout *> (synthv1widget_param::layout());
 	pGridLayout->addWidget(m_pLabel, 0, 0, 1, 3);
 	pGridLayout->addWidget(m_pDial,  1, 0, 1, 3);
+	pGridLayout->setAlignment(m_pDial, Qt::AlignVCenter | Qt::AlignHCenter);
 
 	QObject::connect(m_pDial,
 		SIGNAL(valueChanged(int)),
@@ -677,7 +678,10 @@ synthv1widget_radio::synthv1widget_radio ( QWidget *pParent )
 		"QRadioButton::indicator::checked   { image: url(:/images/ledOn.png);  }"
 	);
 #endif
-	synthv1widget_param::setMaximumSize(QSize(64, 72));
+
+	const QFont& font = synthv1widget_param::font();
+	const QFont font1(font.family(), font.pointSize() - 1);
+	QWidget::setFont(font1);
 
 	QObject::connect(&m_group,
 		SIGNAL(buttonClicked(int)),
@@ -724,12 +728,13 @@ void synthv1widget_radio::insertItems ( int iIndex, const QStringList& items )
 {
 	QGridLayout *pGridLayout
 		= static_cast<QGridLayout *> (synthv1widget_param::layout());
-
+	const QString sToolTipMask(synthv1widget_param::toolTip() + ": %1");
 	QStringListIterator iter(items);
 	while (iter.hasNext()) {
 		const QString& sValueText = iter.next();
 		QRadioButton *pRadioButton = new QRadioButton(sValueText);
 		pRadioButton->setStyle(synthv1widget_param_style::getRef());
+		pRadioButton->setToolTip(sToolTipMask.arg(sValueText));
 		pGridLayout->addWidget(pRadioButton, iIndex, 0);
 		m_group.addButton(pRadioButton, iIndex);
 		++iIndex;
@@ -794,7 +799,7 @@ synthv1widget_check::synthv1widget_check ( QWidget *pParent )
 	pGridLayout->addWidget(m_pCheckBox, 0, 0);
 	pGridLayout->setAlignment(m_pCheckBox, m_alignment);
 
-	synthv1widget_param::setMaximumSize(QSize(64, 72));
+	synthv1widget_param::setMaximumSize(QSize(72, 72));
 
 	QObject::connect(m_pCheckBox,
 		SIGNAL(toggled(bool)),
