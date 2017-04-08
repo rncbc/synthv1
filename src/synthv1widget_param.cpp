@@ -616,9 +616,9 @@ public:
 	}
 
 	// Paint job.
-	void drawPrimitive(	PrimitiveElement element,
+	void drawPrimitive(PrimitiveElement element,
 		const QStyleOption *option,
-		QPainter *painter, const QWidget *widget ) const
+		QPainter *painter, const QWidget *widget) const
 	{
 		if (element == PE_IndicatorRadioButton ||
 			element == PE_IndicatorCheckBox) {
@@ -638,6 +638,18 @@ public:
 		}
 		else
 		QProxyStyle::drawPrimitive(element, option, painter, widget);
+	}
+
+	// Spiced up text margins
+	void drawItemText(QPainter *painter, const QRect& rectangle,
+		int alignment, const QPalette& palette, bool enabled,
+		const QString& text, QPalette::ColorRole textRole) const
+	{
+		QRect rect = rectangle;
+		rect.setLeft(rect.left() - 4);
+		rect.setRight(rect.right() + 4);
+		QProxyStyle::drawItemText(painter, rect,
+			alignment, palette, enabled, text, textRole);
 	}
 
 	static void addRef ()
