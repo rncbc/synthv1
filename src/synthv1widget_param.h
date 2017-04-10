@@ -24,12 +24,12 @@
 
 #include <QWidget>
 #include <QDial>
+#include <QDoubleSpinBox>
 #include <QButtonGroup>
 
 
 // Forward declarations.
 class QLabel;
-class QDoubleSpinBox;
 class QComboBox;
 class QCheckBox;
 
@@ -196,6 +196,49 @@ private:
 
 
 //-------------------------------------------------------------------------
+// synthv1widget_edit - A better QDoubleSpinBox widget.
+
+class synthv1widget_edit : public QDoubleSpinBox
+{
+	Q_OBJECT
+
+public:
+
+	// Constructor.
+	synthv1widget_edit(QWidget *pParent = 0);
+
+	// Edit mode behavior:
+	// DefaultMode - default (immediate value changes) behavior.
+	// DeferredMode - deferred value changes (to when editing is finished).
+	enum EditMode { DefaultMode = 0, DeferredMode };
+
+	// Set spin-box edit mode behavior.
+	static void setEditMode(EditMode editMode);
+	static EditMode editMode();
+
+protected slots:
+
+	// Alternate value change behavior handlers.
+	void lineEditTextChanged(const QString&);
+	void spinBoxEditingFinished();
+	void spinBoxValueChanged(double);
+
+signals:
+
+	// Alternate value change signal.
+	void valueChangedEx(double);
+
+private:
+
+	// Alternate edit behavior tracking.
+	int m_iTextChanged;
+
+	// Spin-box edit mode behavior.
+	static EditMode g_editMode;
+};
+
+
+//-------------------------------------------------------------------------
 // synthv1widget_spin - Custom knob/spin-box widget.
 
 class synthv1widget_spin : public synthv1widget_knob
@@ -235,7 +278,7 @@ protected slots:
 private:
 
 	// Widget members.
-	QDoubleSpinBox *m_pSpinBox;
+	synthv1widget_edit *m_pSpinBox;
 };
 
 
