@@ -95,7 +95,7 @@
          </item>
         </widget>
        </item>
-       <item row="1" column="2" colspan="2">
+       <item row="1" column="2" colspan="2" rowspan="3">
         <spacer>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -108,7 +108,37 @@
          </property>
         </spacer>
        </item>
-	   <item row="2" column="0">
+       <item row="2" column="0">
+        <widget class="QLabel" name="KnobEditModeTextLabel">
+         <property name="text">
+          <string>Knob &amp;edit mode:</string>
+         </property>
+         <property name="buddy">
+          <cstring>KnobEditModeComboBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="KnobEditModeComboBox">
+         <property name="toolTip">
+          <string>Knob edit mode</string>
+         </property>
+         <property name="editable">
+          <bool>false</bool>
+         </property>
+         <item>
+          <property name="text">
+           <string>(default)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Deferred</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="3" column="0">
         <widget class="QLabel" name="CustomStyleThemeTextLabel">
          <property name="text">
           <string>Custom &amp;style theme:</string>
@@ -118,7 +148,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="3" column="1">
         <widget class="QComboBox" name="CustomStyleThemeComboBox">
          <property name="toolTip">
           <string>Custom widget style theme</string>
@@ -133,7 +163,7 @@
          </item>
         </widget>
        </item>
-       <item row="3" colspan="3">
+       <item row="4" colspan="3">
         <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -499,6 +529,7 @@
  <tabstops>
   <tabstop>UseNativeDialogsCheckBox</tabstop>
   <tabstop>KnobDialModeComboBox</tabstop>
+  <tabstop>KnobEditModeComboBox</tabstop>
   <tabstop>CustomStyleThemeComboBox</tabstop>
   <tabstop>ProgramsAddBankToolButton</tabstop>
   <tabstop>ProgramsAddItemToolButton</tabstop>

@@ -2264,7 +2264,7 @@
   </customwidget>
   <customwidget>
    <class>synthv1widget_check</class>
-   <extends>QDial</extends>
+   <extends>QCheckBox</extends>
    <header>synthv1widget_param.h</header>
   </customwidget>
   <customwidget>

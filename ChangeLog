@@ -6,6 +6,14 @@ ChangeLog
 
 GIT HEAD
 
+- A custom knob/spin-box behavioral option have been added:
+  Configure/Knob edit mode, as to avoid abrupt changes upon
+  editing values (still the default behavior) and only take
+  effect (Deferred) when enter is pressed or the spin-box
+  loses focus. (EXPERIMENTAL)
+- The main GUI has been partially revamped, after replacing
+  some rotary knob/dial combos with kinda more skeuomorphic
+  fake-LED radio-buttons or check-boxes. (EXPERIMENTAL)
 - Alias-free/band-limited wavetable oscillators have been
   fixed to prevent cross-octave, polyphonic interference.
   (EXPERIMENTAL) 

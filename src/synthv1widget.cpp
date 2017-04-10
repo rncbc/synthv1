@@ -777,6 +777,8 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	if (pConfig) {
 		synthv1widget_dial::setDialMode(
 			synthv1widget_dial::DialMode(pConfig->iKnobDialMode));
+		synthv1widget_edit::setEditMode(
+			synthv1widget_edit::EditMode(pConfig->iKnobEditMode));
 	}
 
 	// Epilog.
