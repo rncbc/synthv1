@@ -802,6 +802,8 @@ public:
 	void midiInEnabled(bool on);
 	uint32_t midiInCount();
 
+	void directNoteOn(int note, int vel);
+
 	synthv1_wave dco1_wave1, dco1_wave2;
 	synthv1_wave dco2_wave1, dco2_wave2;
 
@@ -904,6 +906,10 @@ private:
 
 	synthv1_reverb m_reverb;
 	synthv1_phasor m_phasor;
+
+	volatile int m_direct_chan;
+	volatile int m_direct_note;
+	volatile int m_direct_vel;
 };
 
 
@@ -1776,11 +1782,6 @@ void synthv1_impl::allControllersOff_2 (void)
 
 void synthv1_impl::allNotesOff (void)
 {
-#if 0
-	allNotesOff_1();
-	allNotesOff_2();
-#else
-
 	synthv1_voice *pv = m_play_list.next();
 	while (pv) {
 		if (pv->note1 >= 0)
@@ -1799,7 +1800,7 @@ void synthv1_impl::allNotesOff (void)
 	m_aux1.reset();
 	m_aux2.reset();
 
-#endif
+	m_direct_chan = m_direct_note = m_direct_vel = -1;
 }
 
 void synthv1_impl::allNotesOff_1 (void)
@@ -1902,6 +1903,21 @@ void synthv1_impl::allSoundOff (void)
 }
 
 
+// direct note-on triggered on next cycle...
+void synthv1_impl::directNoteOn ( int note, int vel )
+{
+	if (vel > 0) {
+		const int ch1 = int(*m_def1.channel);
+		const int ch2 = int(*m_def2.channel);
+		m_direct_chan = (ch1 > 0 ? ch1 - 1 : (ch2 > 0 ? ch2 - 1 : 0)) & 0x0f;
+		m_direct_note = note;
+		m_direct_vel  = vel;
+	} else {
+		m_direct_vel  = 0;
+	}
+}
+
+
 // controllers accessor
 
 synthv1_controls *synthv1_impl::controls (void)
@@ -2001,6 +2017,20 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	for (k = 0; k < m_nchannels; ++k) {
 		::memcpy(m_sfxs[k], ins[k], nframes * sizeof(float));
 		::memset(outs[k], 0, nframes * sizeof(float));
+	}
+
+	// process direct note on/off...
+	if (m_direct_chan >= 0 && m_direct_note >= 0 && m_direct_vel >= 0) {
+		struct note_data { uint8_t status, note, vel; } data;
+		data.status = (m_direct_vel > 0 ? 0x90 : 0x80) | m_direct_chan;
+		data.note = m_direct_note;
+		data.vel = m_direct_vel;
+		process_midi((uint8_t *) &data, sizeof(data));
+		if (m_direct_vel == 0) {
+			m_direct_chan = -1;
+			m_direct_note = -1;
+		}
+		m_direct_vel = -1;
 	}
 
 	// controls
@@ -2486,6 +2516,14 @@ void synthv1::midiInEnabled ( bool on )
 uint32_t synthv1::midiInCount (void)
 {
 	return m_pImpl->midiInCount();
+}
+
+
+// MIDI direct note on/off triggering
+
+void synthv1::directNoteOn ( int note, int vel )
+{
+	m_pImpl->directNoteOn(note, vel);
 }
 
 
