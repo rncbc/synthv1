@@ -84,4 +84,10 @@ uint32_t synthv1_ui::midiInCount (void)
 }
 
 
+void synthv1_ui::directNoteOn ( int note, int vel )
+{
+	m_pSynth->directNoteOn(note, vel);
+}
+
+
 // end of synthv1_ui.cpp

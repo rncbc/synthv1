@@ -50,6 +50,8 @@ public:
 	void midiInEnabled(bool bEnabled);
 	uint32_t midiInCount();
 
+	void directNoteOn(int note, int vel);
+
 private:
 
 	synthv1 *m_pSynth;
