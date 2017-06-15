@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Added StartupWMClass entry to desktop file. (EXPERIMENTAL)
 - Long overdue, some brand new and fundamental icons revamp.
 
 
