@@ -4,9 +4,9 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.8.3  2017-06-21  A Summer'17 release.
 
-- Added StartupWMClass entry to desktop file. (EXPERIMENTAL)
+- Added StartupWMClass entry to desktop file.
 - Long overdue, some brand new and fundamental icons revamp.
 
 
