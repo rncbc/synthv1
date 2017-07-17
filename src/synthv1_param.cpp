@@ -78,6 +78,7 @@ struct ParamInfo {
 	{ "LFO1_SYNC",     PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // LFO1 Sync
 	{ "LFO1_SWEEP",    PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO1 Sweep
 	{ "LFO1_PITCH",    PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO1 Pitch
+	{ "LFO1_BALANCE",  PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO1 Balance
 	{ "LFO1_RINGMOD",  PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO1 Ring Mod
 	{ "LFO1_CUTOFF",   PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO1 Cutoff
 	{ "LFO1_RESO",     PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO1 Resonance
@@ -134,6 +135,7 @@ struct ParamInfo {
 	{ "LFO2_SYNC",     PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // LFO2 Sync
 	{ "LFO2_SWEEP",    PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO2 Sweep
 	{ "LFO2_PITCH",    PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO2 Pitch
+	{ "LFO2_BALANCE",  PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO2 Balance
 	{ "LFO2_RINGMOD",  PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO2 Ring Mod
 	{ "LFO2_CUTOFF",   PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO2 Cutoff
 	{ "LFO2_RESO",     PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // LFO2 Resonance

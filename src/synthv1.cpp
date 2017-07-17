@@ -441,6 +441,7 @@ struct synthv1_lfo
 	synthv1_port  sync;
 	synthv1_port2 sweep;
 	synthv1_port2 pitch;
+	synthv1_port2 balance;
 	synthv1_port2 ringmod;
 	synthv1_port2 cutoff;
 	synthv1_port2 reso;
@@ -595,19 +596,21 @@ private:
 
 // balancing smoother (1 parameter)
 
-class synthv1_bal : public synthv1_ramp1
+class synthv1_bal : public synthv1_ramp2
 {
 public:
 
-	synthv1_bal() : synthv1_ramp1(2) {}
+	synthv1_bal() : synthv1_ramp2(2) {}
 
 protected:
 
 	float evaluate(uint16_t i)
 	{
-		synthv1_ramp1::update();
+		synthv1_ramp2::update();
 
-		const float wbal = 0.25f * M_PI * (1.0f + m_param1_v);
+		const float wbal = 0.25f * M_PI
+			* (1.0f + m_param1_v)
+			* (1.0f + m_param2_v);
 
 		return M_SQRT2 * (i == 0 ? ::cosf(wbal) : ::sinf(wbal));
 	}
@@ -711,7 +714,9 @@ struct synthv1_voice : public synthv1_list<synthv1_voice>
 
 	float lfo1_sample, lfo2_sample;
 
-	synthv1_bal dco1_bal, dco2_bal;
+	synthv1_bal dco1_bal, dco2_bal;				// oscillators balance
+
+	float dco1_balance, dco2_balance;
 
 	synthv1_filter1 dcf11, dcf12, dcf21, dcf22;	// filters
 	synthv1_filter2 dcf13, dcf14, dcf23, dcf24;
@@ -1281,6 +1286,7 @@ synthv1_port *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::LFO1_SYNC:      pParamPort = &m_lfo1.sync;        break;
 	case synthv1::LFO1_SWEEP:     pParamPort = &m_lfo1.sweep;       break;
 	case synthv1::LFO1_PITCH:     pParamPort = &m_lfo1.pitch;       break;
+	case synthv1::LFO1_BALANCE:   pParamPort = &m_lfo1.balance;     break;
 	case synthv1::LFO1_RINGMOD:   pParamPort = &m_lfo1.ringmod;     break;
 	case synthv1::LFO1_CUTOFF:    pParamPort = &m_lfo1.cutoff;      break;
 	case synthv1::LFO1_RESO:      pParamPort = &m_lfo1.reso;        break;
@@ -1335,6 +1341,7 @@ synthv1_port *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::LFO2_SYNC:      pParamPort = &m_lfo2.sync;        break;
 	case synthv1::LFO2_SWEEP:     pParamPort = &m_lfo2.sweep;       break;
 	case synthv1::LFO2_PITCH:     pParamPort = &m_lfo2.pitch;       break;
+	case synthv1::LFO2_BALANCE:   pParamPort = &m_lfo2.balance;     break;
 	case synthv1::LFO2_RINGMOD:   pParamPort = &m_lfo2.ringmod;     break;
 	case synthv1::LFO2_CUTOFF:    pParamPort = &m_lfo2.cutoff;      break;
 	case synthv1::LFO2_RESO:      pParamPort = &m_lfo2.reso;        break;
@@ -1522,7 +1529,8 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					pv->note1 = key;
 					pv->vel1 = synthv1_velocity(vel, *m_def1.velocity);
 					// balance
-					pv->dco1_bal.reset(m_dco1.balance.value_ptr());
+					pv->dco1_balance = 0.0f;
+					pv->dco1_bal.reset(m_dco1.balance.value_ptr(), &pv->dco1_balance);
 					// pressure/after-touch
 					pv->pre1 = 0.0f;
 					pv->dca1_pre.reset(
@@ -1577,7 +1585,8 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					pv->note2 = key;
 					pv->vel2 = synthv1_velocity(vel, *m_def2.velocity);
 					// balance
-					pv->dco2_bal.reset(m_dco2.balance.value_ptr());
+					pv->dco2_balance = 0.0f;
+					pv->dco2_bal.reset(m_dco2.balance.value_ptr(), &pv->dco2_balance);
 					// pressure/after-touch
 					pv->pre2 = 0.0f;
 					pv->dca2_pre.reset(
@@ -2255,6 +2264,8 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				}
 
 				if (j == 0) {
+					pv->dco1_balance = lfo1 * *m_lfo1.balance;
+					pv->dco2_balance = lfo2 * *m_lfo2.balance;
 					m_aux1.panning = lfo1 * *m_lfo1.panning;
 					m_aux1.volume  = lfo1 * *m_lfo1.volume + 1.0f;
 					m_aux2.panning = lfo2 * *m_lfo2.panning;

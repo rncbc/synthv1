@@ -640,6 +640,16 @@
              </spacer>
             </item>
             <item>
+             <widget class="synthv1widget_spin" name="Lfo1BalanceKnob">
+              <property name="toolTip">
+               <string>LFO2 Balance</string>
+              </property>
+              <property name="text">
+               <string>Balance</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="synthv1widget_spin" name="Lfo1RingModKnob">
               <property name="toolTip">
                <string>LFO1 Ring Mod</string>
@@ -1473,6 +1483,16 @@
                </size>
               </property>
              </spacer>
+            </item>
+            <item>
+             <widget class="synthv1widget_spin" name="Lfo2BalanceKnob">
+              <property name="toolTip">
+               <string>LFO2 Balance</string>
+              </property>
+              <property name="text">
+               <string>Balance</string>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="synthv1widget_spin" name="Lfo2RingModKnob">
