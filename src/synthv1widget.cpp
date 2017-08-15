@@ -28,6 +28,9 @@
 #include "synthv1widget_config.h"
 #include "synthv1widget_control.h"
 
+#include "synthv1_controls.h"
+#include "synthv1_programs.h"
+
 #include <QMessageBox>
 #include <QDir>
 #include <QTimer>
@@ -1243,8 +1246,7 @@ void synthv1widget::helpConfigure (void)
 	synthv1widget_config form(this);
 
 	// Set controllers&&programs database...
-	form.setControls(pSynthUi->controls());
-	form.setPrograms(pSynthUi->programs());
+	form.setInstance(pSynthUi);
 
 	form.exec();
 }

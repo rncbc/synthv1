@@ -33,9 +33,11 @@ class synthv1_ui
 {
 public:
 
-	synthv1_ui(synthv1 *pSynth);
+	synthv1_ui(synthv1 *pSynth, bool bPlugin);
 
 	synthv1 *instance() const;
+
+	bool isPlugin() const;
 
 	void setParamValue(synthv1::ParamIndex index, float fValue);
 	float paramValue(synthv1::ParamIndex index) const;
@@ -55,6 +57,8 @@ public:
 private:
 
 	synthv1 *m_pSynth;
+
+	bool m_bPlugin;
 };
 
 

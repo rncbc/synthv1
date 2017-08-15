@@ -26,7 +26,8 @@
 // synthv1_ui - decl.
 //
 
-synthv1_ui::synthv1_ui ( synthv1 *pSynth ) : m_pSynth(pSynth)
+synthv1_ui::synthv1_ui ( synthv1 *pSynth, bool bPlugin )
+	: m_pSynth(pSynth), m_bPlugin(bPlugin)
 {
 }
 
@@ -34,6 +35,12 @@ synthv1_ui::synthv1_ui ( synthv1 *pSynth ) : m_pSynth(pSynth)
 synthv1 *synthv1_ui::instance (void) const
 {
 	return m_pSynth;
+}
+
+
+bool synthv1_ui::isPlugin (void) const
+{
+	return m_bPlugin;
 }
 
 

@@ -70,7 +70,7 @@ synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 		QApplication::setStyle(QStyleFactory::create(pConfig->sCustomStyleTheme));
 
 	// Initialize (user) interface stuff...
-	m_pSynthUi = new synthv1_ui(m_pSynth);
+	m_pSynthUi = new synthv1_ui(m_pSynth, false);
 
 	// May initialize the scheduler/work notifier.
 	openSchedNotifier();

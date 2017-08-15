@@ -43,17 +43,10 @@ public:
 	~synthv1_programs();
 
 	// operational mode flags.
-	enum Mode { Enabled = 1, Optional = 2 };
-
 	void enabled(bool on)
-		{ if (on) m_mode |= Enabled; else m_mode &= ~Enabled; }
+		{ m_enabled = on; }
 	bool enabled() const
-		{ return m_mode & Enabled; }
-
-	void optional(bool on)
-		{ if (on) m_mode |= Optional; else m_mode &= ~Optional; }
-	bool optional() const
-		{ return m_mode & Optional; }
+		{ return m_enabled; }
 
 	// prog. base node
 	class Prog
@@ -163,7 +156,7 @@ protected:
 private:
 
 	// instance variables.
-	unsigned int m_mode;
+	bool m_enabled;
 
 	Sched m_sched;
 

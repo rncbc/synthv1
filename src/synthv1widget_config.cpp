@@ -22,6 +22,12 @@
 #include "synthv1widget_config.h"
 #include "synthv1widget_param.h"
 
+#include "synthv1_ui.h"
+
+#include "synthv1_controls.h"
+#include "synthv1_programs.h"
+
+
 #include <QPushButton>
 #include <QMessageBox>
 
@@ -40,6 +46,9 @@ synthv1widget_config::synthv1widget_config (
 {
 	// Setup UI struct...
 	m_ui.setupUi(this);
+
+	// UI instance reference.
+	m_pSynthUi = NULL;
 
 	// Custom style themes...
 	//m_ui.CustomStyleThemeComboBox->clear();
@@ -145,10 +154,6 @@ synthv1widget_config::synthv1widget_config (
 		SIGNAL(rejected()),
 		SLOT(reject()));
 
-	// Controllers, Programs database.
-	m_pControls = NULL;
-	m_pPrograms = NULL;
-
 	// Dialog dirty flags.
 	m_iDirtyControls = 0;
 	m_iDirtyPrograms = 0;
@@ -165,30 +170,45 @@ synthv1widget_config::~synthv1widget_config (void)
 }
 
 
-// controllers accessors.
-void synthv1widget_config::setControls ( synthv1_controls *pControls )
+// instance accessors.
+void synthv1widget_config::setInstance ( synthv1_ui *pSynthUi )
 {
-	m_pControls = pControls;
+	m_pSynthUi = pSynthUi;
 
-	// Load controllers database...
 	synthv1_config *pConfig = synthv1_config::getInstance();
-	if (pConfig && m_pControls) {
-		m_ui.ControlsTreeWidget->loadControls(m_pControls);
-		const bool bControlsOptional = m_pControls->optional();
-		m_ui.ControlsEnabledCheckBox->setEnabled(bControlsOptional);
-		m_ui.ControlsEnabledCheckBox->setChecked(m_pControls->enabled());
+	if (pConfig && m_pSynthUi) {
+		const bool bOptional = m_pSynthUi->isPlugin();
+		// Load controllers database...
+		synthv1_controls *pControls = pSynthUi->controls();
+		if (pControls) {
+			m_ui.ControlsTreeWidget->loadControls(pControls);
+			m_ui.ControlsEnabledCheckBox->setEnabled(bOptional);
+			m_ui.ControlsEnabledCheckBox->setChecked(pControls->enabled());
+		}
+		// Load programs database...
+		synthv1_programs *pPrograms = pSynthUi->programs();
+		if (pPrograms) {
+			m_ui.ProgramsTreeWidget->loadPrograms(pPrograms);
+			m_ui.ProgramsEnabledCheckBox->setEnabled(bOptional);
+			m_ui.ProgramsPreviewCheckBox->setEnabled(!bOptional);
+			m_ui.ProgramsEnabledCheckBox->setChecked(pPrograms->enabled());
+		}
+		// Widget styles not available on plugin mode...
+		m_ui.CustomStyleThemeTextLabel->setEnabled(!bOptional);
+		m_ui.CustomStyleThemeComboBox->setEnabled(!bOptional);
 	}
 
 	// Reset dialog dirty flags.
 	m_iDirtyControls = 0;
+	m_iDirtyPrograms = 0;
 
 	stabilize();
 }
 
 
-synthv1_controls *synthv1widget_config::controls (void) const
+synthv1_ui *synthv1widget_config::instance (void) const
 {
-	return m_pControls;
+	return m_pSynthUi;
 }
 
 
@@ -235,7 +255,7 @@ void synthv1widget_config::controlsContextMenuRequested ( const QPoint& pos )
 	QMenu menu(this);
 	QAction *pAction;
 
-	bool bEnabled = (m_pControls != NULL);
+	bool bEnabled = (m_pSynthUi && m_pSynthUi->controls() != NULL);
 
 	pAction = menu.addAction(QIcon(":/images/synthv1_preset.png"),
 		tr("&Add Controller"), this, SLOT(controlsAddItem()));
@@ -261,8 +281,11 @@ void synthv1widget_config::controlsContextMenuRequested ( const QPoint& pos )
 
 void synthv1widget_config::controlsEnabled ( bool bOn )
 {
-	if (m_pControls && m_pControls->optional())
-		m_pControls->enabled(bOn);
+	if (m_pSynthUi) {
+		synthv1_controls *pControls = m_pSynthUi->controls();
+		if (pControls && m_pSynthUi->isPlugin())
+			pControls->enabled(bOn);
+	}
 
 	controlsChanged();
 }
@@ -273,34 +296,6 @@ void synthv1widget_config::controlsChanged (void)
 	++m_iDirtyControls;
 
 	stabilize();
-}
-
-
-// programs accessors.
-void synthv1widget_config::setPrograms ( synthv1_programs *pPrograms )
-{
-	m_pPrograms = pPrograms;
-
-	// Load programs database...
-	synthv1_config *pConfig = synthv1_config::getInstance();
-	if (pConfig && m_pPrograms) {
-		m_ui.ProgramsTreeWidget->loadPrograms(m_pPrograms);
-		const bool bProgramsOptional = m_pPrograms->optional();
-		m_ui.ProgramsEnabledCheckBox->setEnabled(bProgramsOptional);
-		m_ui.ProgramsPreviewCheckBox->setEnabled(!bProgramsOptional);
-		m_ui.ProgramsEnabledCheckBox->setChecked(m_pPrograms->enabled());
-	}
-
-	// Reset dialog dirty flags.
-	m_iDirtyPrograms = 0;
-
-	stabilize();
-}
-
-
-synthv1_programs *synthv1widget_config::programs (void) const
-{
-	return m_pPrograms;
 }
 
 
@@ -355,7 +350,7 @@ void synthv1widget_config::programsContextMenuRequested ( const QPoint& pos )
 	QMenu menu(this);
 	QAction *pAction;
 
-	bool bEnabled = (m_pPrograms != NULL);
+	bool bEnabled = (m_pSynthUi && m_pSynthUi->programs() != NULL);
 
 	pAction = menu.addAction(QIcon(":/images/presetBank.png"),
 		tr("Add &Bank"), this, SLOT(programsAddBankItem()));
@@ -385,8 +380,11 @@ void synthv1widget_config::programsContextMenuRequested ( const QPoint& pos )
 
 void synthv1widget_config::programsEnabled ( bool bOn )
 {
-	if (m_pPrograms && m_pPrograms->optional())
-		m_pPrograms->enabled(bOn);
+	if (m_pSynthUi) {
+		synthv1_programs *pPrograms = m_pSynthUi->programs();
+		if (pPrograms && m_pSynthUi->isPlugin())
+			pPrograms->enabled(bOn);
+	}
 
 	programsChanged();
 }
@@ -402,8 +400,11 @@ void synthv1widget_config::programsChanged (void)
 
 void synthv1widget_config::programsActivated (void)
 {
-	if (m_ui.ProgramsPreviewCheckBox->isChecked() && m_pPrograms)
-		m_ui.ProgramsTreeWidget->selectProgram(m_pPrograms);
+	if (m_pSynthUi) {
+		synthv1_programs *pPrograms = m_pSynthUi->programs();
+		if (m_ui.ProgramsPreviewCheckBox->isChecked() && pPrograms)
+			m_ui.ProgramsTreeWidget->selectProgram(pPrograms);
+	}
 
 	stabilize();
 }
@@ -422,16 +423,16 @@ void synthv1widget_config::optionsChanged (void)
 void synthv1widget_config::stabilize (void)
 {
 	QTreeWidgetItem *pItem = m_ui.ControlsTreeWidget->currentItem();
-	bool bEnabled = (m_pControls != NULL);
+	bool bEnabled = (m_pSynthUi && m_pSynthUi->controls() != NULL);
 	m_ui.ControlsAddItemToolButton->setEnabled(bEnabled);
 	bEnabled = bEnabled && (pItem != NULL);
 	m_ui.ControlsEditToolButton->setEnabled(bEnabled);
 	m_ui.ControlsDeleteToolButton->setEnabled(bEnabled);
 
 	pItem = m_ui.ProgramsTreeWidget->currentItem();
-	bEnabled = (m_pPrograms != NULL);
+	bEnabled = (m_pSynthUi && m_pSynthUi->programs() != NULL);
 	m_ui.ProgramsPreviewCheckBox->setEnabled(
-		bEnabled && m_pPrograms->enabled());
+		bEnabled && m_ui.ProgramsEnabledCheckBox->isEnabled());
 	m_ui.ProgramsAddBankToolButton->setEnabled(bEnabled);
 	m_ui.ProgramsAddItemToolButton->setEnabled(bEnabled);
 	bEnabled = bEnabled && (pItem != NULL);
@@ -449,20 +450,26 @@ void synthv1widget_config::accept (void)
 {
 	synthv1_config *pConfig = synthv1_config::getInstance();
 
-	if (m_iDirtyControls > 0 && pConfig && m_pControls) {
+	if (m_iDirtyControls > 0 && pConfig && m_pSynthUi) {
 		// Save controls...
-		m_ui.ControlsTreeWidget->saveControls(m_pControls);
-		pConfig->saveControls(m_pControls);
-		// Reset dirty flag.
-		m_iDirtyControls = 0;
+		synthv1_controls *pControls = m_pSynthUi->controls();
+		if (pControls) {
+			m_ui.ControlsTreeWidget->saveControls(pControls);
+			pConfig->saveControls(pControls);
+			// Reset dirty flag.
+			m_iDirtyControls = 0;
+		}
 	}
 
-	if (m_iDirtyPrograms > 0 && pConfig && m_pPrograms) {
+	if (m_iDirtyPrograms > 0 && pConfig && m_pSynthUi) {
 		// Save programs...
-		m_ui.ProgramsTreeWidget->savePrograms(m_pPrograms);
-		pConfig->savePrograms(m_pPrograms);
-		// Reset dirty flag.
-		m_iDirtyPrograms = 0;
+		synthv1_programs *pPrograms = m_pSynthUi->programs();
+		if (pPrograms) {
+			m_ui.ProgramsTreeWidget->savePrograms(pPrograms);
+			pConfig->savePrograms(pPrograms);
+			// Reset dirty flag.
+			m_iDirtyPrograms = 0;
+		}
 	}
 
 	if (m_iDirtyOptions > 0 && pConfig) {
@@ -481,8 +488,17 @@ void synthv1widget_config::accept (void)
 			pConfig->sCustomStyleTheme = m_ui.CustomStyleThemeComboBox->currentText();
 		else
 			pConfig->sCustomStyleTheme.clear();
-		// Show restart needed message...
-		if (pConfig->sCustomStyleTheme != sOldCustomStyleTheme) {
+		int iNeedRestart = 0;
+ 		if (pConfig->sCustomStyleTheme != sOldCustomStyleTheme) {
+			if (pConfig->sCustomStyleTheme.isEmpty()) {
+				++iNeedRestart;
+			} else {
+				QApplication::setStyle(
+					QStyleFactory::create(pConfig->sCustomStyleTheme));
+			}
+ 		}
+		// Show restart message if needed...
+ 		if (iNeedRestart > 0) {
 			QMessageBox::information(this,
 				tr("Information") + " - " SYNTHV1_TITLE,
 				tr("Some settings may be only effective\n"

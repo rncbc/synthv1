@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Disabled "Custom style theme" option on LV2 plug-in form.
 - Brand new LFO Balance parameter introduced.
 
 

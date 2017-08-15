@@ -35,7 +35,7 @@
 
 synthv1_lv2ui::synthv1_lv2ui ( synthv1_lv2 *pSynth,
 	LV2UI_Controller controller, LV2UI_Write_Function write_function )
-	: synthv1_ui(pSynth)
+	: synthv1_ui(pSynth, true)
 {
 	m_controller = controller;
 	m_write_function = write_function;

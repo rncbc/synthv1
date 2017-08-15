@@ -24,9 +24,11 @@
 
 #include "ui_synthv1widget_config.h"
 
-#include "synthv1_programs.h"
-#include "synthv1_controls.h"
 #include "synthv1_config.h"
+
+
+// forward decls.
+class synthv1_ui;
 
 
 //----------------------------------------------------------------------------
@@ -44,13 +46,9 @@ public:
 	// dtor.
 	~synthv1widget_config();
 
-	// controllers accessors.
-	void setControls(synthv1_controls *pControls);
-	synthv1_controls *controls() const;
-
-	// programs accessors.
-	void setPrograms(synthv1_programs *pPrograms);
-	synthv1_programs *programs() const;
+	// instance accessors.
+	void setInstance(synthv1_ui *pSynthUi);
+	synthv1_ui *instance() const;
 
 protected slots:
 
@@ -93,11 +91,8 @@ private:
 	// UI struct.
 	Ui::synthv1widget_config m_ui;
 
-	// Controllers database.
-	synthv1_controls *m_pControls;
-
-	// Programs database.
-	synthv1_programs *m_pPrograms;
+	// Instance reference.
+	synthv1_ui *m_pSynthUi;
 
 	// Dialog dirty flag.
 	int m_iDirtyControls;
