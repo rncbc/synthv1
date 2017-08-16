@@ -1243,12 +1243,7 @@ void synthv1widget::helpConfigure (void)
 	if (pSynthUi == NULL)
 		return;
 
-	synthv1widget_config form(this);
-
-	// Set controllers&&programs database...
-	form.setInstance(pSynthUi);
-
-	form.exec();
+	synthv1widget_config(pSynthUi, this).exec();
 }
 
 

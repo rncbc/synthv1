@@ -41,14 +41,14 @@ class synthv1widget_config : public QDialog
 public:
 
 	// ctor.
-	synthv1widget_config(QWidget *pParent = 0, Qt::WindowFlags wflags = 0);
+	synthv1widget_config(synthv1_ui *pSynthUi,
+		QWidget *pParent = 0, Qt::WindowFlags wflags = 0);
 
 	// dtor.
 	~synthv1widget_config();
 
-	// instance accessors.
-	void setInstance(synthv1_ui *pSynthUi);
-	synthv1_ui *instance() const;
+	// UI instance accessors.
+	synthv1_ui *ui_instance() const;
 
 protected slots:
 
