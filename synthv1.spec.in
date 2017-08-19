@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 33
+%define release 34
 
 %define _prefix	@ac_prefix@
 
@@ -87,6 +87,8 @@ BuildRequires:	lv2-devel
 %{_datadir}/man/man1/%{name}*.1.gz
 
 %changelog
+* Tue Aug 22 2017 Rui Nuno Capela <rncbc@rncbc.org> 0.8.4
+- A Late-Summer'17 release.
 * Wed Jun 21 2017 Rui Nuno Capela <rncbc@rncbc.org> 0.8.3
 - A Summer'17 release.
 * Tue May  2 2017 Rui Nuno Capela <rncbc@rncbc.org> 0.8.2
