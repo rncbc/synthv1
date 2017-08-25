@@ -1,10 +1,10 @@
 [Desktop Entry]
-Name=@PACKAGE_NAME@
+Name=synthv1
 Version=1.0
 GenericName=MIDI
 Comment=synthv1 is an old school polyphonic synthesizer
 Comment[fr]=synthv1 est un synthétiseur polyphonique à l'ancienne
-Exec=@ac_prefix@/bin/synthv1_jack
+Exec=synthv1_jack
 Icon=synthv1
 Categories=Audio;AudioVideo;Midi;X-Alsa;X-Jack;Qt;
 Keywords=Audio;MIDI;ALSA;JACK;Synthesizer;LV2;Qt;
