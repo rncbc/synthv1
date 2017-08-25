@@ -63,7 +63,7 @@ BuildRequires:	lv2-devel
 %{_libdir}/lv2/%{name}.lv2/%{name}.so
 %{_libdir}/lv2/%{name}.lv2/%{name}_ui.ttl
 %{_libdir}/lv2/%{name}.lv2/%{name}_ui.so
-%dir %{_datadir}/appdata
+%dir %{_datadir}/metainfo
 #dir %{_datadir}/mime
 #dir %{_datadir}/mime/packages
 #dir %{_datadir}/applications
@@ -77,7 +77,7 @@ BuildRequires:	lv2-devel
 #dir %{_datadir}/man
 #dir %{_datadir}/man/man1
 %{_bindir}/%{name}_jack
-%{_datadir}/appdata/%{name}.appdata.xml
+%{_datadir}/metainfo/%{name}.appdata.xml
 %{_datadir}/mime/packages/%{name}.xml
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/32x32/apps/%{name}.png

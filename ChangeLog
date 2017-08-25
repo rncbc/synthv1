@@ -8,7 +8,6 @@ GIT HEAD
 
 - Desktop entry specification file is now finally independent
   from build/configure template chains.
-
 - Updated target path for freedesktop.org's AppStream metainfo
   file (formerly AppData).
 
