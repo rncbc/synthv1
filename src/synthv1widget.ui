@@ -642,7 +642,7 @@
             <item>
              <widget class="synthv1widget_spin" name="Lfo1BalanceKnob">
               <property name="toolTip">
-               <string>LFO2 Balance</string>
+               <string>LFO1 Balance</string>
               </property>
               <property name="text">
                <string>Balance</string>
