@@ -56,7 +56,7 @@
 const uint16_t MAX_VOICES = 32;			// polyphony
 const uint8_t  MAX_NOTES  = 128;
 
-const float MIN_ENV_MSECS = 2.0f;		// min 2msec per stage
+const float MIN_ENV_MSECS = 0.5f;		// min 500 usec per stage
 const float MAX_ENV_MSECS = 5000.0f;	// max 5 sec per stage (default)
 
 const float DETUNE_SCALE  = 0.5f;
@@ -1146,7 +1146,7 @@ void synthv1_impl::updateEnvTimes_1 (void)
 
 	float envtime_msecs = 10000.0f * m_dco1.envtime0;
 	if (envtime_msecs < MIN_ENV_MSECS)
-		envtime_msecs = MIN_ENV_MSECS + 1.0f;
+		envtime_msecs = MIN_ENV_MSECS * 2.0f;
 
 	const uint32_t min_frames = uint32_t(srate_ms * MIN_ENV_MSECS);
 	const uint32_t max_frames = uint32_t(srate_ms * envtime_msecs);
@@ -1169,7 +1169,7 @@ void synthv1_impl::updateEnvTimes_2 (void)
 
 	float envtime_msecs = 10000.0f * m_dco2.envtime0;
 	if (envtime_msecs < MIN_ENV_MSECS)
-		envtime_msecs = MIN_ENV_MSECS + 1.0f;
+		envtime_msecs = MIN_ENV_MSECS * 2.0f;
 
 	const uint32_t min_frames = uint32_t(srate_ms * MIN_ENV_MSECS);
 	const uint32_t max_frames = uint32_t(srate_ms * envtime_msecs);

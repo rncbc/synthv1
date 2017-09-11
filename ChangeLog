@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Reduced minimum envelope stage time from 2msec to 500usec.
 - Desktop entry specification file is now finally independent
   from build/configure template chains.
 - Updated target path for freedesktop.org's AppStream metainfo
