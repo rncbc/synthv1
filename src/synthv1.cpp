@@ -1476,8 +1476,6 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 							m_dcf1.env.note_off_fast(&pv->dcf1_env);
 							m_lfo1.env.note_off_fast(&pv->lfo1_env);
 							m_dca1.env.note_off_fast(&pv->dca1_env);
-							m_note1[pv->note1] = NULL;
-							pv->note1 = -1;
 						}
 					}
 				}
@@ -1502,8 +1500,6 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 							m_dcf2.env.note_off_fast(&pv->dcf2_env);
 							m_lfo2.env.note_off_fast(&pv->lfo2_env);
 							m_dca2.env.note_off_fast(&pv->dca2_env);
-							m_note2[pv->note2] = NULL;
-							pv->note2 = -1;
 						}
 					}
 				}
@@ -1652,6 +1648,18 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 							m_dcf1.env.note_off(&pv->dcf1_env);
 							m_lfo1.env.note_off(&pv->lfo1_env);
 						}
+						m_note1[pv->note1] = NULL;
+						pv->note1 = -1;
+						// mono legato?
+						if (*m_def1.mono > 1.0f) {
+							do pv = pv->prev();	while (pv && pv->note1 < 0);
+							if (pv && pv->note1 >= 0) {
+								m_dcf1.env.start(&pv->dcf1_env);
+								m_lfo1.env.start(&pv->lfo1_env);
+								m_dca1.env.start(&pv->dca1_env);
+								m_note1[pv->note1] = pv;
+							}
+						}
 					}
 				}
 			}
@@ -1666,6 +1674,18 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 							m_dca2.env.note_off(&pv->dca2_env);
 							m_dcf2.env.note_off(&pv->dcf2_env);
 							m_lfo2.env.note_off(&pv->lfo2_env);
+						}
+						m_note2[pv->note2] = NULL;
+						pv->note2 = -1;
+						// mono legato?
+						if (*m_def2.mono > 1.0f) {
+							do pv = pv->prev();	while (pv && pv->note2 < 0);
+							if (pv && pv->note2 >= 0) {
+								m_dcf2.env.start(&pv->dcf2_env);
+								m_lfo2.env.start(&pv->lfo2_env);
+								m_dca2.env.start(&pv->dca2_env);
+								m_note2[pv->note2] = pv;
+							}
 						}
 					}
 				}
@@ -1866,6 +1886,8 @@ void synthv1_impl::allSustainOff_1 (void)
 				m_dca1.env.note_off(&pv->dca1_env);
 				m_dcf1.env.note_off(&pv->dcf1_env);
 				m_lfo1.env.note_off(&pv->lfo1_env);
+				m_note1[pv->note1] = NULL;
+				pv->note1 = -1;
 			}
 		}
 		pv = pv->next();
@@ -1883,6 +1905,8 @@ void synthv1_impl::allSustainOff_2 (void)
 				m_dca2.env.note_off(&pv->dca2_env);
 				m_dcf2.env.note_off(&pv->dcf2_env);
 				m_lfo2.env.note_off(&pv->lfo2_env);
+				m_note2[pv->note2] = NULL;
+				pv->note2 = -1;
 			}
 		}
 		pv = pv->next();
@@ -2292,11 +2316,8 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 
 			if (pv->dca1_env.stage == synthv1_env::Idle &&
 				pv->dca2_env.stage == synthv1_env::Idle) {
-				if (pv->note1 >= 0)
-					m_note1[pv->note1] = NULL;
-				if (pv->note2 >= 0)
-					m_note2[pv->note2] = NULL;
-				free_voice(pv);
+				if (pv->note1 < 0 && pv->note2 < 0)
+					free_voice(pv);
 				nblock = 0;
 			} else {
 				if (pv->dcf1_env.running && pv->dcf1_env.frames == 0)
