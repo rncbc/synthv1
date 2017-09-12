@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Mono(phonic) "Legato" mode option is now introduced.
 - Reduced minimum envelope stage time from 2msec to 500usec.
 - Desktop entry specification file is now finally independent
   from build/configure template chains.

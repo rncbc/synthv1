@@ -1,7 +1,7 @@
 // synthv1_param.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2016, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -103,7 +103,7 @@ struct ParamInfo {
 	{ "DEF1_PRESSURE", PARAM_FLOAT,   0.2f,   0.0f,   1.0f }, // DEF1 Pressure
 	{ "DEF1_VELOCITY", PARAM_FLOAT,   0.2f,   0.0f,   1.0f }, // DEF1 Velocity
 	{ "DEF1_CHANNEL",  PARAM_INT,     0.0f,   0.0f,  16.0f }, // DEF1 Channel
-	{ "DEF1_MONO",     PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // DEF1 Mono
+	{ "DEF1_MONO",     PARAM_INT,     0.0f,   0.0f,   2.0f }, // DEF1 Mono
 
 	{ "DCO2_SHAPE1",   PARAM_INT,     1.0f,   0.0f,   4.0f }, // DCO2 Wave Shape 1
 	{ "DCO2_WIDTH1",   PARAM_FLOAT,   1.0f,   0.0f,   1.0f }, // DCO2 Wave Width 1
@@ -160,7 +160,7 @@ struct ParamInfo {
 	{ "DEF2_PRESSURE", PARAM_FLOAT,   0.2f,   0.0f,   1.0f }, // DEF2 Pressure
 	{ "DEF2_VELOCITY", PARAM_FLOAT,   0.2f,   0.0f,   1.0f }, // DEF2 Velocity
 	{ "DEF2_CHANNEL",  PARAM_INT,     0.0f,   0.0f,  16.0f }, // DEF2 Channel
-	{ "DEF2_MONO",     PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // DEF2 Mono
+	{ "DEF2_MONO",     PARAM_INT,     0.0f,   0.0f,   2.0f }, // DEF2 Mono
 
 	{ "CHO1_WET",      PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // Chorus Wet
 	{ "CHO1_DELAY",    PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // Chorus Delay

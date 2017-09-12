@@ -586,10 +586,13 @@
 		lv2:index 60 ;
 		lv2:symbol "DEF1_MONO" ;
 		lv2:name "DEF1 Mono" ;
-		lv2:portProperty lv2:toggled ;
+		lv2:portProperty lv2:integer, lv2:enumeration ;
+		lv2:scalePoint [ rdfs:label "Poly"; rdf:value 0 ] ;
+		lv2:scalePoint [ rdfs:label "Mono"; rdf:value 1 ] ;
+		lv2:scalePoint [ rdfs:label "Legato"; rdf:value 2 ] ;
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
-		lv2:maximum 1.0 ;
+		lv2:maximum 2.0 ;
 		lv2pg:group synthv1_lv2:106_DEF1 ;
 	] ;
 	lv2:port [
@@ -1116,10 +1119,13 @@
 		lv2:index 115 ;
 		lv2:symbol "DEF2_MONO" ;
 		lv2:name "DEF2 Mono" ;
-		lv2:portProperty lv2:toggled ;
+		lv2:portProperty lv2:integer, lv2:enumeration ;
+		lv2:scalePoint [ rdfs:label "Poly"; rdf:value 0 ] ;
+		lv2:scalePoint [ rdfs:label "Mono"; rdf:value 1 ] ;
+		lv2:scalePoint [ rdfs:label "Legato"; rdf:value 2 ] ;
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
-		lv2:maximum 1.0 ;
+		lv2:maximum 2.0 ;
 		lv2pg:group synthv1_lv2:206_DEF2 ;
 	] ;
 	lv2:port [

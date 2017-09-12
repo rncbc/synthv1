@@ -866,7 +866,7 @@
            </widget>
           </item>
           <item>
-           <widget class="synthv1widget_check" name="Def1MonoKnob">
+           <widget class="synthv1widget_radio" name="Def1MonoKnob">
             <property name="toolTip">
              <string>DEF1 Mono</string>
             </property>
@@ -1711,7 +1711,7 @@
            </widget>
           </item>
           <item>
-           <widget class="synthv1widget_check" name="Def2MonoKnob">
+           <widget class="synthv1widget_radio" name="Def2MonoKnob">
             <property name="toolTip">
              <string>DEF2 Mono</string>
             </property>

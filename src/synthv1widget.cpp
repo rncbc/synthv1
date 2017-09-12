@@ -252,14 +252,16 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 
 	m_ui.Def1ChannelKnob->insertItems(0, channels);
 	m_ui.Def2ChannelKnob->insertItems(0, channels);
-#if 0
-	// Mono switches
-	m_ui.Def1MonoKnob->insertItems(0, states);
-	m_ui.Def2MonoKnob->insertItems(0, states);
-#else
-	m_ui.Def1MonoKnob->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
-	m_ui.Def2MonoKnob->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
-#endif
+
+	// Mono switches.
+	QStringList modes;
+	modes << tr("Poly");
+	modes << tr("Mono");
+	modes << tr("Legato");
+
+	m_ui.Def1MonoKnob->insertItems(0, modes);
+	m_ui.Def2MonoKnob->insertItems(0, modes);
+
 	// Output (stereo-)width limits.
 	m_ui.Out1WidthKnob->setMinimum(-1.0f);
 	m_ui.Out1WidthKnob->setMaximum(+1.0f);
