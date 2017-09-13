@@ -56,7 +56,7 @@
 const uint16_t MAX_VOICES = 32;			// polyphony
 const uint8_t  MAX_NOTES  = 128;
 
-const float MIN_ENV_MSECS = 0.5f;		// min 500 usec per stage
+const float MIN_ENV_MSECS = 2.0f;		// min 2 msec per stage
 const float MAX_ENV_MSECS = 5000.0f;	// max 5 sec per stage (default)
 
 const float DETUNE_SCALE  = 0.5f;
@@ -337,6 +337,19 @@ struct synthv1_env
 		p->delta = 1.0f / float(p->frames);
 		p->c1 = -(p->value);
 		p->c0 = p->value;
+	}
+
+	void restart(State *p)
+	{
+		p->running = true;
+		p->stage = Attack;
+		p->frames = uint32_t(*attack * *attack * max_frames);
+		p->phase = 0.0f;
+		if (p->frames < min_frames)
+			p->frames = min_frames;
+		p->delta = 1.0f / float(p->frames);
+		p->c1 = 1.0f;
+		p->c0 = 0.0f;
 	}
 
 	// parameters
@@ -1654,9 +1667,9 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 						if (*m_def1.mono > 1.0f) {
 							do pv = pv->prev();	while (pv && pv->note1 < 0);
 							if (pv && pv->note1 >= 0) {
-								m_dcf1.env.start(&pv->dcf1_env);
-								m_lfo1.env.start(&pv->lfo1_env);
-								m_dca1.env.start(&pv->dca1_env);
+								m_dcf1.env.restart(&pv->dcf1_env);
+								m_lfo1.env.restart(&pv->lfo1_env);
+								m_dca1.env.restart(&pv->dca1_env);
 								m_note1[pv->note1] = pv;
 							}
 						}
@@ -1681,9 +1694,9 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 						if (*m_def2.mono > 1.0f) {
 							do pv = pv->prev();	while (pv && pv->note2 < 0);
 							if (pv && pv->note2 >= 0) {
-								m_dcf2.env.start(&pv->dcf2_env);
-								m_lfo2.env.start(&pv->lfo2_env);
-								m_dca2.env.start(&pv->dca2_env);
+								m_dcf2.env.restart(&pv->dcf2_env);
+								m_lfo2.env.restart(&pv->lfo2_env);
+								m_dca2.env.restart(&pv->dca2_env);
 								m_note2[pv->note2] = pv;
 							}
 						}
