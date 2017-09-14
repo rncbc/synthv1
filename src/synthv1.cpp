@@ -339,17 +339,26 @@ struct synthv1_env
 		p->c0 = p->value;
 	}
 
-	void restart(State *p)
+	void restart(State *p, bool legato)
 	{
 		p->running = true;
-		p->stage = Attack;
-		p->frames = uint32_t(*attack * *attack * max_frames);
-		p->phase = 0.0f;
-		if (p->frames < min_frames)
+		if (legato) {
+			p->stage = Decay;
 			p->frames = min_frames;
-		p->delta = 1.0f / float(p->frames);
-		p->c1 = 1.0f;
-		p->c0 = 0.0f;
+			p->phase = 0.0f;
+			p->delta = 1.0f / float(p->frames);
+			p->c1 = *sustain - p->value;
+			p->c0 = 0.0f;
+		} else {
+			p->stage = Attack;
+			p->frames = uint32_t(*attack * *attack * max_frames);
+			p->phase = 0.0f;
+			if (p->frames < min_frames)
+				p->frames = min_frames;
+			p->delta = 1.0f / float(p->frames);
+			p->c1 = 1.0f;
+			p->c0 = 0.0f;
+		}
 	}
 
 	// parameters
@@ -1664,12 +1673,13 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 						m_note1[pv->note1] = NULL;
 						pv->note1 = -1;
 						// mono legato?
-						if (*m_def1.mono > 1.0f) {
+						if (*m_def1.mono > 0.0f) {
 							do pv = pv->prev();	while (pv && pv->note1 < 0);
 							if (pv && pv->note1 >= 0) {
-								m_dcf1.env.restart(&pv->dcf1_env);
-								m_lfo1.env.restart(&pv->lfo1_env);
-								m_dca1.env.restart(&pv->dca1_env);
+								const bool legato1 = (*m_def1.mono > 1.0f);
+								m_dcf1.env.restart(&pv->dcf1_env, legato1);
+								m_lfo1.env.restart(&pv->lfo1_env, legato1);
+								m_dca1.env.restart(&pv->dca1_env, legato1);
 								m_note1[pv->note1] = pv;
 							}
 						}
@@ -1691,12 +1701,13 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 						m_note2[pv->note2] = NULL;
 						pv->note2 = -1;
 						// mono legato?
-						if (*m_def2.mono > 1.0f) {
+						if (*m_def2.mono > 0.0f) {
 							do pv = pv->prev();	while (pv && pv->note2 < 0);
 							if (pv && pv->note2 >= 0) {
-								m_dcf2.env.restart(&pv->dcf2_env);
-								m_lfo2.env.restart(&pv->lfo2_env);
-								m_dca2.env.restart(&pv->dca2_env);
+								const bool legato2 = (*m_def2.mono > 1.0f);
+								m_dcf2.env.restart(&pv->dcf2_env, legato2);
+								m_lfo2.env.restart(&pv->lfo2_env, legato2);
+								m_dca2.env.restart(&pv->dca2_env, legato2);
 								m_note2[pv->note2] = pv;
 							}
 						}
