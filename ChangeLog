@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- Opening multiple preset files is now possible, populating
+  the preset drop-down listing, while only the first one is
+  loaded effectively into the scene as usual. (EXPERIMENTAL)
 - Mono(phonic) "Legato" mode option introduced. (EXPERIMENTAL)
 - Desktop entry specification file is now finally independent
   from build/configure template chains.

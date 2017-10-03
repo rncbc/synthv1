@@ -230,7 +230,7 @@ void synthv1widget_preset::openPreset (void)
 	if (pConfig == NULL)
 		return;
 
-	QString sFilename;
+	QStringList files;
 
 	const QString  sExt(SYNTHV1_TITLE);
 	const QString& sTitle  = tr("Open Preset") + " - " SYNTHV1_TITLE;
@@ -239,13 +239,13 @@ void synthv1widget_preset::openPreset (void)
 	QFileDialog::Options options = 0;
 	if (pConfig->bDontUseNativeDialogs)
 		options |= QFileDialog::DontUseNativeDialog;
-	sFilename = QFileDialog::getOpenFileName(parentWidget(),
+	files = QFileDialog::getOpenFileNames(parentWidget(),
 		sTitle, pConfig->sPresetDir, sFilter, NULL, options);
 #else
 	QFileDialog fileDialog(nativeParentWidget(),
 		sTitle, pConfig->sPresetDir, sFilter);
 	fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
-	fileDialog.setFileMode(QFileDialog::ExistingFile);
+	fileDialog.setFileMode(QFileDialog::ExistingFiles);
 	fileDialog.setDefaultSuffix(sExt);
 	QList<QUrl> urls(fileDialog.sidebarUrls());
 	urls.append(QUrl::fromLocalFile(pConfig->sPresetDir));
@@ -253,18 +253,26 @@ void synthv1widget_preset::openPreset (void)
 	if (pConfig->bDontUseNativeDialogs)
 		fileDialog.setOptions(QFileDialog::DontUseNativeDialog);
 	if (fileDialog.exec())
-		sFilename = fileDialog.selectedFiles().first();
+		files = fileDialog.selectedFiles();
 #endif
-	if (!sFilename.isEmpty()) {
-		QFileInfo fi(sFilename);
-		if (fi.exists() && queryPreset()) {
-			const QString& sPreset = fi.completeBaseName();
-			pConfig->setPresetFile(sPreset, sFilename);
-			emit loadPresetFile(sFilename);
-			++m_iInitPreset;
-		//	pConfig->sPreset = sPreset;
-			pConfig->sPresetDir = fi.absolutePath();
-			setPreset(sPreset);
+
+	if (!files.isEmpty() && queryPreset()) {
+		int iPreset = 0;
+		QStringListIterator iter(files);
+		while (iter.hasNext()) {
+			const QString& sFilename = iter.next();
+			const QFileInfo fi(sFilename);
+			if (fi.exists()) {
+				const QString& sPreset = fi.completeBaseName();
+				pConfig->setPresetFile(sPreset, sFilename);
+				if (++iPreset == 1) {
+					++m_iInitPreset;
+					emit loadPresetFile(sFilename);
+				//	pConfig->sPreset = sPreset;
+					pConfig->sPresetDir = fi.absolutePath();
+					setPreset(sPreset);
+				}
+			}
 			refreshPreset();
 		}
 	}
