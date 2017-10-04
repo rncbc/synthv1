@@ -5,6 +5,7 @@ NAME = synthv1
 TARGET = $${NAME}_lv2
 TEMPLATE = lib
 CONFIG += shared plugin
+LIBS += -L.
 
 include(src_lv2.pri)
 
@@ -63,7 +64,7 @@ unix {
 
 	QMAKE_CLEAN += $${TARGET_LV2}.so
 
-	LIBS += -L. -l$${NAME} -Wl,-rpath,$${LIBDIR}
+	LIBS += -l$${NAME} -Wl,-rpath,$${LIBDIR}
 }
 
 QT -= gui
