@@ -1492,12 +1492,17 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 			if (on1) {
 				// mono voice modes
 				if (*m_def1.mono > 0.0f) {
+					int n1 = 0;
 					for (pv = m_play_list.next(); pv; pv = pv->next()) {
 						if (pv->note1 >= 0
 							&& pv->dca1_env.stage != synthv1_env::Release) {
 							m_dcf1.env.note_off_fast(&pv->dcf1_env);
 							m_lfo1.env.note_off_fast(&pv->lfo1_env);
 							m_dca1.env.note_off_fast(&pv->dca1_env);
+							if (++n1 > 1) { // there shall be only one
+								m_note1[pv->note1] = NULL;
+								pv->note1 = -1;
+							}
 						}
 					}
 				}
@@ -1516,12 +1521,17 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 			if (on2) {
 				// mono voice modes
 				if (*m_def2.mono > 0.0f) {
+					int n2 = 0;
 					for (pv = m_play_list.next(); pv; pv = pv->next()) {
 						if (pv->note2 >= 0
 							&& pv->dca2_env.stage != synthv1_env::Release) {
 							m_dcf2.env.note_off_fast(&pv->dcf2_env);
 							m_lfo2.env.note_off_fast(&pv->lfo2_env);
 							m_dca2.env.note_off_fast(&pv->dca2_env);
+							if (++n2 > 1) { // there shall be only one
+								m_note2[pv->note2] = NULL;
+								pv->note2 = -1;
+							}
 						}
 					}
 				}
