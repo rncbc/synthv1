@@ -235,14 +235,22 @@ void synthv1widget_preset::openPreset (void)
 	const QString  sExt(SYNTHV1_TITLE);
 	const QString& sTitle  = tr("Open Preset") + " - " SYNTHV1_TITLE;
 	const QString& sFilter = tr("Preset files (*.%1)").arg(sExt);
-#if 1//QT_VERSION < 0x040400
+
+#if QT_VERSION < 0x040400
+	QWidget *pParentWidget = NULL;
+#else
+	QWidget *pParentWidget = nativeParentWidget();
+#endif
 	QFileDialog::Options options = 0;
-	if (pConfig->bDontUseNativeDialogs)
+	if (pConfig->bDontUseNativeDialogs) {
 		options |= QFileDialog::DontUseNativeDialog;
-	files = QFileDialog::getOpenFileNames(parentWidget(),
+		pParentWidget = parentWidget();
+	}
+#if 1//QT_VERSION < 0x040400
+	files = QFileDialog::getOpenFileNames(pParentWidget,
 		sTitle, pConfig->sPresetDir, sFilter, NULL, options);
 #else
-	QFileDialog fileDialog(nativeParentWidget(),
+	QFileDialog fileDialog(pParentWidget,
 		sTitle, pConfig->sPresetDir, sFilter);
 	fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
 	fileDialog.setFileMode(QFileDialog::ExistingFiles);
@@ -250,8 +258,7 @@ void synthv1widget_preset::openPreset (void)
 	QList<QUrl> urls(fileDialog.sidebarUrls());
 	urls.append(QUrl::fromLocalFile(pConfig->sPresetDir));
 	fileDialog.setSidebarUrls(urls);
-	if (pConfig->bDontUseNativeDialogs)
-		fileDialog.setOptions(QFileDialog::DontUseNativeDialog);
+	fileDialog.setOptions(options);
 	if (fileDialog.exec())
 		files = fileDialog.selectedFiles();
 #endif
@@ -301,14 +308,21 @@ void synthv1widget_preset::savePreset ( const QString& sPreset )
 	if (!fi.exists()) {
 		const QString& sTitle  = tr("Save Preset") + " - " SYNTHV1_TITLE;
 		const QString& sFilter = tr("Preset files (*.%1)").arg(sExt);
-	#if 1//QT_VERSION < 0x040400
+	#if QT_VERSION < 0x040400
+		QWidget *pParentWidget = NULL;
+	#else
+		QWidget *pParentWidget = nativeParentWidget();
+	#endif
 		QFileDialog::Options options = 0;
-		if (pConfig->bDontUseNativeDialogs)
+		if (pConfig->bDontUseNativeDialogs) {
 			options |= QFileDialog::DontUseNativeDialog;
-		sFilename = QFileDialog::getSaveFileName(parentWidget(),
+			pParentWidget = parentWidget();
+		}
+	#if 1//QT_VERSION < 0x040400
+		sFilename = QFileDialog::getSaveFileName(pParentWidget,
 			sTitle, sFilename, sFilter, NULL, options);
 	#else
-		QFileDialog fileDialog(nativeParentWidget(),
+		QFileDialog fileDialog(pParentWidget,
 			sTitle, sFilename, sFilter);
 		fileDialog.setAcceptMode(QFileDialog::AcceptSave);
 		fileDialog.setFileMode(QFileDialog::AnyFile);
@@ -316,8 +330,7 @@ void synthv1widget_preset::savePreset ( const QString& sPreset )
 		QList<QUrl> urls(fileDialog.sidebarUrls());
 		urls.append(QUrl::fromLocalFile(pConfig->sPresetDir));
 		fileDialog.setSidebarUrls(urls);
-		if (pConfig->bDontUseNativeDialogs)
-			fileDialog.setOptions(QFileDialog::DontUseNativeDialog);
+		fileDialog.setOptions(options);
 		if (fileDialog.exec())
 			sFilename = fileDialog.selectedFiles().first();
 	#endif
