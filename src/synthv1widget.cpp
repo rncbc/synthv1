@@ -1144,7 +1144,7 @@ void synthv1widget::loadPreset ( const QString& sFilename )
 
 	synthv1_ui *pSynthUi = ui_instance();
 	if (pSynthUi)
-		synthv1_param::loadPreset(pSynthUi->instance(), sFilename);
+		pSynthUi->loadPreset(sFilename);
 
 	updateLoadPreset(QFileInfo(sFilename).completeBaseName());
 }
@@ -1158,7 +1158,7 @@ void synthv1widget::savePreset ( const QString& sFilename )
 
 	synthv1_ui *pSynthUi = ui_instance();
 	if (pSynthUi)
-		synthv1_param::savePreset(pSynthUi->instance(), sFilename);
+		pSynthUi->savePreset(sFilename);
 
 	const QString& sPreset
 		= QFileInfo(sFilename).completeBaseName();

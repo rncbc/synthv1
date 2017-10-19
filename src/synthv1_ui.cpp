@@ -21,6 +21,8 @@
 
 #include "synthv1_ui.h"
 
+#include "synthv1_param.h"
+
 
 //-------------------------------------------------------------------------
 // synthv1_ui - decl.
@@ -41,6 +43,17 @@ synthv1 *synthv1_ui::instance (void) const
 bool synthv1_ui::isPlugin (void) const
 {
 	return m_bPlugin;
+}
+
+
+bool synthv1_ui::loadPreset ( const QString& sFilename )
+{
+	return synthv1_param::loadPreset(m_pSynth, sFilename);
+}
+
+bool synthv1_ui::savePreset ( const QString& sFilename )
+{
+	return synthv1_param::savePreset(m_pSynth, sFilename);
 }
 
 

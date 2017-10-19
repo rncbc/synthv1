@@ -24,6 +24,8 @@
 
 #include "synthv1.h"
 
+#include <QString>
+
 
 //-------------------------------------------------------------------------
 // synthv1_ui - decl.
@@ -38,6 +40,9 @@ public:
 	synthv1 *instance() const;
 
 	bool isPlugin() const;
+
+	bool loadPreset(const QString& sFilename);
+	bool savePreset(const QString& sFilename);
 
 	void setParamValue(synthv1::ParamIndex index, float fValue);
 	float paramValue(synthv1::ParamIndex index) const;

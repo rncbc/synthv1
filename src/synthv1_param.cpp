@@ -242,10 +242,10 @@ bool synthv1_param::paramFloat ( synthv1::ParamIndex index )
 
 
 // Preset serialization methods.
-void synthv1_param::loadPreset ( synthv1 *pSynth, const QString& sFilename )
+bool synthv1_param::loadPreset ( synthv1 *pSynth, const QString& sFilename )
 {
 	if (pSynth == NULL)
-		return;
+		return false;
 
 	QFileInfo fi(sFilename);
 	if (!fi.exists()) {
@@ -254,16 +254,16 @@ void synthv1_param::loadPreset ( synthv1 *pSynth, const QString& sFilename )
 			const QString& sPresetFile
 				= pConfig->presetFile(sFilename);
 			if (sPresetFile.isEmpty())
-				return;
+				return false;
 			fi.setFile(sPresetFile);
 			if (!fi.exists())
-				return;
+				return false;
 		}
 	}
 
 	QFile file(fi.filePath());
 	if (!file.open(QIODevice::ReadOnly))
-		return;
+		return false;
 
 	static QHash<QString, synthv1::ParamIndex> s_hash;
 	if (s_hash.isEmpty()) {
@@ -272,6 +272,9 @@ void synthv1_param::loadPreset ( synthv1 *pSynth, const QString& sFilename )
 			s_hash.insert(synthv1_param::paramName(index), index);
 		}
 	}
+
+	const QDir currentDir(QDir::current());
+	QDir::setCurrent(fi.absolutePath());
 
 	QDomDocument doc(SYNTHV1_TITLE);
 	if (doc.setContent(&file)) {
@@ -312,15 +315,21 @@ void synthv1_param::loadPreset ( synthv1 *pSynth, const QString& sFilename )
 	file.close();
 
 	pSynth->reset();
+
+	QDir::setCurrent(currentDir.absolutePath());
+
+	return true;
 }
 
 
-void synthv1_param::savePreset ( synthv1 *pSynth, const QString& sFilename )
+bool synthv1_param::savePreset ( synthv1 *pSynth, const QString& sFilename )
 {
 	if (pSynth == NULL)
-		return;
+		return false;
 
 	const QFileInfo fi(sFilename);
+	const QDir currentDir(QDir::current());
+	QDir::setCurrent(fi.absolutePath());
 
 	QDomDocument doc(SYNTHV1_TITLE);
 	QDomElement ePreset = doc.createElement("preset");
@@ -341,10 +350,15 @@ void synthv1_param::savePreset ( synthv1 *pSynth, const QString& sFilename )
 	doc.appendChild(ePreset);
 
 	QFile file(fi.filePath());
-	if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-		QTextStream(&file) << doc.toString();
-		file.close();
-	}
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+		return false;
+
+	QTextStream(&file) << doc.toString();
+	file.close();
+
+	QDir::setCurrent(currentDir.absolutePath());
+
+	return true;
 }
 
 
