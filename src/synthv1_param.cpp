@@ -242,7 +242,8 @@ bool synthv1_param::paramFloat ( synthv1::ParamIndex index )
 
 
 // Preset serialization methods.
-bool synthv1_param::loadPreset ( synthv1 *pSynth, const QString& sFilename )
+bool synthv1_param::loadPreset (
+	synthv1 *pSynth, const QString& sFilename )
 {
 	if (pSynth == NULL)
 		return false;
@@ -322,7 +323,8 @@ bool synthv1_param::loadPreset ( synthv1 *pSynth, const QString& sFilename )
 }
 
 
-bool synthv1_param::savePreset ( synthv1 *pSynth, const QString& sFilename )
+bool synthv1_param::savePreset (
+	synthv1 *pSynth, const QString& sFilename, bool /*bSymLink*/ )
 {
 	if (pSynth == NULL)
 		return false;

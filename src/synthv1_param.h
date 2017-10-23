@@ -38,8 +38,11 @@ class QDomDocument;
 namespace synthv1_param
 {
 	// Preset serialization methods.
-	bool loadPreset(synthv1 *pSynth, const QString& sFilename);
-	bool savePreset(synthv1 *pSynth, const QString& sFilename);
+	bool loadPreset(synthv1 *pSynth,
+		const QString& sFilename);
+	bool savePreset(synthv1 *pSynth,
+		const QString& sFilename,
+		bool bSymLink = false);
 
 	// Default parameter name/value helpers.
 	const char *paramName(synthv1::ParamIndex index);
