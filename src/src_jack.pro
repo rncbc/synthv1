@@ -10,25 +10,8 @@ include(src_jack.pri)
 
 HEADERS = \
 	config.h \
-	synthv1.h \
-	synthv1_ui.h \
-	synthv1_config.h \
-	synthv1_param.h \
-	synthv1_programs.h \
-	synthv1_controls.h \
 	synthv1_nsm.h \
 	synthv1_jack.h \
-	synthv1widget.h \
-	synthv1widget_env.h \
-	synthv1widget_filt.h \
-	synthv1widget_wave.h \
-	synthv1widget_param.h \
-	synthv1widget_preset.h \
-	synthv1widget_status.h \
-	synthv1widget_programs.h \
-	synthv1widget_controls.h \
-	synthv1widget_control.h \
-	synthv1widget_config.h \
 	synthv1widget_jack.h
 
 SOURCES = \

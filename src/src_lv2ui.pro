@@ -11,19 +11,7 @@ include(src_lv2.pri)
 
 HEADERS = \
 	config.h \
-	synthv1_ui.h \
 	synthv1_lv2ui.h \
-	synthv1widget.h \
-	synthv1widget_env.h \
-	synthv1widget_filt.h \
-	synthv1widget_wave.h \
-	synthv1widget_param.h \
-	synthv1widget_preset.h \
-	synthv1widget_status.h \
-	synthv1widget_programs.h \
-	synthv1widget_controls.h \
-	synthv1widget_control.h \
-	synthv1widget_config.h \
 	synthv1widget_lv2.h
 
 SOURCES = \

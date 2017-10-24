@@ -12,10 +12,6 @@ include(src_ui.pri)
 HEADERS = \
 	config.h \
 	synthv1_ui.h \
-	synthv1_config.h \
-	synthv1_param.h \
-	synthv1_programs.h \
-	synthv1_controls.h \
 	synthv1widget.h \
 	synthv1widget_env.h \
 	synthv1widget_filt.h \
