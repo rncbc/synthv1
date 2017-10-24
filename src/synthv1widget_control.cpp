@@ -1,7 +1,7 @@
 // synthv1widget_control.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -24,6 +24,8 @@
 
 #include "synthv1_config.h"
 
+#include "ui_synthv1widget_control.h"
+
 #include <QMessageBox>
 #include <QPushButton>
 #include <QLineEdit>
@@ -39,7 +41,7 @@ synthv1widget_control *synthv1widget_control::g_pInstance = NULL;
 // Constructor.
 synthv1widget_control::synthv1widget_control (
 	QWidget *pParent, Qt::WindowFlags wflags )
-	: QDialog(pParent, wflags)
+	: QDialog(pParent, wflags), p_ui(new Ui::synthv1widget_control), m_ui(*p_ui)
 {
 	// Setup UI struct...
 	m_ui.setupUi(this);
@@ -113,6 +115,7 @@ synthv1widget_control::synthv1widget_control (
 // Destructor.
 synthv1widget_control::~synthv1widget_control (void)
 {
+	delete p_ui;
 }
 
 

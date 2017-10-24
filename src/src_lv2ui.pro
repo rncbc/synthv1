@@ -5,16 +5,13 @@ NAME = synthv1
 TARGET = $${NAME}_lv2ui
 TEMPLATE = lib
 CONFIG += shared plugin
+LIBS += -L.
 
 include(src_lv2.pri)
 
 HEADERS = \
 	config.h \
 	synthv1_ui.h \
-	synthv1_config.h \
-	synthv1_param.h \
-	synthv1_programs.h \
-	synthv1_controls.h \
 	synthv1_lv2ui.h \
 	synthv1widget.h \
 	synthv1widget_env.h \
@@ -31,25 +28,7 @@ HEADERS = \
 
 SOURCES = \
 	synthv1_lv2ui.cpp \
-	synthv1widget.cpp \
-	synthv1widget_env.cpp \
-	synthv1widget_filt.cpp \
-	synthv1widget_wave.cpp \
-	synthv1widget_param.cpp \
-	synthv1widget_preset.cpp \
-	synthv1widget_status.cpp \
-	synthv1widget_programs.cpp \
-	synthv1widget_controls.cpp \
-	synthv1widget_control.cpp \
-	synthv1widget_config.cpp \
 	synthv1widget_lv2.cpp
-
-FORMS = \
-	synthv1widget.ui \
-	synthv1widget_control.ui \
-	synthv1widget_config.ui
-
-RESOURCES += synthv1.qrc
 
 
 unix {
@@ -104,7 +83,7 @@ unix {
 
 	QMAKE_CLEAN += $${TARGET_LV2UI}.so $${TARGET_LV2UI}.ttl
 
-	LIBS += -L. -l$${NAME} -L$${NAME}.lv2 -Wl,-rpath,$${LIBDIR}:$${LV2DIR}/$${NAME}.lv2
+	LIBS += -l$${NAME} -l$${NAME}_ui -L$${NAME}.lv2 -Wl,-rpath,$${LIBDIR}:$${LV2DIR}/$${NAME}.lv2
 }
 
 QT += xml

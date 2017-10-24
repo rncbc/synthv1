@@ -56,6 +56,7 @@ BuildRequires:	lv2-devel
 %defattr(-,root,root)
 %doc AUTHORS COPYING ChangeLog README TODO
 %{_libdir}/lib%{name}.so*
+%{_libdir}/lib%{name}_ui.so*
 %dir %{_libdir}/lv2
 %dir %{_libdir}/lv2/%{name}.lv2
 %{_libdir}/lv2/%{name}.lv2/manifest.ttl

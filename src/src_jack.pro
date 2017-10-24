@@ -34,25 +34,7 @@ HEADERS = \
 SOURCES = \
 	synthv1_nsm.cpp \
 	synthv1_jack.cpp \
-	synthv1widget.cpp \
-	synthv1widget_env.cpp \
-	synthv1widget_filt.cpp \
-	synthv1widget_wave.cpp \
-	synthv1widget_param.cpp \
-	synthv1widget_preset.cpp \
-	synthv1widget_status.cpp \
-	synthv1widget_programs.cpp \
-	synthv1widget_controls.cpp \
-	synthv1widget_control.cpp \
-	synthv1widget_config.cpp \
 	synthv1widget_jack.cpp
-
-FORMS = \
-	synthv1widget.ui \
-	synthv1widget_control.ui \
-	synthv1widget_config.ui
-
-RESOURCES += synthv1.qrc
 
 
 unix {
@@ -110,7 +92,7 @@ unix {
 	mimetypes_scalable.path = $${DATADIR}/icons/hicolor/scalable/mimetypes
 	mimetypes_scalable.files += mimetypes/application-x-$${NAME}-preset.svg
 
-	LIBS += -l$${NAME} -Wl,-rpath,$${LIBDIR}
+	LIBS += -l$${NAME} -l$${NAME}_ui -Wl,-rpath,$${LIBDIR}
 }
 
 QT += xml

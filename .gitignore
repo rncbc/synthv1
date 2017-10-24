@@ -1,4 +1,5 @@
 Makefile
+Makefile.src_*
 config.*
 configure
 *.m4
@@ -12,8 +13,8 @@ configure
 *.pro.user
 *.qmake.stash
 qrc_*.cpp
-.moc
-.obj
-.ui
+.moc_*
+.obj_*
+.ui_*
 synthv1_ui.ttl
 synthv1_jack

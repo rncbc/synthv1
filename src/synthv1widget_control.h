@@ -1,7 +1,7 @@
 // synthv1widget_control.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -22,12 +22,16 @@
 #ifndef __synthv1widget_control_h
 #define __synthv1widget_control_h
 
-#include "ui_synthv1widget_control.h"
-
 #include "synthv1_controls.h"
 #include "synthv1_param.h"
 
+#include <QDialog>
+
+
 // forward decls.
+namespace Ui { class synthv1widget_control; }
+
+class QAbstractButton;
 class QCloseEvent;
 
 
@@ -103,7 +107,8 @@ protected:
 private:
 
 	// The Qt-designer UI struct...
-	Ui::synthv1widget_control m_ui;
+	Ui::synthv1widget_control *p_ui;
+	Ui::synthv1widget_control& m_ui;
 
 	// Instance variables.
 	synthv1_controls *m_pControls;

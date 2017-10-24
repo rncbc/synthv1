@@ -3,7 +3,7 @@ AC_INIT(synthv1, 0.8.5, rncbc@rncbc.org)
 
 AC_CONFIG_SRCDIR(src/synthv1.cpp)
 AC_CONFIG_HEADERS(src/config.h)
-AC_CONFIG_FILES(Makefile synthv1.spec src/src_core.pri src/src_jack.pri src/src_lv2.pri)
+AC_CONFIG_FILES(Makefile synthv1.spec src/src_core.pri src/src_ui.pri src/src_jack.pri src/src_lv2.pri)
 
 # Build version string.
 AC_CACHE_VAL([ac_cv_build_version], [
