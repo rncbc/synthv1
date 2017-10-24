@@ -22,15 +22,18 @@
 #ifndef __synthv1widget_h
 #define __synthv1widget_h
 
-#include "ui_synthv1widget.h"
-
 #include "synthv1_config.h"
 #include "synthv1_sched.h"
 
 #include "synthv1_ui.h"
 
+#include <QWidget>
+
 
 // forward decls.
+namespace Ui { class synthv1widget; }
+
+class synthv1widget_param;
 class synthv1widget_sched;
 
 
@@ -143,7 +146,8 @@ protected:
 private:
 
 	// Instance variables.
-	Ui::synthv1widget m_ui;
+	Ui::synthv1widget *p_ui;
+	Ui::synthv1widget& m_ui;
 
 	synthv1widget_sched *m_sched_notifier;
 

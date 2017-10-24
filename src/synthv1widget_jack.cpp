@@ -27,6 +27,7 @@
 #include "synthv1_nsm.h"
 #endif
 
+#include <QApplication>
 #include <QFileInfo>
 #include <QDir>
 

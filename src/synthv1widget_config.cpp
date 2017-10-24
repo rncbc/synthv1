@@ -27,6 +27,7 @@
 #include "synthv1_controls.h"
 #include "synthv1_programs.h"
 
+#include "ui_synthv1widget_config.h"
 
 #include <QPushButton>
 #include <QMessageBox>
@@ -42,7 +43,8 @@
 // ctor.
 synthv1widget_config::synthv1widget_config (
 	synthv1_ui *pSynthUi, QWidget *pParent, Qt::WindowFlags wflags )
-	: QDialog(pParent, wflags), m_pSynthUi(pSynthUi)
+	: QDialog(pParent, wflags), p_ui(new Ui::synthv1widget_config), m_ui(*p_ui),
+		m_pSynthUi(pSynthUi)
 {
 	// Setup UI struct...
 	m_ui.setupUi(this);
@@ -182,6 +184,7 @@ synthv1widget_config::synthv1widget_config (
 // dtor.
 synthv1widget_config::~synthv1widget_config (void)
 {
+	delete p_ui;
 }
 
 

@@ -22,12 +22,14 @@
 #ifndef __synthv1widget_config_h
 #define __synthv1widget_config_h
 
-#include "ui_synthv1widget_config.h"
-
 #include "synthv1_config.h"
+
+#include <QDialog>
 
 
 // forward decls.
+namespace Ui { class synthv1widget_config; }
+
 class synthv1_ui;
 
 
@@ -89,7 +91,8 @@ protected:
 private:
 
 	// UI struct.
-	Ui::synthv1widget_config m_ui;
+	Ui::synthv1widget_config *p_ui;
+	Ui::synthv1widget_config& m_ui;
 
 	// Instance reference.
 	synthv1_ui *m_pSynthUi;

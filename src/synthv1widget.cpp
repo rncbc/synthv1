@@ -31,6 +31,8 @@
 #include "synthv1_controls.h"
 #include "synthv1_programs.h"
 
+#include "ui_synthv1widget.h"
+
 #include <QMessageBox>
 #include <QDir>
 #include <QTimer>
@@ -45,7 +47,7 @@
 
 // Constructor.
 synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
-	: QWidget(pParent, wflags)
+	: QWidget(pParent, wflags), p_ui(new Ui::synthv1widget), m_ui(*p_ui)
 {
 	Q_INIT_RESOURCE(synthv1);
 
@@ -806,6 +808,8 @@ synthv1widget::~synthv1widget (void)
 {
 	if (m_sched_notifier)
 		delete m_sched_notifier;
+
+	delete p_ui;
 }
 
 
