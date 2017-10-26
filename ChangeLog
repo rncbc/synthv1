@@ -11,7 +11,7 @@ GIT HEAD
   loaded effectively into the scene as usual. (EXPERIMENTAL)
 - Mono(phonic) "Legato" mode option introduced. (EXPERIMENTAL)
 - Desktop entry specification file is now finally independent
-  from build/configure template chains.
+  from all build/configure template chains, whatever.
 - Updated target path for freedesktop.org's AppStream metainfo
   file (formerly AppData).
 
