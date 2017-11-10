@@ -4,6 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Set on a minimum attack time of 500usec as much to prevent
+  audible clicking on low-pitched notes. (EXPERIMENTAL)
+
+
 0.8.5  2017-10-29  An Autumn'17 release.
 
 - Opening multiple preset files is now possible, populating
