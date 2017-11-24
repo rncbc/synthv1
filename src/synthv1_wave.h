@@ -63,6 +63,10 @@ public:
 	uint32_t size() const
 		{ return m_nsize; }
 
+	// phase-zero (for slave reset)
+	float phase0() const
+		{ return m_phase0; }
+
 	// init.
 	void reset(Shape shape, float width, bool bandl = false);
 	// init.sync.
@@ -85,9 +89,15 @@ public:
 		float    ftab;
 		uint16_t itab;
 
-		Phase   *psync;
+		Phase   *slave;
+		float    slave_phase0;
 
-		void reset() { phase = ftab = 0.0f; itab = 0; psync = 0; }
+		void reset()
+		{
+			phase = ftab = slave_phase0 = 0.0f;
+			itab  = 0;
+			slave = 0;
+		}
 	};
 
 	// begin.
@@ -114,8 +124,8 @@ public:
 		phase.phase += p0 * freq / m_srate;
 		if (phase.phase >= p0) {
 			phase.phase -= p0;
-			if (phase.psync)
-				phase.psync->phase = m_phase0;
+			if (phase.slave)
+				phase.slave->phase = phase.slave_phase0;
 		}
 
 		if (phase.itab < m_ntabs) {
@@ -294,7 +304,15 @@ public:
 
 	// hard-sync slave.
 	void sync(synthv1_oscillator *slave)
-		{ m_phase.psync = (slave ? &(slave->m_phase) : 0); }
+	{
+		if (slave && slave->m_wave) {
+			m_phase.slave = &(slave->m_phase);
+			m_phase.slave_phase0 = (slave->m_wave)->phase0();
+		} else {
+			m_phase.slave = 0;
+			m_phase.slave_phase0 = 0.0f;
+		}
+	}
 
 private:
 
