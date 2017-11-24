@@ -149,14 +149,41 @@
            </widget>
           </item>
           <item>
-           <widget class="synthv1widget_check" name="Dco1Bandl1Knob">
-            <property name="toolTip">
-             <string>DCO1 Wave Bandlimit 1</string>
-            </property>
-            <property name="text">
-             <string>Bandl.1</string>
-            </property>
-           </widget>
+           <layout class="QVBoxLayout">
+            <item>
+             <spacer>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint">
+               <size>
+                <width>20</width>
+                <height>8</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="synthv1widget_check" name="Dco1Bandl1Knob">
+              <property name="toolTip">
+               <string>DCO1 Wave Bandlimit 1</string>
+              </property>
+              <property name="text">
+               <string>Bandl.1</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_check" name="Dco1Sync1Knob">
+              <property name="toolTip">
+               <string>DCO1 Wave Sync 1</string>
+              </property>
+              <property name="text">
+               <string>Sync 1</string>
+              </property>
+             </widget>
+            </item>
+	       </layout>
           </item>
           <item>
            <widget class="synthv1widget_wave" name="Dco1Wave2">
@@ -186,14 +213,41 @@
            </widget>
           </item>
           <item>
-           <widget class="synthv1widget_check" name="Dco1Bandl2Knob">
-            <property name="toolTip">
-             <string>DCO1 Wave Bandlimit 2</string>
-            </property>
-            <property name="text">
-             <string>Bandl.2</string>
-            </property>
-           </widget>
+           <layout class="QVBoxLayout">
+            <item>
+             <spacer>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint">
+               <size>
+                <width>20</width>
+                <height>8</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="synthv1widget_check" name="Dco1Bandl2Knob">
+              <property name="toolTip">
+               <string>DCO1 Wave Bandlimit 2</string>
+              </property>
+              <property name="text">
+               <string>Bandl.2</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_check" name="Dco1Sync2Knob">
+              <property name="toolTip">
+               <string>DCO1 Wave Sync 2</string>
+              </property>
+              <property name="text">
+               <string>Sync 2</string>
+              </property>
+             </widget>
+            </item>
+	       </layout>
           </item>
           <item>
            <spacer>
@@ -994,14 +1048,41 @@
            </widget>
           </item>
           <item>
-           <widget class="synthv1widget_check" name="Dco2Bandl1Knob">
-            <property name="toolTip">
-             <string>DCO2 Wave Bandlimit 1</string>
-            </property>
-            <property name="text">
-             <string>Bandl.1</string>
-            </property>
-           </widget>
+           <layout class="QVBoxLayout">
+            <item>
+             <spacer>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint">
+               <size>
+                <width>20</width>
+                <height>8</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="synthv1widget_check" name="Dco2Bandl1Knob">
+              <property name="toolTip">
+               <string>DCO2 Wave Bandlimit 1</string>
+              </property>
+              <property name="text">
+               <string>Bandl.1</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_check" name="Dco2Sync1Knob">
+              <property name="toolTip">
+               <string>DCO2 Wave Sync 1</string>
+              </property>
+              <property name="text">
+               <string>Sync 1</string>
+              </property>
+             </widget>
+            </item>
+	       </layout>
           </item>
           <item>
            <widget class="synthv1widget_wave" name="Dco2Wave2">
@@ -1031,14 +1112,41 @@
            </widget>
           </item>
           <item>
-           <widget class="synthv1widget_check" name="Dco2Bandl2Knob">
-            <property name="toolTip">
-             <string>DCO2 Wave Bandlimit 2</string>
-            </property>
-            <property name="text">
-             <string>Bandl.2</string>
-            </property>
-           </widget>
+           <layout class="QVBoxLayout">
+            <item>
+             <spacer>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint">
+               <size>
+                <width>20</width>
+                <height>8</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="synthv1widget_check" name="Dco2Bandl2Knob">
+              <property name="toolTip">
+               <string>DCO2 Wave Bandlimit 2</string>
+              </property>
+              <property name="text">
+               <string>Bandl.2</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="synthv1widget_check" name="Dco2Sync2Knob">
+              <property name="toolTip">
+               <string>DCO2 Wave Sync 2</string>
+              </property>
+              <property name="text">
+               <string>Sync 2</string>
+              </property>
+             </widget>
+            </item>
+	       </layout>
           </item>
           <item>
            <spacer>

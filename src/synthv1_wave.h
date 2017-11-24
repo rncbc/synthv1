@@ -79,11 +79,15 @@ public:
 	// phasor.
 	struct Phase
 	{
+		Phase() { reset(); }
+
 		float    phase;
 		float    ftab;
 		uint16_t itab;
 
-		void reset() { phase = ftab = 0.0f; itab =  0; }
+		Phase   *psync;
+
+		void reset() { phase = ftab = 0.0f; itab = 0; psync = 0; }
 	};
 
 	// begin.
@@ -108,8 +112,11 @@ public:
 		const float p0 = float(m_nsize);
 
 		phase.phase += p0 * freq / m_srate;
-		if (phase.phase >= p0)
+		if (phase.phase >= p0) {
 			phase.phase -= p0;
+			if (phase.psync)
+				phase.psync->phase = m_phase0;
+		}
 
 		if (phase.itab < m_ntabs) {
 			const float x0 = interp(i, phase.itab, alpha);
@@ -285,10 +292,13 @@ public:
 	void update(float freq)
 		{ m_wave->update(m_phase, freq); }
 
+	// hard-sync slave.
+	void sync(synthv1_oscillator *slave)
+		{ m_phase.psync = (slave ? &(slave->m_phase) : 0); }
+
 private:
 
-	synthv1_wave *m_wave;
-
+	synthv1_wave       *m_wave;
 	synthv1_wave::Phase m_phase;
 };
 

@@ -420,9 +420,11 @@ struct synthv1_dco
 	synthv1_port shape1;
 	synthv1_port width1;
 	synthv1_port bandl1;
+	synthv1_port sync1;
 	synthv1_port shape2;
 	synthv1_port width2;
 	synthv1_port bandl2;
+	synthv1_port sync2;
 	synthv1_port balance;
 	synthv1_port detune;
 	synthv1_port phase;
@@ -1287,9 +1289,11 @@ synthv1_port *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DCO1_SHAPE1:    pParamPort = &m_dco1.shape1;      break;
 	case synthv1::DCO1_WIDTH1:    pParamPort = &m_dco1.width1;      break;
 	case synthv1::DCO1_BANDL1:    pParamPort = &m_dco1.bandl1;      break;
+	case synthv1::DCO1_SYNC1:     pParamPort = &m_dco1.sync1;       break;
 	case synthv1::DCO1_SHAPE2:    pParamPort = &m_dco1.shape2;      break;
 	case synthv1::DCO1_WIDTH2:    pParamPort = &m_dco1.width2;      break;
 	case synthv1::DCO1_BANDL2:    pParamPort = &m_dco1.bandl2;      break;
+	case synthv1::DCO1_SYNC2:     pParamPort = &m_dco1.sync2;       break;
 	case synthv1::DCO1_BALANCE:   pParamPort = &m_dco1.balance;     break;
 	case synthv1::DCO1_DETUNE:    pParamPort = &m_dco1.detune;      break;
 	case synthv1::DCO1_PHASE:     pParamPort = &m_dco1.phase;       break;
@@ -1342,9 +1346,11 @@ synthv1_port *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DCO2_SHAPE1:    pParamPort = &m_dco2.shape1;      break;
 	case synthv1::DCO2_WIDTH1:    pParamPort = &m_dco2.width1;      break;
 	case synthv1::DCO2_BANDL1:    pParamPort = &m_dco2.bandl1;      break;
+	case synthv1::DCO2_SYNC1:     pParamPort = &m_dco2.sync1;       break;
 	case synthv1::DCO2_SHAPE2:    pParamPort = &m_dco2.shape2;      break;
 	case synthv1::DCO2_WIDTH2:    pParamPort = &m_dco2.width2;      break;
 	case synthv1::DCO2_BANDL2:    pParamPort = &m_dco2.bandl2;      break;
+	case synthv1::DCO2_SYNC2:     pParamPort = &m_dco1.sync2;       break;
 	case synthv1::DCO2_BALANCE:   pParamPort = &m_dco2.balance;     break;
 	case synthv1::DCO2_DETUNE:    pParamPort = &m_dco2.detune;      break;
 	case synthv1::DCO2_PHASE:     pParamPort = &m_dco2.phase;       break;
@@ -1576,8 +1582,21 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 						+ *m_dco1.tuning * TUNING_SCALE;
 					const float detune1
 						= *m_dco1.detune * DETUNE_SCALE;
-					pv->dco1_freq1 = synthv1_freq(note1 - detune1);
-					pv->dco1_freq2 = synthv1_freq(note1 + detune1);
+					// syncs
+					if (*m_dco1.sync1 > 0.5f) {
+						pv->dco1_freq2 = synthv1_freq(note1);
+						pv->dco1_osc2.sync(&pv->dco1_osc1);
+					} else {
+						pv->dco1_freq2 = synthv1_freq(note1 + detune1);
+						pv->dco1_osc2.sync(NULL);
+					}
+					if (*m_dco1.sync2 > 0.5f) {
+						pv->dco1_freq1 = synthv1_freq(note1);
+						pv->dco1_osc1.sync(&pv->dco1_osc2);
+					} else {
+						pv->dco1_freq1 = synthv1_freq(note1 - detune1);
+						pv->dco1_osc1.sync(NULL);
+					}
 					// phases
 					const float phase1 = *m_dco1.phase * PHASE_SCALE;
 					pv->dco1_sample1 = pv->dco1_osc1.start(  0.0f, pv->dco1_freq1);
@@ -1632,8 +1651,21 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 						+ *m_dco2.tuning * TUNING_SCALE;
 					const float detune2
 						= *m_dco2.detune * DETUNE_SCALE;
-					pv->dco2_freq1 = synthv1_freq(note2 - detune2);
-					pv->dco2_freq2 = synthv1_freq(note2 + detune2);
+					// syncs
+					if (*m_dco2.sync1 > 0.5f) {
+						pv->dco2_freq2 = synthv1_freq(note2);
+						pv->dco2_osc2.sync(&pv->dco2_osc1);
+					} else {
+						pv->dco2_freq2 = synthv1_freq(note2 + detune2);
+						pv->dco2_osc2.sync(NULL);
+					}
+					if (*m_dco2.sync2 > 0.5f) {
+						pv->dco2_freq1 = synthv1_freq(note2);
+						pv->dco2_osc1.sync(&pv->dco2_osc2);
+					} else {
+						pv->dco2_freq1 = synthv1_freq(note2 - detune2);
+						pv->dco2_osc1.sync(NULL);
+					}
 					// phases
 					const float phase2 = *m_dco2.phase * PHASE_SCALE;
 					pv->dco2_sample1 = pv->dco2_osc1.start(  0.0f, pv->dco2_freq1);

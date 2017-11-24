@@ -51,9 +51,11 @@ struct ParamInfo {
 	{ "DCO1_SHAPE1",   PARAM_INT,     1.0f,   0.0f,   4.0f }, // DCO1 Wave Shape 1
 	{ "DCO1_WIDTH1",   PARAM_FLOAT,   1.0f,   0.0f,   1.0f }, // DCO1 Wave Width 1
 	{ "DCO1_BANDL1",   PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // DCO1 Wave Bandlimit 1
+	{ "DCO1_SYNC1",    PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // DCO1 Wave Sync 1
 	{ "DCO1_SHAPE2",   PARAM_INT,     1.0f,   0.0f,   4.0f }, // DCO1 Wave Shape 2
 	{ "DCO1_WIDTH2",   PARAM_FLOAT,   1.0f,   0.0f,   1.0f }, // DCO1 Width 2
 	{ "DCO1_BANDL2",   PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // DCO1 Wave Bandlimit 2
+	{ "DCO1_SYNC2",    PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // DCO1 Wave Sync 2
 	{ "DCO1_BALANCE",  PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // DCO1 Balance
 	{ "DCO1_DETUNE",   PARAM_FLOAT,   0.1f,   0.0f,   1.0f }, // DCO1 Detune
 	{ "DCO1_PHASE",    PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // DCO1 Phase
@@ -108,9 +110,11 @@ struct ParamInfo {
 	{ "DCO2_SHAPE1",   PARAM_INT,     1.0f,   0.0f,   4.0f }, // DCO2 Wave Shape 1
 	{ "DCO2_WIDTH1",   PARAM_FLOAT,   1.0f,   0.0f,   1.0f }, // DCO2 Wave Width 1
 	{ "DCO2_BANDL1",   PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // DCO2 Wave Bandlimit 1
+	{ "DCO2_SYNC1",    PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // DCO2 Wave Sync 1
 	{ "DCO2_SHAPE2",   PARAM_INT,     1.0f,   0.0f,   4.0f }, // DCO2 Wave Shape 2
 	{ "DCO2_WIDTH2",   PARAM_FLOAT,   1.0f,   0.0f,   1.0f }, // DCO2 Wave Width 2
 	{ "DCO2_BANDL2",   PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // DCO2 Wave Bandlimit 2
+	{ "DCO2_SYNC2",    PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // DCO2 Wave Sync 2
 	{ "DCO2_BALANCE",  PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // DCO2 Balance
 	{ "DCO2_DETUNE",   PARAM_FLOAT,   0.1f,   0.0f,   1.0f }, // DCO2 Detune
 	{ "DCO2_PHASE",    PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // DCO2 Phase

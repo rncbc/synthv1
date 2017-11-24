@@ -6,6 +6,10 @@ ChangeLog
 
 GIT HEAD
 
+- Sync option added to DCO wavetable oscillators, as for
+  making either one to hard-sync (slave) with the other
+  one (master) in each pair. (EXPERIMENTAL)
+
 - Set on a minimum attack time of 500usec as much to prevent
   audible clicking on low-pitched notes. (EXPERIMENTAL)
 
