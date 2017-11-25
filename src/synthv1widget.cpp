@@ -129,6 +129,11 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_ui.Dcf1SlopeKnob->insertItems(0, slopes);
 	m_ui.Dcf2SlopeKnob->insertItems(0, slopes);
 
+	m_ui.Dco1Sync1Knob->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
+	m_ui.Dco1Sync2Knob->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
+	m_ui.Dco2Sync1Knob->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
+	m_ui.Dco2Sync2Knob->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
+
 	// Dynamic states.
 	QStringList states;
 	states << tr("Off");
@@ -145,10 +150,6 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_ui.Dyn1CompressKnob->insertItems(0, states);
 	m_ui.Dyn1LimiterKnob->insertItems(0, states);
 #else
-	m_ui.Dco1Sync1Knob->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
-	m_ui.Dco1Sync2Knob->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
-	m_ui.Dco2Sync1Knob->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
-	m_ui.Dco2Sync2Knob->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
 	m_ui.Lfo1SyncKnob->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
 	m_ui.Lfo2SyncKnob->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
 #endif
