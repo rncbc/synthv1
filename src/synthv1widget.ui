@@ -186,6 +186,19 @@
 	       </layout>
           </item>
           <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
            <widget class="synthv1widget_wave" name="Dco1Wave2">
             <property name="toolTip">
              <string>DCO1 Wave 2</string>
@@ -1083,6 +1096,19 @@
              </widget>
             </item>
 	       </layout>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint">
+             <size>
+              <width>8</width>
+              <height>8</height>
+             </size>
+            </property>
+           </spacer>
           </item>
           <item>
            <widget class="synthv1widget_wave" name="Dco2Wave2">
