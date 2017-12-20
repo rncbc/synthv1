@@ -4,14 +4,13 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.8.6  2017-12-20  The End of Autumn'17 release.
 
 - Sync option added to DCO wavetable oscillators, as for
   making either one to hard-sync (slave) with the other
-  one (master) in each pair. (EXPERIMENTAL)
-
+  one (master) in each pair.
 - Set on a minimum attack time of 500usec as much to prevent
-  audible clicking on low-pitched notes. (EXPERIMENTAL)
+  audible clicking on low-pitched notes.
 
 
 0.8.5  2017-10-29  An Autumn'17 release.
