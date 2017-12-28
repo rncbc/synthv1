@@ -226,7 +226,7 @@ void synthv1widget_control::closeEvent ( QCloseEvent *pCloseEvent )
 void synthv1widget_control::setControlKey ( const synthv1_controls::Key& key )
 {
 	// Anti-flooding guard timer < 3sec...
-	if (m_pEventTimer->elapsed() < 3000)
+	if (m_iDirtySetup == 0 && m_pEventTimer->elapsed() < 3000)
 		return;
 
 	setControlType(key.type());
