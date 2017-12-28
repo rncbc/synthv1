@@ -34,6 +34,8 @@ namespace Ui { class synthv1widget_control; }
 class QAbstractButton;
 class QCloseEvent;
 
+class QTime;
+
 
 //----------------------------------------------------------------------------
 // synthv1widget_control -- UI wrapper form.
@@ -122,6 +124,9 @@ private:
 
 	int m_iDirtyCount;
 	int m_iDirtySetup;
+
+	// Anti-flooding guard timer.
+	QTime *m_pEventTimer;
 
 	// Pseudo-singleton instance.
 	static synthv1widget_control *g_pInstance;

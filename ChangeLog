@@ -4,6 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+ 
+- An anti-flooding timer is now in place in MIDI Controller
+  assignment (aka. MIDI learn) dialog. (EXPERIMENTAL)
+
+
 0.8.6  2017-12-20  The End of Autumn'17 release.
 
 - Sync option added to DCO wavetable oscillators, as for
