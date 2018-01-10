@@ -164,19 +164,19 @@ uninstall_jack:	jack
 
 
 clean_core:	$(name).mak
-	@$(MAKE) -f $(name).mak distclean
+	@$(MAKE) -f $(name).mak distclean || true
 	@rm -f $(name).mak
 
 clean_ui:	$(name_ui).mak
-	@$(MAKE) -f $(name_ui).mak distclean
+	@$(MAKE) -f $(name_ui).mak distclean || true
 	@rm -f $(name_ui).mak
 
 clean_lv2:	$(name_lv2).mak
-	@$(MAKE) -f $(name_lv2).mak distclean
+	@$(MAKE) -f $(name_lv2).mak distclean || true
 	@rm -f $(name_lv2).mak
 
 clean_jack:	$(name_jack).mak
-	@$(MAKE) -f $(name_jack).mak distclean
+	@$(MAKE) -f $(name_jack).mak distclean || true
 	@rm -f $(name_jack).mak
 
 
