@@ -1,7 +1,7 @@
 // synthv1_config.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -27,8 +27,8 @@
 #define SYNTHV1_TITLE       PACKAGE_NAME
 
 #define SYNTHV1_SUBTITLE    "an old-school polyphonic synthesizer."
-#define SYNTHV1_WEBSITE     "http://synthv1.sourceforge.net"
-#define SYNTHV1_COPYRIGHT   "Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved."
+#define SYNTHV1_WEBSITE     "https://synthv1.sourceforge.io"
+#define SYNTHV1_COPYRIGHT   "Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved."
 
 #define SYNTHV1_DOMAIN      "rncbc.org"
 

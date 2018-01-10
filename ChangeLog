@@ -5,7 +5,8 @@ ChangeLog
 
 
 GIT HEAD
- 
+
+- A little hardening on the configure (autoconf) macro side.
 - An anti-flooding timer is now in place in MIDI Controller
   assignment (aka. MIDI learn) dialog. (EXPERIMENTAL)
 
