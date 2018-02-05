@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- Trying to get CC14 MSB+LSB (course+fine) running status on,
+  no matter whether each pairing event are under 200ms apart.
+  (EXPERIMENTAL)
 - A little hardening on the configure (autoconf) macro side.
 - An anti-flooding timer is now in place in MIDI Controller
   assignment (aka. MIDI learn) dialog. (EXPERIMENTAL)

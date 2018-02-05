@@ -1,7 +1,7 @@
 // synthv1_controls.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -450,14 +450,15 @@ public:
 				--m_count;
 			}
 			else
-			if (item.is_param_msb() || item.is_value_msb()
-				|| (item.type() == synthv1_controls::CC14
+			if ((item.is_param_msb() && item.is_value_msb())
+				|| (item.type() == synthv1_controls::CC14 && item.is_param_lsb()
 					&& item.param_lsb() != event.key.param + CC14_LSB_MIN))
 				enqueue(item);
 			if (!item.is_status()) {
 				item.set_status(synthv1_controls::CC14 | channel);
 				++m_count;
 			}
+			item.set_param_lsb(event.key.param + CC14_LSB_MIN);
 			item.set_param_msb(event.key.param);
 			item.set_value_msb(event.value);
 			if (item.is_14bit())
@@ -473,14 +474,15 @@ public:
 				--m_count;
 			}
 			else
-			if (item.is_param_lsb() || item.is_value_lsb()
-				|| (item.type() == synthv1_controls::CC14
+			if ((item.is_param_lsb() && item.is_value_lsb())
+				|| (item.type() == synthv1_controls::CC14 && item.is_param_msb()
 					&& item.param_msb() != event.key.param - CC14_LSB_MIN))
 				enqueue(item);
 			if (!item.is_status()) {
 				item.set_status(synthv1_controls::CC14 | channel);
 				++m_count;
 			}
+			item.set_param_msb(event.key.param - CC14_LSB_MIN);
 			item.set_param_lsb(event.key.param);
 			item.set_value_lsb(event.value);
 			if (item.is_14bit())
@@ -504,16 +506,20 @@ protected:
 		if (item.type() == synthv1_controls::CC14) {
 			if (item.is_14bit()) {
 				m_queue.push(item.status(), item.param_msb(), item.value());
+				const unsigned char value_msb = item.value_msb();
+				item.clear_value();
+				item.set_value_msb(value_msb);
+			//	--m_count;
 			} else  {
 				const unsigned short status
 					= synthv1_controls::CC | item.channel();
-				if (item.is_value_msb())
+				if (item.is_param_msb() && item.is_value_msb())
 					m_queue.push(status, item.param_msb(), item.value_msb());
-				if (item.is_value_lsb())
+				if (item.is_param_lsb() && item.is_value_lsb())
 					m_queue.push(status, item.param_lsb(), item.value_lsb());
+				item.clear();
+				--m_count;
 			}
-			item.clear();
-			--m_count;
 		}
 		else
 		if (item.is_ready()) {
