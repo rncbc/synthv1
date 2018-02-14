@@ -130,7 +130,7 @@ void synthv1widget_jack::updateDirtyPreset ( bool bDirtyPreset )
 
 #ifdef CONFIG_NSM
 	if (m_pNsmClient && m_pNsmClient->is_active())
-		m_pNsmClient->dirty(bDirtyPreset);
+		m_pNsmClient->dirty(true); // as far as NSM goes, we're always filthy!
 #endif
 }
 
