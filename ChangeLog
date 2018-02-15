@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- Whether to use native file browser/requester dialogs is
+  now an effective option when launching under NSM session
+  management (was once disabled initially). (EXPERIMENTAL)
 - Trying to get CC14 MSB+LSB (course+fine) running status on,
   no matter whether each pairing event are under 200ms apart.
   (EXPERIMENTAL)

@@ -1,7 +1,7 @@
 // synthv1widget_jack.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -101,10 +101,6 @@ synthv1_ui *synthv1widget_jack::ui_instance (void) const
 void synthv1widget_jack::setNsmClient ( synthv1_nsm *pNsmClient )
 {
 	m_pNsmClient = pNsmClient;
-
-	synthv1_config *pConfig = synthv1_config::getInstance();
-	if (pConfig)
-		pConfig->bDontUseNativeDialogs = true;
 }
 
 synthv1_nsm *synthv1widget_jack::nsmClient (void) const
