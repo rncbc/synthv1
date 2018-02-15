@@ -1,7 +1,7 @@
 // synthv1widget_preset.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -114,10 +114,6 @@ void synthv1widget_preset::clearPreset (void)
 {
 	++m_iInitPreset;
 
-	synthv1_config *pConfig = synthv1_config::getInstance();
-	if (pConfig)
-		pConfig->sPreset.clear();
-
 	const bool bBlockSignals = m_pComboBox->blockSignals(true);
 	m_pComboBox->clearEditText();
 	m_pComboBox->blockSignals(bBlockSignals);
@@ -126,10 +122,6 @@ void synthv1widget_preset::clearPreset (void)
 
 void synthv1widget_preset::setPreset ( const QString& sPreset )
 {
-	synthv1_config *pConfig = synthv1_config::getInstance();
-	if (pConfig)
-		pConfig->sPreset = sPreset;
-
 	const bool bBlockSignals = m_pComboBox->blockSignals(true);
 	m_pComboBox->setEditText(sPreset);
 	m_pComboBox->blockSignals(bBlockSignals);
@@ -152,7 +144,7 @@ bool synthv1widget_preset::queryPreset (void)
 		return false;
 
 	if (m_iDirtyPreset > 0) {
-		const QString sPreset(pConfig->sPreset);
+		const QString& sPreset(pConfig->sPreset);
 		if (sPreset.isEmpty()) {
 			if (QMessageBox::warning(this,
 				tr("Warning") + " - " SYNTHV1_TITLE,
@@ -203,8 +195,8 @@ void synthv1widget_preset::loadPreset ( const QString& sPreset )
 	if (pConfig) {
 		emit loadPresetFile(pConfig->presetFile(sPreset));
 		++m_iInitPreset;
-	//	pConfig->sPreset = sPreset;
-	//	setPreset(sPreset);
+		pConfig->sPreset = sPreset;
+		setPreset(sPreset);
 		refreshPreset();
 	}
 
@@ -214,8 +206,13 @@ void synthv1widget_preset::loadPreset ( const QString& sPreset )
 
 void synthv1widget_preset::newPreset (void)
 {
-	if (queryPreset()) {
+	if (!queryPreset())
+		return;
+
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig) {
 		emit newPresetFile();
+		pConfig->sPreset.clear();
 		clearPreset();
 		refreshPreset();
 	}
@@ -271,7 +268,7 @@ void synthv1widget_preset::openPreset (void)
 				if (++iPreset == 1) {
 					++m_iInitPreset;
 					emit loadPresetFile(sFilename);
-				//	pConfig->sPreset = sPreset;
+					pConfig->sPreset = sPreset;
 					pConfig->sPresetDir = fi.absolutePath();
 					setPreset(sPreset);
 				}
@@ -375,6 +372,7 @@ void synthv1widget_preset::deletePreset (void)
 		return;
 
 	pConfig->removePreset(sPreset);
+	pConfig->sPreset.clear();
 
 	clearPreset();
 	refreshPreset();
