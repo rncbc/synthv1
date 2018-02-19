@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- An internal note-key/frequency indirection table is now in
+  place, as a baseline for any micro-tuning implementations.
+  (EXPERIMENTAL)
 - Whether to use native file browser/requester dialogs is
   now an effective option when launching under NSM session
   management (was once disabled initially). (EXPERIMENTAL)

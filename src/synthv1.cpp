@@ -1,7 +1,7 @@
 // synthv1.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -135,9 +135,14 @@ inline float synthv1_pow2f ( const float x )
 
 // convert note to frequency (hertz)
 
-inline float synthv1_freq ( float note )
+inline float synthv1_freq2 ( float delta )
 {
-	return (440.0f / 32.0f) * ::powf(2.0f, (note - 9.0f) / 12.0f);
+	return ::powf(2.0f, delta / 12.0f);
+}
+
+inline float synthv1_freq ( int note )
+{
+	return (440.0f / 32.0f) * synthv1_freq2(float(note - 9));
 }
 
 
@@ -892,6 +897,8 @@ private:
 	float    m_srate;
 	float    m_bpm;
 
+	float    m_freqs[MAX_NOTES];
+
 	synthv1_ctl m_ctl1, m_ctl2;
 
 	synthv1_dco m_dco1, m_dco2;
@@ -993,8 +1000,10 @@ synthv1_impl::synthv1_impl (
 		m_free_list.append(m_voices[i]);
 	}
 
-	for (int note = 0; note < MAX_NOTES; ++note)
+	for (int note = 0; note < MAX_NOTES; ++note) {
+		m_freqs[note] = synthv1_freq(note);
 		m_note1[note] = m_note2[note] = NULL;
+	}
 
 	// local buffers none yet
 	m_sfxs = NULL;
@@ -1577,24 +1586,26 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 						m_def1.pressure.value_ptr(),
 						&m_ctl1.pressure, &pv->pre1);
 					// frequencies
-					const float note1 = float(key)
-						+ *m_dco1.octave * OCTAVE_SCALE
+					const float tuning1
+						= *m_dco1.octave * OCTAVE_SCALE
 						+ *m_dco1.tuning * TUNING_SCALE;
 					const float detune1
 						= *m_dco1.detune * DETUNE_SCALE;
+					const float freq1
+						= m_freqs[key] * synthv1_freq2(tuning1);
+					pv->dco1_freq1 = freq1;
+					pv->dco1_freq2 = freq1;
 					// syncs
 					if (*m_dco1.sync1 > 0.5f) {
-						pv->dco1_freq2 = synthv1_freq(note1);
 						pv->dco1_osc2.sync(&pv->dco1_osc1);
 					} else {
-						pv->dco1_freq2 = synthv1_freq(note1 + detune1);
+						pv->dco1_freq2 *= synthv1_freq2(+ detune1);
 						pv->dco1_osc2.sync(NULL);
 					}
 					if (*m_dco1.sync2 > 0.5f) {
-						pv->dco1_freq1 = synthv1_freq(note1);
 						pv->dco1_osc1.sync(&pv->dco1_osc2);
 					} else {
-						pv->dco1_freq1 = synthv1_freq(note1 - detune1);
+						pv->dco1_freq1 *= synthv1_freq2(- detune1);
 						pv->dco1_osc1.sync(NULL);
 					}
 					// phases
@@ -1646,24 +1657,26 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 						m_def2.pressure.value_ptr(),
 						&m_ctl2.pressure, &pv->pre2);
 					// frequencies
-					const float note2 = float(key)
-						+ *m_dco2.octave * OCTAVE_SCALE
+					const float tuning2
+						= *m_dco2.octave * OCTAVE_SCALE
 						+ *m_dco2.tuning * TUNING_SCALE;
 					const float detune2
 						= *m_dco2.detune * DETUNE_SCALE;
+					const float freq2
+						= m_freqs[key] * synthv1_freq2(tuning2);
+					pv->dco2_freq1 = freq2;
+					pv->dco2_freq2 = freq2;
 					// syncs
 					if (*m_dco2.sync1 > 0.5f) {
-						pv->dco2_freq2 = synthv1_freq(note2);
 						pv->dco2_osc2.sync(&pv->dco2_osc1);
 					} else {
-						pv->dco2_freq2 = synthv1_freq(note2 + detune2);
+						pv->dco2_freq2 *= synthv1_freq2(+ detune2);
 						pv->dco2_osc2.sync(NULL);
 					}
 					if (*m_dco2.sync2 > 0.5f) {
-						pv->dco2_freq1 = synthv1_freq(note2);
 						pv->dco2_osc1.sync(&pv->dco2_osc2);
 					} else {
-						pv->dco2_freq1 = synthv1_freq(note2 - detune2);
+						pv->dco2_freq1 *= synthv1_freq2(- detune2);
 						pv->dco2_osc1.sync(NULL);
 					}
 					// phases
