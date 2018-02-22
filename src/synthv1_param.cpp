@@ -206,6 +206,25 @@ float synthv1_param::paramDefaultValue ( synthv1::ParamIndex index )
 }
 
 
+float synthv1_param::paramSafeValue ( synthv1::ParamIndex index, float fValue )
+{
+	const ParamInfo& param = synthv1_params[index];
+
+	if (param.type == PARAM_BOOL)
+		return (fValue > 0.5f ? 1.0f : 0.0f);
+
+	if (fValue < param.min)
+		return param.min;
+	if (fValue > param.max)
+		return param.max;
+
+	if (param.type == PARAM_INT)
+		return ::rintf(fValue);
+	else
+		return fValue;
+}
+
+
 float synthv1_param::paramValue ( synthv1::ParamIndex index, float fScale )
 {
 	const ParamInfo& param = synthv1_params[index];
@@ -242,7 +261,6 @@ bool synthv1_param::paramFloat ( synthv1::ParamIndex index )
 {
 	return (synthv1_params[index].type == PARAM_FLOAT);
 }
-
 
 
 // Preset serialization methods.
@@ -309,7 +327,8 @@ bool synthv1_param::loadPreset (
 								index = s_hash.value(sName);
 							}
 							const float fValue = eParam.text().toFloat();
-							pSynth->setParamValue(index, fValue);
+							pSynth->setParamValue(index,
+								synthv1_param::paramSafeValue(index, fValue));
 						}
 					}
 				}
