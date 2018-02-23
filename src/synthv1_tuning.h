@@ -54,13 +54,9 @@ class synthv1_tuning
 public:
 
 	// Default reference note and pitch (A4 @440hz)
-	static const float REF_PITCH = 440.0f;
-	static const int   REF_NOTE  = 69;
+	synthv1_tuning(float refPitch = 440.0f, int refNote = 69);
 
-	// Default ctor.
-	synthv1_tuning(float refPitch = REF_PITCH, int refNote = REF_NOTE);
-
-	// Default is 12-tone equal temperament, wstern standard mapping
+	// Default 12-tone equal temperament, wstern standard mapping
 	void reset(float refPitch, int refNote);
 
 	// Reference note and pitch accessors.

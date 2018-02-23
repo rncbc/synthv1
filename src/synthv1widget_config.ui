@@ -3,7 +3,7 @@
  <author>rncbc aka Rui Nuno Capela</author>
  <comment>synthv1 - An old-school polyphonic synthesizer
 
-  Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+  Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -502,6 +502,211 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="TuningTab">
+      <attribute name="title">
+       <string>&amp;Tuning</string>
+      </attribute>
+      <attribute name="toolTip">
+       <string>Tuning</string>
+      </attribute>
+      <layout class="QGridLayout">
+       <item row="0" column="0" colspan="6">
+        <widget class="QCheckBox" name="TuningEnabledCheckBox">
+         <property name="toolTip">
+          <string>Whether to use custom tuning (micro-tonal)</string>
+         </property>
+         <property name="text">
+          <string>Enable custom tuning (micro-tonal)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLabel" name="TuningRefNoteTextLabel">
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="text">
+          <string>&amp;Reference:</string>
+         </property>
+         <property name="buddy">
+          <cstring>TuningRefNoteComboBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QComboBox" name="TuningRefNoteComboBox">
+         <property name="maximumSize">
+          <size>
+           <width>64</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Reference note</string>
+         </property>
+         <property name="editable">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QDoubleSpinBox" name="TuningRefPitchSpinBox">
+         <property name="maximumSize">
+          <size>
+           <width>96</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Reference pitch</string>
+         </property>
+         <property name="suffix">
+          <string> Hz</string>
+         </property>
+         <property name="decimals">
+          <number>1</number>
+         </property>
+         <property name="minimum">
+          <double>20.0</double>
+         </property>
+         <property name="maximum">
+          <double>20000.0</double>
+         </property>
+         <property name="value">
+          <double>440.0</double>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4" colspan="2">
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint">
+          <size>
+           <width>20</width>
+           <height>8</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="1">
+        <widget class="QCheckBox" name="TuningScaleFileCheckBox">
+         <property name="toolTip">
+          <string>Whether to use an alternate scale definition file (*.scl)</string>
+         </property>
+         <property name="text">
+          <string>&amp;Scale:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2" colspan="3">
+        <widget class="QComboBox" name="TuningScaleFileComboBox">
+         <property name="minimumSize">
+          <size>
+           <width>360</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Scale definition file (*.scl)</string>
+         </property>
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="5">
+        <widget class="QToolButton" name="TuningScaleFileToolButton">
+         <property name="minimumSize">
+          <size>
+           <width>22</width>
+           <height>22</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::TabFocus</enum>
+         </property>
+         <property name="toolTip">
+          <string>Browse for the scale file location (*.scl)</string>
+         </property>
+         <property name="icon">
+          <iconset resource="synthv1.qrc">:/images/fileOpen.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QCheckBox" name="TuningKeyMapFileCheckBox">
+         <property name="toolTip">
+          <string>Whether to use an alternate keyboard-map file (*.kbm)</string>
+         </property>
+         <property name="text">
+          <string>&amp;Key map:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2" colspan="3">
+        <widget class="QComboBox" name="TuningKeyMapFileComboBox">
+         <property name="minimumSize">
+          <size>
+           <width>360</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Keyboard map file (*.kbm)</string>
+         </property>
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="5">
+        <widget class="QToolButton" name="TuningKeyMapFileToolButton">
+         <property name="minimumSize">
+          <size>
+           <width>22</width>
+           <height>22</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::TabFocus</enum>
+         </property>
+         <property name="toolTip">
+          <string>Browse for the keyboard-map file location (*.kbm)</string>
+         </property>
+         <property name="icon">
+          <iconset resource="synthv1.qrc">:/images/fileOpen.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="6">
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
@@ -543,6 +748,15 @@
   <tabstop>ControlsDeleteToolButton</tabstop>
   <tabstop>ControlsTreeWidget</tabstop>
   <tabstop>ControlsEnabledCheckBox</tabstop>
+  <tabstop>TuningEnabledCheckBox</tabstop>
+  <tabstop>TuningRefNoteComboBox</tabstop>
+  <tabstop>TuningRefPitchSpinBox</tabstop>
+  <tabstop>TuningScaleFileCheckBox</tabstop>
+  <tabstop>TuningScaleFileComboBox</tabstop>
+  <tabstop>TuningScaleFileToolButton</tabstop>
+  <tabstop>TuningKeyMapFileCheckBox</tabstop>
+  <tabstop>TuningKeyMapFileComboBox</tabstop>
+  <tabstop>TuningKeyMapFileToolButton</tabstop>
   <tabstop>DialogButtonBox</tabstop>
  </tabstops>
  <resources>
