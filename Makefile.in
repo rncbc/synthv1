@@ -20,6 +20,7 @@ headers = \
 	src/$(name)_config.h \
 	src/$(name)_param.h \
 	src/$(name)_sched.h \
+	src/$(name)_tuning.h \
 	src/$(name)_programs.h \
 	src/$(name)_controls.h
 
@@ -30,6 +31,7 @@ sources = \
 	src/$(name)_wave.cpp \
 	src/$(name)_param.cpp \
 	src/$(name)_sched.cpp \
+	src/$(name)_tuning.cpp \
 	src/$(name)_programs.cpp \
 	src/$(name)_controls.cpp
 

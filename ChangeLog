@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- Introducing Scala micro-tuning classes, borrowed, stirred
+  and refactored from original Nick Dowell's amsynth code,
+  all under the GPL umbrella, of course. (EXPERIMENTAL)
 - An internal note-key/frequency indirection table is now in
   place, as a baseline for any micro-tuning implementations.
   (EXPERIMENTAL)
