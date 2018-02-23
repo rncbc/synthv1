@@ -52,9 +52,9 @@
 
 
 // Default ctor.
-synthv1_tuning::synthv1_tuning (void)
+synthv1_tuning::synthv1_tuning ( float refPitch, int refNote )
 {
-	reset();
+	reset(refPitch, refNote);
 }
 
 

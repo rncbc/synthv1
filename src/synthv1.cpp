@@ -35,6 +35,7 @@
 #include "synthv1_config.h"
 #include "synthv1_controls.h"
 #include "synthv1_programs.h"
+#include "synthv1_tuning.h"
 
 #include "synthv1_sched.h"
 
@@ -826,6 +827,8 @@ public:
 	synthv1_controls *controls();
 	synthv1_programs *programs();
 
+	void updateTuning();
+
 	void process_midi(uint8_t *data, uint32_t size);
 	void process(float **ins, float **outs, uint32_t nframes);
 
@@ -1000,10 +1003,8 @@ synthv1_impl::synthv1_impl (
 		m_free_list.append(m_voices[i]);
 	}
 
-	for (int note = 0; note < MAX_NOTES; ++note) {
-		m_freqs[note] = synthv1_freq(note);
+	for (int note = 0; note < MAX_NOTES; ++note)
 		m_note1[note] = m_note2[note] = NULL;
-	}
 
 	// local buffers none yet
 	m_sfxs = NULL;
@@ -1020,6 +1021,9 @@ synthv1_impl::synthv1_impl (
 
 	// compressors none yet
 	m_comp = NULL;
+
+	// Micro-tuning support, if any...
+	updateTuning();
 
 	// load controllers & programs database...
 	m_config.loadControls(&m_controls);
@@ -2052,6 +2056,31 @@ synthv1_programs *synthv1_impl::programs (void)
 }
 
 
+// Micro-tuning support
+void synthv1_impl::updateTuning (void)
+{
+
+	if (m_config.bTuningEnabled) {
+		// Custom micro-tuning, possibly from Scala keymap and scale files...
+		synthv1_tuning tuning(
+			m_config.fTuningRefPitch,
+			m_config.iTuningRefNote);
+		if (!m_config.sTuningKeyMapFile.isEmpty())
+			tuning.loadKeyMapFile(m_config.sTuningKeyMapFile);
+		if (!m_config.sTuningScaleFile.isEmpty())
+			tuning.loadScaleFile(m_config.sTuningScaleFile);
+		for (int note = 0; note < MAX_NOTES; ++note)
+			m_freqs[note] = tuning.noteToPitch(note);
+		// Done custom tuning.
+	} else {
+		// Native tuning, 12-tone equal temperament western standard...
+		for (int note = 0; note < MAX_NOTES; ++note)
+			m_freqs[note] = synthv1_freq(note);
+		// Done native tuning.
+	}
+}
+
+
 // all reset clear
 
 void synthv1_impl::reset (void)
@@ -2641,6 +2670,13 @@ uint32_t synthv1::midiInCount (void)
 void synthv1::directNoteOn ( int note, int vel )
 {
 	m_pImpl->directNoteOn(note, vel);
+}
+
+
+// Micro-tuning support
+void synthv1::updateTuning (void)
+{
+	m_pImpl->updateTuning();
 }
 
 
