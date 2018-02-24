@@ -30,7 +30,10 @@
 #include "ui_synthv1widget_config.h"
 
 #include <QPushButton>
+
 #include <QMessageBox>
+#include <QFileDialog>
+#include <QUrl>
 
 #include <QMenu>
 
@@ -53,6 +56,12 @@ synthv1widget_config::synthv1widget_config (
 	//m_ui.CustomStyleThemeComboBox->clear();
 	//m_ui.CustomStyleThemeComboBox->addItem(tr("(default)"));
 	m_ui.CustomStyleThemeComboBox->addItems(QStyleFactory::keys());
+
+	// Note names.
+	QStringList notes;
+	for (int note = 0; note < 128; ++note)
+		notes << noteName(note);
+	m_ui.TuningRefNoteComboBox->insertItems(0, notes);
 
 	// Setup options...
 	synthv1_config *pConfig = synthv1_config::getInstance();
@@ -84,6 +93,17 @@ synthv1widget_config::synthv1widget_config (
 			m_ui.ProgramsPreviewCheckBox->setEnabled(!bPlugin);
 			m_ui.ProgramsEnabledCheckBox->setChecked(pPrograms->enabled());
 		}
+		// Initialize conveniency options...
+		loadComboBoxHistory(m_ui.TuningScaleFileComboBox);
+		loadComboBoxHistory(m_ui.TuningKeyMapFileComboBox);
+		// Micro-tonal tuning settings...
+		m_ui.TuningEnabledCheckBox->setChecked(pConfig->bTuningEnabled);
+		m_ui.TuningRefNoteComboBox->setCurrentIndex(pConfig->iTuningRefNote);
+		m_ui.TuningRefPitchSpinBox->setValue(double(pConfig->fTuningRefPitch));
+		m_ui.TuningScaleEnabledCheckBox->setChecked(pConfig->bTuningScaleEnabled);
+		m_ui.TuningScaleFileComboBox->setEditText(pConfig->sTuningScaleFile);
+		m_ui.TuningKeyMapEnabledCheckBox->setChecked(pConfig->bTuningKeyMapEnabled);
+		m_ui.TuningKeyMapFileComboBox->setEditText(pConfig->sTuningKeyMapFile);
 	}
 
 	// Signal/slots connections...
@@ -146,6 +166,38 @@ synthv1widget_config::synthv1widget_config (
 		SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(programsContextMenuRequested(const QPoint&)));
 
+	// Tuning slots...
+	QObject::connect(m_ui.TuningEnabledCheckBox,
+		SIGNAL(toggled(bool)),
+		SLOT(tuningChanged()));
+	QObject::connect(m_ui.TuningRefNoteComboBox,
+		SIGNAL(activated(int)),
+		SLOT(tuningChanged()));
+	QObject::connect(m_ui.TuningRefPitchSpinBox,
+		SIGNAL(valueChanged(double)),
+		SLOT(tuningChanged()));
+	QObject::connect(m_ui.TuningRefNotePushButton,
+		SIGNAL(clicked()),
+		SLOT(tuningRefNoteClicked()));
+	QObject::connect(m_ui.TuningScaleEnabledCheckBox,
+		SIGNAL(toggled(bool)),
+		SLOT(tuningChanged()));
+	QObject::connect(m_ui.TuningScaleFileComboBox,
+		SIGNAL(editTextChanged(const QString&)),
+		SLOT(tuningChanged()));
+	QObject::connect(m_ui.TuningScaleFileToolButton,
+		SIGNAL(clicked()),
+		SLOT(tuningScaleFileClicked()));
+	QObject::connect(m_ui.TuningKeyMapEnabledCheckBox,
+		SIGNAL(toggled(bool)),
+		SLOT(tuningChanged()));
+	QObject::connect(m_ui.TuningKeyMapFileToolButton,
+		SIGNAL(clicked()),
+		SLOT(tuningKeyMapFileClicked()));
+	QObject::connect(m_ui.TuningKeyMapFileComboBox,
+		SIGNAL(editTextChanged(const QString&)),
+		SLOT(tuningChanged()));
+
 	// Options slots...
 	QObject::connect(m_ui.ProgramsPreviewCheckBox,
 		SIGNAL(toggled(bool)),
@@ -172,6 +224,7 @@ synthv1widget_config::synthv1widget_config (
 		SLOT(reject()));
 
 	// Dialog dirty flags.
+	m_iDirtyTuning   = 0;
 	m_iDirtyControls = 0;
 	m_iDirtyPrograms = 0;
 	m_iDirtyOptions  = 0;
@@ -191,6 +244,15 @@ synthv1widget_config::~synthv1widget_config (void)
 synthv1_ui *synthv1widget_config::ui_instance (void) const
 {
 	return m_pSynthUi;
+}
+
+
+// MIDI note/octave name helper (static).
+QString synthv1widget_config::noteName ( int note )
+{
+	static const char *notes[] =
+		{ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+	return QString("%1 %2").arg(notes[note % 12]).arg((note / 12) - 1);
 }
 
 
@@ -392,6 +454,108 @@ void synthv1widget_config::programsActivated (void)
 }
 
 
+// tuning command slots
+void synthv1widget_config::tuningRefNoteClicked (void)
+{
+	m_ui.TuningRefNoteComboBox->setCurrentIndex(69);
+	m_ui.TuningRefPitchSpinBox->setValue(double(440.0f));
+
+	tuningChanged();
+}
+
+
+void synthv1widget_config::tuningScaleFileClicked (void)
+{
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig == NULL)
+		return;
+
+	QString sTuningScaleFile = m_ui.TuningScaleFileComboBox->currentText();
+
+	const QString  sExt("scl");
+	const QString& sTitle  = tr("Open Scale File") + " - " SYNTHV1_TITLE;
+	const QString& sFilter = tr("Scale files (*.%1)").arg(sExt);
+
+	QWidget *pParentWidget = NULL;
+	QFileDialog::Options options = 0;
+	if (pConfig->bDontUseNativeDialogs) {
+		options |= QFileDialog::DontUseNativeDialog;
+		pParentWidget = QWidget::window();
+	}
+#if 1//QT_VERSION < 0x040400
+	sTuningScaleFile = QFileDialog::getOpenFileName(pParentWidget,
+		sTitle, sTuningScaleFile, sFilter, NULL, options);
+#else
+	QFileDialog fileDialog(pParentWidget,
+		sTitle, sTuningScaleFile, sFilter);
+	fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
+	fileDialog.setFileMode(QFileDialog::ExistingFiles);
+	fileDialog.setDefaultSuffix(sExt);
+	QList<QUrl> urls(fileDialog.sidebarUrls());
+	urls.append(QUrl::fromLocalFile(pConfig->sTuningScaleFile));
+	fileDialog.setSidebarUrls(urls);
+	fileDialog.setOptions(options);
+	if (fileDialog.exec())
+		sTuningScaleFile = fileDialog.selectedFiles().first();
+#endif
+
+	if (!sTuningScaleFile.isEmpty()) {
+		m_ui.TuningScaleFileComboBox->setEditText(sTuningScaleFile);
+		tuningChanged();
+	}
+}
+
+
+void synthv1widget_config::tuningKeyMapFileClicked (void)
+{
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig == NULL)
+		return;
+
+	QString sTuningKeyMapFile = m_ui.TuningKeyMapFileComboBox->currentText();
+
+	const QString  sExt("kbm");
+	const QString& sTitle  = tr("Open Key Map File") + " - " SYNTHV1_TITLE;
+	const QString& sFilter = tr("Key Map files (*.%1)").arg(sExt);
+
+	QWidget *pParentWidget = NULL;
+	QFileDialog::Options options = 0;
+	if (pConfig->bDontUseNativeDialogs) {
+		options |= QFileDialog::DontUseNativeDialog;
+		pParentWidget = QWidget::window();
+	}
+#if 1//QT_VERSION < 0x040400
+	sTuningKeyMapFile = QFileDialog::getOpenFileName(pParentWidget,
+		sTitle, sTuningKeyMapFile, sFilter, NULL, options);
+#else
+	QFileDialog fileDialog(pParentWidget,
+		sTitle, sTuningScaleFile, sFilter);
+	fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
+	fileDialog.setFileMode(QFileDialog::ExistingFiles);
+	fileDialog.setDefaultSuffix(sExt);
+	QList<QUrl> urls(fileDialog.sidebarUrls());
+	urls.append(QUrl::fromLocalFile(pConfig->sTuningKeyMapFile));
+	fileDialog.setSidebarUrls(urls);
+	fileDialog.setOptions(options);
+	if (fileDialog.exec())
+		sTuningKeyMapFile = fileDialog.selectedFiles().first();
+#endif
+
+	if (!sTuningKeyMapFile.isEmpty()) {
+		m_ui.TuningKeyMapFileComboBox->setEditText(sTuningKeyMapFile);
+		tuningChanged();
+	}
+}
+
+
+void synthv1widget_config::tuningChanged (void)
+{
+	++m_iDirtyTuning;
+
+	stabilize();
+}
+
+
 // options slot.
 void synthv1widget_config::optionsChanged (void)
 {
@@ -421,8 +585,28 @@ void synthv1widget_config::stabilize (void)
 	m_ui.ProgramsEditToolButton->setEnabled(bEnabled);
 	m_ui.ProgramsDeleteToolButton->setEnabled(bEnabled);
 
+	const bool bTuningEnabled
+		= m_ui.TuningEnabledCheckBox->isChecked();
+	m_ui.TuningRefNoteTextLabel->setEnabled(bTuningEnabled);
+	m_ui.TuningRefNoteComboBox->setEnabled(bTuningEnabled);
+	m_ui.TuningRefPitchSpinBox->setEnabled(bTuningEnabled);
+	m_ui.TuningRefNotePushButton->setEnabled(bTuningEnabled);
+	m_ui.TuningScaleEnabledCheckBox->setEnabled(bTuningEnabled);
+	const bool bTuningScaleEnabled
+		= bTuningEnabled && m_ui.TuningScaleEnabledCheckBox->isChecked();
+	m_ui.TuningScaleFileComboBox->setEnabled(bTuningScaleEnabled);
+	m_ui.TuningScaleFileToolButton->setEnabled(bTuningScaleEnabled);
+	m_ui.TuningKeyMapEnabledCheckBox->setEnabled(bTuningEnabled);
+	const bool bTuningKeyMapEnabled
+		= bTuningEnabled && m_ui.TuningKeyMapEnabledCheckBox->isChecked();
+	m_ui.TuningKeyMapFileComboBox->setEnabled(bTuningKeyMapEnabled);
+	m_ui.TuningKeyMapFileToolButton->setEnabled(bTuningKeyMapEnabled);
+
 	const bool bValid
-		= (m_iDirtyControls > 0 || m_iDirtyPrograms > 0 || m_iDirtyOptions > 0);
+		= (m_iDirtyTuning   > 0
+		|| m_iDirtyControls > 0
+		|| m_iDirtyPrograms > 0
+		|| m_iDirtyOptions  > 0);
 	m_ui.DialogButtonBox->button(QDialogButtonBox::Ok)->setEnabled(bValid);
 }
 
@@ -431,6 +615,24 @@ void synthv1widget_config::stabilize (void)
 void synthv1widget_config::accept (void)
 {
 	synthv1_config *pConfig = synthv1_config::getInstance();
+
+	if (m_iDirtyTuning > 0 && pConfig && m_pSynthUi) {
+		// Micro-tonal tuning settings...
+		pConfig->bTuningEnabled = m_ui.TuningEnabledCheckBox->isChecked();
+		pConfig->iTuningRefNote = m_ui.TuningRefNoteComboBox->currentIndex();
+		pConfig->fTuningRefPitch = float(m_ui.TuningRefPitchSpinBox->value());
+		pConfig->bTuningScaleEnabled = m_ui.TuningScaleEnabledCheckBox->isChecked();
+		pConfig->sTuningScaleFile = m_ui.TuningScaleFileComboBox->currentText();
+		pConfig->bTuningKeyMapEnabled = m_ui.TuningKeyMapEnabledCheckBox->isChecked();
+		pConfig->sTuningKeyMapFile = m_ui.TuningKeyMapFileComboBox->currentText();
+		// Reset/update micro-tonal tuning...
+		m_pSynthUi->updateTuning();
+		// Save other conveniency options...
+		saveComboBoxHistory(m_ui.TuningScaleFileComboBox);
+		saveComboBoxHistory(m_ui.TuningKeyMapFileComboBox);
+		// Reset dirty flag.
+		m_iDirtyTuning = 0;
+	}
 
 	if (m_iDirtyControls > 0 && pConfig && m_pSynthUi) {
 		// Save controls...
@@ -500,7 +702,10 @@ void synthv1widget_config::reject (void)
 	bool bReject = true;
 
 	// Check if there's any pending changes...
-	if (m_iDirtyControls > 0 || m_iDirtyPrograms > 0 || m_iDirtyOptions > 0) {
+	if (m_iDirtyTuning   > 0 ||
+		m_iDirtyControls > 0 ||
+		m_iDirtyPrograms > 0 ||
+		m_iDirtyOptions  > 0) {
 		QMessageBox::StandardButtons buttons
 			= QMessageBox::Discard | QMessageBox::Cancel;
 		if (m_ui.DialogButtonBox->button(QDialogButtonBox::Ok)->isEnabled())
@@ -522,6 +727,77 @@ void synthv1widget_config::reject (void)
 
 	if (bReject)
 		QDialog::reject();
+}
+
+
+// Combo box history persistence helper implementation.
+void synthv1widget_config::loadComboBoxHistory ( QComboBox *pComboBox, int iLimit )
+{
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig == NULL)
+		return;
+
+	const bool bBlockSignals = pComboBox->blockSignals(true);
+
+	// Load combobox list from configuration settings file...
+	pConfig->beginGroup("/History/" + pComboBox->objectName());
+
+	if (pConfig->childKeys().count() > 0) {
+		pComboBox->setUpdatesEnabled(false);
+		pComboBox->setDuplicatesEnabled(false);
+		pComboBox->clear();
+		for (int i = 0; i < iLimit; ++i) {
+			const QString& sText = pConfig->value(
+				"/Item" + QString::number(i + 1)).toString();
+			if (sText.isEmpty())
+				break;
+			pComboBox->addItem(sText);
+		}
+		pComboBox->setUpdatesEnabled(true);
+	}
+
+	pConfig->endGroup();
+
+	pComboBox->blockSignals(bBlockSignals);
+}
+
+
+void synthv1widget_config::saveComboBoxHistory ( QComboBox *pComboBox, int iLimit )
+{
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig == NULL)
+		return;
+
+	const bool bBlockSignals = pComboBox->blockSignals(true);
+
+	// Add current text as latest item...
+	const QString sCurrentText = pComboBox->currentText();
+	int iCount = pComboBox->count();
+	for (int i = 0; i < iCount; i++) {
+		const QString& sText = pComboBox->itemText(i);
+		if (sText == sCurrentText) {
+			pComboBox->removeItem(i);
+			--iCount;
+			break;
+		}
+	}
+	while (iCount >= iLimit)
+		pComboBox->removeItem(--iCount);
+	pComboBox->insertItem(0, sCurrentText);
+	pComboBox->setCurrentIndex(0);
+	++iCount;
+
+	// Save combobox list to configuration settings file...
+	pConfig->beginGroup("/History/" + pComboBox->objectName());
+	for (int i = 0; i < iCount; ++i) {
+		const QString& sText = pComboBox->itemText(i);
+		if (sText.isEmpty())
+			break;
+		pConfig->setValue("/Item" + QString::number(i + 1), sText);
+	}
+	pConfig->endGroup();
+
+	pComboBox->blockSignals(bBlockSignals);
 }
 
 

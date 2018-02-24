@@ -78,7 +78,9 @@ public:
 	bool    bTuningEnabled;
 	float   fTuningRefPitch;
 	int     iTuningRefNote;
+	bool    bTuningScaleEnabled;
 	QString sTuningScaleFile;
+	bool    bTuningKeyMapEnabled;
 	QString sTuningKeyMapFile;
 
 	// Singleton instance accessor.

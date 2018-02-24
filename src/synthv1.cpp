@@ -2065,9 +2065,11 @@ void synthv1_impl::updateTuning (void)
 		synthv1_tuning tuning(
 			m_config.fTuningRefPitch,
 			m_config.iTuningRefNote);
-		if (!m_config.sTuningKeyMapFile.isEmpty())
+		if (m_config.bTuningKeyMapEnabled
+			&& !m_config.sTuningKeyMapFile.isEmpty())
 			tuning.loadKeyMapFile(m_config.sTuningKeyMapFile);
-		if (!m_config.sTuningScaleFile.isEmpty())
+		if (m_config.bTuningScaleEnabled
+			&& !m_config.sTuningScaleFile.isEmpty())
 			tuning.loadScaleFile(m_config.sTuningScaleFile);
 		for (int note = 0; note < MAX_NOTES; ++note)
 			m_freqs[note] = tuning.noteToPitch(note);
