@@ -116,4 +116,13 @@ void synthv1_ui::updateTuning (void)
 }
 
 
+// MIDI note/octave name helper (static).
+QString synthv1_ui::noteName ( int note )
+{
+	static const char *notes[] =
+		{ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+	return QString("%1 %2").arg(notes[note % 12]).arg((note / 12) - 1);
+}
+
+
 // end of synthv1_ui.cpp

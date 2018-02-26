@@ -61,6 +61,9 @@ public:
 
 	void updateTuning();
 
+	// MIDI note/octave name helper.
+	static QString noteName(int note);
+
 private:
 
 	synthv1 *m_pSynth;

@@ -55,9 +55,6 @@ public:
 	// UI instance accessors.
 	synthv1_ui *ui_instance() const;
 
-	// MIDI note/octave name helper (static).
-	static QString noteName(int note);
-
 protected slots:
 
 	// command slots.
