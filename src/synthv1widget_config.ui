@@ -520,11 +520,8 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0" colspan="2">
+       <item row="1" column="1">
         <widget class="QLabel" name="TuningRefNoteTextLabel">
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
          <property name="text">
           <string>Re&amp;ference:</string>
          </property>
@@ -604,12 +601,15 @@
         </spacer>
        </item>
        <item row="2" column="1">
-        <widget class="QCheckBox" name="TuningScaleEnabledCheckBox">
+        <widget class="QLabel" name="TuningScaleFileTextLabel">
          <property name="toolTip">
           <string>Whether to use an alternate scale definition file (*.scl)</string>
          </property>
          <property name="text">
           <string>&amp;Scale:</string>
+         </property>
+         <property name="buddy">
+          <cstring>TuningScaleFileComboBox</cstring>
          </property>
         </widget>
        </item>
@@ -625,8 +625,13 @@
           <string>Scale definition file (*.scl)</string>
          </property>
          <property name="editable">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
+         <item>
+          <property name="text">
+           <string>(default)</string>
+          </property>
+         </item>
         </widget>
        </item>
        <item row="2" column="6">
@@ -655,12 +660,15 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QCheckBox" name="TuningKeyMapEnabledCheckBox">
+        <widget class="QLabel" name="TuningKeyMapFileTextLabel">
          <property name="toolTip">
           <string>Whether to use an alternate keyboard-map file (*.kbm)</string>
          </property>
          <property name="text">
           <string>&amp;Key map:</string>
+         </property>
+         <property name="buddy">
+          <cstring>TuningKeyMapFileComboBox</cstring>
          </property>
         </widget>
        </item>
@@ -676,8 +684,13 @@
           <string>Keyboard map file (*.kbm)</string>
          </property>
          <property name="editable">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
+         <item>
+          <property name="text">
+           <string>(default)</string>
+          </property>
+         </item>
         </widget>
        </item>
        <item row="3" column="6">
@@ -765,10 +778,8 @@
   <tabstop>TuningRefNoteComboBox</tabstop>
   <tabstop>TuningRefPitchSpinBox</tabstop>
   <tabstop>TuningRefNotePushButton</tabstop>
-  <tabstop>TuningScaleEnabledCheckBox</tabstop>
   <tabstop>TuningScaleFileComboBox</tabstop>
   <tabstop>TuningScaleFileToolButton</tabstop>
-  <tabstop>TuningKeyMapEnabledCheckBox</tabstop>
   <tabstop>TuningKeyMapFileComboBox</tabstop>
   <tabstop>TuningKeyMapFileToolButton</tabstop>
   <tabstop>DialogButtonBox</tabstop>

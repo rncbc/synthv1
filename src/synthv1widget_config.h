@@ -33,6 +33,7 @@ namespace Ui { class synthv1widget_config; }
 class synthv1_ui;
 
 class QComboBox;
+class QFileInfo;
 
 
 //----------------------------------------------------------------------------
@@ -96,8 +97,12 @@ protected slots:
 protected:
 
 	// Combo box history persistence helper prototypes.
-	void loadComboBoxHistory(QComboBox *pComboBox, int iLimit = 8);
-	void saveComboBoxHistory(QComboBox *pComboBox, int iLimit = 8);
+	void loadComboBoxHistory(QComboBox *pComboBox);
+	void saveComboBoxHistory(QComboBox *pComboBox);
+
+	// Combo box settter/gettter helper prototypes.
+	bool setComboBoxCurrentItem(QComboBox *pComboBox, const QFileInfo& info);
+	QString comboBoxCurrentItem(QComboBox *pComboBox);
 
 	// stabilizer.
 	void stabilize();

@@ -329,11 +329,11 @@ void synthv1_config::load (void)
 	// Micro-tuning options.
 	QSettings::beginGroup("/Tuning");
 	bTuningEnabled = QSettings::value("/Enabled", false).toBool();
-	fTuningRefPitch = QSettings::value("/RefPitch", 440.0f).toFloat();
+	fTuningRefPitch = float(QSettings::value("/RefPitch", 440.0).toDouble());
 	iTuningRefNote = QSettings::value("/RefNote", 69).toInt();
-	bTuningScaleEnabled = QSettings::value("/ScaleEnabled", false).toBool();
+	sTuningScaleDir = QSettings::value("/ScaleDir").toString();
 	sTuningScaleFile = QSettings::value("/ScaleFile").toString();
-	bTuningKeyMapEnabled= QSettings::value("/KeyMapEnabled", false).toBool();
+	sTuningKeyMapDir = QSettings::value("/KeyMapDir").toString();
 	sTuningKeyMapFile = QSettings::value("/KeyMapFile").toString();
 	QSettings::endGroup();
 }
@@ -366,11 +366,11 @@ void synthv1_config::save (void)
 	// Micro-tuning options.
 	QSettings::beginGroup("/Tuning");
 	QSettings::setValue("/Enabled", bTuningEnabled);
-	QSettings::setValue("/RefPitch", fTuningRefPitch);
+	QSettings::setValue("/RefPitch", double(fTuningRefPitch));
 	QSettings::setValue("/RefNote", iTuningRefNote);
-	QSettings::setValue("/ScaleFileEnabled", bTuningScaleEnabled);
+	QSettings::setValue("/ScaleDir", sTuningScaleDir);
 	QSettings::setValue("/ScaleFile", sTuningScaleFile);
-	QSettings::setValue("/KeyMapEnabled", bTuningKeyMapEnabled);
+	QSettings::setValue("/KeyMapDir", sTuningKeyMapDir);
 	QSettings::setValue("/KeyMapFile", sTuningKeyMapFile);
 	QSettings::endGroup();
 
