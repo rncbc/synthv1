@@ -1,7 +1,7 @@
 // synthv1widget_control.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -33,8 +33,6 @@ namespace Ui { class synthv1widget_control; }
 
 class QAbstractButton;
 class QCloseEvent;
-
-class QTime;
 
 
 //----------------------------------------------------------------------------
@@ -124,9 +122,6 @@ private:
 
 	int m_iDirtyCount;
 	int m_iDirtySetup;
-
-	// Anti-flooding guard timer.
-	QTime *m_pEventTimer;
 
 	// Pseudo-singleton instance.
 	static synthv1widget_control *g_pInstance;

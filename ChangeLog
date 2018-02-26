@@ -19,8 +19,6 @@ GIT HEAD
   no matter whether each pairing event are under 200ms apart.
   (EXPERIMENTAL)
 - A little hardening on the configure (autoconf) macro side.
-- An anti-flooding timer is now in place in MIDI Controller
-  assignment (aka. MIDI learn) dialog. (EXPERIMENTAL)
 
 
 0.8.6  2017-12-20  The End of Autumn'17 release.

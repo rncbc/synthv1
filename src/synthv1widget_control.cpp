@@ -1,7 +1,7 @@
 // synthv1widget_control.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -29,7 +29,6 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QLineEdit>
-#include <QTime>
 
 
 //----------------------------------------------------------------------------
@@ -66,9 +65,6 @@ synthv1widget_control::synthv1widget_control (
 		int(synthv1_controls::CC14));
 
 	m_ui.ControlParamComboBox->setInsertPolicy(QComboBox::NoInsert);
-
-	// Anti-flooding guard timer.
-	m_pEventTimer = new QTime();
 
 	// Start clean.
 	m_iControlParamUpdate = 0;
@@ -119,8 +115,6 @@ synthv1widget_control::synthv1widget_control (
 // Destructor.
 synthv1widget_control::~synthv1widget_control (void)
 {
-	delete m_pEventTimer;
-
 	delete p_ui;
 }
 
@@ -191,8 +185,6 @@ void synthv1widget_control::setControls (
 		(flags & synthv1_controls::Hook) || !bFloat);
 	m_ui.ControlHookCheckBox->setEnabled(bFloat);
 
-	m_pEventTimer->start();
-
 	--m_iDirtySetup;
 
 	m_iDirtyCount = 0;
@@ -225,10 +217,6 @@ void synthv1widget_control::closeEvent ( QCloseEvent *pCloseEvent )
 // Process incoming controller key event.
 void synthv1widget_control::setControlKey ( const synthv1_controls::Key& key )
 {
-	// Anti-flooding guard timer < 3sec...
-	if (m_iDirtySetup == 0 && m_pEventTimer->elapsed() < 3000)
-		return;
-
 	setControlType(key.type());
 	setControlParam(key.param);
 
@@ -238,8 +226,6 @@ void synthv1widget_control::setControlKey ( const synthv1_controls::Key& key )
 		= m_ui.DialogButtonBox->button(QDialogButtonBox::Reset);
 	if (pResetButton && m_pControls)
 		pResetButton->setEnabled(m_pControls->find_control(key) >= 0);
-
-	m_pEventTimer->restart();
 }
 
 
@@ -266,8 +252,6 @@ void synthv1widget_control::changed (void)
 #ifdef CONFIG_DEBUG_0
 	qDebug("synthv1widget_control::changed()");
 #endif
-
-	m_pEventTimer->restart();
 
 	++m_iDirtyCount;
 
