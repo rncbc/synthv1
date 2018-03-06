@@ -4,20 +4,18 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.0  2018-03-07  The End of Winter'18 release.
 
 - Introducing Scala micro-tuning classes, borrowed, stirred
   and refactored from original Nick Dowell's amsynth code,
-  all under the GPL umbrella, of course. (EXPERIMENTAL)
+  all under the GPL umbrella, of course.
 - An internal note-key/frequency indirection table is now in
   place, as a baseline for any micro-tuning implementations.
-  (EXPERIMENTAL)
 - Whether to use native file browser/requester dialogs is
   now an effective option when launching under NSM session
-  management (was once disabled initially). (EXPERIMENTAL)
+  management (was once disabled initially).
 - Trying to get CC14 MSB+LSB (course+fine) running status on,
   no matter whether each pairing event are under 200ms apart.
-  (EXPERIMENTAL)
 - A little hardening on the configure (autoconf) macro side.
 
 
