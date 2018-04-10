@@ -4,6 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Added "All files (*.*)" filter to every file requestor
+  dialog, wherever missing. (EXPERIMENTAL)
+
+
 0.9.0  2018-03-07  The End of Winter'18 release.
 
 - Introducing Scala micro-tuning classes, borrowed, stirred
