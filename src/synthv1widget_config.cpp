@@ -589,10 +589,12 @@ void synthv1widget_config::stabilize (void)
 	m_ui.ProgramsDeleteToolButton->setEnabled(bEnabled);
 
 	bEnabled = m_ui.TuningEnabledCheckBox->isChecked();
-	m_ui.TuningRefNoteTextLabel->setEnabled(bEnabled);
-	m_ui.TuningRefNoteComboBox->setEnabled(bEnabled);
-	m_ui.TuningRefPitchSpinBox->setEnabled(bEnabled);
-	m_ui.TuningRefNotePushButton->setEnabled(bEnabled);
+	const bool bTuningRefEnabled = bEnabled
+		&& comboBoxCurrentItem(m_ui.TuningKeyMapFileComboBox).isEmpty();
+	m_ui.TuningRefNoteTextLabel->setEnabled(bTuningRefEnabled);
+	m_ui.TuningRefNoteComboBox->setEnabled(bTuningRefEnabled);
+	m_ui.TuningRefPitchSpinBox->setEnabled(bTuningRefEnabled);
+	m_ui.TuningRefNotePushButton->setEnabled(bTuningRefEnabled);
 	m_ui.TuningScaleFileTextLabel->setEnabled(bEnabled);
 	m_ui.TuningScaleFileComboBox->setEnabled(bEnabled);
 	m_ui.TuningScaleFileToolButton->setEnabled(bEnabled);

@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- Disable reference micro-tuning settings when a Scala
+  keyboard map override is in effect (EXPERIMENTAL).
 - Added "All files (*.*)" filter to every file requestor
   dialog, wherever missing. (EXPERIMENTAL)
 
