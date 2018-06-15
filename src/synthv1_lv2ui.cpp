@@ -1,7 +1,7 @@
 // synthv1_lv2ui.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -189,6 +189,57 @@ static const void *synthv1_lv2ui_extension_data ( const char *uri )
 }
 
 
+#ifdef CONFIG_LV2_UI_X11
+
+static LV2UI_Handle synthv1_lv2ui_x11_instantiate (
+	const LV2UI_Descriptor *, const char *, const char *,
+	LV2UI_Write_Function write_function,
+	LV2UI_Controller controller, LV2UI_Widget *widget,
+	const LV2_Feature *const *ui_features )
+{
+	WId winid, parent = 0;
+	LV2UI_Resize *resize = NULL;
+	synthv1_lv2 *pSynth = NULL;
+
+	for (int i = 0; ui_features[i]; ++i) {
+		if (::strcmp(ui_features[i]->URI, LV2_INSTANCE_ACCESS_URI) == 0)
+			pSynth = static_cast<synthv1_lv2 *> (ui_features[i]->data);
+		else
+		if (::strcmp(ui_features[i]->URI, LV2_UI__parent) == 0)
+			parent = (WId) ui_features[i]->data;
+		else
+		if (::strcmp(ui_features[i]->URI, LV2_UI__resize) == 0)
+			resize = (LV2UI_Resize *) ui_features[i]->data;
+	}
+
+	if (pSynth == NULL)
+		return NULL;
+	if (!parent)
+		return NULL;
+
+	if (qApp == NULL && synthv1_lv2ui_qapp_instance == NULL) {
+		static int s_argc = 1;
+		static const char *s_argv[] = { __func__, NULL };
+		synthv1_lv2ui_qapp_instance = new QApplication(s_argc, (char **) s_argv);
+	}
+	synthv1_lv2ui_qapp_refcount++;
+
+	synthv1widget_lv2 *pWidget
+		= new synthv1widget_lv2(pSynth, controller, write_function);
+	if (resize && resize->handle) {
+		const QSize& hint = pWidget->sizeHint();
+		resize->ui_resize(resize->handle, hint.width(), hint.height());
+	}
+	winid = pWidget->winId();
+	pWidget->windowHandle()->setParent(QWindow::fromWinId(parent));
+	pWidget->show();
+	*widget = (LV2UI_Widget) winid;
+	return pWidget;
+}
+
+#endif	// CONFIG_LV2_UI_X11
+
+
 #ifdef CONFIG_LV2_EXTERNAL_UI
 
 struct synthv1_lv2ui_external_widget
@@ -306,6 +357,17 @@ static const LV2UI_Descriptor synthv1_lv2ui_descriptor =
 	synthv1_lv2ui_extension_data
 };
 
+#ifdef CONFIG_LV2_UI_X11
+static const LV2UI_Descriptor synthv1_lv2ui_x11_descriptor =
+{
+	SYNTHV1_LV2UI_X11_URI,
+	synthv1_lv2ui_x11_instantiate,
+	synthv1_lv2ui_cleanup,
+	synthv1_lv2ui_port_event,
+	synthv1_lv2ui_extension_data
+};
+#endif	// CONFIG_LV2_UI_X11
+
 #ifdef CONFIG_LV2_EXTERNAL_UI
 static const LV2UI_Descriptor synthv1_lv2ui_external_descriptor =
 {
@@ -323,8 +385,13 @@ LV2_SYMBOL_EXPORT const LV2UI_Descriptor *lv2ui_descriptor ( uint32_t index )
 	if (index == 0)
 		return &synthv1_lv2ui_descriptor;
 	else
-#ifdef CONFIG_LV2_EXTERNAL_UI
+#ifdef CONFIG_LV2_UI_X11
 	if (index == 1)
+		return &synthv1_lv2ui_x11_descriptor;
+	else
+#endif
+#ifdef CONFIG_LV2_EXTERNAL_UI
+	if (index == 2)
 		return &synthv1_lv2ui_external_descriptor;
 	else
 #endif

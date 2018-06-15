@@ -1,7 +1,7 @@
 // synthv1_lv2ui.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -30,10 +30,16 @@
 
 #define SYNTHV1_LV2UI_URI SYNTHV1_LV2_PREFIX "ui"
 
+#ifdef CONFIG_LV2_UI_X11
+#include <QWindow>
+#define SYNTHV1_LV2UI_X11_URI SYNTHV1_LV2_PREFIX "ui_x11"
+#endif
+
 #ifdef CONFIG_LV2_EXTERNAL_UI
 #include "lv2_external_ui.h"
 #define SYNTHV1_LV2UI_EXTERNAL_URI SYNTHV1_LV2_PREFIX "ui_external"
 #endif
+
 
 // Forward decls.
 class synthv1_lv2;

@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Added LV2 UI X11 support option. (EXPERIMENTAL)
 - Disable reference micro-tuning settings when a Scala
   keyboard map override is in effect (EXPERIMENTAL).
 - Added "All files (*.*)" filter to every file requestor
@@ -315,7 +316,7 @@ GIT HEAD
 - A slight GUI behavior change: (re)writing existing names
   doesn't load the respective preset anymore (after ticket
   by Jiri Prochazka aka. Anchakor, thanks).
-- Introducing LV2 External UI "rougue" support.
+- Introducing LV2 External UI "rogue" support.
 - Moog-like 24dB/oct resonant filter slight modification.
 - Fixed JACK client fail/fake initialization.
 

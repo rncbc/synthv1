@@ -6,6 +6,11 @@
 	lv2:requiredFeature <http://lv2plug.in/ns/ext/instance-access> ;
 	lv2ui:binary <synthv1_ui.so> .
 
+<http://synthv1.sourceforge.net/lv2#ui_x11>
+	a lv2ui:X11UI ;
+	lv2:requiredFeature <http://lv2plug.in/ns/ext/instance-access> ;
+	lv2ui:binary <synthv1_ui.so> .
+
 <http://synthv1.sourceforge.net/lv2#ui_external>
 	a <http://kxstudio.sf.net/ns/lv2ext/external-ui#Widget> ;
 	lv2:requiredFeature <http://lv2plug.in/ns/ext/instance-access> ;
