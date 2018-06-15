@@ -240,7 +240,7 @@ static LV2UI_Handle synthv1_lv2ui_x11_instantiate (
 #endif	// CONFIG_LV2_UI_X11
 
 
-#ifdef CONFIG_LV2_EXTERNAL_UI
+#ifdef CONFIG_LV2_UI_EXTERNAL
 
 struct synthv1_lv2ui_external_widget
 {
@@ -345,7 +345,7 @@ static const void *synthv1_lv2ui_external_extension_data ( const char * )
 	return NULL;
 }
 
-#endif	// CONFIG_LV2_EXTERNAL_UI
+#endif	// CONFIG_LV2_UI_EXTERNAL
 
 
 static const LV2UI_Descriptor synthv1_lv2ui_descriptor =
@@ -368,7 +368,7 @@ static const LV2UI_Descriptor synthv1_lv2ui_x11_descriptor =
 };
 #endif	// CONFIG_LV2_UI_X11
 
-#ifdef CONFIG_LV2_EXTERNAL_UI
+#ifdef CONFIG_LV2_UI_EXTERNAL
 static const LV2UI_Descriptor synthv1_lv2ui_external_descriptor =
 {
 	SYNTHV1_LV2UI_EXTERNAL_URI,
@@ -377,7 +377,7 @@ static const LV2UI_Descriptor synthv1_lv2ui_external_descriptor =
 	synthv1_lv2ui_external_port_event,
 	synthv1_lv2ui_external_extension_data
 };
-#endif	// CONFIG_LV2_EXTERNAL_UI
+#endif	// CONFIG_LV2_UI_EXTERNAL
 
 
 LV2_SYMBOL_EXPORT const LV2UI_Descriptor *lv2ui_descriptor ( uint32_t index )
@@ -390,7 +390,7 @@ LV2_SYMBOL_EXPORT const LV2UI_Descriptor *lv2ui_descriptor ( uint32_t index )
 		return &synthv1_lv2ui_x11_descriptor;
 	else
 #endif
-#ifdef CONFIG_LV2_EXTERNAL_UI
+#ifdef CONFIG_LV2_UI_EXTERNAL
 	if (index == 2)
 		return &synthv1_lv2ui_external_descriptor;
 	else

@@ -1,7 +1,7 @@
 // synthv1widget_lv2.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ public:
 	void port_event(uint32_t port_index,
 		uint32_t buffer_size, uint32_t format, const void *buffer);
 
-#ifdef CONFIG_LV2_EXTERNAL_UI
+#ifdef CONFIG_LV2_UI_EXTERNAL
 	void setExternalHost(LV2_External_UI_Host *external_host);
 	const LV2_External_UI_Host *externalHost() const;
 #endif
@@ -72,7 +72,7 @@ private:
 
 	bool m_params_def[synthv1::NUM_PARAMS];
 
-#ifdef CONFIG_LV2_EXTERNAL_UI
+#ifdef CONFIG_LV2_UI_EXTERNAL
 	LV2_External_UI_Host *m_external_host;
 #endif
 #ifdef CONFIG_LV2_UI_IDLE

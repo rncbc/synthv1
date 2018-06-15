@@ -102,10 +102,10 @@ AC_ARG_ENABLE(lv2-ui-x11,
   [ac_lv2_ui_x11="$enableval"],
   [ac_lv2_ui_x11="yes"])
 
-AC_ARG_ENABLE(lv2-external-ui,
-  AS_HELP_STRING([--enable-lv2-external-ui], [enable LV2 plug-in External UI support (default=yes)]),
-  [ac_lv2_external_ui="$enableval"],
-  [ac_lv2_external_ui="yes"])
+AC_ARG_ENABLE(lv2-ui-external,
+  AS_HELP_STRING([--enable-lv2-ui-external], [enable LV2 plug-in External UI support (default=yes)]),
+  [ac_lv2_ui_external="$enableval"],
+  [ac_lv2_ui_external="yes"])
 
 AC_ARG_ENABLE(lv2-ui-idle,
   AS_HELP_STRING([--enable-lv2-ui-idle], [enable LV2 UI Idle interface support (default=yes)]),
@@ -568,7 +568,7 @@ fi
 
 if test "x$ac_lv2" = "xno"; then
    ac_lv2_ui_x11="no"
-   ac_lv2_external_ui="no"
+   ac_lv2_ui_external="no"
    ac_lv2_ui_idle="no"
    ac_lv2_ui_show="no"
    ac_lv2_programs="no"
@@ -584,12 +584,12 @@ else
    AC_MSG_WARN([*** LV2 X11 UI support will be disabled.])
 fi
 
-if test "x$ac_lv2_external_ui" = "xyes"; then
+if test "x$ac_lv2_ui_external" = "xyes"; then
    CFLAGS="$CFLAGS -Isrc/lv2"
    CPPFLAGS="$CPPFLAGS -Isrc/lv2"
-   AC_CHECK_HEADER(lv2_external_ui.h, [ac_lv2_external_ui="yes"], [ac_lv2_external_ui="no"])
-   if test "x$ac_lv2_external_ui" = "xyes"; then
-      AC_DEFINE(CONFIG_LV2_EXTERNAL_UI, 1, [Define if LV2 External UI extension is available.])
+   AC_CHECK_HEADER(lv2_external_ui.h, [ac_lv2_ui_external="yes"], [ac_lv2_ui_external="no"])
+   if test "x$ac_lv2_ui_external" = "xyes"; then
+      AC_DEFINE(CONFIG_LV2_UI_EXTERNAL, 1, [Define if LV2 External UI extension is available.])
       ac_lv2_incpath="lv2 $ac_lv2_incpath"
    else
       AC_MSG_WARN([*** LV2 External UI extension will be disabled.])
@@ -697,7 +697,7 @@ echo "  JACK MIDI support  . . . . . . . . . . . . . . . .: $ac_jack_midi"
 echo "  ALSA MIDI support  . . . . . . . . . . . . . . . .: $ac_alsa_midi"
 echo "  LV2 plug-in build  . . . . . . . . . . . . . . . .: $ac_lv2"
 echo "  LV2 plug-in X11 UI support   . . . . . . . . . . .: $ac_lv2_ui_x11"
-echo "  LV2 plug-in External UI support  . . . . . . . . .: $ac_lv2_external_ui"
+echo "  LV2 plug-in External UI support  . . . . . . . . .: $ac_lv2_ui_external"
 echo "  LV2 plug-in UI Idle interface support  . . . . . .: $ac_lv2_ui_idle"
 echo "  LV2 plug-in UI Show interface support  . . . . . .: $ac_lv2_ui_show"
 echo "  LV2 plug-in Programs support . . . . . . . . . . .: $ac_lv2_programs"
