@@ -97,7 +97,6 @@ public:
 
 	// controller events.
 	struct Event
-
 	{
 		Key key;
 		unsigned short value;

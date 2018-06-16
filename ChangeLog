@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Fixed for some g++ >= 8.1.1 warnings and quietness.
 - Added LV2 UI X11 support option. (EXPERIMENTAL)
 - Disable reference micro-tuning settings when a Scala
   keyboard map override is in effect (EXPERIMENTAL).

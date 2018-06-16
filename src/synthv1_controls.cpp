@@ -216,15 +216,21 @@ public:
 			synthv1_controls::Event *old_events = m_events;
 			if (old_events) {
 				if (m_write > m_read) {
-					::memcpy(new_events + m_read, old_events + m_read,
+					::memcpy(
+						(void *) (new_events + m_read),
+						(void *) (old_events + m_read),
 						(m_write - m_read) * sizeof(synthv1_controls::Event));
 				}
 				else
 				if (m_write < m_read) {
-					::memcpy(new_events + m_read, old_events + m_read,
+					::memcpy(
+						(void *) (new_events + m_read),
+						(void *) (old_events + m_read),
 						(old_size - m_read) * sizeof(synthv1_controls::Event));
 					if (m_write > 0) {
-						::memcpy(new_events + old_size, old_events,
+						::memcpy(
+							(void *) (new_events + old_size),
+							(void *) (old_events),
 							m_write * sizeof(synthv1_controls::Event));
 					}
 					m_write += old_size;
