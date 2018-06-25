@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 39
+%define release 38
 
 %define _prefix	@ac_prefix@
 
@@ -94,6 +94,8 @@ BuildRequires:	lv2-devel
 %{_datadir}/man/man1/%{name}*.1.gz
 
 %changelog
+* Tue Jun 26 2018 Rui Nuno Capela <rncbc@rncbc.org> 0.9.1
+- An Early Summer'18 release.
 * Wed Mar  7 2018 Rui Nuno Capela <rncbc@rncbc.org> 0.9.0
 - The End of Winter'18 release.
 * Sun Oct 29 2017 Rui Nuno Capela <rncbc@rncbc.org> 0.8.5

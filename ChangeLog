@@ -4,14 +4,14 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.1  2018-06-26  An Early Summer'18 release.
 
 - Fixed for some g++ >= 8.1.1 warnings and quietness.
-- Added LV2 UI X11 support option. (EXPERIMENTAL)
+- Added LV2 UI X11 support option.
 - Disable reference micro-tuning settings when a Scala
-  keyboard map override is in effect (EXPERIMENTAL).
+  keyboard map override is in effect.
 - Added "All files (*.*)" filter to every file requestor
-  dialog, wherever missing. (EXPERIMENTAL)
+  dialog, wherever missing.
 
 
 0.9.0  2018-03-07  The End of Winter'18 release.
