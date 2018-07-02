@@ -4,6 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- AppData/AppStream metadata is now settled under an all
+  permisssive license (FSFAP).
+
+
 0.9.1  2018-06-26  An Early Summer'18 release.
 
 - Fixed for some g++ >= 8.1.1 warnings and quietness.
