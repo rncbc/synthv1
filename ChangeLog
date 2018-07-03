@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- Process MIDI Controlllers even though the channel filter
+  is on (DEF Channel is set anything but "Omni").
 - AppData/AppStream metadata is now settled under an all
   permisssive license (FSFAP).
 

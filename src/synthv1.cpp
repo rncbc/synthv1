@@ -1504,11 +1504,15 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 		if (++i >= size)
 			break;
 
-		// channel filter
-		if (!on1 && !on2)
-			continue;
-
+		// channel value
 		const int value = (data[i] & 0x7f);
+
+		// channel/controller filter
+		if (!on1 && !on2) {
+			if (status == 0xb0)
+				m_controls.process_enqueue(channel, key, value);
+			continue;
+		}
 
 		// note on
 		if (status == 0x90 && value > 0) {
