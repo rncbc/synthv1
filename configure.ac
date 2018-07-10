@@ -117,6 +117,11 @@ AC_ARG_ENABLE(lv2-ui-show,
   [ac_lv2_ui_show="$enableval"],
   [ac_lv2_ui_show="yes"])
 
+AC_ARG_ENABLE(lv2-ui-resize,
+  AS_HELP_STRING([--enable-lv2-ui-resize], [enable LV2 UI Resize interface support (default=yes)]),
+  [ac_lv2_ui_resize="$enableval"],
+  [ac_lv2_ui_resize="yes"])
+
 AC_ARG_ENABLE(lv2-programs,
   AS_HELP_STRING([--enable-lv2-programs], [enable LV2 plug-in Programs support (default=yes)]),
   [ac_lv2_programs="$enableval"],
@@ -571,6 +576,7 @@ if test "x$ac_lv2" = "xno"; then
    ac_lv2_ui_external="no"
    ac_lv2_ui_idle="no"
    ac_lv2_ui_show="no"
+   ac_lv2_ui_resize="no"
    ac_lv2_programs="no"
 fi
 
@@ -625,6 +631,22 @@ if test "x$ac_lv2_ui_show" = "xyes"; then
       AC_DEFINE(CONFIG_LV2_UI_SHOW, 1, [Define if LV2 UI Show interface support is available.])
    else
       AC_MSG_WARN([*** LV2 UI Show interface support will be disabled.])
+   fi
+fi
+
+if test "x$ac_lv2_ui_resize" = "xyes"; then
+   AC_CACHE_CHECK([for LV2 UI Resize interface],
+      ac_cv_lv2_ui_resize, [
+      AC_TRY_LINK([#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"], [
+         // Checking for LV2 UI Resize interface...
+         LV2UI_Resize resize;
+      ], ac_cv_lv2_ui_resize="yes", ac_cv_lv2_ui_resize="no")
+   ])
+   ac_lv2_ui_resize=$ac_cv_lv2_ui_resize
+   if test "x$ac_lv2_ui_resize" = "xyes"; then
+      AC_DEFINE(CONFIG_LV2_UI_RESIZE, 1, [Define if LV2 UI Resize interface support is available.])
+   else
+      AC_MSG_WARN([*** LV2 UI Resize interface support will be disabled.])
    fi
 fi
 
@@ -700,6 +722,7 @@ echo "  LV2 plug-in X11 UI support   . . . . . . . . . . .: $ac_lv2_ui_x11"
 echo "  LV2 plug-in External UI support  . . . . . . . . .: $ac_lv2_ui_external"
 echo "  LV2 plug-in UI Idle interface support  . . . . . .: $ac_lv2_ui_idle"
 echo "  LV2 plug-in UI Show interface support  . . . . . .: $ac_lv2_ui_show"
+echo "  LV2 plug-in UI Resize interface support  . . . . .: $ac_lv2_ui_resize"
 echo "  LV2 plug-in Programs support . . . . . . . . . . .: $ac_lv2_programs"
 echo "  OSC service support (liblo)  . . . . . . . . . . .: $ac_liblo"
 echo "  NSM (Non Session Management) support . . . . . . .: $ac_nsm"

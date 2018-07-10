@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Add LV2 UI Resize extension data support. (EXPERIMENTAL)
 - Process MIDI Controlllers even though the channel filter
   is on (DEF Channel is set anything but "Omni").
 - AppData/AppStream metadata is now settled under an all

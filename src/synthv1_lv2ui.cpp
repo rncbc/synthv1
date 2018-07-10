@@ -173,6 +173,30 @@ static const LV2UI_Show_Interface synthv1_lv2ui_show_interface =
 
 #endif	// CONFIG_LV2_UI_IDLE
 
+
+#ifdef CONFIG_LV2_UI_RESIZE
+
+int synthv1_lv2ui_resize ( LV2UI_Handle ui, int width, int height )
+{
+qDebug("DEBUG> synthv1_lv2ui_resize(%p, %d, %d)", ui, width, height);
+	synthv1widget_lv2 *pWidget = static_cast<synthv1widget_lv2 *> (ui);
+	if (pWidget) {
+		pWidget->resize(width, height);
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
+static const LV2UI_Resize synthv1_lv2ui_resize_interface =
+{
+	NULL, // handle: host should use its own when calling ui_resize().
+	synthv1_lv2ui_resize
+};
+
+#endif	// CONFIG_LV2_UI_RESIZE
+
+
 static const void *synthv1_lv2ui_extension_data ( const char *uri )
 {
 #ifdef CONFIG_LV2_UI_IDLE
@@ -183,6 +207,11 @@ static const void *synthv1_lv2ui_extension_data ( const char *uri )
 #ifdef CONFIG_LV2_UI_SHOW
 	if (::strcmp(uri, LV2_UI__showInterface) == 0)
 		return (void *) &synthv1_lv2ui_show_interface;
+	else
+#endif
+#ifdef CONFIG_LV2_UI_RESIZE
+	if (::strcmp(uri, LV2_UI__resize) == 0)
+		return (void *) &synthv1_lv2ui_resize_interface;
 	else
 #endif
 	return NULL;
