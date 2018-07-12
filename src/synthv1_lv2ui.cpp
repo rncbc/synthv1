@@ -178,7 +178,6 @@ static const LV2UI_Show_Interface synthv1_lv2ui_show_interface =
 
 int synthv1_lv2ui_resize ( LV2UI_Handle ui, int width, int height )
 {
-qDebug("DEBUG> synthv1_lv2ui_resize(%p, %d, %d)", ui, width, height);
 	synthv1widget_lv2 *pWidget = static_cast<synthv1widget_lv2 *> (ui);
 	if (pWidget) {
 		pWidget->resize(width, height);
