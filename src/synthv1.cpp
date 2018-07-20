@@ -484,9 +484,9 @@ struct synthv1_lfo
 
 struct synthv1_dca
 {
-	synthv1_port2 volume;
+	synthv1_port volume;
 
-	synthv1_env   env;
+	synthv1_env  env;
 };
 
 
@@ -508,10 +508,10 @@ struct synthv1_def
 
 struct synthv1_out
 {
-	synthv1_port2 width;
-	synthv1_port2 panning;
-	synthv1_port2 fxsend;
-	synthv1_port2 volume;
+	synthv1_port width;
+	synthv1_port panning;
+	synthv1_port fxsend;
+	synthv1_port volume;
 };
 
 
@@ -519,11 +519,11 @@ struct synthv1_out
 
 struct synthv1_cho
 {
-	synthv1_port2 wet;
-	synthv1_port2 delay;
-	synthv1_port2 feedb;
-	synthv1_port2 rate;
-	synthv1_port2 mod;
+	synthv1_port wet;
+	synthv1_port delay;
+	synthv1_port feedb;
+	synthv1_port rate;
+	synthv1_port mod;
 };
 
 
@@ -531,10 +531,10 @@ struct synthv1_cho
 
 struct synthv1_fla
 {
-	synthv1_port2 wet;
-	synthv1_port2 delay;
-	synthv1_port2 feedb;
-	synthv1_port2 daft;
+	synthv1_port wet;
+	synthv1_port delay;
+	synthv1_port feedb;
+	synthv1_port daft;
 };
 
 
@@ -542,11 +542,11 @@ struct synthv1_fla
 
 struct synthv1_pha
 {
-	synthv1_port2 wet;
-	synthv1_port2 rate;
-	synthv1_port2 feedb;
-	synthv1_port2 depth;
-	synthv1_port2 daft;
+	synthv1_port wet;
+	synthv1_port rate;
+	synthv1_port feedb;
+	synthv1_port depth;
+	synthv1_port daft;
 };
 
 
@@ -554,10 +554,10 @@ struct synthv1_pha
 
 struct synthv1_del
 {
-	synthv1_port2 wet;
-	synthv1_port2 delay;
-	synthv1_port2 feedb;
-	synthv1_port2 bpm;
+	synthv1_port wet;
+	synthv1_port delay;
+	synthv1_port feedb;
+	synthv1_port bpm;
 };
 
 
@@ -565,11 +565,11 @@ struct synthv1_del
 
 struct synthv1_rev
 {
-	synthv1_port2 wet;
-	synthv1_port2 room;
-	synthv1_port2 damp;
-	synthv1_port2 feedb;
-	synthv1_port2 width;
+	synthv1_port wet;
+	synthv1_port room;
+	synthv1_port damp;
+	synthv1_port feedb;
+	synthv1_port width;
 };
 
 // dynamic(compressor/limiter)
@@ -2504,19 +2504,9 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	// post-processing
 	m_phasor.process(nframes);
 
-	m_dca1.volume.tick(nframes);
-	m_out1.width.tick(nframes);
-	m_out1.panning.tick(nframes);
-	m_out1.volume.tick(nframes);
-
 	m_wid1.process(nframes);
 	m_pan1.process(nframes);
 	m_vol1.process(nframes);
-
-	m_dca2.volume.tick(nframes);
-	m_out2.width.tick(nframes);
-	m_out2.panning.tick(nframes);
-	m_out2.volume.tick(nframes);
 
 	m_wid2.process(nframes);
 	m_pan2.process(nframes);
