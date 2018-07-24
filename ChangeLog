@@ -4,9 +4,9 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.2  2018-07-24  A Summer'18 release.
 
-- Add LV2 UI Resize extension data support. (EXPERIMENTAL)
+- Add LV2 UI Resize extension data support.
 - Process MIDI Controlllers even though the channel filter
   is on (DEF Channel is set anything but "Omni").
 - AppData/AppStream metadata is now settled under an all
