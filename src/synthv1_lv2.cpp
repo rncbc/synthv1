@@ -1,7 +1,7 @@
 // synthv1_lv2.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -454,7 +454,7 @@ static LV2_Worker_Status synthv1_lv2_worker_response (
 	if (pSynth && pSynth->worker_response(data, size))
 		return LV2_WORKER_SUCCESS;
 	else
-		return LV2_WORKER_SUCCESS;
+		return LV2_WORKER_ERR_UNKNOWN;
 }
 
 
