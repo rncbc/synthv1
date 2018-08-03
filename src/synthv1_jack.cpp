@@ -1,7 +1,7 @@
 // synthv1_jack.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -785,7 +785,9 @@ void synthv1_jack_application::openSession (void)
 	if (!dir.exists())
 		dir.mkpath(path_name);
 
-	const QFileInfo fi(path_name, display_name + '.' + SYNTHV1_TITLE);
+	QFileInfo fi(path_name, "session." SYNTHV1_TITLE);
+	if (!fi.exists())
+		fi.setFile(path_name, display_name + '.' + SYNTHV1_TITLE);
 	if (fi.exists()) {
 		const QString& sFilename = fi.absoluteFilePath();
 		if (m_pWidget) {
@@ -817,10 +819,11 @@ void synthv1_jack_application::saveSession (void)
 	qDebug("synthv1_jack::saveSession()");
 #endif
 
-	const QString& path_name = m_pNsmClient->path_name();
-	const QString& display_name = m_pNsmClient->display_name();
 //	const QString& client_id = m_pNsmClient->client_id();
-	const QFileInfo fi(path_name, display_name + '.' + SYNTHV1_TITLE);
+	const QString& path_name = m_pNsmClient->path_name();
+//	const QString& display_name = m_pNsmClient->display_name();
+//	const QFileInfo fi(path_name, display_name + '.' + SYNTHV1_TITLE);
+	const QFileInfo fi(path_name, "session." SYNTHV1_TITLE);
 
 	synthv1_param::savePreset(m_pSynth, fi.absoluteFilePath(), true);
 
