@@ -4,6 +4,13 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Make NSM state independent to session display name, keeping
+  backward compatibility for old sessions. (EXPERIMENTAL)
+- Give some more slack to schedule/worker thread ring-buffer.
+
+
 0.9.2  2018-07-24  A Summer'18 release.
 
 - Add LV2 UI Resize extension data support.
