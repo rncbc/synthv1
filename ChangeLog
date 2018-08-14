@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- SIGTERM (and SIGINT) signal handler added to close the JACK
+  stand-alone client applications properly. (EXPERIMENTAL)
+- Make the GUI not to show initially on NSM. (EXPERIMENTAL)
 - Make NSM state independent to session display name, keeping
   backward compatibility for old sessions. (EXPERIMENTAL)
 - Give some more slack to schedule/worker thread ring-buffer.
