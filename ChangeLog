@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- AppStream metadata updated to be the most compliant with
+  latest freedesktop.org specification and recommendation.
 - SIGTERM (and SIGINT) signal handler added to close the JACK
   stand-alone client applications properly. (EXPERIMENTAL)
 - Make the GUI not to show initially on NSM. (EXPERIMENTAL)
