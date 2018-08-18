@@ -23,6 +23,8 @@
 
 #include <QHash>
 
+#include <math.h>
+
 
 #define RPN_MSB   0x65
 #define RPN_LSB   0x64
@@ -665,8 +667,8 @@ void synthv1_controls::process_event ( const Event& event )
 		const float v0 = data.val;
 		const float v1 = synthv1_param::paramScale(index,
 			m_sched_in.instance()->paramValue(index));
-		const float d1 = (v1 - fScale);
-		const float d2 = (v1 - v0) * d1;
+		const float d1 = ::fabsf(v1 - fScale);
+		const float d2 = ::fabsf(v1 - v0) * d1;
 		bSync = (d2 < 0.001f);
 		if (bSync) {
 			data.val = fScale;
