@@ -318,8 +318,11 @@ void synthv1_lv2::updatePreset ( bool /*bDirty*/ )
 }
 
 
-bool synthv1_lv2::worker_work ( const void *data, uint32_t /*size*/ )
+bool synthv1_lv2::worker_work ( const void *data, uint32_t size )
 {
+	if (size != sizeof(synthv1_lv2_worker_message))
+		return false;
+
 	const synthv1_lv2_worker_message *mesg
 		= (const synthv1_lv2_worker_message *) data;
 
@@ -327,8 +330,11 @@ bool synthv1_lv2::worker_work ( const void *data, uint32_t /*size*/ )
 }
 
 
-bool synthv1_lv2::worker_response ( const void *data, uint32_t /*size*/ )
+bool synthv1_lv2::worker_response ( const void *data, uint32_t size )
 {
+	if (size != sizeof(synthv1_lv2_worker_message))
+		return false;
+
 	const synthv1_lv2_worker_message *mesg
 		= (const synthv1_lv2_worker_message *) data;
 
@@ -451,12 +457,10 @@ static LV2_Worker_Status synthv1_lv2_worker_response (
 	LV2_Handle instance, uint32_t size, const void *data )
 {
 	synthv1_lv2 *pSynth = static_cast<synthv1_lv2 *> (instance);
-	if (pSynth) {
-		pSynth->worker_response(data, size);
+	if (pSynth && pSynth->worker_response(data, size))
 		return LV2_WORKER_SUCCESS;
-	}
-
-	return LV2_WORKER_ERR_UNKNOWN;
+	else
+		return LV2_WORKER_ERR_UNKNOWN;
 }
 
 
