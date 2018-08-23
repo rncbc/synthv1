@@ -1231,7 +1231,7 @@ void synthv1widget::updateSchedNotify ( int stype, int sid )
 		return;
 
 #ifdef CONFIG_DEBUG_0
-	qDebug("samplv1widget::updateSchedNotify(%d, 0x%04x)", stype, sid);
+	qDebug("synthv1widget::updateSchedNotify(%d, 0x%04x)", stype, sid);
 #endif
 
 	switch (synthv1_sched::Type(stype)) {
