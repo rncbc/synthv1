@@ -898,14 +898,13 @@ synthv1widget_param *synthv1widget::paramKnob ( synthv1::ParamIndex index ) cons
 
 
 // Param port accessors.
-void synthv1widget::setParamValue (
-	synthv1::ParamIndex index, float fValue, bool bDefault )
+void synthv1widget::setParamValue ( synthv1::ParamIndex index, float fValue )
 {
 	++m_iUpdate;
 
 	synthv1widget_param *pParam = paramKnob(index);
 	if (pParam)
-		pParam->setValue(fValue, bDefault);
+		pParam->setValue(fValue);
 
 	updateParamEx(index, fValue);
 
@@ -1015,7 +1014,7 @@ void synthv1widget::updateSchedParam ( synthv1::ParamIndex index, float fValue )
 
 	synthv1widget_param *pParam = paramKnob(index);
 	if (pParam) {
-		pParam->setValue(fValue, false);
+		pParam->setValue(fValue);
 		updateParam(index, fValue);
 		updateParamEx(index, fValue);
 		m_ui.StatusBar->showMessage(QString("%1: %2")
@@ -1105,7 +1104,7 @@ void synthv1widget::updateParamValues (void)
 		const float fValue = (pSynthUi
 			? pSynthUi->paramValue(index)
 			: synthv1_param::paramDefaultValue(index));
-		setParamValue(index, fValue, true);
+		setParamValue(index, fValue);
 		updateParam(index, fValue);
 	//	updateParamEx(index, fValue);
 		m_params_ab[i] = fValue;
@@ -1121,7 +1120,7 @@ void synthv1widget::resetParamValues (void)
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
 		const synthv1::ParamIndex index = synthv1::ParamIndex(i);
 		const float fValue = synthv1_param::paramDefaultValue(index);
-		setParamValue(index, fValue, true);
+		setParamValue(index, fValue);
 		updateParam(index, fValue);
 	//	updateParamEx(index, fValue);
 		m_params_ab[i] = fValue;
@@ -1215,6 +1214,7 @@ bool synthv1widget::queryClose (void)
 // Preset status updater.
 void synthv1widget::updateLoadPreset ( const QString& sPreset )
 {
+	resetParamKnobs();
 	updateParamValues();
 
 	m_ui.Preset->setPreset(sPreset);
@@ -1230,7 +1230,7 @@ void synthv1widget::updateSchedNotify ( int stype, int sid )
 	if (pSynthUi == NULL)
 		return;
 
-#ifdef CONFIG_DEBUG_0
+#ifdef CONFIG_DEBUG
 	qDebug("synthv1widget::updateSchedNotify(%d, 0x%04x)", stype, sid);
 #endif
 
@@ -1262,6 +1262,12 @@ void synthv1widget::updateSchedNotify ( int stype, int sid )
 		break;
 	}
 	case synthv1_sched::Wave:
+		if (sid > 0) {
+			updateParamValues();
+			resetParamKnobs();
+			updateDirtyPreset(false);
+		}
+		// fall thru...
 	default:
 		break;
 	}

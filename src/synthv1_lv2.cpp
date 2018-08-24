@@ -21,6 +21,8 @@
 
 #include "synthv1_lv2.h"
 
+#include "synthv1_sched.h"
+
 #include "synthv1_programs.h"
 #include "synthv1_controls.h"
 
@@ -258,6 +260,55 @@ void synthv1_lv2::deactivate (void)
 }
 
 
+uint32_t synthv1_lv2::urid_map ( const char *uri ) const
+{
+	return (m_urid_map ? m_urid_map->map(m_urid_map->handle, uri) : 0);
+}
+
+
+//-------------------------------------------------------------------------
+// synthv1_lv2 - LV2 State interface.
+//
+
+static LV2_State_Status synthv1_lv2_state_save ( LV2_Handle instance,
+	LV2_State_Store_Function /*store*/, LV2_State_Handle /*handle*/,
+	uint32_t /*flags*/, const LV2_Feature *const */*features*/ )
+{
+	synthv1_lv2 *pPlugin = static_cast<synthv1_lv2 *> (instance);
+	if (pPlugin == NULL)
+		return LV2_STATE_ERR_UNKNOWN;
+
+	// Nothing to do...
+	//
+	return LV2_STATE_SUCCESS;
+}
+
+
+static LV2_State_Status synthv1_lv2_state_restore ( LV2_Handle instance,
+	LV2_State_Retrieve_Function /*retrieve*/, LV2_State_Handle /*handle*/,
+	uint32_t /*flags*/, const LV2_Feature *const */*features*/ )
+{
+	synthv1_lv2 *pPlugin = static_cast<synthv1_lv2 *> (instance);
+	if (pPlugin == NULL)
+		return LV2_STATE_ERR_UNKNOWN;
+
+	// Something to do...
+	//
+	pPlugin->reset();
+
+	synthv1_sched::sync_notify(pPlugin, synthv1_sched::Wave, 1);
+
+	return LV2_STATE_SUCCESS;
+}
+
+
+static const LV2_State_Interface synthv1_lv2_state_interface =
+{
+	synthv1_lv2_state_save,
+	synthv1_lv2_state_restore
+};
+
+
 #ifdef CONFIG_LV2_PROGRAMS
 
 #include "synthv1_programs.h"
@@ -295,16 +346,6 @@ void synthv1_lv2::select_program ( uint32_t bank, uint32_t program )
 
 #endif	// CONFIG_LV2_PROGRAMS
 
-
-uint32_t synthv1_lv2::urid_map ( const char *uri ) const
-{
-	return (m_urid_map ? m_urid_map->map(m_urid_map->handle, uri) : 0);
-}
-
-
-//-------------------------------------------------------------------------
-// synthv1_lv2 - LV2 State (bogus) interface.
-//
 
 void synthv1_lv2::updatePreset ( bool /*bDirty*/ )
 {
@@ -481,8 +522,11 @@ static const void *synthv1_lv2_extension_data ( const char *uri )
 #endif
 	if (::strcmp(uri, LV2_WORKER__interface) == 0)
 		return &synthv1_lv2_worker_interface;
+	else
+	if (::strcmp(uri, LV2_STATE__interface) == 0)
+		return &synthv1_lv2_state_interface;
 
-    return NULL;
+	return NULL;
 }
 
 

@@ -70,8 +70,6 @@ private:
 	// Instance variables.
 	synthv1_lv2ui *m_pSynthUi;
 
-	bool m_params_def[synthv1::NUM_PARAMS];
-
 #ifdef CONFIG_LV2_UI_EXTERNAL
 	LV2_External_UI_Host *m_external_host;
 #endif

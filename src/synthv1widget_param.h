@@ -117,7 +117,7 @@ public:
 public slots:
 
 	// Virtual accessor.
-	virtual void setValue(float fValue, bool bDefault = false);
+	virtual void setValue(float fValue);
 
 signals:
 
@@ -173,7 +173,7 @@ public:
 public slots:
 
 	// Virtual accessor.
-	void setValue(float fValue, bool bDefault = false);
+	void setValue(float fValue);
 
 protected slots:
 
@@ -268,7 +268,7 @@ public:
 public slots:
 
 	// Virtual accessor.
-	void setValue(float fValue, bool bDefault = false);
+	void setValue(float fValue);
 
 protected slots:
 
@@ -304,7 +304,7 @@ public:
 public slots:
 
 	// Virtual accessor.
-	void setValue(float fValue, bool bDefault = false);
+	void setValue(float fValue);
 
 protected slots:
 
@@ -348,7 +348,7 @@ public:
 public slots:
 
 	// Virtual accessor.
-	void setValue(float fValue, bool bDefault = false);
+	void setValue(float fValue);
 
 protected slots:
 
@@ -387,7 +387,7 @@ public:
 public slots:
 
 	// Virtual accessor.
-	void setValue(float fValue, bool bDefault = false);
+	void setValue(float fValue);
 
 protected slots:
 

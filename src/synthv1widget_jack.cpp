@@ -78,7 +78,8 @@ synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 
 	// Initialize preset stuff...
 	// initPreset();
-	updateParamValues();
+	resetParamKnobs();
+	resetParamValues();
 }
 
 

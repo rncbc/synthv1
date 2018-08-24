@@ -58,8 +58,7 @@ public:
 	void closeSchedNotifier();
 
 	// Param port accessors.
-	void setParamValue(
-		synthv1::ParamIndex index, float fValue, bool bDefault = false);
+	void setParamValue(synthv1::ParamIndex index, float fValue);
 	float paramValue(synthv1::ParamIndex index) const;
 
 	// Param kbob (widget) mapper.
