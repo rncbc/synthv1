@@ -1063,7 +1063,6 @@ void synthv1widget::swapParams ( bool bOn )
 #ifdef CONFIG_DEBUG
 	qDebug("synthv1widget::swapParams(%d)", int(bOn));
 #endif
-//	resetParamKnobs();
 
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
 		const synthv1::ParamIndex index = synthv1::ParamIndex(i);

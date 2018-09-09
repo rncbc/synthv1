@@ -44,10 +44,15 @@ synthv1widget_lv2::synthv1widget_lv2 ( synthv1_lv2 *pSynth,
 	m_bIdleClosed = false;
 #endif
 
+	// Initialise preset stuff...
+	clearPreset();
+
+	// Initial update, always...
+	resetParamValues();
+	resetParamKnobs();
+
 	// May initialize the scheduler/work notifier.
 	openSchedNotifier();
-
-	clearPreset();
 }
 
 

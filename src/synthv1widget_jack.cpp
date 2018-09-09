@@ -73,13 +73,15 @@ synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 	// Initialize (user) interface stuff...
 	m_pSynthUi = new synthv1_ui(m_pSynth, false);
 
+	// Initialise preset stuff...
+	clearPreset();
+
+	// Initial update, always...
+	resetParamValues();
+	resetParamKnobs();
+
 	// May initialize the scheduler/work notifier.
 	openSchedNotifier();
-
-	// Initialize preset stuff...
-	// initPreset();
-	resetParamKnobs();
-	resetParamValues();
 }
 
 
