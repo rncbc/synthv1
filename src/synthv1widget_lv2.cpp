@@ -48,7 +48,7 @@ synthv1widget_lv2::synthv1widget_lv2 ( synthv1_lv2 *pSynth,
 	clearPreset();
 
 	// Initial update, always...
-	resetParamValues();
+	//resetParamValues();
 	resetParamKnobs();
 
 	// May initialize the scheduler/work notifier.
