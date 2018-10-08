@@ -215,6 +215,8 @@ public:
 	void setParamValue(ParamIndex index, float fValue);
 	float paramValue(ParamIndex index) const;
 
+	bool running(bool on);
+
 	void reset();
 
 	void process_midi(uint8_t *data, uint32_t size);

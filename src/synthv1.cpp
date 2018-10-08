@@ -839,6 +839,8 @@ public:
 
 	void directNoteOn(int note, int vel);
 
+	bool running(bool on);
+
 	synthv1_wave dco1_wave1, dco1_wave2;
 	synthv1_wave dco2_wave1, dco2_wave2;
 
@@ -947,6 +949,8 @@ private:
 	volatile int m_direct_chan;
 	volatile int m_direct_note;
 	volatile int m_direct_vel;
+
+	volatile bool m_running;
 };
 
 
@@ -984,7 +988,8 @@ synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
 
 synthv1_impl::synthv1_impl (
 	synthv1 *pSynth, uint16_t nchannels, float srate )
-	: m_controls(pSynth), m_programs(pSynth), m_midi_in(pSynth), m_bpm(180.0f)
+	: m_controls(pSynth), m_programs(pSynth),
+		m_midi_in(pSynth), m_bpm(180.0f), m_running(false)
 {
 	// max env. stage length (default)
 	m_dco1.envtime0 = m_dco2.envtime0 = 0.0001f * MAX_ENV_MSECS;
@@ -1037,7 +1042,8 @@ synthv1_impl::synthv1_impl (
 
 	// reset all voices
 	allControllersOff();
-	allNotesOff();
+
+	running(true);
 }
 
 
@@ -2157,6 +2163,8 @@ uint32_t synthv1_impl::midiInCount (void)
 
 void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 {
+	if (!m_running) return;
+
 	float *v_outs[m_nchannels];
 	float *v_sfxs[m_nchannels];
 
@@ -2516,6 +2524,16 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 }
 
 
+// process running state...
+bool synthv1_impl::running ( bool on )
+{
+	const bool running = m_running;
+	m_running = on;
+	reset();
+	return running;
+}
+
+
 //-------------------------------------------------------------------------
 // synthv1 - decl.
 //
@@ -2634,6 +2652,14 @@ synthv1_controls *synthv1::controls (void) const
 synthv1_programs *synthv1::programs (void) const
 {
 	return m_pImpl->programs();
+}
+
+
+// process state
+
+bool synthv1::running ( bool on )
+{
+	return m_pImpl->running(on);
 }
 
 

@@ -288,6 +288,8 @@ bool synthv1_param::loadPreset (
 	if (!file.open(QIODevice::ReadOnly))
 		return false;
 
+	const bool running = pSynth->running(false);
+
 	static QHash<QString, synthv1::ParamIndex> s_hash;
 	if (s_hash.isEmpty()) {
 		for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
@@ -338,7 +340,7 @@ bool synthv1_param::loadPreset (
 
 	file.close();
 
-	pSynth->reset();
+	pSynth->running(running);
 
 	QDir::setCurrent(currentDir.absolutePath());
 
