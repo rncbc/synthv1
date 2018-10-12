@@ -1042,7 +1042,7 @@ synthv1_impl::synthv1_impl (
 
 	// reset all voices
 	allControllersOff();
-	allMotesOff();
+	allNotesOff();
 
 	running(true);
 }
