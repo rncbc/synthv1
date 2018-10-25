@@ -4,6 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Added missing include <unistd.h> to shut up some stricter
+  compilers from build failures.
+
+
 0.9.3  2018-10-22  An Autumn'18 release.
 
 - For safety reasons, all processing is now suspended while
