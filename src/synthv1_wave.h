@@ -1,7 +1,7 @@
 // synthv1_wave.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -103,13 +103,11 @@ public:
 	// begin.
 	float start(Phase& phase, float pshift = 0.0f, float freq = 0.0f)
 	{
-		const float p0 = float(m_nsize);
-
 		update(phase, freq);
 
-		phase.phase = m_phase0 + pshift * p0;
-		if (phase.phase >= p0)
-			phase.phase -= p0;
+		phase.phase = m_phase0 + pshift;
+		if (phase.phase >= 1.0f)
+			phase.phase -= 1.0f;
 
 		return sample(phase, freq);
 	}
@@ -117,13 +115,13 @@ public:
 	// iterate.
 	float sample(Phase& phase, float freq) const
 	{
-		const uint32_t i = uint32_t(phase.phase);
-		const float alpha = phase.phase - float(i);
-		const float p0 = float(m_nsize);
+		const float index = phase.phase * float(m_nsize);
+		const uint32_t i = uint32_t(index);
+		const float alpha = index - float(i);
 
-		phase.phase += p0 * freq / m_srate;
-		if (phase.phase >= p0) {
-			phase.phase -= p0;
+		phase.phase += freq / m_srate;
+		if (phase.phase >= 1.0f) {
+			phase.phase -= 1.0f;
 			if (phase.slave)
 				phase.slave->phase = phase.slave_phase0;
 		}
@@ -163,14 +161,11 @@ public:
 	// absolute value.
 	float value(float phase) const
 	{
-		const float p0 = float(m_nsize);
-
-		phase *= p0;
 		phase += m_phase0;
-		if (phase >= p0)
-			phase -= p0;
+		if (phase >= 1.0f)
+			phase -= 1.0f;
 
-		return m_tables[m_ntabs][uint32_t(phase)];
+		return m_tables[m_ntabs][uint32_t(phase * float(m_nsize))];
 	}
 
 	// post-iter.

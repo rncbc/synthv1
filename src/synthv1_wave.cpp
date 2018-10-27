@@ -1,7 +1,7 @@
 // synthv1_wave.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@ private:
 synthv1_wave::synthv1_wave ( uint32_t nsize, uint16_t nover, uint16_t ntabs )
 	: m_nsize(nsize), m_nover(nover), m_ntabs(ntabs),
 		m_shape(Saw), m_width(1.0f), m_bandl(false),
-		m_srate(44100.0f), m_srand(0),
+		m_srate(44100.0f), m_phase0(0.0f), m_srand(0),
 		m_min_freq(0.0f), m_max_freq(0.0f), m_sched(NULL)
 {
 	const uint16_t ntabs1 = m_ntabs + 1;
@@ -121,7 +121,7 @@ void synthv1_wave::reset_sync (void)
 		break;
 	case Noise:
 		reset_noise();
-		// thru...
+		// Fall thru...
 	default:
 		break;
 	}
@@ -477,14 +477,14 @@ void synthv1_wave::reset_interp ( uint16_t itab )
 		frames[i] = frames[i - m_nsize];
 
 	if (itab == m_ntabs) {
-		uint32_t pk = 0;
+		uint32_t k = 0;
 		for (i = 1; i < m_nsize; ++i) {
 			const float p1 = frames[i - 1];
 			const float p2 = frames[i];
 			if (p1 < 0.0f && p2 >= 0.0f)
-				pk = i;
+				k = i;
 		}
-		m_phase0 = float(pk);
+		m_phase0 = float(k) / float(m_nsize);
 	}
 }
 
