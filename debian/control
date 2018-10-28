@@ -9,7 +9,7 @@ Standards-Version: 3.7.2
 
 Package: synthv1
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: jackd, ${shlibs:Depends}, ${misc:Depends}
 Description: an old-school polyphonic synthesizer
   An old-school 4-oscillator subtractive polyphonic synthesizer
   with stereo fx.
