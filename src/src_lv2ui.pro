@@ -50,10 +50,6 @@ unix {
 		system(touch $${TARGET_LV2UI}.so)
 	}
 
-	!exists($${TARGET_LV2UI}.ttl) {
-		system(touch $${TARGET_LV2UI}.ttl)
-	}
-
 	INSTALLS += target
 
 	target.path  = $${LV2DIR}/$${NAME}.lv2
@@ -61,22 +57,9 @@ unix {
 
 	QMAKE_POST_LINK += $${QMAKE_COPY} -vp $(TARGET) $${TARGET_LV2UI}.so
 
-	greaterThan(QT_MAJOR_VERSION, 4) {
-		QMAKE_POST_LINK += ;\
-			$${QMAKE_COPY} -vp $${TARGET_LV2UI}-qt5.ttl $${TARGET_LV2UI}.ttl
-	} else {
-		QMAKE_POST_LINK += ;\
-			$${QMAKE_COPY} -vp $${TARGET_LV2UI}-qt4.ttl $${TARGET_LV2UI}.ttl
-	}
-
-	QMAKE_CLEAN += $${TARGET_LV2UI}.so $${TARGET_LV2UI}.ttl
+	QMAKE_CLEAN += $${TARGET_LV2UI}.so
 
 	LIBS += -l$${NAME} -l$${NAME}_ui -L$${NAME}.lv2 -Wl,-rpath,$${LIBDIR}:$${LV2DIR}/$${NAME}.lv2
 }
 
-QT += xml
-
-# QT5 support
-greaterThan(QT_MAJOR_VERSION, 4) {
-	QT += widgets
-}
+QT += widgets xml

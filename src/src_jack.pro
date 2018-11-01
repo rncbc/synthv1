@@ -78,9 +78,4 @@ unix {
 	LIBS += -l$${NAME} -l$${NAME}_ui -Wl,-rpath,$${LIBDIR}
 }
 
-QT += xml
-
-# QT5 support
-!lessThan(QT_MAJOR_VERSION, 5) {
-	QT += widgets
-}
+QT += widgets xml
