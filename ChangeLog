@@ -4,10 +4,10 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.4  2018-12-12  A Late Autumn'18 release.
 
 - Old deprecated Qt4 build support is no more.
-- Normalized wavetable oscillator phasors. (EXPERIMENTAL)
+- Normalized wavetable oscillator phasors.
 - Added missing include <unistd.h> to shut up some stricter
   compilers from build failures.
 
