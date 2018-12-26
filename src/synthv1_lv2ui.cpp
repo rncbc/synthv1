@@ -101,10 +101,12 @@ static void synthv1_lv2ui_cleanup ( LV2UI_Handle ui )
 	synthv1widget_lv2 *pWidget = static_cast<synthv1widget_lv2 *> (ui);
 	if (pWidget) {
 		delete pWidget;
+	#if 0//Avoid destructing the possibly shared QApplication instance...
 		if (--synthv1_lv2ui_qapp_refcount == 0 && synthv1_lv2ui_qapp_instance) {
 			delete synthv1_lv2ui_qapp_instance;
 			synthv1_lv2ui_qapp_instance = NULL;
 		}
+	#endif
 	}
 }
 
