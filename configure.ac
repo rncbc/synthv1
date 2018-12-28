@@ -479,11 +479,10 @@ if test "x$ac_lv2" = "xyes"; then
       ac_lv2 cflags="$ac_lv2_cflags $LV2_CFLAGS"
       CFLAGS="$CFLAGS $LV2_CFLAGS"
       CPPFLAGS="$CPPFLAGS $LV2_CFLAGS"
-   else
-      AC_CHECK_HEADER(lv2/lv2.h, [ac_lv2="yes"], [ac_lv2="no"])
    fi
    if test "x$ac_lv2" = "xyes"; then
       AC_CHECK_HEADERS(
+         lv2/lv2plug.in/ns/ext/urid/urid.h \
          lv2/lv2plug.in/ns/ext/atom/atom.h \
          lv2/lv2plug.in/ns/ext/atom/forge.h \
          lv2/lv2plug.in/ns/ext/atom/util.h,
