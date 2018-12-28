@@ -474,11 +474,21 @@ fi
 
 # Check for LV2 headers.
 if test "x$ac_lv2" = "xyes"; then
-   AC_CHECK_HEADERS(lv2.h \
-      lv2/lv2plug.in/ns/ext/atom/atom.h \
-      lv2/lv2plug.in/ns/ext/atom/forge.h \
-      lv2/lv2plug.in/ns/ext/atom/util.h,
-      [ac_lv2="yes"], [ac_lv2="no"])
+   PKG_CHECK_MODULES([LV2], [lv2], [ac_lv2="yes"], [ac_lv2="no"])
+   if test "x$ac_lv2" = "xyes"; then
+      ac_lv2 cflags="$ac_lv2_cflags $LV2_CFLAGS"
+      CFLAGS="$CFLAGS $LV2_CFLAGS"
+      CPPFLAGS="$CPPFLAGS $LV2_CFLAGS"
+   else
+      AC_CHECK_HEADER(lv2/lv2.h, [ac_lv2="yes"], [ac_lv2="no"])
+   fi
+   if test "x$ac_lv2" = "xyes"; then
+      AC_CHECK_HEADERS(
+         lv2/lv2plug.in/ns/ext/atom/atom.h \
+         lv2/lv2plug.in/ns/ext/atom/forge.h \
+         lv2/lv2plug.in/ns/ext/atom/util.h,
+         [ac_lv2="yes"], [ac_lv2="no"])
+   fi
    if test "x$ac_lv2" = "xyes"; then
       AC_DEFINE(CONFIG_LV2, 1, [Define if LV2 plug-in build is enabled.])
       ac_all_targets="lv2 $ac_all_targets"
