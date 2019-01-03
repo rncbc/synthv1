@@ -1235,6 +1235,12 @@ void synthv1widget::updateSchedNotify ( int stype, int sid )
 
 	switch (synthv1_sched::Type(stype)) {
 	case synthv1_sched::MidiIn:
+		if (sid >= 0) {
+			const int key = (sid & 0x7f);
+			const int vel = (sid >> 7) & 0x7f;
+			m_ui.StatusBar->midiInNote(key, vel);
+		}
+		else
 		if (pSynthUi->midiInCount() > 0) {
 			m_ui.StatusBar->midiInLed(true);
 			QTimer::singleShot(200, this, SLOT(midiInLedTimeout()));
