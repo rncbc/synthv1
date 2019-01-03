@@ -1,7 +1,7 @@
 // synthv1widget.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -27,6 +27,8 @@
 
 #include "synthv1widget_config.h"
 #include "synthv1widget_control.h"
+
+#include "synthv1widget_keybd.h"
 
 #include "synthv1_controls.h"
 #include "synthv1_programs.h"
@@ -783,6 +785,11 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	QObject::connect(m_ui.TabBar, SIGNAL(currentChanged(int)),
 		m_ui.StackedWidget, SLOT(setCurrentIndex(int)));
 
+	// Direct status-bar keyboard input
+	QObject::connect(m_ui.StatusBar->keybd(),
+		SIGNAL(sendNote(int, int)),
+		SLOT(directNoteOn(int, int)));
+
 	// Menu actions
 	QObject::connect(m_ui.helpConfigureAction,
 		SIGNAL(triggered(bool)),
@@ -1276,6 +1283,19 @@ void synthv1widget::updateSchedNotify ( int stype, int sid )
 	default:
 		break;
 	}
+}
+
+
+// Direct note-on/off slot.
+void synthv1widget::directNoteOn ( int iNote, int iVelocity )
+{
+#ifdef CONFIG_DEBUG
+	qDebug("synthv1widget::directNoteOn(%d, %d)", iNote, iVelocity);
+#endif
+
+	synthv1_ui *pSynthUi = ui_instance();
+	if (pSynthUi)
+		pSynthUi->directNoteOn(iNote, iVelocity); // note-on!
 }
 
 

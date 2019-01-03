@@ -79,6 +79,9 @@ public slots:
 	void loadPreset(const QString& sFilename);
 	void savePreset(const QString& sFilename);
 
+	// Direct note-on/off slot.
+	void directNoteOn(int iNote, int iVelocity);
+
 protected slots:
 
 	// Preset renewal.
