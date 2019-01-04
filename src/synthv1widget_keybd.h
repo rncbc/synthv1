@@ -61,7 +61,7 @@ public slots:
 signals:
 
 	// Piano keyboard note-on/off signal.
-	void sendNote(int iNote, int iVelocity);
+	void noteOnClicked(int iNote, int iVelocity);
 
 	// Keyboard note range changed signal.
 	void noteRangeChanged();

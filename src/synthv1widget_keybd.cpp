@@ -44,6 +44,7 @@ synthv1widget_keybd::synthv1widget_keybd ( QWidget *pParent )
 {
 	const QFont& font = QWidget::font();
 	QWidget::setFont(QFont(font.family(), font.pointSize() - 3));
+	QWidget::setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	QWidget::setMinimumSize(QSize(440, 22));
 	QWidget::setMouseTracking(true);
 
@@ -225,9 +226,9 @@ void synthv1widget_keybd::dragNoteOn ( const QPoint& pos )
 	// Now for the sounding new one...
 	m_iNoteOn = iNote;
 
-	noteOn(iNote);
+//	noteOn(iNote);
 
-	emit sendNote(iNote, m_iVelocity);
+	emit noteOnClicked(iNote, m_iVelocity);
 }
 
 
@@ -242,9 +243,9 @@ void synthv1widget_keybd::dragNoteOff (void)
 
 	m_iNoteOn = -1;
 
-	noteOff(iNote);
+//	noteOff(iNote);
 
-	emit sendNote(iNote, 0);
+	emit noteOnClicked(iNote, 0);
 }
 
 
