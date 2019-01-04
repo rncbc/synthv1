@@ -38,6 +38,10 @@ public:
 	// Constructor.
 	synthv1widget_keybd(QWidget *pParent = 0);
 
+	// Note range predicate.
+	void setNoteRange(bool bNoteRange);
+	bool isNoteRange() const;
+
 	// Default note-on velocity.
 	void setVelocity(int iVelocity);
 	int velocity() const;
@@ -139,6 +143,8 @@ protected:
 	QPoint m_posDrag;
 
 	// Piano keyboard note range.
+	bool m_bNoteRange;
+
 	int m_iNoteLow;
 	int m_iNoteLowX;
 
