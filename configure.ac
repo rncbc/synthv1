@@ -476,7 +476,7 @@ fi
 if test "x$ac_lv2" = "xyes"; then
    PKG_CHECK_MODULES([LV2], [lv2], [ac_lv2="yes"], [ac_lv2="no"])
    if test "x$ac_lv2" = "xyes"; then
-      ac_lv2 cflags="$ac_lv2_cflags $LV2_CFLAGS"
+      ac_lv2_cflags="$ac_lv2_cflags $LV2_CFLAGS"
       CFLAGS="$CFLAGS $LV2_CFLAGS"
       CPPFLAGS="$CPPFLAGS $LV2_CFLAGS"
    fi
