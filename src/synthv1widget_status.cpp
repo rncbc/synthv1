@@ -1,7 +1,7 @@
 // synthv1widget_status.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
 *****************************************************************************/
 
 #include "synthv1widget_status.h"
+
+#include "synthv1widget_keybd.h"
 
 #include <QLabel>
 #include <QIcon>
@@ -73,6 +75,10 @@ synthv1widget_status::synthv1widget_status ( QWidget *pParent )
 	pMidiInWidget->setLayout(pMidiInLayout);
 	QStatusBar::addWidget(pMidiInWidget);
 
+	m_pKeybd = new synthv1widget_keybd();
+	m_pKeybd->setMinimumWidth(640);
+	QStatusBar::addPermanentWidget(m_pKeybd);
+
 	const QFontMetrics fm(QStatusBar::font());
 	m_pModifiedLabel = new QLabel();
 	m_pModifiedLabel->setAlignment(Qt::AlignHCenter);
@@ -92,9 +98,24 @@ synthv1widget_status::~synthv1widget_status (void)
 
 
 // Permanent widgets accessors.
+synthv1widget_keybd *synthv1widget_status::keybd (void) const
+{
+	return m_pKeybd;
+}
+
+
 void synthv1widget_status::midiInLed ( bool bMidiInLed )
 {
 	m_pMidiInLedLabel->setPixmap(*m_midiInLed[bMidiInLed ? 1 : 0]);
+}
+
+
+void synthv1widget_status::midiInNote ( int iNote, int iVelocity )
+{
+	if (iVelocity > 0) 
+		m_pKeybd->noteOn(iNote);
+	else
+		m_pKeybd->noteOff(iNote);
 }
 
 

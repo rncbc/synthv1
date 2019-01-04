@@ -1,7 +1,7 @@
 // synthv1widget_status.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -26,6 +26,8 @@
 
 
 // Forward declarations.
+class synthv1widget_keybd;
+
 class QLabel;
 class QPixmap;
 
@@ -46,7 +48,10 @@ public:
 	~synthv1widget_status();
 
 	// Permanent widgets accessors.
+	synthv1widget_keybd *keybd() const;
+
 	void midiInLed(bool bMidiInLed);
+	void midiInNote(int iNote, int iVelocity);
 	void modified(bool bModified);
 
 private:
@@ -56,6 +61,8 @@ private:
 
 	QLabel *m_pMidiInLedLabel;
 	QLabel *m_pModifiedLabel;
+
+	synthv1widget_keybd *m_pKeybd;
 };
 
 
