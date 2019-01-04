@@ -21,6 +21,8 @@
 
 #include "synthv1widget_keybd.h"
 
+#include "synthv1_ui.h"
+
 #include <QPainter>
 #include <QToolTip>
 
@@ -607,31 +609,7 @@ void synthv1widget_keybd::noteToolTip ( const QPoint& pos ) const
 // Default note name map accessor.
 QString synthv1widget_keybd::noteName ( int iNote ) const
 {
-	static struct
-	{
-		int note;
-		const char *name;
-
-	} s_notes[] = {
-
-		// Diatonic note map...
-		{  0, QT_TR_NOOP("C")     },
-		{  1, QT_TR_NOOP("C#/Db") },
-		{  2, QT_TR_NOOP("D")     },
-		{  3, QT_TR_NOOP("D#/Eb") },
-		{  4, QT_TR_NOOP("E")     },
-		{  5, QT_TR_NOOP("F")     },
-		{  6, QT_TR_NOOP("F#/Gb") },
-		{  7, QT_TR_NOOP("G")     },
-		{  8, QT_TR_NOOP("G#/Ab") },
-		{  9, QT_TR_NOOP("A")     },
-		{ 10, QT_TR_NOOP("A#/Bb") },
-		{ 11, QT_TR_NOOP("B")     },
-
-		{  0, NULL }
-	};
-
-	return QString("%1%2").arg(s_notes[iNote % 12].name).arg((iNote / 12) - 1);
+	return synthv1_ui::noteName(iNote);
 }
 
 

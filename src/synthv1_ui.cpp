@@ -1,7 +1,7 @@
 // synthv1_ui.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -119,9 +119,23 @@ void synthv1_ui::updateTuning (void)
 // MIDI note/octave name helper (static).
 QString synthv1_ui::noteName ( int note )
 {
-	static const char *notes[] =
-		{ "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
-	return QString("%1 %2").arg(notes[note % 12]).arg((note / 12) - 1);
+	static const char *s_notes[] =
+	{
+		QT_TR_NOOP("C"),
+		QT_TR_NOOP("C#/Db"),
+		QT_TR_NOOP("D"),
+		QT_TR_NOOP("D#/Eb"),
+		QT_TR_NOOP("E"),
+		QT_TR_NOOP("F"),
+		QT_TR_NOOP("F#/Gb"),
+		QT_TR_NOOP("G"),
+		QT_TR_NOOP("G#/Ab"),
+		QT_TR_NOOP("A"),
+		QT_TR_NOOP("A#/Bb"),
+		QT_TR_NOOP("B")
+	};
+
+	return QString("%1 %2").arg(s_notes[note % 12]).arg((note / 12) - 1);
 }
 
 
