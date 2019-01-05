@@ -1402,6 +1402,27 @@
 		lv2:minimum 0.0 ;
 		lv2:maximum 1.0 ;
 		lv2pg:group synthv1_lv2:G306_DYN1 ;
+	] ;
+	lv2:port [
+		a lv2:InputPort, lv2:ControlPort ;
+		lv2:index 145 ;
+		lv2:symbol "KEY1_LOW" ;
+		lv2:name "Keyboard Low" ;
+		lv2:portProperty lv2:integer ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 127.0 ;
+		lv2pg:group synthv1_lv2:G207_KEY1 ;
+	], [
+		a lv2:InputPort, lv2:ControlPort ;
+		lv2:index 146 ;
+		lv2:symbol "KEY1_HIGH" ;
+		lv2:name "Keyboard High" ;
+		lv2:portProperty lv2:integer ;
+		lv2:default 127.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 127.0 ;
+		lv2pg:group synthv1_lv2:G207_KEY1 ;
 	] .
 
 synthv1_lv2:G101_DCO1
@@ -1493,3 +1514,8 @@ synthv1_lv2:G306_DYN1
 	a lv2pg:InputGroup;
 	lv2:name "Effects - Dynamic" ;
 	lv2:symbol "DYN1" .
+
+synthv1_lv2:G307_KEY1
+	a lv2pg:InputGroup;
+	lv2:name "Input - Keyboard" ;
+	lv2:symbol "KEY1" .

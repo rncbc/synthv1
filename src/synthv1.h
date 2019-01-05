@@ -203,6 +203,9 @@ public:
 		DYN1_COMPRESS,
 		DYN1_LIMITER,
 
+		KEY1_LOW,
+		KEY1_HIGH,
+
 		NUM_PARAMS
 	};
 

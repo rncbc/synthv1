@@ -572,12 +572,27 @@ struct synthv1_rev
 	synthv1_port width;
 };
 
+
 // dynamic(compressor/limiter)
 
 struct synthv1_dyn
 {
 	synthv1_port compress;
 	synthv1_port limiter;
+};
+
+
+// keyboard/note range
+
+struct synthv1_key
+{
+	synthv1_port low;
+	synthv1_port high;
+
+	bool is_note(int key)
+	{
+		return (key >= int(*low) && int(*high) >= key);
+	}
 };
 
 
@@ -922,6 +937,8 @@ private:
 	synthv1_del m_del;
 	synthv1_rev m_rev;
 	synthv1_dyn m_dyn;
+
+	synthv1_key m_key;
 
 	synthv1_voice **m_voices;
 	synthv1_voice  *m_note1[MAX_NOTES];
@@ -1450,6 +1467,8 @@ synthv1_port *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::REV1_WIDTH:     pParamPort = &m_rev.width;        break;
 	case synthv1::DYN1_COMPRESS:  pParamPort = &m_dyn.compress;     break;
 	case synthv1::DYN1_LIMITER:   pParamPort = &m_dyn.limiter;      break;
+	case synthv1::KEY1_LOW:       pParamPort = &m_key.low;          break;
+	case synthv1::KEY1_HIGH:      pParamPort = &m_key.high;         break;
 	default: break;
 	}
 
@@ -1528,6 +1547,8 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 
 		// note on
 		if (status == 0x90 && value > 0) {
+			if (!m_key.is_note(key))
+				continue;
 			synthv1_voice *pv;
 			// synth 1
 			if (on1) {
@@ -1739,6 +1760,8 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 		}
 		// note off
 		else if (status == 0x80 || (status == 0x90 && value == 0)) {
+			if (!m_key.is_note(key))
+				continue;
 			synthv1_voice *pv;
 			// synth 1
 			if (on1) {
@@ -1800,6 +1823,8 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 		}
 		// key pressure/poly.aftertouch
 		else if (status == 0xa0) {
+			if (!m_key.is_note(key))
+				continue;
 			const float pre = float(value) / 127.0f;
 			synthv1_voice *pv;
 			// synth 1
@@ -1884,7 +1909,6 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 			if (on1) m_ctl1.pitchbend = synthv1_pow2f(*m_def1.pitchbend * pitchbend);
 			if (on2) m_ctl2.pitchbend = synthv1_pow2f(*m_def2.pitchbend * pitchbend);
 		}
-
 	}
 
 	// process pending controllers...
