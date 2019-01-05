@@ -102,6 +102,9 @@ protected slots:
 	// MIDI In LED timeout.
 	void midiInLedTimeout();
 
+	// Keyboard note range change.
+	void noteRangeChanged();
+
 	// Param knob context menu.
 	void paramContextMenu(const QPoint& pos);
 

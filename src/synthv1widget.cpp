@@ -757,6 +757,8 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	setParamKnob(synthv1::DYN1_COMPRESS, m_ui.Dyn1CompressKnob);
 	setParamKnob(synthv1::DYN1_LIMITER,  m_ui.Dyn1LimiterKnob);
 
+	// Make status-bar keyboard range active.
+	m_ui.StatusBar->keybd()->setNoteRange(true);
 
 	// Preset management
 	QObject::connect(m_ui.Preset,
@@ -789,6 +791,9 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	QObject::connect(m_ui.StatusBar->keybd(),
 		SIGNAL(noteOnClicked(int, int)),
 		SLOT(directNoteOn(int, int)));
+	QObject::connect(m_ui.StatusBar->keybd(),
+		SIGNAL(noteRangeChanged()),
+		SLOT(noteRangeChanged()));
 
 	// Menu actions
 	QObject::connect(m_ui.helpConfigureAction,
@@ -1005,6 +1010,12 @@ void synthv1widget::updateParamEx ( synthv1::ParamIndex index, float fValue )
 		break;
 	case synthv1::DCF2_SLOPE:
 		m_ui.Dcf2TypeKnob->setEnabled(int(fValue) != 3); // !Formant
+		break;
+	case synthv1::KEY1_LOW:
+		m_ui.StatusBar->keybd()->setNoteLow(int(fValue));
+		break;
+	case synthv1::KEY1_HIGH:
+		m_ui.StatusBar->keybd()->setNoteHigh(int(fValue));
 		// Fall thru...
 	default:
 		break;
@@ -1296,6 +1307,31 @@ void synthv1widget::directNoteOn ( int iNote, int iVelocity )
 	synthv1_ui *pSynthUi = ui_instance();
 	if (pSynthUi)
 		pSynthUi->directNoteOn(iNote, iVelocity); // note-on!
+}
+
+
+// Keyboard note range change.
+void synthv1widget::noteRangeChanged (void)
+{
+	synthv1_ui *pSynthUi = ui_instance();
+	if (pSynthUi == NULL)
+		return;
+
+	const int iNoteLow  = m_ui.StatusBar->keybd()->noteLow();
+	const int iNoteHigh = m_ui.StatusBar->keybd()->noteHigh();
+
+#ifdef CONFIG_DEBUG
+	qDebug("padthv1widget::noteRangeChanged(%d, %d)", iNoteLow, iNoteHigh);
+#endif
+
+	pSynthUi->setParamValue(synthv1::KEY1_LOW,  float(iNoteLow));
+	pSynthUi->setParamValue(synthv1::KEY1_HIGH, float(iNoteHigh));
+
+	m_ui.StatusBar->showMessage(QString("KEY Low: %1 (%2) High: %3 (%4)")
+		.arg(synthv1_ui::noteName(iNoteLow)).arg(iNoteLow)
+		.arg(synthv1_ui::noteName(iNoteHigh)).arg(iNoteHigh), 5000);
+
+	updateDirtyPreset(true);
 }
 
 
