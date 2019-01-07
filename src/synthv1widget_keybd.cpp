@@ -169,19 +169,21 @@ QRect synthv1widget_keybd::noteRect ( int iNote ) const
 
 	const float wn = float(w - 4) / float(NUM_NOTES);
 	const float wk = 12.0f * wn / 7.0f;
-	const int w2 = int(wn + 0.5f);
 
 	int k = (iNote % 12);
 	if (k >= 5) ++k;
 
 	const int nk = (iNote / 12) * 7 + (k >> 1);
 	int x2 = int(wk * float(nk));
+	int w2 = int(wn + 0.5f);
 	int h2 = h;
 	if (k & 1) {
 		x2 += int(wk - float(w2 >> 1));
 		h2  = (h << 1) / 3;
+		++w2;
 	} else {
 		x2 += (w2 >> 1);
+		--w2; // <<= 1;
 	}
 
 	return QRect(x2, 0, w2, h2);
