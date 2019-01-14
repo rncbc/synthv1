@@ -54,8 +54,8 @@
 //    Copyright (C) 2007 jorgen, linux-vst.com
 //
 
-const uint16_t MAX_VOICES = 32;			// polyphony
-const uint8_t  MAX_NOTES  = 128;
+const uint8_t MAX_VOICES  = 64;			// max polyphony
+const uint8_t MAX_NOTES   = 128;
 
 const float MIN_ENV_MSECS = 0.5f;		// min 500 usec per stage
 const float MAX_ENV_MSECS = 5000.0f;	// max 5 sec per stage (default)
@@ -66,6 +66,8 @@ const float OCTAVE_SCALE  = 12.0f;
 const float TUNING_SCALE  = 1.0f;
 const float SWEEP_SCALE   = 0.5f;
 const float PITCH_SCALE   = 0.5f;
+
+const uint8_t MAX_DIRECT_NOTES = (MAX_VOICES >> 3);
 
 
 // maximum helper
@@ -966,11 +968,11 @@ private:
 	synthv1_phasor m_phasor;
 
 	// process direct note on/off...
-	volatile uint32_t m_direct_note;
+	volatile uint16_t m_direct_note;
 
 	struct direct_note {
 		uint8_t status, note, vel;
-	} m_direct_notes[MAX_VOICES];
+	} m_direct_notes[MAX_DIRECT_NOTES];
 
 	volatile bool m_running;
 };
@@ -2071,7 +2073,7 @@ void synthv1_impl::allSoundOff (void)
 void synthv1_impl::directNoteOn ( int note, int vel )
 {
 	const uint32_t i = m_direct_note;
-	if (i < MAX_VOICES) {
+	if (i < MAX_DIRECT_NOTES) {
 		const int ch1 = int(*m_def1.channel);
 		const int ch2 = int(*m_def2.channel);
 		const int chan = (ch1 > 0 ? ch1 - 1 : (ch2 > 0 ? ch2 - 1 : 0)) & 0x0f;
