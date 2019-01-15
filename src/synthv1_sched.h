@@ -1,7 +1,7 @@
 // synthv1_sched.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -63,6 +63,27 @@ public:
 	// signal broadcast (static).
 	static void sync_notify(synthv1 *pSynth, Type stype, int sid);
 
+	// Notifier - Worker/schedule proxy decl.
+	//
+	class Notifier
+	{
+	public:
+
+		// ctor.
+		Notifier(synthv1 *pSynth);
+
+		// dtor.
+		virtual ~Notifier();
+
+		// signal notifier.
+		virtual void notify(synthv1_sched::Type stype, int sid) const = 0;
+
+	private:
+
+		// instance variables.
+		synthv1 *m_pSynth;
+	};
+
 private:
 
 	// instance variables.
@@ -80,30 +101,6 @@ private:
 	volatile uint32_t m_iwrite;
 
 	volatile bool m_sync_wait;
-};
-
-
-//-------------------------------------------------------------------------
-// synthv1_sched_notifier - worker/schedule proxy decl.
-//
-
-class synthv1_sched_notifier
-{
-public:
-
-	// ctor.
-	synthv1_sched_notifier(synthv1 *pSynth);
-
-	// dtor.
-	~synthv1_sched_notifier();
-
-	// signal notifier.
-	virtual void notify(synthv1_sched::Type stype, int sid) const = 0;
-
-private:
-
-	// instance variables.
-	synthv1 *m_pSynth;
 };
 
 

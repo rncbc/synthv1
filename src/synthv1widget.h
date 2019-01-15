@@ -187,12 +187,12 @@ signals:
 protected:
 
 	// Notififier visitor.
-	class Notifier : public synthv1_sched_notifier
+	class Notifier : public synthv1_sched::Notifier
 	{
 	public:
 
 		Notifier(synthv1 *pSynth, synthv1widget_sched *pSched)
-			: synthv1_sched_notifier(pSynth), m_pSched(pSched) {}
+			: synthv1_sched::Notifier(pSynth), m_pSched(pSched) {}
 
 		void notify(synthv1_sched::Type stype, int sid) const
 			{ m_pSched->emit_notify(stype, sid); }
