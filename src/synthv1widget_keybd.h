@@ -70,6 +70,11 @@ signals:
 	// Keyboard note range changed signal.
 	void noteRangeChanged();
 
+protected slots:
+
+	// Kill dangling notes, if any...
+	void allNotesTimeout();
+
 protected:
 
 	// Keyboard note range sanitizers.
@@ -133,6 +138,8 @@ protected:
 		QRect rect;
 
 	} m_notes[NUM_NOTES];
+
+	int m_iNoteCount;
 
 	// Keyboard note range state.
 	enum DragState {

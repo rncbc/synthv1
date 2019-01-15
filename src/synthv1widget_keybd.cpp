@@ -33,6 +33,8 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 
+#include <QTimer>
+
 #include <math.h>
 
 
@@ -52,6 +54,8 @@ synthv1widget_keybd::synthv1widget_keybd ( QWidget *pParent )
 
 	for (int n = 0; n < NUM_NOTES; ++n)
 		m_notes[n].on = false;
+
+	m_iNoteCount = 0;
 
 	m_dragCursor = DragNone;
 
@@ -206,6 +210,9 @@ void synthv1widget_keybd::noteOn ( int iNote )
 	note.rect = noteRect(iNote);
 
 	QWidget::update(note.rect);
+
+	if (++m_iNoteCount == 1)
+		QTimer::singleShot(3000, this, SLOT(allNotesTimeout()));
 }
 
 
@@ -223,6 +230,8 @@ void synthv1widget_keybd::noteOff ( int iNote )
 	note.on = false;
 
 	QWidget::update(note.rect);
+
+	--m_iNoteCount;
 }
 
 
@@ -230,6 +239,25 @@ void synthv1widget_keybd::allNotesOff (void)
 {
 	for (int n = 0; n < NUM_NOTES; ++n)
 		noteOff(n);
+}
+
+
+// Kill dangling notes, if any...
+void synthv1widget_keybd::allNotesTimeout (void)
+{
+	if (m_iNoteCount < 1)
+		return;
+
+	for (int n = 0; n < NUM_NOTES; ++n) {
+		Note& note = m_notes[n];
+		if (note.on) {
+			note.on = false;
+			QWidget::update(note.rect);
+			emit noteOnClicked(n, 0);
+		}
+	}
+
+	m_iNoteCount = 0;
 }
 
 
