@@ -48,7 +48,7 @@ synthv1widget_keybd::synthv1widget_keybd ( QWidget *pParent )
 {
 	const QFont& font = QWidget::font();
 	QWidget::setFont(QFont(font.family(), font.pointSize() - 3));
-	QWidget::setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	QWidget::setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 	QWidget::setMinimumSize(QSize(440, 22));
 	QWidget::setMouseTracking(true);
 
