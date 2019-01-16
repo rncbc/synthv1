@@ -243,7 +243,7 @@ void synthv1widget_keybd::allNotesTimeout (void)
 
 	if (m_iNoteOn >= 0) {
 		++m_iTimeout;
-		QTimer::singleShot(3000, this, SLOT(allNotesTimeout())); // +3sec.
+		QTimer::singleShot(1200, this, SLOT(allNotesTimeout())); // +3sec.
 		return;
 	}
 
@@ -280,7 +280,7 @@ void synthv1widget_keybd::dragNoteOn ( const QPoint& pos )
 	emit noteOnClicked(iNote, m_iVelocity);
 
 	if (++m_iTimeout == 1)
-		QTimer::singleShot(3000, this, SLOT(allNotesTimeout())); // +3sec.
+		QTimer::singleShot(1200, this, SLOT(allNotesTimeout())); // +3sec.
 }
 
 
