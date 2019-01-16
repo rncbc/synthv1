@@ -139,8 +139,6 @@ protected:
 
 	} m_notes[NUM_NOTES];
 
-	int m_iNoteCount;
-
 	// Keyboard note range state.
 	enum DragState {
 		DragNone = 0, DragStart,
@@ -160,6 +158,9 @@ protected:
 
 	// Current note being keyed on.
 	int m_iNoteOn;
+
+	// Current note-on timeout.
+	int m_iTimeout;
 
 	// Default note-on velocity.
 	int m_iVelocity;

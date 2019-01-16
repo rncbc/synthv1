@@ -55,8 +55,6 @@ synthv1widget_keybd::synthv1widget_keybd ( QWidget *pParent )
 	for (int n = 0; n < NUM_NOTES; ++n)
 		m_notes[n].on = false;
 
-	m_iNoteCount = 0;
-
 	m_dragCursor = DragNone;
 
 	m_bNoteRange = false;
@@ -68,7 +66,7 @@ synthv1widget_keybd::synthv1widget_keybd ( QWidget *pParent )
 	m_iNoteHighX = 0;
 
 	m_iNoteOn    = -1;
-
+	m_iTimeout   = 0;
 	m_iVelocity  = (MIN_VELOCITY + MAX_VELOCITY) / 2;
 
 	resetDragState();
@@ -210,9 +208,6 @@ void synthv1widget_keybd::noteOn ( int iNote )
 	note.rect = noteRect(iNote);
 
 	QWidget::update(note.rect);
-
-	if (++m_iNoteCount == 1)
-		QTimer::singleShot(3000, this, SLOT(allNotesTimeout()));
 }
 
 
@@ -230,8 +225,6 @@ void synthv1widget_keybd::noteOff ( int iNote )
 	note.on = false;
 
 	QWidget::update(note.rect);
-
-	--m_iNoteCount;
 }
 
 
@@ -245,8 +238,14 @@ void synthv1widget_keybd::allNotesOff (void)
 // Kill dangling notes, if any...
 void synthv1widget_keybd::allNotesTimeout (void)
 {
-	if (m_iNoteCount < 1)
+	if (m_iTimeout < 1)
 		return;
+
+	if (m_iNoteOn >= 0) {
+		++m_iTimeout;
+		QTimer::singleShot(3000, this, SLOT(allNotesTimeout())); // +3sec.
+		return;
+	}
 
 	for (int n = 0; n < NUM_NOTES; ++n) {
 		Note& note = m_notes[n];
@@ -257,7 +256,7 @@ void synthv1widget_keybd::allNotesTimeout (void)
 		}
 	}
 
-	m_iNoteCount = 0;
+	m_iTimeout = 0;
 }
 
 
@@ -279,6 +278,9 @@ void synthv1widget_keybd::dragNoteOn ( const QPoint& pos )
 //	noteOn(iNote);
 
 	emit noteOnClicked(iNote, m_iVelocity);
+
+	if (++m_iTimeout == 1)
+		QTimer::singleShot(3000, this, SLOT(allNotesTimeout())); // +3sec.
 }
 
 
