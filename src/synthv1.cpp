@@ -67,7 +67,7 @@ const float TUNING_SCALE  = 1.0f;
 const float SWEEP_SCALE   = 0.5f;
 const float PITCH_SCALE   = 0.5f;
 
-const uint8_t MAX_DIRECT_NOTES = (MAX_VOICES >> 3);
+const uint8_t MAX_DIRECT_NOTES = (MAX_VOICES >> 2);
 
 
 // maximum helper
