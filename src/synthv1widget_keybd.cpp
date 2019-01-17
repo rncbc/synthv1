@@ -311,9 +311,9 @@ void synthv1widget_keybd::updatePixmap (void)
 
 	const QPalette& pal = QWidget::palette();
 
-	const QColor& rgbLine   = pal.mid().color();
-	const QColor& rgbLight  = pal.light().color().lighter(120);
-	const QColor& rgbShadow = pal.shadow().color().darker(120);
+	const QColor& rgbLine  = pal.mid().color();
+	const QColor& rgbLight = QColor(Qt::white).darker();
+	const QColor& rgbDark  = QColor(Qt::black).lighter();
 
 	m_pixmap = QPixmap(w, h);
 	m_pixmap.fill(pal.window().color());
@@ -348,10 +348,10 @@ void synthv1widget_keybd::updatePixmap (void)
 
 	QLinearGradient gradDark(0, 0, 0, h3);
 	gradDark.setColorAt(0.0, rgbLight);
-	gradDark.setColorAt(0.4, rgbShadow);
-	gradDark.setColorAt(0.96, rgbShadow);
+	gradDark.setColorAt(0.4, rgbDark);
+	gradDark.setColorAt(0.96, rgbDark);
 	gradDark.setColorAt(0.98, rgbLight);
-	gradDark.setColorAt(1.0, rgbShadow);
+	gradDark.setColorAt(1.0, rgbDark);
 	painter.setBrush(gradDark);
 
 	for (n = 0; n < NUM_NOTES; ++n) {
