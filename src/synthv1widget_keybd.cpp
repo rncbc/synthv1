@@ -312,8 +312,8 @@ void synthv1widget_keybd::updatePixmap (void)
 	const QPalette& pal = QWidget::palette();
 
 	const QColor& rgbLine   = pal.mid().color();
-	const QColor& rgbLight  = pal.light().color().lighter();
-	const QColor& rgbShadow = pal.shadow().color().darker();
+	const QColor& rgbLight  = pal.light().color().lighter(120);
+	const QColor& rgbShadow = pal.shadow().color().darker(120);
 
 	m_pixmap = QPixmap(w, h);
 	m_pixmap.fill(pal.window().color());
