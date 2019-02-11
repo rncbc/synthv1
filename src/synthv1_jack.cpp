@@ -1,7 +1,7 @@
 // synthv1_jack.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -664,6 +664,10 @@ synthv1_jack_application::synthv1_jack_application ( int& argc, char **argv )
 		m_pApp = new QApplication(argc, argv);
 	else
 		m_pApp = new QCoreApplication(argc, argv);
+
+#if QT_VERSION >= 0x050600
+	if (m_bGui) m_pApp->setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
 
 #ifdef HAVE_SIGNAL_H
 

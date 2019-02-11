@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- HiDPI display screen support (Qt >= 5.6). (EXPERIMENTAL)
 - A fake/visual piano-keyboard widget is now being introduced
   to the status bar. (EXPERIMENTAL)
 - Avoid destructing the possibly shared QApplication instance
