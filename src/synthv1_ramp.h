@@ -1,7 +1,7 @@
 // synthv1_ramp.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ public:
 		m_frames = 0;
 	}
 
-	~synthv1_ramp()
+	virtual ~synthv1_ramp()
 	{
 		delete [] m_delta;
 		delete [] m_value1;
