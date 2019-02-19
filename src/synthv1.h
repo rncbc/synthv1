@@ -220,6 +220,7 @@ public:
 
 	bool running(bool on);
 
+	void stabilize();
 	void reset();
 
 	void process_midi(uint8_t *data, uint32_t size);

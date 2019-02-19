@@ -851,6 +851,7 @@ public:
 	void process_midi(uint8_t *data, uint32_t size);
 	void process(float **ins, float **outs, uint32_t nframes);
 
+	void stabilize();
 	void reset();
 
 	void midiInEnabled(bool on);
@@ -2134,6 +2135,18 @@ void synthv1_impl::updateTuning (void)
 }
 
 
+// all stabilize
+
+void synthv1_impl::stabilize (void)
+{
+	for (int i = 0; i < synthv1::NUM_PARAMS; ++i) {
+		synthv1_port *pParamPort = paramPort(synthv1::ParamIndex(i));
+		if (pParamPort)
+			pParamPort->tick(synthv1_port2::NSTEP);
+	}
+}
+
+
 // all reset clear
 
 void synthv1_impl::reset (void)
@@ -2705,6 +2718,14 @@ synthv1_programs *synthv1::programs (void) const
 bool synthv1::running ( bool on )
 {
 	return m_pImpl->running(on);
+}
+
+
+// all stabilize
+
+void synthv1::stabilize (void)
+{
+	m_pImpl->stabilize();
 }
 
 
