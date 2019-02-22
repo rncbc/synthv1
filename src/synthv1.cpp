@@ -196,7 +196,7 @@ public:
 		{ return tick(1); }
 
 	void reset()
-		{ m_vport = (m_port ? *m_port : 0.0f); m_xport = false; }
+		{ m_xport = false; }
 
 private:
 
