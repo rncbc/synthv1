@@ -175,17 +175,16 @@ public:
 	virtual float tick(uint32_t /*nstep*/)
 	{
 		if (m_port) {
-			const float d1
-				= ::fabsf(m_vport - *m_port);
+			const float v1 = *m_port;
+			const float d1 = ::fabsf(v1 - m_vport);
 			if (d1 > 0.001f) {
 				if (!m_xport) {
-					const float d2
-						= ::fabsf(m_vport - m_value) * d1;
+					const float d2 = ::fabsf(v1 - m_value) * d1;
 					m_xport = (d2 < 0.001f);
 				}
-				m_vport = *m_port;
+				m_vport = v1;
 				if (m_xport)
-					set_value(m_vport);
+					set_value(v1);
 			}
 		}
 
