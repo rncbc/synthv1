@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- Overhaul to control input ports processing, now playing as
+  catch-up/differential observers. (EXPERIMENTAL)
 - HiDPI display screen support (Qt >= 5.6). (EXPERIMENTAL)
 - A fake/visual piano-keyboard widget is now being introduced
   to the status bar. (EXPERIMENTAL)
