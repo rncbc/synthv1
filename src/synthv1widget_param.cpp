@@ -1,7 +1,7 @@
 // synthv1widget_param.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -404,7 +404,7 @@ synthv1widget_edit::EditMode synthv1widget_edit::editMode (void)
 synthv1widget_edit::synthv1widget_edit ( QWidget *pParent )
 	: QDoubleSpinBox(pParent), m_iTextChanged(0)
 {
-	QObject::connect(lineEdit(),
+	QObject::connect(QDoubleSpinBox::lineEdit(),
 		SIGNAL(textChanged(const QString&)),
 		SLOT(lineEditTextChanged(const QString&)));
 	QObject::connect(this,
@@ -428,7 +428,7 @@ void synthv1widget_edit::spinBoxEditingFinished (void)
 {
 	if (g_editMode == DeferredMode) {
 		m_iTextChanged = 0;
-		emit valueChangedEx(value());
+		emit valueChangedEx(QDoubleSpinBox::value());
 	}
 }
 
@@ -437,6 +437,21 @@ void synthv1widget_edit::spinBoxValueChanged ( double spinValue )
 {
 	if (g_editMode != DeferredMode || m_iTextChanged == 0)
 		emit valueChangedEx(spinValue);
+}
+
+
+// Inherited/override methods.
+QValidator::State synthv1widget_edit::validate ( QString& sText, int& iPos ) const
+{
+	const QValidator::State state
+		= QDoubleSpinBox::validate(sText, iPos);
+
+	if (state == QValidator::Acceptable
+		&& g_editMode == DeferredMode
+		&& m_iTextChanged == 0)
+		return QValidator::Intermediate;
+
+	return state;
 }
 
 
