@@ -164,7 +164,7 @@ int synthv1widget_keybd::noteHigh (void) const
 
 
 // Piano key rectangle finder.
-QRect synthv1widget_keybd::noteRect ( int iNote ) const
+QRect synthv1widget_keybd::noteRect ( int iNote, bool bOn ) const
 {
 	const int w = QWidget::width();
 	const int h = QWidget::height();
@@ -183,9 +183,11 @@ QRect synthv1widget_keybd::noteRect ( int iNote ) const
 		x2 += int(wk - float(w2 >> 1));
 		h2  = (h << 1) / 3;
 		++w2;
-	} else {
+	} else if (bOn) {
 		x2 += (w2 >> 1);
-		--w2; // <<= 1;
+		--w2;
+	} else {
+		w2 <<= 1;
 	}
 
 	return QRect(x2, 0, w2, h2);
@@ -205,7 +207,7 @@ void synthv1widget_keybd::noteOn ( int iNote )
 
 	// Now for the sounding new one...
 	note.on = true;
-	note.rect = noteRect(iNote);
+	note.rect = noteRect(iNote, true);
 
 	QWidget::update(note.rect);
 }

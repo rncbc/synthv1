@@ -82,7 +82,7 @@ protected:
 	int safeNoteHigh(int iNoteHigh) const;
 
 	// Piano key rectangle finder.
-	QRect noteRect(int iNote) const;
+	QRect noteRect(int iNote, bool bOn = false) const;
 
 	// Piano keyboard note-on/off handlers.
 	void dragNoteOn(const QPoint& pos);
