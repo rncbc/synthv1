@@ -67,6 +67,8 @@ public:
 	void sessionEvent(void *pvSessionArg);
 #endif
 
+	void shutdown();
+
 protected:
  
 	void updatePreset(bool bDirty);

@@ -4,6 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Brute force shutdown on the JACK client standalone front...
+  (EXPERIMENTAL)
+
 0.9.5  2019-03-04  The End of Winter'19 release.
 
 - HiDPI display screen support (Qt >= 5.6).
