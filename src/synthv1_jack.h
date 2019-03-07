@@ -68,6 +68,7 @@ public:
 #endif
 
 	void shutdown();
+	void shutdown_close();
 
 protected:
  
