@@ -6,7 +6,7 @@ ChangeLog
 
 GIT HEAD
 
-- Brute force shutdown on the JACK client standalone front...
+- A gentlier shutdown for the JACK client standalone client.
   (EXPERIMENTAL)
 
 0.9.5  2019-03-04  The End of Winter'19 release.

@@ -617,7 +617,9 @@ void synthv1_jack::updatePreset ( bool /*bDirty*/ )
 
 void synthv1_jack::shutdown (void)
 {
-	QCoreApplication::quit();
+	synthv1_jack_application *pApp = synthv1_jack_application::getInstance();
+	if (pApp)
+		pApp->shutdown();
 }
 
 
@@ -723,12 +725,17 @@ synthv1_jack_application::synthv1_jack_application ( int& argc, char **argv )
 	m_pSigtermNotifier = NULL;
 
 #endif	// !HAVE_SIGNAL_H
+
+	// Pseudo-singleton instance.
+	g_pInstance = this;
 }
 
 
 // Destructor.
 synthv1_jack_application::~synthv1_jack_application (void)
 {
+	g_pInstance = NULL;
+
 #ifdef HAVE_SIGNAL_H
 	if (m_pSigtermNotifier) delete m_pSigtermNotifier;
 #endif
@@ -786,6 +793,10 @@ bool synthv1_jack_application::setup (void)
 		m_pApp->quit();
 		return false;
 	}
+
+	QObject::connect(this,
+		SIGNAL(shutdown_signal()),
+		SLOT(shutdown_slot()));
 
 	m_pSynth = new synthv1_jack();
 
@@ -973,6 +984,30 @@ void synthv1_jack_application::sigterm_handler (void)
 }
 
 #endif	// HAVE_SIGNAL_H
+
+
+// JACK shutdown handlers.
+void synthv1_jack_application::shutdown (void)
+{
+	emit shutdown_signal();
+}
+
+void synthv1_jack_application::shutdown_slot (void)
+{
+	if (m_pWidget)
+		m_pWidget->close();
+	if (m_pApp)
+		m_pApp->quit();
+}
+
+
+// Pseudo-singleton instance.
+synthv1_jack_application *synthv1_jack_application::g_pInstance = NULL;
+
+synthv1_jack_application *synthv1_jack_application::getInstance (void)
+{
+	return g_pInstance;
+}
 
 
 //-------------------------------------------------------------------------
