@@ -147,17 +147,14 @@ signals:
 
 	void shutdown_signal();
 
-#ifdef CONFIG_NSM
-
 protected slots:
 
+#ifdef CONFIG_NSM
 	// NSM callback slots.
 	void openSession();
 	void saveSession();
-
 	void hideSession();
 	void showSession();
-
 #endif	// CONFIG_NSM
 
 #ifdef HAVE_SIGNAL_H
