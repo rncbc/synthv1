@@ -4,10 +4,10 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.6  2019-03-18  Pre-LAC2019 Release Frenzy.
 
 - A gentlier shutdown for the JACK client standalone client.
-  (EXPERIMENTAL)
+
 
 0.9.5  2019-03-04  The End of Winter'19 release.
 
