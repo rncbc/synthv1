@@ -6,7 +6,8 @@ ChangeLog
 
 GIT HEAD
 
-- Post-LAC2019 development cycle started (towards v0.9.7)...
+- Re-defined all JACK stand-alone client application UNIX
+  signal handling. (EXPERIMENTAL)
 
 
 0.9.6  2019-03-18  Pre-LAC2019 Release Frenzy.

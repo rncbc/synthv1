@@ -159,7 +159,7 @@ protected slots:
 
 #ifdef HAVE_SIGNAL_H
 	// SIGTERM signal handler.
-	void sigterm_handler();
+	void handle_sigterm();
 #endif
 
 	void shutdown_slot();
