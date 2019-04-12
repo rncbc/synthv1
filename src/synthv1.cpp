@@ -2230,8 +2230,8 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	uint16_t k;
 
 	for (k = 0; k < m_nchannels; ++k) {
-		::memcpy(m_sfxs[k], ins[k], nframes * sizeof(float));
-		::memset(outs[k], 0, nframes * sizeof(float));
+		::memset(m_sfxs[k], 0, nframes * sizeof(float));
+		::memcpy(outs[k], ins[k], nframes * sizeof(float));
 	}
 
 	// process direct note on/off...
@@ -2540,22 +2540,20 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	// output mix-down
 	for (k = 0; k < m_nchannels; ++k) {
 		uint32_t n;
-		// fx sends
-		float *in  = m_sfxs[k];
+		float *in = m_sfxs[k];
 		float *out = outs[k];
-		for (n = 0; n < nframes; ++n)
-			*out++ += *in++;
-		// dynamics
-		in = outs[k];
 		// compressor
 		if (int(*m_dyn.compress) > 0)
 			m_comp[k].process(in, nframes);
 		// limiter
 		if (int(*m_dyn.limiter) > 0) {
-			out = in;
 			for (n = 0; n < nframes; ++n)
-				*out++ = synthv1_sigmoid(*in++);
+				*in++ = synthv1_sigmoid(*in);
 		}
+		// mix-down
+		in = m_sfxs[k];
+		for (n = 0; n < nframes; ++n)
+			*out++ += *in++;
 	}
 
 	// post-processing
