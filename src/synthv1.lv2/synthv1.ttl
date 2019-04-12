@@ -25,7 +25,7 @@
 	lv2:requiredFeature lv2urid:map, lv2worker:schedule ;
 	lv2:optionalFeature lv2:hardRTCapable ;
 	lv2:extensionData lv2worker:interface ;
-	lv2ui:ui synthv1_lv2:ui, synthv1_lv2:ui_x11, synthv1_lv2:ui_external ;
+	lv2ui:ui synthv1_lv2:ui_x11, synthv1_lv2:ui_external ;
 	lv2:port [
 		a lv2:InputPort, lv2atom:AtomPort ;
 		lv2atom:bufferType lv2atom:Sequence ;

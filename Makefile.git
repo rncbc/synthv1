@@ -11,6 +11,7 @@ clean:
 	@rm -rvf Makefile configure config.*
 	@rm -rvf src/.ui_* src/.obj_* src/.moc_*
 	@rm -rvf src/config.* src/*.pri src/lib*.so*
+	@rm -rvf src/lib*.a src/*_plugin_import.cpp
 	@rm -rvf src/Makefile src/Makefile.src_* src/*.mak src/*.mak.*
 	@rm -rvf *.cache *.log *.status *.spec *.mak *.m4 .m4
 	@rm -rvf .qmake.stash src/.qmake.stash

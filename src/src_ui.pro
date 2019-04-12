@@ -4,7 +4,7 @@ NAME = synthv1
 
 TARGET = $${NAME}_ui
 TEMPLATE = lib
-CONFIG += shared
+CONFIG += static
 LIBS += -L.
 
 include(src_ui.pri)
@@ -71,7 +71,7 @@ unix {
 
 	target.path = $${LIBDIR}
 
-	LIBS += -l$${NAME} -Wl,-rpath,$${LIBDIR}
+	LIBS += -l$${NAME}
 }
 
 QT += widgets xml
