@@ -2540,20 +2540,21 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	// output mix-down
 	for (k = 0; k < m_nchannels; ++k) {
 		uint32_t n;
-		float *in = m_sfxs[k];
-		float *out = outs[k];
+		float *sfx = m_sfxs[k];
 		// compressor
 		if (int(*m_dyn.compress) > 0)
-			m_comp[k].process(in, nframes);
+			m_comp[k].process(sfx, nframes);
 		// limiter
 		if (int(*m_dyn.limiter) > 0) {
+			float *p = sfx;
+			float *q = sfx;
 			for (n = 0; n < nframes; ++n)
-				*in++ = synthv1_sigmoid(*in);
+				*q++ = synthv1_sigmoid(*p++);
 		}
 		// mix-down
-		in = m_sfxs[k];
+		float *out = outs[k];
 		for (n = 0; n < nframes; ++n)
-			*out++ += *in++;
+			*out++ += *sfx++;
 	}
 
 	// post-processing
