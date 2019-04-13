@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- All audio input now get through without being processed
+  by any or whole effects stage anymore. (EXPERIMENTAL)
 - Re-defined all JACK stand-alone client application UNIX
   signal handling. (EXPERIMENTAL)
 
