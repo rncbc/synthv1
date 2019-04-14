@@ -4,12 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.7  2019-04-14  A Spring-Break'19 Release.
 
 - All audio input now get through without being processed
-  by any or whole effects stage anymore. (EXPERIMENTAL)
+  by any or whole effects stage anymore.
 - Re-defined all JACK stand-alone client application UNIX
-  signal handling. (EXPERIMENTAL)
+  signal handling.
 
 
 0.9.6  2019-03-18  Pre-LAC2019 Release Frenzy.
