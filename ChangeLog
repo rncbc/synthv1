@@ -4,6 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Minor update to Debian packaging control file.
+
+
 0.9.7  2019-04-14  A Spring-Break'19 Release.
 
 - All audio input now get through without being processed
