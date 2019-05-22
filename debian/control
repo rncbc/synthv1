@@ -4,13 +4,13 @@ Priority: extra
 Maintainer: Rui Nuno Capela <rncbc@rncbc.org>
 Build-Depends: debhelper (>= 5), automake, pkg-config,
   qtchooser, qtbase5-dev (>= 5.1), qtbase5-dev-tools (>= 5.1),
-  qttools5-dev-tools (>= 5.1), libjack-dev, libasound2-dev,
+  qttools5-dev-tools (>= 5.1), libjack2-dev, libasound2-dev,
   lv2-dev, liblo0-dev
 Standards-Version: 3.7.2
 
 Package: synthv1
 Architecture: any
-Depends: jackd, ${shlibs:Depends}, ${misc:Depends}
+Depends: libjack2, ${shlibs:Depends}, ${misc:Depends}
 Description: an old-school polyphonic synthesizer
   An old-school 4-oscillator subtractive polyphonic synthesizer
   with stereo fx.
