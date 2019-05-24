@@ -966,10 +966,12 @@ void synthv1widget::updateParamEx ( synthv1::ParamIndex index, float fValue )
 
 	switch (index) {
 	case synthv1::DCO1_SHAPE1:
+		m_ui.Dco1Wave1->setWaveShape(fValue);
 		m_ui.Dco1Bandl1Knob->setEnabled(
 			synthv1_wave::Shape(int(fValue)) != synthv1_wave::Noise);
 		break;
 	case synthv1::DCO1_SHAPE2:
+		m_ui.Dco1Wave2->setWaveShape(fValue);
 		m_ui.Dco1Bandl2Knob->setEnabled(
 			synthv1_wave::Shape(int(fValue)) != synthv1_wave::Noise);
 		break;
@@ -986,10 +988,12 @@ void synthv1widget::updateParamEx ( synthv1::ParamIndex index, float fValue )
 		}
 		break;
 	case synthv1::DCO2_SHAPE1:
+		m_ui.Dco2Wave1->setWaveShape(fValue);
 		m_ui.Dco2Bandl1Knob->setEnabled(
 			synthv1_wave::Shape(int(fValue)) != synthv1_wave::Noise);
 		break;
 	case synthv1::DCO2_SHAPE2:
+		m_ui.Dco2Wave2->setWaveShape(fValue);
 		m_ui.Dco2Bandl2Knob->setEnabled(
 			synthv1_wave::Shape(int(fValue)) != synthv1_wave::Noise);
 		break;
@@ -1010,6 +1014,12 @@ void synthv1widget::updateParamEx ( synthv1::ParamIndex index, float fValue )
 		break;
 	case synthv1::DCF2_SLOPE:
 		m_ui.Dcf2TypeKnob->setEnabled(int(fValue) != 3); // !Formant
+		break;
+	case synthv1::LFO1_SHAPE:
+		m_ui.Lfo1Wave->setWaveShape(fValue);
+		break;
+	case synthv1::LFO2_SHAPE:
+		m_ui.Lfo2Wave->setWaveShape(fValue);
 		break;
 	case synthv1::KEY1_LOW:
 		m_ui.StatusBar->keybd()->setNoteLow(int(fValue));

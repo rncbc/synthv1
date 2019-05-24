@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Fixed initial DCO and LFO wave shapes on LV2 plug-in UI.
 - Minor update to Debian packaging control file.
 
 
