@@ -438,18 +438,24 @@ void synthv1_wave::reset_normalize ( uint16_t itab )
 	uint32_t i;
 
 	float pmax = 0.0f;
-	float pmin = 0.0f;
+	float pmid = 0.0f;
 
-	for (i = 0; i < m_nsize; ++i) {
-		const float p = frames[i];
-		if (pmax < p)
-			pmax = p;
-		else
-		if (pmin > p)
-			pmin = p;
+	if (m_ntabs > 0) {
+		for (i = 0; i < m_nsize; ++i)
+			pmid += frames[i];
+		pmid /= float(m_nsize);
+	} else {
+		for (i = 0; i < m_nsize; ++i) {
+			const float p = frames[i];
+			if (pmax < p)
+				pmax = p;
+			else
+			if (pmid > p)
+				pmid = p;
+		}
+		pmid = 0.5f * (pmax + pmid);
+		pmax = 0.0f;
 	}
-
-	const float pmid = 0.5f * (pmax + pmin);
 
 	pmax = 0.0f;
 	for (i = 0; i < m_nsize; ++i) {
