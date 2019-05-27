@@ -101,7 +101,7 @@ public:
 	};
 
 	// begin.
-	float start(Phase& phase, float pshift = 0.0f, float freq = 0.0f)
+	float start(Phase& phase, float pshift = 0.0f, float freq = 0.0f) const
 	{
 		update(phase, freq);
 
@@ -169,7 +169,7 @@ public:
 	}
 
 	// post-iter.
-	void update(Phase& phase, float freq)
+	void update(Phase& phase, float freq) const
 	{
 		if (freq < m_min_freq) {
 			phase.itab  = m_ntabs;
