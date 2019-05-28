@@ -747,10 +747,10 @@ struct synthv1_voice : public synthv1_list<synthv1_voice>
 	float vel1, vel2;							// key velocity
 	float pre1, pre2;							// key pressure/after-touch
 
-	synthv1_oscillator dco1_osc1, dco1_osc2;	// oscillators
-	synthv1_oscillator dco2_osc1, dco2_osc2;
+	synthv1_oscillator dco11, dco12;			// oscillators
+	synthv1_oscillator dco21, dco22;
 
-	synthv1_oscillator lfo1_osc,  lfo2_osc;		// low frequency oscillators
+	synthv1_oscillator lfo1,  lfo2;				// low frequency oscillators
 
 	float dco1_freq1, dco1_sample1;				// frequency and phase
 	float dco1_freq2, dco1_sample2;
@@ -989,12 +989,12 @@ synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
 	note1(-1), note2(-1),
 	vel1(0.0f), vel2(0.0f),
 	pre1(0.0f), pre2(0.0f),
-	dco1_osc1(&pImpl->dco1_wave1),
-	dco1_osc2(&pImpl->dco1_wave2),
-	dco2_osc1(&pImpl->dco2_wave1),
-	dco2_osc2(&pImpl->dco2_wave2),
-	lfo1_osc(&pImpl->lfo1_wave),
-	lfo2_osc(&pImpl->lfo2_wave),
+	dco11(&pImpl->dco1_wave1),
+	dco12(&pImpl->dco1_wave2),
+	dco21(&pImpl->dco2_wave1),
+	dco22(&pImpl->dco2_wave2),
+	lfo1(&pImpl->lfo1_wave),
+	lfo2(&pImpl->lfo2_wave),
 	dco1_freq1(0.0f), dco1_sample1(0.0f),
 	dco1_freq2(0.0f), dco1_sample2(0.0f),
 	dco2_freq1(0.0f), dco2_sample1(0.0f),
@@ -1645,21 +1645,21 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					pv->dco1_freq2 = freq1;
 					// syncs
 					if (*m_dco1.sync1 > 0.5f) {
-						pv->dco1_osc2.sync(&pv->dco1_osc1);
+						pv->dco12.sync(&pv->dco11);
 					} else {
 						pv->dco1_freq2 *= synthv1_freq2(+ detune1);
-						pv->dco1_osc2.sync(NULL);
+						pv->dco12.sync(NULL);
 					}
 					if (*m_dco1.sync2 > 0.5f) {
-						pv->dco1_osc1.sync(&pv->dco1_osc2);
+						pv->dco11.sync(&pv->dco12);
 					} else {
 						pv->dco1_freq1 *= synthv1_freq2(- detune1);
-						pv->dco1_osc1.sync(NULL);
+						pv->dco11.sync(NULL);
 					}
 					// phases
 					const float phase1 = *m_dco1.phase * PHASE_SCALE;
-					pv->dco1_sample1 = pv->dco1_osc1.start(  0.0f, pv->dco1_freq1);
-					pv->dco1_sample2 = pv->dco1_osc2.start(phase1, pv->dco1_freq2);
+					pv->dco1_sample1 = pv->dco11.start(  0.0f, pv->dco1_freq1);
+					pv->dco1_sample2 = pv->dco12.start(phase1, pv->dco1_freq2);
 					// filters
 					const int type1 = int(*m_dcf1.type);
 					pv->dcf11.reset(synthv1_filter1::Type(type1));
@@ -1678,9 +1678,11 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					m_lfo1.env.start(&pv->lfo1_env);
 					m_dca1.env.start(&pv->dca1_env);
 					// lfos
-					const float pshift1
+					const float lfo1_pshift
 						= (*m_lfo1.sync > 0.0f ? m_phasor.pshift() : 0.0f);
-					pv->lfo1_sample = pv->lfo1_osc.start(pshift1);
+					const float lfo1_freq
+						= get_bpm(*m_lfo1.bpm) / (60.01f - *m_lfo1.rate * 60.0f);
+					pv->lfo1_sample = pv->lfo1.start(lfo1_pshift, lfo1_freq);
 					// glides (portamento)
 					const float frames1
 						= uint32_t(*m_dco1.glide * *m_dco1.glide * m_srate);
@@ -1716,21 +1718,21 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					pv->dco2_freq2 = freq2;
 					// syncs
 					if (*m_dco2.sync1 > 0.5f) {
-						pv->dco2_osc2.sync(&pv->dco2_osc1);
+						pv->dco22.sync(&pv->dco21);
 					} else {
 						pv->dco2_freq2 *= synthv1_freq2(+ detune2);
-						pv->dco2_osc2.sync(NULL);
+						pv->dco22.sync(NULL);
 					}
 					if (*m_dco2.sync2 > 0.5f) {
-						pv->dco2_osc1.sync(&pv->dco2_osc2);
+						pv->dco21.sync(&pv->dco22);
 					} else {
 						pv->dco2_freq1 *= synthv1_freq2(- detune2);
-						pv->dco2_osc1.sync(NULL);
+						pv->dco21.sync(NULL);
 					}
 					// phases
 					const float phase2 = *m_dco2.phase * PHASE_SCALE;
-					pv->dco2_sample1 = pv->dco2_osc1.start(  0.0f, pv->dco2_freq1);
-					pv->dco2_sample2 = pv->dco2_osc2.start(phase2, pv->dco2_freq2);
+					pv->dco2_sample1 = pv->dco21.start(  0.0f, pv->dco2_freq1);
+					pv->dco2_sample2 = pv->dco22.start(phase2, pv->dco2_freq2);
 					// filters
 					const int type2 = int(*m_dcf2.type);
 					pv->dcf21.reset(synthv1_filter1::Type(type2));
@@ -1749,9 +1751,11 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					m_lfo2.env.start(&pv->lfo2_env);
 					m_dca2.env.start(&pv->dca2_env);
 					// lfos
-					const float pshift2
+					const float lfo2_pshift
 						= (*m_lfo2.sync > 0.0f ? m_phasor.pshift() : 0.0f);
-					pv->lfo2_sample = pv->lfo2_osc.start(pshift2);
+					const float lfo2_freq
+						= get_bpm(*m_lfo2.bpm) / (60.01f - *m_lfo2.rate * 60.0f);
+					pv->lfo2_sample = pv->lfo2.start(lfo2_pshift, lfo2_freq);
 					// glides (portamento)
 					const float frames2
 						= uint32_t(*m_dco2.glide * *m_dco2.glide * m_srate);
@@ -2339,23 +2343,23 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				const float dco21 = pv->dco2_sample1 * pv->dco2_bal.value(j, 0);
 				const float dco22 = pv->dco2_sample2 * pv->dco2_bal.value(j, 1);
 
-				pv->dco1_sample1 = pv->dco1_osc1.sample(pv->dco1_freq1
+				pv->dco1_sample1 = pv->dco11.sample(pv->dco1_freq1
 					* (m_ctl1.pitchbend + modwheel1 * lfo1)
 					+ pv->dco1_glide1.tick());
-				pv->dco1_sample2 = pv->dco1_osc2.sample(pv->dco1_freq2
+				pv->dco1_sample2 = pv->dco12.sample(pv->dco1_freq2
 					* (m_ctl1.pitchbend + modwheel1 * lfo1)
 					+ pv->dco1_glide2.tick());
 
-				pv->dco2_sample1 = pv->dco2_osc1.sample(pv->dco2_freq1
+				pv->dco2_sample1 = pv->dco21.sample(pv->dco2_freq1
 					* (m_ctl2.pitchbend + modwheel2 * lfo2)
 					+ pv->dco2_glide1.tick());
-				pv->dco2_sample2 = pv->dco2_osc2.sample(pv->dco2_freq2
+				pv->dco2_sample2 = pv->dco22.sample(pv->dco2_freq2
 					* (m_ctl2.pitchbend + modwheel2 * lfo2)
 					+ pv->dco2_glide2.tick());
 
-				pv->lfo1_sample = pv->lfo1_osc.sample(lfo1_freq
+				pv->lfo1_sample = pv->lfo1.sample(lfo1_freq
 					* (1.0f + SWEEP_SCALE * *m_lfo1.sweep * lfo1_env));
-				pv->lfo2_sample = pv->lfo2_osc.sample(lfo2_freq
+				pv->lfo2_sample = pv->lfo2.sample(lfo2_freq
 					* (1.0f + SWEEP_SCALE * *m_lfo2.sweep * lfo2_env));
 
 				// ring modulators
