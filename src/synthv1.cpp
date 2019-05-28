@@ -1634,45 +1634,45 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 						m_def1.pressure.value_ptr(),
 						&m_ctl1.pressure, &pv->pre1);
 					// frequencies
-					const float tuning1
+					const float dco1_tuning
 						= *m_dco1.octave * OCTAVE_SCALE
 						+ *m_dco1.tuning * TUNING_SCALE;
-					const float detune1
+					const float dco1_detune
 						= *m_dco1.detune * DETUNE_SCALE;
-					const float freq1
-						= m_freqs[key] * synthv1_freq2(tuning1);
-					pv->dco1_freq1 = freq1;
-					pv->dco1_freq2 = freq1;
+					const float dco1_freq
+						= m_freqs[key] * synthv1_freq2(dco1_tuning);
+					pv->dco1_freq1 = dco1_freq;
+					pv->dco1_freq2 = dco1_freq;
 					// syncs
 					if (*m_dco1.sync1 > 0.5f) {
 						pv->dco12.sync(&pv->dco11);
 					} else {
-						pv->dco1_freq2 *= synthv1_freq2(+ detune1);
+						pv->dco1_freq2 *= synthv1_freq2(+ dco1_detune);
 						pv->dco12.sync(NULL);
 					}
 					if (*m_dco1.sync2 > 0.5f) {
 						pv->dco11.sync(&pv->dco12);
 					} else {
-						pv->dco1_freq1 *= synthv1_freq2(- detune1);
+						pv->dco1_freq1 *= synthv1_freq2(- dco1_detune);
 						pv->dco11.sync(NULL);
 					}
 					// phases
-					const float phase1 = *m_dco1.phase * PHASE_SCALE;
-					pv->dco1_sample1 = pv->dco11.start(  0.0f, pv->dco1_freq1);
-					pv->dco1_sample2 = pv->dco12.start(phase1, pv->dco1_freq2);
+					const float dco1_phase = *m_dco1.phase * PHASE_SCALE;
+					pv->dco1_sample1 = pv->dco11.start(      0.0f, pv->dco1_freq1);
+					pv->dco1_sample2 = pv->dco12.start(dco1_phase, pv->dco1_freq2);
 					// filters
-					const int type1 = int(*m_dcf1.type);
-					pv->dcf11.reset(synthv1_filter1::Type(type1));
-					pv->dcf12.reset(synthv1_filter1::Type(type1));
-					pv->dcf13.reset(synthv1_filter2::Type(type1));
-					pv->dcf14.reset(synthv1_filter2::Type(type1));
-					pv->dcf15.reset(synthv1_filter3::Type(type1));
-					pv->dcf16.reset(synthv1_filter3::Type(type1));
+					const int dcf1_type = int(*m_dcf1.type);
+					pv->dcf11.reset(synthv1_filter1::Type(dcf1_type));
+					pv->dcf12.reset(synthv1_filter1::Type(dcf1_type));
+					pv->dcf13.reset(synthv1_filter2::Type(dcf1_type));
+					pv->dcf14.reset(synthv1_filter2::Type(dcf1_type));
+					pv->dcf15.reset(synthv1_filter3::Type(dcf1_type));
+					pv->dcf16.reset(synthv1_filter3::Type(dcf1_type));
 					// formant filters
-					const float cutoff1 = *m_dcf1.cutoff;
-					const float reso1 = *m_dcf1.reso;
-					pv->dcf17.reset_filters(cutoff1, reso1);
-					pv->dcf18.reset_filters(cutoff1, reso1);
+					const float dcf1_cutoff = *m_dcf1.cutoff;
+					const float dcf1_reso = *m_dcf1.reso;
+					pv->dcf17.reset_filters(dcf1_cutoff, dcf1_reso);
+					pv->dcf18.reset_filters(dcf1_cutoff, dcf1_reso);
 					// envelopes
 					m_dcf1.env.start(&pv->dcf1_env);
 					m_lfo1.env.start(&pv->lfo1_env);
@@ -1684,10 +1684,10 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 						= get_bpm(*m_lfo1.bpm) / (60.01f - *m_lfo1.rate * 60.0f);
 					pv->lfo1_sample = pv->lfo1.start(lfo1_pshift, lfo1_freq);
 					// glides (portamento)
-					const float frames1
+					const float dco1_frames
 						= uint32_t(*m_dco1.glide * *m_dco1.glide * m_srate);
-					pv->dco1_glide1.reset(frames1, pv->dco1_freq1);
-					pv->dco1_glide2.reset(frames1, pv->dco1_freq2);
+					pv->dco1_glide1.reset(dco1_frames, pv->dco1_freq1);
+					pv->dco1_glide2.reset(dco1_frames, pv->dco1_freq2);
 					// sustain
 					pv->sustain1 = false;
 					// allocated
@@ -1707,45 +1707,45 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 						m_def2.pressure.value_ptr(),
 						&m_ctl2.pressure, &pv->pre2);
 					// frequencies
-					const float tuning2
+					const float dco2_tuning
 						= *m_dco2.octave * OCTAVE_SCALE
 						+ *m_dco2.tuning * TUNING_SCALE;
-					const float detune2
+					const float dco2_detune
 						= *m_dco2.detune * DETUNE_SCALE;
-					const float freq2
-						= m_freqs[key] * synthv1_freq2(tuning2);
-					pv->dco2_freq1 = freq2;
-					pv->dco2_freq2 = freq2;
+					const float dco2_freq
+						= m_freqs[key] * synthv1_freq2(dco2_tuning);
+					pv->dco2_freq1 = dco2_freq;
+					pv->dco2_freq2 = dco2_freq;
 					// syncs
 					if (*m_dco2.sync1 > 0.5f) {
 						pv->dco22.sync(&pv->dco21);
 					} else {
-						pv->dco2_freq2 *= synthv1_freq2(+ detune2);
+						pv->dco2_freq2 *= synthv1_freq2(+ dco2_detune);
 						pv->dco22.sync(NULL);
 					}
 					if (*m_dco2.sync2 > 0.5f) {
 						pv->dco21.sync(&pv->dco22);
 					} else {
-						pv->dco2_freq1 *= synthv1_freq2(- detune2);
+						pv->dco2_freq1 *= synthv1_freq2(- dco2_detune);
 						pv->dco21.sync(NULL);
 					}
 					// phases
-					const float phase2 = *m_dco2.phase * PHASE_SCALE;
-					pv->dco2_sample1 = pv->dco21.start(  0.0f, pv->dco2_freq1);
-					pv->dco2_sample2 = pv->dco22.start(phase2, pv->dco2_freq2);
+					const float dco2_phase = *m_dco2.phase * PHASE_SCALE;
+					pv->dco2_sample1 = pv->dco21.start(      0.0f, pv->dco2_freq1);
+					pv->dco2_sample2 = pv->dco22.start(dco2_phase, pv->dco2_freq2);
 					// filters
-					const int type2 = int(*m_dcf2.type);
-					pv->dcf21.reset(synthv1_filter1::Type(type2));
-					pv->dcf22.reset(synthv1_filter1::Type(type2));
-					pv->dcf23.reset(synthv1_filter2::Type(type2));
-					pv->dcf24.reset(synthv1_filter2::Type(type2));
-					pv->dcf25.reset(synthv1_filter3::Type(type2));
-					pv->dcf26.reset(synthv1_filter3::Type(type2));
+					const int dcf2_type = int(*m_dcf2.type);
+					pv->dcf21.reset(synthv1_filter1::Type(dcf2_type));
+					pv->dcf22.reset(synthv1_filter1::Type(dcf2_type));
+					pv->dcf23.reset(synthv1_filter2::Type(dcf2_type));
+					pv->dcf24.reset(synthv1_filter2::Type(dcf2_type));
+					pv->dcf25.reset(synthv1_filter3::Type(dcf2_type));
+					pv->dcf26.reset(synthv1_filter3::Type(dcf2_type));
 					// formant filters
-					const float cutoff2 = *m_dcf2.cutoff;
-					const float reso2 = *m_dcf2.reso;
-					pv->dcf27.reset_filters(cutoff2, reso2);
-					pv->dcf28.reset_filters(cutoff2, reso2);
+					const float dcf2_cutoff = *m_dcf2.cutoff;
+					const float dcf2_reso = *m_dcf2.reso;
+					pv->dcf27.reset_filters(dcf2_cutoff, dcf2_reso);
+					pv->dcf28.reset_filters(dcf2_cutoff, dcf2_reso);
 					// envelopes
 					m_dcf2.env.start(&pv->dcf2_env);
 					m_lfo2.env.start(&pv->lfo2_env);
@@ -1757,10 +1757,10 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 						= get_bpm(*m_lfo2.bpm) / (60.01f - *m_lfo2.rate * 60.0f);
 					pv->lfo2_sample = pv->lfo2.start(lfo2_pshift, lfo2_freq);
 					// glides (portamento)
-					const float frames2
+					const float dco2_frames
 						= uint32_t(*m_dco2.glide * *m_dco2.glide * m_srate);
-					pv->dco2_glide1.reset(frames2, pv->dco2_freq1);
-					pv->dco2_glide2.reset(frames2, pv->dco2_freq2);
+					pv->dco2_glide1.reset(dco2_frames, pv->dco2_freq1);
+					pv->dco2_glide2.reset(dco2_frames, pv->dco2_freq2);
 					// sustain
 					pv->sustain2 = false;
 					// allocated
