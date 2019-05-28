@@ -1,7 +1,7 @@
 // synthv1_controls.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -70,6 +70,16 @@ public:
 				return (status < key.status);
 			else
 				return (param < key.param);
+		}
+
+		// copy assignment operator.
+		Key& operator= (const Key& key)
+		{
+			if (this != &key) {
+				status = key.status;
+				param  = key.param;
+			}
+			return *this;
 		}
 
 		unsigned short status;
