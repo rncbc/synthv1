@@ -6,7 +6,8 @@ ChangeLog
 
 GIT HEAD
 
-- Fixed all LFO Sync, Panning and Volume modulation, now
+- Refactored the LFO Sync for correctness. (EXPERIMENTAL)
+- Fixed all LFO Panning and Volume modulation, now being
   correctly isolated on a per voice basis. (EXPERIMENTAL)
 - Fixed DC offset on all main DCO wavetable oscillators.
 - Fixed initial DCO and LFO wave shapes on LV2 plug-in UI.
