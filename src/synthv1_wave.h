@@ -309,6 +309,13 @@ public:
 		}
 	}
 
+	// phase-shift accessor.
+	float pshift() const
+	{
+		const float pshift = m_wave->phase0() + m_phase.phase;
+		return (pshift >= 1.0f ? pshift - 1.0f : pshift);
+	}
+
 private:
 
 	synthv1_wave       *m_wave;

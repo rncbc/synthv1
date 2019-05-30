@@ -444,6 +444,7 @@ struct synthv1_dcf
 
 
 // lfo
+struct synthv1_voice;
 
 struct synthv1_lfo
 {
@@ -462,6 +463,8 @@ struct synthv1_lfo
 	synthv1_port2 volume;
 
 	synthv1_env   env;
+
+	synthv1_voice *psync;
 };
 
 
@@ -893,6 +896,11 @@ protected:
 
 	void free_voice ( synthv1_voice *pv )
 	{
+		if (m_lfo1.psync == pv)
+			m_lfo1.psync = NULL;
+		if (m_lfo2.psync == pv)
+			m_lfo2.psync = NULL;
+
 		m_play_list.remove(pv);
 		m_free_list.append(pv);
 		--m_nvoices;
@@ -953,7 +961,6 @@ private:
 	synthv1_fx_comp    *m_comp;
 
 	synthv1_reverb m_reverb;
-	synthv1_phasor m_phasor;
 
 	// process direct note on/off...
 	volatile uint16_t m_direct_note;
@@ -1660,10 +1667,10 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					m_dca1.env.start(&pv->dca1_env);
 					// lfos
 					const float lfo1_pshift
-						= (*m_lfo1.sync > 0.0f ? m_phasor.pshift() : 0.0f);
-					const float lfo1_freq
-						= get_bpm(*m_lfo1.bpm) / (60.01f - *m_lfo1.rate * 60.0f);
-					pv->lfo1_sample = pv->lfo1.start(lfo1_pshift, lfo1_freq);
+						= (m_lfo1.psync ? m_lfo1.psync->lfo1.pshift() : 0.0f);
+					pv->lfo1_sample = pv->lfo1.start(lfo1_pshift);
+					if (*m_lfo1.sync > 0.0f && m_lfo1.psync == NULL)
+						m_lfo1.psync = pv;
 					// glides (portamento)
 					const float dco1_frames
 						= uint32_t(*m_dco1.glide * *m_dco1.glide * m_srate);
@@ -1739,10 +1746,10 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					m_dca2.env.start(&pv->dca2_env);
 					// lfos
 					const float lfo2_pshift
-						= (*m_lfo2.sync > 0.0f ? m_phasor.pshift() : 0.0f);
-					const float lfo2_freq
-						= get_bpm(*m_lfo2.bpm) / (60.01f - *m_lfo2.rate * 60.0f);
-					pv->lfo2_sample = pv->lfo2.start(lfo2_pshift, lfo2_freq);
+						= (m_lfo2.psync ? m_lfo2.psync->lfo2.pshift() : 0.0f);
+					pv->lfo2_sample = pv->lfo2.start(lfo2_pshift);
+					if (*m_lfo2.sync > 0.0f && m_lfo2.psync == NULL)
+						m_lfo2.psync = pv;
 					// glides (portamento)
 					const float dco2_frames
 						= uint32_t(*m_dco2.glide * *m_dco2.glide * m_srate);
@@ -1960,6 +1967,9 @@ void synthv1_impl::allNotesOff (void)
 	dco1_last2 = 0.0f;
 	dco2_last1 = 0.0f;
 	dco2_last2 = 0.0f;
+
+	m_lfo1.psync = NULL;
+	m_lfo2.psync = NULL;
 
 	m_direct_note = 0;
 }
@@ -2557,8 +2567,6 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	}
 
 	// post-processing
-	m_phasor.process(nframes);
-
 	m_dca1.volume.tick(nframes);
 	m_out1.width.tick(nframes);
 	m_out1.panning.tick(nframes);
