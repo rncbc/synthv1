@@ -178,15 +178,15 @@ void synthv1_formant::Impl::vtab_coeffs (
 
 
 // reset method impl.
-void synthv1_formant::Impl::reset_coeffs (void)
+void synthv1_formant::Impl::reset_coeffs ( float cutoff, float reso )
 {
-	const float   fK = m_cutoff * float(NUM_VTABS - 1);
+	const float   fK = cutoff * float(NUM_VTABS - 1);
 	const uint32_t k = uint32_t(fK);
 	const float   fJ = (fK - float(k)) * float(NUM_VOWELS - 1);
 	const uint32_t j = uint32_t(fJ);
 	const float   dJ = (fJ - float(j)); // vowel morph fraction
 
-	const float q = 4.0f * m_reso * m_reso + 1.0f;
+	const float q = 4.0f * reso * reso + 1.0f;
 	const float p = 1.0f / q;
 
 	// vocal/vowel formant morphing
@@ -215,7 +215,7 @@ void synthv1_formant::Impl::reset_coeffs (void)
 void synthv1_formant::reset_coeffs (void)
 {
 	if (m_pImpl) {
-		m_pImpl->update(m_cutoff, m_reso);
+		m_pImpl->reset_coeffs(m_cutoff, m_reso);
 		for (uint32_t i = 0; i < NUM_FORMANTS; ++i)
 			m_filters[i].reset_coeffs(m_pImpl->coeffs(i));
 	}

@@ -60,8 +60,7 @@ public:
 
 		// ctor.
 		Impl(float srate = 44100.0f)
-			: m_srate(srate), m_cutoff(0.0f), m_reso(0.0f)
-			{ reset_coeffs(); }
+			: m_srate(srate) { reset_coeffs(); }
 
 		// sample-rate accessors
 		void setSampleRate(float srate)
@@ -73,33 +72,18 @@ public:
 		const Coeffs& coeffs(uint32_t i) const
 			{ return m_ctabs[i]; }
 
-		// update method
-		void update(float cutoff = 0.5f, float reso = 0.0f)
-		{
-			if (::fabsf(m_cutoff - cutoff) > 0.001f ||
-				::fabsf(m_reso   - reso)   > 0.001f) {
-				m_cutoff = cutoff;
-				m_reso = reso;
-				reset_coeffs();
-			}
-		}
+		// reset coeffs. method
+		void reset_coeffs(float cutoff = 0.5f, float reso = 0.0f);
 
 	protected:
 
 		// compute coeffs. for given vocal formant table
 		void vtab_coeffs(Coeffs& coeffs, const Vtab *vtab, uint32_t i, float p);
 
-		// reset coeffs. method
-		void reset_coeffs();
-
 	private:
 
 		// instance members
 		float m_srate;
-
-		// parameters
-		float m_cutoff;
-		float m_reso;
 
 		// filter coeffs.
 		Coeffs m_ctabs[NUM_FORMANTS];
@@ -107,7 +91,7 @@ public:
 
 	// ctor.
 	synthv1_formant(Impl *pImpl = 0)
-		: m_pImpl(pImpl), m_cutoff(0.0f), m_reso(0.0f), m_nstep(0)
+		: m_pImpl(pImpl), m_cutoff(0.5f), m_reso(0.0f), m_nstep(0)
 		{ reset_coeffs(); }
 
 	// reset impl.
@@ -251,7 +235,7 @@ private:
 	float m_cutoff;
 	float m_reso;
 
-	// slew control.
+	// slew-rate control.
 	uint32_t m_nstep;
 
 	// formant filters
