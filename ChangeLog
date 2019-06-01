@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Improved slew-rate to DCF Formant coefficient updates.
 - Refactored the LFO Sync for correctness. (EXPERIMENTAL)
 - Fixed all LFO Panning and Volume modulation, now being
   correctly isolated on a per voice basis. (EXPERIMENTAL)
