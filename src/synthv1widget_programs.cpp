@@ -1,7 +1,7 @@
 // synthv1widget_programs.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -24,32 +24,60 @@
 #include "synthv1_programs.h"
 #include "synthv1_config.h"
 
+#include <QItemDelegate>
 #include <QHeaderView>
-
 #include <QSpinBox>
 #include <QLineEdit>
 #include <QComboBox>
 
 
 //----------------------------------------------------------------------------
+// synthv1widget_programs::ItemDelegate -- Custom (tree) list item delegate.
+
+class synthv1widget_programs::ItemDelegate : public QItemDelegate
+{
+public:
+
+	// ctor.
+	ItemDelegate(QObject *pParent = 0);
+
+	// QItemDelegate interface...
+	QSize sizeHint(
+		const QStyleOptionViewItem& option,
+		const QModelIndex& index) const;
+
+	QWidget *createEditor(QWidget *pParent,
+		const QStyleOptionViewItem& option,
+		const QModelIndex& index) const;
+
+	void setEditorData(QWidget *pEditor,
+		const QModelIndex& index) const;
+
+	void setModelData(QWidget *pEditor,
+		QAbstractItemModel *pModel,
+		const QModelIndex& index) const;
+};
+
+
+//----------------------------------------------------------------------------
 // synthv1widget_programs_item_delegate -- Custom (tree) list item delegate.
 
 // ctor.
-synthv1widget_programs_item_delegate::synthv1widget_programs_item_delegate (
-	QObject *pParent ) : QItemDelegate(pParent)
+synthv1widget_programs::ItemDelegate::ItemDelegate ( QObject *pParent )
+	: QItemDelegate(pParent)
 {
 }
 
 
 // QItemDelegate interface...
-QSize synthv1widget_programs_item_delegate::sizeHint (
+QSize synthv1widget_programs::ItemDelegate::sizeHint (
 	const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
 	return QItemDelegate::sizeHint(option, index) + QSize(4, 4);
 }
 
 
-QWidget *synthv1widget_programs_item_delegate::createEditor ( QWidget *pParent,
+QWidget *synthv1widget_programs::ItemDelegate::createEditor ( QWidget *pParent,
 	const QStyleOptionViewItem& /*option*/, const QModelIndex& index ) const
 {
 	QWidget *pEditor = NULL;
@@ -88,7 +116,7 @@ QWidget *synthv1widget_programs_item_delegate::createEditor ( QWidget *pParent,
 	}
 
 #ifdef CONFIG_DEBUG_0
-	qDebug("synthv1widget_programs_item_delegate::createEditor(%p, %d, %d) = %p",
+	qDebug("synthv1widget_programs::ItemDelegate::createEditor(%p, %d, %d) = %p",
 		pParent, index.row(), index.column(), pEditor);
 #endif
 
@@ -96,11 +124,11 @@ QWidget *synthv1widget_programs_item_delegate::createEditor ( QWidget *pParent,
 }
 
 
-void synthv1widget_programs_item_delegate::setEditorData (
+void synthv1widget_programs::ItemDelegate::setEditorData (
 	QWidget *pEditor, const QModelIndex& index ) const
 {
 #ifdef CONFIG_DEBUG_0
-	qDebug("synthv1widget_programs_item_delegate::setEditorData(%p, %d, %d)",
+	qDebug("synthv1widget_programs::ItemDelegate::setEditorData(%p, %d, %d)",
 		pEditor, index.row(), index.column());
 #endif
 
@@ -137,11 +165,11 @@ void synthv1widget_programs_item_delegate::setEditorData (
 }
 
 
-void synthv1widget_programs_item_delegate::setModelData ( QWidget *pEditor,
+void synthv1widget_programs::ItemDelegate::setModelData ( QWidget *pEditor,
 	QAbstractItemModel *pModel,	const QModelIndex& index ) const
 {
 #ifdef CONFIG_DEBUG_0
-	qDebug("synthv1widget_programs_item_delegate::setModelData(%p, %d, %d)",
+	qDebug("synthv1widget_programs::ItemDelegate::setModelData(%p, %d, %d)",
 		pEditor, index.row(), index.column());
 #endif
 
@@ -210,7 +238,7 @@ synthv1widget_programs::synthv1widget_programs ( QWidget *pParent )
 #endif
 	pHeaderView->hide();
 
-	QTreeWidget::setItemDelegate(new synthv1widget_programs_item_delegate(this));
+	QTreeWidget::setItemDelegate(new ItemDelegate(this));
 
 	QObject::connect(this,
 		SIGNAL(itemChanged(QTreeWidgetItem *, int)),
