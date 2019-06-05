@@ -4,12 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.8  2019-06-06  A Spring'19 Release.
 
 - Improved slew-rate to DCF Formant coefficient updates.
-- Refactored the LFO Sync for correctness. (EXPERIMENTAL)
+- Refactored the LFO Sync for correctness.
 - Fixed all LFO Panning and Volume modulation, now being
-  correctly isolated on a per voice basis. (EXPERIMENTAL)
+  correctly isolated on a per voice basis.
 - Fixed DC offset on all main DCO wavetable oscillators.
 - Fixed initial DCO and LFO wave shapes on LV2 plug-in UI.
 - Minor update to Debian packaging control file.
