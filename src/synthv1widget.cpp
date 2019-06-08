@@ -340,6 +340,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		m_ui.Dco1Width2Knob, SLOT(setValue(float)));
 
 	// DCF1
+	setParamKnob(synthv1::DCF1_ENABLED,	 m_ui.Dcf1GroupBox->param());
 	setParamKnob(synthv1::DCF1_CUTOFF,   m_ui.Dcf1CutoffKnob);
 	setParamKnob(synthv1::DCF1_RESO,     m_ui.Dcf1ResoKnob);
 	setParamKnob(synthv1::DCF1_TYPE,     m_ui.Dcf1TypeKnob);
@@ -400,6 +401,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		m_ui.Dcf1Env, SLOT(setRelease(float)));
 
 	// LFO1
+	setParamKnob(synthv1::LFO1_ENABLED,	m_ui.Lfo1GroupBox->param());
 	setParamKnob(synthv1::LFO1_SHAPE,   m_ui.Lfo1ShapeKnob);
 	setParamKnob(synthv1::LFO1_WIDTH,   m_ui.Lfo1WidthKnob);
 	setParamKnob(synthv1::LFO1_BPM,     m_ui.Lfo1BpmKnob);
@@ -554,6 +556,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		m_ui.Dco2Width2Knob, SLOT(setValue(float)));
 
 	// DCF2
+	setParamKnob(synthv1::DCF2_ENABLED,	 m_ui.Dcf2GroupBox->param());
 	setParamKnob(synthv1::DCF2_CUTOFF,   m_ui.Dcf2CutoffKnob);
 	setParamKnob(synthv1::DCF2_RESO,     m_ui.Dcf2ResoKnob);
 	setParamKnob(synthv1::DCF2_TYPE,     m_ui.Dcf2TypeKnob);
@@ -614,6 +617,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		m_ui.Dcf2Env, SLOT(setRelease(float)));
 
 	// LFO2
+	setParamKnob(synthv1::LFO2_ENABLED, m_ui.Lfo2GroupBox->param());
 	setParamKnob(synthv1::LFO2_SHAPE,   m_ui.Lfo2ShapeKnob);
 	setParamKnob(synthv1::LFO2_WIDTH,   m_ui.Lfo2WidthKnob);
 	setParamKnob(synthv1::LFO2_BPM,     m_ui.Lfo2BpmKnob);

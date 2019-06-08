@@ -433,6 +433,7 @@ struct synthv1_dco
 
 struct synthv1_dcf
 {
+	synthv1_port  enabled;
 	synthv1_port2 cutoff;
 	synthv1_port2 reso;
 	synthv1_port  type;
@@ -448,6 +449,7 @@ struct synthv1_voice;
 
 struct synthv1_lfo
 {
+	synthv1_port  enabled;
 	synthv1_port  shape;
 	synthv1_port  width;
 	synthv1_port2 bpm;
@@ -1339,6 +1341,7 @@ synthv1_port *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DCO1_TUNING:    pParamPort = &m_dco1.tuning;      break;
 	case synthv1::DCO1_GLIDE:     pParamPort = &m_dco1.glide;       break;
 	case synthv1::DCO1_ENVTIME:   pParamPort = &m_dco1.envtime;     break;
+	case synthv1::DCF1_ENABLED:   pParamPort = &m_dcf1.enabled;     break;
 	case synthv1::DCF1_CUTOFF:    pParamPort = &m_dcf1.cutoff;      break;
 	case synthv1::DCF1_RESO:      pParamPort = &m_dcf1.reso;        break;
 	case synthv1::DCF1_TYPE:      pParamPort = &m_dcf1.type;        break;
@@ -1348,6 +1351,7 @@ synthv1_port *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DCF1_DECAY:     pParamPort = &m_dcf1.env.decay;   break;
 	case synthv1::DCF1_SUSTAIN:   pParamPort = &m_dcf1.env.sustain; break;
 	case synthv1::DCF1_RELEASE:   pParamPort = &m_dcf1.env.release; break;
+	case synthv1::LFO1_ENABLED:   pParamPort = &m_lfo1.enabled;     break;
 	case synthv1::LFO1_SHAPE:     pParamPort = &m_lfo1.shape;       break;
 	case synthv1::LFO1_WIDTH:     pParamPort = &m_lfo1.width;       break;
 	case synthv1::LFO1_BPM:       pParamPort = &m_lfo1.bpm;         break;
@@ -1396,6 +1400,7 @@ synthv1_port *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DCO2_TUNING:    pParamPort = &m_dco2.tuning;      break;
 	case synthv1::DCO2_GLIDE:     pParamPort = &m_dco2.glide;       break;
 	case synthv1::DCO2_ENVTIME:   pParamPort = &m_dco2.envtime;     break;
+	case synthv1::DCF2_ENABLED:   pParamPort = &m_dcf2.enabled;     break;
 	case synthv1::DCF2_CUTOFF:    pParamPort = &m_dcf2.cutoff;      break;
 	case synthv1::DCF2_RESO:      pParamPort = &m_dcf2.reso;        break;
 	case synthv1::DCF2_TYPE:      pParamPort = &m_dcf2.type;        break;
@@ -1405,6 +1410,7 @@ synthv1_port *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DCF2_DECAY:     pParamPort = &m_dcf2.env.decay;   break;
 	case synthv1::DCF2_SUSTAIN:   pParamPort = &m_dcf2.env.sustain; break;
 	case synthv1::DCF2_RELEASE:   pParamPort = &m_dcf2.env.release; break;
+	case synthv1::LFO2_ENABLED:   pParamPort = &m_lfo2.enabled;     break;
 	case synthv1::LFO2_SHAPE:     pParamPort = &m_lfo2.shape;       break;
 	case synthv1::LFO2_WIDTH:     pParamPort = &m_lfo2.width;       break;
 	case synthv1::LFO2_BPM:       pParamPort = &m_lfo2.bpm;         break;
@@ -2239,13 +2245,22 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	}
 
 	// controls
-	const float lfo1_freq
-		= get_bpm(*m_lfo1.bpm) / (60.01f - *m_lfo1.rate * 60.0f);
-	const float lfo2_freq
-		= get_bpm(*m_lfo2.bpm) / (60.01f - *m_lfo2.rate * 60.0f);
 
-	const float modwheel1 = m_ctl1.modwheel + PITCH_SCALE * *m_lfo1.pitch;
-	const float modwheel2 = m_ctl2.modwheel + PITCH_SCALE * *m_lfo2.pitch;
+	const bool lfo1_enabled = (*m_lfo1.enabled > 0.0f);
+	const bool lfo2_enabled = (*m_lfo2.enabled > 0.0f);
+
+	const float lfo1_freq = (lfo1_enabled
+		? get_bpm(*m_lfo1.bpm) / (60.01f - *m_lfo1.rate * 60.0f) : 0.0f);
+	const float lfo2_freq = (lfo2_enabled
+		? get_bpm(*m_lfo2.bpm) / (60.01f - *m_lfo2.rate * 60.0f) : 0.0f);
+
+	const float modwheel1 = (lfo1_enabled
+		? m_ctl1.modwheel + PITCH_SCALE * *m_lfo1.pitch : 0.0f);
+	const float modwheel2 = (lfo2_enabled
+		? m_ctl2.modwheel + PITCH_SCALE * *m_lfo2.pitch : 0.0f);
+
+	const bool dcf1_enabled = (*m_dcf1.enabled > 0.0f);
+	const bool dcf2_enabled = (*m_dcf2.enabled > 0.0f);
 
 	const float fxsend1 = *m_out1.fxsend * *m_out1.fxsend;
 	const float fxsend2 = *m_out2.fxsend * *m_out2.fxsend;
@@ -2273,10 +2288,14 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 		synthv1_wave::Shape(*m_dco2.shape2),
 		*m_dco2.width2, *m_dco2.bandl2 > 0.0f);
 
-	lfo1_wave.reset_test(
-		synthv1_wave::Shape(*m_lfo1.shape), *m_lfo1.width);
-	lfo2_wave.reset_test(
-		synthv1_wave::Shape(*m_lfo2.shape), *m_lfo2.width);
+	if (lfo1_enabled) {
+		lfo1_wave.reset_test(
+			synthv1_wave::Shape(*m_lfo1.shape), *m_lfo1.width);
+	}
+	if (lfo2_enabled) {
+		lfo2_wave.reset_test(
+			synthv1_wave::Shape(*m_lfo2.shape), *m_lfo2.width);
+	}
 
 	// per voice
 
@@ -2325,11 +2344,15 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 
 				// generators
 
-				const float lfo1_env = pv->lfo1_env.tick();
-				const float lfo2_env = pv->lfo2_env.tick();
+				const float lfo1_env
+					= (lfo1_enabled ? pv->lfo1_env.tick() : 0.0f);
+				const float lfo2_env
+					= (lfo1_enabled ? pv->lfo2_env.tick() : 0.0f);
 
-				const float lfo1 = pv->lfo1_sample * lfo1_env;
-				const float lfo2 = pv->lfo2_sample * lfo2_env;
+				const float lfo1
+					= (lfo1_enabled ? pv->lfo1_sample * lfo1_env : 0.0f);
+				const float lfo2
+					= (lfo2_enabled ? pv->lfo2_sample * lfo2_env : 0.0f);
 
 				const float dco11 = pv->dco1_sample1 * pv->dco1_bal.value(j, 0);
 				const float dco12 = pv->dco1_sample2 * pv->dco1_bal.value(j, 1);
@@ -2350,10 +2373,14 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 					* (m_ctl2.pitchbend + modwheel2 * lfo2)
 					+ pv->dco2_glide2.tick());
 
-				pv->lfo1_sample = pv->lfo1.sample(lfo1_freq
-					* (1.0f + SWEEP_SCALE * *m_lfo1.sweep * lfo1_env));
-				pv->lfo2_sample = pv->lfo2.sample(lfo2_freq
-					* (1.0f + SWEEP_SCALE * *m_lfo2.sweep * lfo2_env));
+				if (lfo1_enabled) {
+					pv->lfo1_sample = pv->lfo1.sample(lfo1_freq
+						* (1.0f + SWEEP_SCALE * *m_lfo1.sweep * lfo1_env));
+				}
+				if (lfo2_enabled) {
+					pv->lfo2_sample = pv->lfo2.sample(lfo2_freq
+						* (1.0f + SWEEP_SCALE * *m_lfo2.sweep * lfo2_env));
+				}
 
 				// ring modulators
 
@@ -2369,58 +2396,60 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 
 				// filters
 
-				const float env1 = 0.5f * (1.0f + vel1
-					* *m_dcf1.envelope * pv->dcf1_env.tick());
-				const float cutoff1 = synthv1_sigmoid_1(*m_dcf1.cutoff
-					* env1 * (1.0f + *m_lfo1.cutoff * lfo1));
-				const float reso1 = synthv1_sigmoid_1(*m_dcf1.reso
-					* env1 * (1.0f + *m_lfo1.reso * lfo1));
-
-				switch (int(*m_dcf1.slope)) {
-				case 3: // Formant
-					mod11 = pv->dcf17.output(mod11, cutoff1, reso1);
-					mod12 = pv->dcf18.output(mod12, cutoff1, reso1);
-					break;
-				case 2: // Biquad
-					mod11 = pv->dcf15.output(mod11, cutoff1, reso1);
-					mod12 = pv->dcf16.output(mod12, cutoff1, reso1);
-					break;
-				case 1: // 24db/octave
-					mod11 = pv->dcf13.output(mod11, cutoff1, reso1);
-					mod12 = pv->dcf14.output(mod12, cutoff1, reso1);
-					break;
-				case 0: // 12db/octave
-				default:
-					mod11 = pv->dcf11.output(mod11, cutoff1, reso1);
-					mod12 = pv->dcf12.output(mod12, cutoff1, reso1);
-					break;
+				if (dcf1_enabled) {
+					const float env1 = 0.5f * (1.0f + vel1
+						* *m_dcf1.envelope * pv->dcf1_env.tick());
+					const float cutoff1 = synthv1_sigmoid_1(*m_dcf1.cutoff
+						* env1 * (1.0f + *m_lfo1.cutoff * lfo1));
+					const float reso1 = synthv1_sigmoid_1(*m_dcf1.reso
+						* env1 * (1.0f + *m_lfo1.reso * lfo1));
+					switch (int(*m_dcf1.slope)) {
+					case 3: // Formant
+						mod11 = pv->dcf17.output(mod11, cutoff1, reso1);
+						mod12 = pv->dcf18.output(mod12, cutoff1, reso1);
+						break;
+					case 2: // Biquad
+						mod11 = pv->dcf15.output(mod11, cutoff1, reso1);
+						mod12 = pv->dcf16.output(mod12, cutoff1, reso1);
+						break;
+					case 1: // 24db/octave
+						mod11 = pv->dcf13.output(mod11, cutoff1, reso1);
+						mod12 = pv->dcf14.output(mod12, cutoff1, reso1);
+						break;
+					case 0: // 12db/octave
+					default:
+						mod11 = pv->dcf11.output(mod11, cutoff1, reso1);
+						mod12 = pv->dcf12.output(mod12, cutoff1, reso1);
+						break;
+					}
 				}
 
-				const float env2 = 0.5f * (1.0f + vel2
-					* *m_dcf2.envelope * pv->dcf2_env.tick());
-				const float cutoff2 = synthv1_sigmoid_1(*m_dcf2.cutoff
-					* env2 * (1.0f + *m_lfo2.cutoff * lfo2));
-				const float reso2 = synthv1_sigmoid_1(*m_dcf2.reso
-					* env2 * (1.0f + *m_lfo2.reso * lfo2));
-
-				switch (int(*m_dcf2.slope)) {
-				case 3: // Formant
-					mod21 = pv->dcf27.output(mod21, cutoff2, reso2);
-					mod22 = pv->dcf28.output(mod22, cutoff2, reso2);
-					break;
-				case 2: // Biquad
-					mod21 = pv->dcf25.output(mod21, cutoff2, reso2);
-					mod22 = pv->dcf26.output(mod22, cutoff2, reso2);
-					break;
-				case 1: // 24db/octave
-					mod21 = pv->dcf23.output(mod21, cutoff2, reso2);
-					mod22 = pv->dcf24.output(mod22, cutoff2, reso2);
-					break;
-				case 0: // 12db/octave
-				default:
-					mod21 = pv->dcf21.output(mod21, cutoff2, reso2);
-					mod22 = pv->dcf22.output(mod22, cutoff2, reso2);
-					break;
+				if (dcf2_enabled) {
+					const float env2 = 0.5f * (1.0f + vel2
+						* *m_dcf2.envelope * pv->dcf2_env.tick());
+					const float cutoff2 = synthv1_sigmoid_1(*m_dcf2.cutoff
+						* env2 * (1.0f + *m_lfo2.cutoff * lfo2));
+					const float reso2 = synthv1_sigmoid_1(*m_dcf2.reso
+						* env2 * (1.0f + *m_lfo2.reso * lfo2));
+					switch (int(*m_dcf2.slope)) {
+					case 3: // Formant
+						mod21 = pv->dcf27.output(mod21, cutoff2, reso2);
+						mod22 = pv->dcf28.output(mod22, cutoff2, reso2);
+						break;
+					case 2: // Biquad
+						mod21 = pv->dcf25.output(mod21, cutoff2, reso2);
+						mod22 = pv->dcf26.output(mod22, cutoff2, reso2);
+						break;
+					case 1: // 24db/octave
+						mod21 = pv->dcf23.output(mod21, cutoff2, reso2);
+						mod22 = pv->dcf24.output(mod22, cutoff2, reso2);
+						break;
+					case 0: // 12db/octave
+					default:
+						mod21 = pv->dcf21.output(mod21, cutoff2, reso2);
+						mod22 = pv->dcf22.output(mod22, cutoff2, reso2);
+						break;
+					}
 				}
 
 				// volumes
