@@ -1013,6 +1013,34 @@ void synthv1widget::updateParamEx ( synthv1::ParamIndex index, float fValue )
 			updateParam(synthv1::DCO1_SYNC1, 0.0f);
 		}
 		break;
+	case synthv1::DCF1_ENABLED:
+		if (m_ui.Lfo1GroupBox->isChecked()) {
+			const bool bDcf1Enabled = (fValue > 0.5f);
+			m_ui.Lfo1CutoffKnob->setEnabled(bDcf1Enabled);
+			m_ui.Lfo1ResoKnob->setEnabled(bDcf1Enabled);
+		}
+		break;
+	case synthv1::LFO1_ENABLED:
+		if (fValue > 0.5f) {
+			const bool bDcf1Enabled = m_ui.Dcf1GroupBox->isChecked();
+			m_ui.Lfo1CutoffKnob->setEnabled(bDcf1Enabled);
+			m_ui.Lfo1ResoKnob->setEnabled(bDcf1Enabled);
+		}
+		break;
+	case synthv1::DCF2_ENABLED:
+		if (m_ui.Lfo2GroupBox->isChecked()) {
+			const bool bDcf2Enabled = (fValue > 0.5f);
+			m_ui.Lfo2CutoffKnob->setEnabled(bDcf2Enabled);
+			m_ui.Lfo2ResoKnob->setEnabled(bDcf2Enabled);
+		}
+		break;
+	case synthv1::LFO2_ENABLED:
+		if (fValue > 0.5f) {
+			const bool bDcf2Enabled = m_ui.Dcf2GroupBox->isChecked();
+			m_ui.Lfo2CutoffKnob->setEnabled(bDcf2Enabled);
+			m_ui.Lfo2ResoKnob->setEnabled(bDcf2Enabled);
+		}
+		break;
 	case synthv1::DCF1_SLOPE:
 		if (m_ui.Dcf1GroupBox->isChecked())
 			m_ui.Dcf1TypeKnob->setEnabled(int(fValue) != 3); // !Formant
