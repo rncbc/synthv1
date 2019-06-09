@@ -425,6 +425,9 @@
        </item>
        <item row="2" column="0" rowspan="2" colspan="5">
         <widget class="synthv1widget_group" name="Dcf1GroupBox">
+         <property name="toolTip">
+          <string>DCF1 Enabled</string>
+         </property>
          <property name="title">
           <string>DCF1</string>
          </property>
@@ -549,6 +552,9 @@
        </item>
        <item row="2" column="5" rowspan="2" colspan="8">
         <widget class="synthv1widget_group" name="Lfo1GroupBox">
+         <property name="toolTip">
+          <string>LFO1 Enabled</string>
+         </property>
          <property name="title">
           <string>LFO1</string>
          </property>
@@ -1343,6 +1349,9 @@
        </item>
        <item row="2" column="0" rowspan="2" colspan="5">
         <widget class="synthv1widget_group" name="Dcf2GroupBox">
+         <property name="toolTip">
+          <string>DCF2 Enabled</string>
+         </property>
          <property name="title">
           <string>DCF2</string>
          </property>
@@ -1467,6 +1476,9 @@
        </item>
        <item row="2" column="5" rowspan="2" colspan="8">
         <widget class="synthv1widget_group" name="Lfo2GroupBox">
+         <property name="toolTip">
+          <string>LFO2 Enabled</string>
+         </property>
          <property name="title">
           <string>LFO2</string>
          </property>

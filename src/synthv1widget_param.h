@@ -425,6 +425,9 @@ public:
 	~synthv1widget_group();
 
 	// Accessors.
+	void setToolTip(const QString& sToolTip);
+	QString toolTip() const;
+
 	synthv1widget_param *param() const;
 
 protected slots:

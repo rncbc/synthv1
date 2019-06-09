@@ -960,6 +960,7 @@ synthv1widget_group::synthv1widget_group ( QWidget *pParent )
 	QGroupBox::setStyle(synthv1widget_param_style::getRef());
 
 	m_pParam = new synthv1widget_param(this);
+	m_pParam->setToolTip(QGroupBox::toolTip());
 
 	QObject::connect(m_pParam,
 		 SIGNAL(valueChanged(float)),
@@ -981,6 +982,18 @@ synthv1widget_group::~synthv1widget_group (void)
 
 
 // Accessors.
+void synthv1widget_group::setToolTip ( const QString& sToolTip )
+{
+	m_pParam->setToolTip(sToolTip);
+}
+
+
+QString synthv1widget_group::toolTip (void) const
+{
+	return m_pParam->toolTip();
+}
+
+
 synthv1widget_param *synthv1widget_group::param (void) const
 {
 	return m_pParam;
