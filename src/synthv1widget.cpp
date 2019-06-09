@@ -1014,10 +1014,12 @@ void synthv1widget::updateParamEx ( synthv1::ParamIndex index, float fValue )
 		}
 		break;
 	case synthv1::DCF1_SLOPE:
-		m_ui.Dcf1TypeKnob->setEnabled(int(fValue) != 3); // !Formant
+		if (m_ui.Dcf1GroupBox->isChecked())
+			m_ui.Dcf1TypeKnob->setEnabled(int(fValue) != 3); // !Formant
 		break;
 	case synthv1::DCF2_SLOPE:
-		m_ui.Dcf2TypeKnob->setEnabled(int(fValue) != 3); // !Formant
+		if (m_ui.Dcf2GroupBox->isChecked())
+			m_ui.Dcf2TypeKnob->setEnabled(int(fValue) != 3); // !Formant
 		break;
 	case synthv1::LFO1_SHAPE:
 		m_ui.Lfo1Wave->setWaveShape(fValue);
