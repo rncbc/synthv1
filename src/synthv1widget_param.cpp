@@ -38,102 +38,95 @@ inline int iroundf(float x) { return int(x < 0.0f ? x - 0.5f : x + 0.5f); }
 
 
 //-------------------------------------------------------------------------
-// synthv1widget_dial - A better QDial widget.
+// synthv1widget_param_style - Custom widget style.
+//
 
-synthv1widget_dial::DialMode
-synthv1widget_dial::g_dialMode = synthv1widget_dial::DefaultMode;
-
-// Set knob dial mode behavior.
-void synthv1widget_dial::setDialMode ( DialMode dialMode )
-	{ g_dialMode = dialMode; }
-
-synthv1widget_dial::DialMode synthv1widget_dial::dialMode (void)
-	{ return g_dialMode; }
+#include <QProxyStyle>
+#include <QPainter>
+#include <QIcon>
 
 
-// Constructor.
-synthv1widget_dial::synthv1widget_dial ( QWidget *pParent )
-	: QDial(pParent), m_bMousePressed(false), m_fLastDragValue(0.0f)
+class synthv1widget_param_style : public QProxyStyle
 {
-}
+public:
 
-
-// Mouse angle determination.
-float synthv1widget_dial::mouseAngle ( const QPoint& pos )
-{
-	const float dx = pos.x() - (width() >> 1);
-	const float dy = (height() >> 1) - pos.y();
-	return 180.0f * ::atan2f(dx, dy) / float(M_PI);
-}
-
-
-// Alternate mouse behavior event handlers.
-void synthv1widget_dial::mousePressEvent ( QMouseEvent *pMouseEvent )
-{
-	if (g_dialMode == DefaultMode) {
-		QDial::mousePressEvent(pMouseEvent);
-	} else if (pMouseEvent->button() == Qt::LeftButton) {
-		m_bMousePressed = true;
-		m_posMouse = pMouseEvent->pos();
-		m_fLastDragValue = float(value());
-		emit sliderPressed();
-	}
-}
-
-
-void synthv1widget_dial::mouseMoveEvent ( QMouseEvent *pMouseEvent )
-{
-	if (g_dialMode == DefaultMode) {
-		QDial::mouseMoveEvent(pMouseEvent);
-		return;
+	// Constructor.
+	synthv1widget_param_style() : QProxyStyle()
+	{
+		m_icon.addPixmap(
+			QPixmap(":/images/ledOff.png"), QIcon::Normal, QIcon::Off);
+		m_icon.addPixmap(
+			QPixmap(":/images/ledOn.png"), QIcon::Normal, QIcon::On);
 	}
 
-	if (!m_bMousePressed)
-		return;
 
-	const QPoint& pos = pMouseEvent->pos();
-	const int dx = pos.x() - m_posMouse.x();
-	const int dy = pos.y() - m_posMouse.y();
-	float fAngleDelta =  mouseAngle(pos) - mouseAngle(m_posMouse);
-	int iNewValue = value();
-
-	switch (g_dialMode)	{
-	case LinearMode:
-		iNewValue = int(m_fLastDragValue) + dx - dy;
-		break;
-	case AngularMode:
-	default:
-		// Forget about the drag origin to be robust on full rotations
-		if (fAngleDelta > +180.0f) fAngleDelta -= 360.0f;
+	// Hints override.
+	int styleHint(StyleHint hint, const QStyleOption *option,
+		const QWidget *widget, QStyleHintReturn *retdata) const
+	{
+		if (hint == QStyle::SH_UnderlineShortcut)
+			return 0;
 		else
-		if (fAngleDelta < -180.0f) fAngleDelta += 360.0f;
-		m_fLastDragValue += float(maximum() - minimum()) * fAngleDelta / 270.0f;
-		if (m_fLastDragValue > float(maximum()))
-			m_fLastDragValue = float(maximum());
+			return QProxyStyle::styleHint(hint, option, widget, retdata);
+	}
+
+	// Paint job.
+	void drawPrimitive(PrimitiveElement element,
+		const QStyleOption *option,
+		QPainter *painter, const QWidget *widget) const
+	{
+		if (element == PE_IndicatorRadioButton ||
+			element == PE_IndicatorCheckBox) {
+			const QRect& rect = option->rect;
+			if (option->state & State_Enabled) {
+				if (option->state & State_On)
+					m_icon.paint(painter, rect,
+						Qt::AlignCenter, QIcon::Normal, QIcon::On);
+				else
+			//	if (option->state & State_Off)
+					m_icon.paint(painter, rect,
+						Qt::AlignCenter, QIcon::Normal, QIcon::Off);
+			} else {
+				m_icon.paint(painter, rect,
+					Qt::AlignCenter, QIcon::Disabled, QIcon::Off);
+			}
+		}
 		else
-		if (m_fLastDragValue < float(minimum()))
-			m_fLastDragValue = float(minimum());
-		m_posMouse = pos;
-		iNewValue = int(m_fLastDragValue + 0.5f);
-		break;
+		QProxyStyle::drawPrimitive(element, option, painter, widget);
 	}
 
-	setValue(iNewValue);
-	update();
-
-	emit sliderMoved(value());
-}
-
-
-void synthv1widget_dial::mouseReleaseEvent ( QMouseEvent *pMouseEvent )
-{
-	if (g_dialMode == DefaultMode
-		&& pMouseEvent->button() != Qt::MidButton) {
-		QDial::mouseReleaseEvent(pMouseEvent);
-	} else if (m_bMousePressed) {
-		m_bMousePressed = false;
+	// Spiced up text margins
+	void drawItemText(QPainter *painter, const QRect& rectangle,
+		int alignment, const QPalette& palette, bool enabled,
+		const QString& text, QPalette::ColorRole textRole) const
+	{
+		QRect rect = rectangle;
+		rect.setLeft(rect.left() - 4);
+		rect.setRight(rect.right() + 4);
+		QProxyStyle::drawItemText(painter, rect,
+			alignment, palette, enabled, text, textRole);
 	}
-}
+
+	static void addRef ()
+		{ if (++g_iRefCount == 1) g_pStyle = new synthv1widget_param_style(); }
+
+	static void releaseRef ()
+		{ if (--g_iRefCount == 0) { delete g_pStyle; g_pStyle = NULL; } }
+
+	static synthv1widget_param_style *getRef ()
+		{ return g_pStyle; }
+
+private:
+
+	QIcon m_icon;
+
+	static synthv1widget_param_style *g_pStyle;
+	static unsigned int g_iRefCount;
+};
+
+
+synthv1widget_param_style *synthv1widget_param_style::g_pStyle = NULL;
+unsigned int synthv1widget_param_style::g_iRefCount = 0;
 
 
 //-------------------------------------------------------------------------
@@ -302,6 +295,105 @@ float synthv1widget_param::scaleFromValue ( float fValue ) const
 float synthv1widget_param::valueFromScale ( float fScale ) const
 {
 	return (fScale / m_fScale);
+}
+
+
+//-------------------------------------------------------------------------
+// synthv1widget_dial - A better QDial widget.
+
+synthv1widget_dial::DialMode
+synthv1widget_dial::g_dialMode = synthv1widget_dial::DefaultMode;
+
+// Set knob dial mode behavior.
+void synthv1widget_dial::setDialMode ( DialMode dialMode )
+	{ g_dialMode = dialMode; }
+
+synthv1widget_dial::DialMode synthv1widget_dial::dialMode (void)
+	{ return g_dialMode; }
+
+
+// Constructor.
+synthv1widget_dial::synthv1widget_dial ( QWidget *pParent )
+	: QDial(pParent), m_bMousePressed(false), m_fLastDragValue(0.0f)
+{
+}
+
+
+// Mouse angle determination.
+float synthv1widget_dial::mouseAngle ( const QPoint& pos )
+{
+	const float dx = pos.x() - (width() >> 1);
+	const float dy = (height() >> 1) - pos.y();
+	return 180.0f * ::atan2f(dx, dy) / float(M_PI);
+}
+
+
+// Alternate mouse behavior event handlers.
+void synthv1widget_dial::mousePressEvent ( QMouseEvent *pMouseEvent )
+{
+	if (g_dialMode == DefaultMode) {
+		QDial::mousePressEvent(pMouseEvent);
+	} else if (pMouseEvent->button() == Qt::LeftButton) {
+		m_bMousePressed = true;
+		m_posMouse = pMouseEvent->pos();
+		m_fLastDragValue = float(value());
+		emit sliderPressed();
+	}
+}
+
+
+void synthv1widget_dial::mouseMoveEvent ( QMouseEvent *pMouseEvent )
+{
+	if (g_dialMode == DefaultMode) {
+		QDial::mouseMoveEvent(pMouseEvent);
+		return;
+	}
+
+	if (!m_bMousePressed)
+		return;
+
+	const QPoint& pos = pMouseEvent->pos();
+	const int dx = pos.x() - m_posMouse.x();
+	const int dy = pos.y() - m_posMouse.y();
+	float fAngleDelta =  mouseAngle(pos) - mouseAngle(m_posMouse);
+	int iNewValue = value();
+
+	switch (g_dialMode)	{
+	case LinearMode:
+		iNewValue = int(m_fLastDragValue) + dx - dy;
+		break;
+	case AngularMode:
+	default:
+		// Forget about the drag origin to be robust on full rotations
+		if (fAngleDelta > +180.0f) fAngleDelta -= 360.0f;
+		else
+		if (fAngleDelta < -180.0f) fAngleDelta += 360.0f;
+		m_fLastDragValue += float(maximum() - minimum()) * fAngleDelta / 270.0f;
+		if (m_fLastDragValue > float(maximum()))
+			m_fLastDragValue = float(maximum());
+		else
+		if (m_fLastDragValue < float(minimum()))
+			m_fLastDragValue = float(minimum());
+		m_posMouse = pos;
+		iNewValue = int(m_fLastDragValue + 0.5f);
+		break;
+	}
+
+	setValue(iNewValue);
+	update();
+
+	emit sliderMoved(value());
+}
+
+
+void synthv1widget_dial::mouseReleaseEvent ( QMouseEvent *pMouseEvent )
+{
+	if (g_dialMode == DefaultMode
+		&& pMouseEvent->button() != Qt::MidButton) {
+		QDial::mouseReleaseEvent(pMouseEvent);
+	} else if (m_bMousePressed) {
+		m_bMousePressed = false;
+	}
 }
 
 
@@ -652,98 +744,6 @@ void synthv1widget_combo::wheelEvent ( QWheelEvent *pWheelEvent )
 
 
 //-------------------------------------------------------------------------
-// synthv1widget_param_style - Custom widget style.
-//
-
-#include <QProxyStyle>
-#include <QPainter>
-#include <QIcon>
-
-
-class synthv1widget_param_style : public QProxyStyle
-{
-public:
-
-	// Constructor.
-	synthv1widget_param_style() : QProxyStyle()
-	{
-		m_icon.addPixmap(
-			QPixmap(":/images/ledOff.png"), QIcon::Normal, QIcon::Off);
-		m_icon.addPixmap(
-			QPixmap(":/images/ledOn.png"), QIcon::Normal, QIcon::On);
-	}
-
-
-	// Hints override.
-	int styleHint(StyleHint hint, const QStyleOption *option,
-		const QWidget *widget, QStyleHintReturn *retdata) const
-	{
-		if (hint == QStyle::SH_UnderlineShortcut)
-			return 0;
-		else
-			return QProxyStyle::styleHint(hint, option, widget, retdata);
-	}
-
-	// Paint job.
-	void drawPrimitive(PrimitiveElement element,
-		const QStyleOption *option,
-		QPainter *painter, const QWidget *widget) const
-	{
-		if (element == PE_IndicatorRadioButton ||
-			element == PE_IndicatorCheckBox) {
-			const QRect& rect = option->rect;
-			if (option->state & State_Enabled) {
-				if (option->state & State_On)
-					m_icon.paint(painter, rect,
-						Qt::AlignCenter, QIcon::Normal, QIcon::On);
-				else
-			//	if (option->state & State_Off)
-					m_icon.paint(painter, rect,
-						Qt::AlignCenter, QIcon::Normal, QIcon::Off);
-			} else {
-				m_icon.paint(painter, rect,
-					Qt::AlignCenter, QIcon::Disabled, QIcon::Off);
-			}
-		}
-		else
-		QProxyStyle::drawPrimitive(element, option, painter, widget);
-	}
-
-	// Spiced up text margins
-	void drawItemText(QPainter *painter, const QRect& rectangle,
-		int alignment, const QPalette& palette, bool enabled,
-		const QString& text, QPalette::ColorRole textRole) const
-	{
-		QRect rect = rectangle;
-		rect.setLeft(rect.left() - 4);
-		rect.setRight(rect.right() + 4);
-		QProxyStyle::drawItemText(painter, rect,
-			alignment, palette, enabled, text, textRole);
-	}
-
-	static void addRef ()
-		{ if (++g_iRefCount == 1) g_pStyle = new synthv1widget_param_style(); }
-
-	static void releaseRef ()
-		{ if (--g_iRefCount == 0) { delete g_pStyle; g_pStyle = NULL; } }
-
-	static synthv1widget_param_style *getRef ()
-		{ return g_pStyle; }
-
-private:
-
-	QIcon m_icon;
-
-	static synthv1widget_param_style *g_pStyle;
-	static unsigned int g_iRefCount;
-};
-
-
-synthv1widget_param_style *synthv1widget_param_style::g_pStyle = NULL;
-unsigned int synthv1widget_param_style::g_iRefCount = 0;
-
-
-//-------------------------------------------------------------------------
 // synthv1widget_radio - Custom radio/button widget.
 //
 
@@ -947,7 +947,7 @@ void synthv1widget_check::checkBoxValueChanged ( bool bCheckValue )
 
 // Constructor.
 synthv1widget_group::synthv1widget_group ( QWidget *pParent )
-: QGroupBox(pParent)
+	: QGroupBox(pParent)
 {
 	synthv1widget_param_style::addRef();
 #if 0

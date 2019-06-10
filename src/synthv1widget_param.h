@@ -36,52 +36,6 @@ class QCheckBox;
 
 
 //-------------------------------------------------------------------------
-// synthv1widget_dial - A better QDial widget.
-
-class synthv1widget_dial : public QDial
-{
-	Q_OBJECT
-
-public:
-
-	// Constructor.
-	synthv1widget_dial(QWidget *pParent = 0);
-
-	// Dial mode behavior:
-	// DefaultMode - default (old) QDial behavior.
-	// LinearMode  - proportionally to distance in one ortogonal axis.
-	// AngularMode - angularly relative to widget center.
-	enum DialMode { DefaultMode = 0, LinearMode, AngularMode };
-
-	// Set knob dial mode behavior.
-	static void setDialMode(DialMode dialMode);
-	static DialMode dialMode();
-
-protected:
-
-	// Mouse angle determination.
-	float mouseAngle(const QPoint& pos);
-
-	// Alternate mouse behavior event handlers.
-	void mousePressEvent(QMouseEvent *pMouseEvent);
-	void mouseMoveEvent(QMouseEvent *pMouseEvent);
-	void mouseReleaseEvent(QMouseEvent *pMouseEvent);
-
-private:
-
-	// Alternate mouse behavior tracking.
-	bool   m_bMousePressed;
-	QPoint m_posMouse;
-
-	// Just for more precission on the movement
-	float m_fLastDragValue;
-
-	// Knob dial mode behavior.
-	static DialMode g_dialMode;
-};
-
-
-//-------------------------------------------------------------------------
 // synthv1widget_param - Custom composite widget.
 
 class synthv1widget_param : public QWidget
@@ -149,6 +103,52 @@ private:
 
 	// Scale multiplier (default=100).
 	float m_fScale;
+};
+
+
+//-------------------------------------------------------------------------
+// synthv1widget_dial - A better QDial widget.
+
+class synthv1widget_dial : public QDial
+{
+	Q_OBJECT
+
+public:
+
+	// Constructor.
+	synthv1widget_dial(QWidget *pParent = 0);
+
+	// Dial mode behavior:
+	// DefaultMode - default (old) QDial behavior.
+	// LinearMode  - proportionally to distance in one ortogonal axis.
+	// AngularMode - angularly relative to widget center.
+	enum DialMode { DefaultMode = 0, LinearMode, AngularMode };
+
+	// Set knob dial mode behavior.
+	static void setDialMode(DialMode dialMode);
+	static DialMode dialMode();
+
+protected:
+
+	// Mouse angle determination.
+	float mouseAngle(const QPoint& pos);
+
+	// Alternate mouse behavior event handlers.
+	void mousePressEvent(QMouseEvent *pMouseEvent);
+	void mouseMoveEvent(QMouseEvent *pMouseEvent);
+	void mouseReleaseEvent(QMouseEvent *pMouseEvent);
+
+private:
+
+	// Alternate mouse behavior tracking.
+	bool   m_bMousePressed;
+	QPoint m_posMouse;
+
+	// Just for more precission on the movement
+	float m_fLastDragValue;
+
+	// Knob dial mode behavior.
+	static DialMode g_dialMode;
 };
 
 
