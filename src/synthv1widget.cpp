@@ -340,7 +340,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		m_ui.Dco1Width2Knob, SLOT(setValue(float)));
 
 	// DCF1
-	setParamKnob(synthv1::DCF1_ENABLED,	 m_ui.Dcf1GroupBox->param());
+	setParamKnob(synthv1::DCF1_ENABLED,  m_ui.Dcf1GroupBox->param());
 	setParamKnob(synthv1::DCF1_CUTOFF,   m_ui.Dcf1CutoffKnob);
 	setParamKnob(synthv1::DCF1_RESO,     m_ui.Dcf1ResoKnob);
 	setParamKnob(synthv1::DCF1_TYPE,     m_ui.Dcf1TypeKnob);
@@ -556,7 +556,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		m_ui.Dco2Width2Knob, SLOT(setValue(float)));
 
 	// DCF2
-	setParamKnob(synthv1::DCF2_ENABLED,	 m_ui.Dcf2GroupBox->param());
+	setParamKnob(synthv1::DCF2_ENABLED,  m_ui.Dcf2GroupBox->param());
 	setParamKnob(synthv1::DCF2_CUTOFF,   m_ui.Dcf2CutoffKnob);
 	setParamKnob(synthv1::DCF2_RESO,     m_ui.Dcf2ResoKnob);
 	setParamKnob(synthv1::DCF2_TYPE,     m_ui.Dcf2TypeKnob);
