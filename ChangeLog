@@ -7,6 +7,7 @@ ChangeLog
 GIT HEAD
 
 - New DCF and LFO Enabled parameters. (EXPERIMENTAL)
+- Configure updated to check for qtchooser availability.
 
 
 0.9.8  2019-06-06  A Spring'19 Release.
