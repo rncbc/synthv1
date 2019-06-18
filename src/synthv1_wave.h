@@ -1,7 +1,7 @@
 // synthv1_wave.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ public:
 		{ return m_shape; }
 	float width() const
 		{ return m_width; }
-	bool bandlimited() const
+	bool bandl() const
 		{ return m_bandl; }
 
 	// sample rate.
@@ -101,7 +101,7 @@ public:
 	};
 
 	// begin.
-	float start(Phase& phase, float pshift = 0.0f, float freq = 0.0f)
+	float start(Phase& phase, float pshift = 0.0f, float freq = 0.0f) const
 	{
 		update(phase, freq);
 
@@ -169,7 +169,7 @@ public:
 	}
 
 	// post-iter.
-	void update(Phase& phase, float freq)
+	void update(Phase& phase, float freq) const
 	{
 		if (freq < m_min_freq) {
 			phase.itab  = m_ntabs;
@@ -307,6 +307,13 @@ public:
 			m_phase.slave = 0;
 			m_phase.slave_phase0 = 0.0f;
 		}
+	}
+
+	// phase-shift accessor.
+	float pshift() const
+	{
+		const float pshift = m_wave->phase0() + m_phase.phase;
+		return (pshift >= 1.0f ? pshift - 1.0f : pshift);
 	}
 
 private:

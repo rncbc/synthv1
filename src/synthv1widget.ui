@@ -183,7 +183,7 @@
               </property>
              </widget>
             </item>
-	       </layout>
+           </layout>
           </item>
           <item>
            <spacer>
@@ -260,7 +260,7 @@
               </property>
              </widget>
             </item>
-	       </layout>
+           </layout>
           </item>
           <item>
            <spacer>
@@ -424,9 +424,15 @@
         </spacer>
        </item>
        <item row="2" column="0" rowspan="2" colspan="5">
-        <widget class="QGroupBox" name="Dcf1GroupBox">
+        <widget class="synthv1widget_group" name="Dcf1GroupBox">
+         <property name="toolTip">
+          <string>DCF1 Enabled</string>
+         </property>
          <property name="title">
           <string>DCF1</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
          <layout class="QVBoxLayout">
           <item>
@@ -545,9 +551,15 @@
         </widget>
        </item>
        <item row="2" column="5" rowspan="2" colspan="8">
-        <widget class="QGroupBox" name="Lfo1GroupBox">
+        <widget class="synthv1widget_group" name="Lfo1GroupBox">
+         <property name="toolTip">
+          <string>LFO1 Enabled</string>
+         </property>
          <property name="title">
           <string>LFO1</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
          <layout class="QVBoxLayout">
           <item>
@@ -1095,7 +1107,7 @@
               </property>
              </widget>
             </item>
-	       </layout>
+           </layout>
           </item>
           <item>
            <spacer>
@@ -1172,7 +1184,7 @@
               </property>
              </widget>
             </item>
-	       </layout>
+           </layout>
           </item>
           <item>
            <spacer>
@@ -1336,9 +1348,15 @@
         </spacer>
        </item>
        <item row="2" column="0" rowspan="2" colspan="5">
-        <widget class="QGroupBox" name="Dcf2GroupBox">
+        <widget class="synthv1widget_group" name="Dcf2GroupBox">
+         <property name="toolTip">
+          <string>DCF2 Enabled</string>
+         </property>
          <property name="title">
           <string>DCF2</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
          <layout class="QVBoxLayout">
           <item>
@@ -1457,9 +1475,15 @@
         </widget>
        </item>
        <item row="2" column="5" rowspan="2" colspan="8">
-        <widget class="QGroupBox" name="Lfo2GroupBox">
+        <widget class="synthv1widget_group" name="Lfo2GroupBox">
+         <property name="toolTip">
+          <string>LFO2 Enabled</string>
+         </property>
          <property name="title">
           <string>LFO2</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
          <layout class="QVBoxLayout">
           <item>
@@ -2419,6 +2443,11 @@
   <customwidget>
    <class>synthv1widget_check</class>
    <extends>QCheckBox</extends>
+   <header>synthv1widget_param.h</header>
+  </customwidget>
+  <customwidget>
+   <class>synthv1widget_group</class>
+   <extends>QGroupBox</extends>
    <header>synthv1widget_param.h</header>
   </customwidget>
   <customwidget>

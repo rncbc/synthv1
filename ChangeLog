@@ -4,6 +4,23 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- New DCF and LFO Enabled parameters. (EXPERIMENTAL)
+- Configure updated to check for qtchooser availability.
+
+
+0.9.8  2019-06-06  A Spring'19 Release.
+
+- Improved slew-rate to DCF Formant coefficient updates.
+- Refactored the LFO Sync for correctness.
+- Fixed all LFO Panning and Volume modulation, now being
+  correctly isolated on a per voice basis.
+- Fixed DC offset on all main DCO wavetable oscillators.
+- Fixed initial DCO and LFO wave shapes on LV2 plug-in UI.
+- Minor update to Debian packaging control file.
+
+
 0.9.7  2019-04-14  A Spring-Break'19 Release.
 
 - All audio input now get through without being processed

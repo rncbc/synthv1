@@ -340,6 +340,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		m_ui.Dco1Width2Knob, SLOT(setValue(float)));
 
 	// DCF1
+	setParamKnob(synthv1::DCF1_ENABLED,  m_ui.Dcf1GroupBox->param());
 	setParamKnob(synthv1::DCF1_CUTOFF,   m_ui.Dcf1CutoffKnob);
 	setParamKnob(synthv1::DCF1_RESO,     m_ui.Dcf1ResoKnob);
 	setParamKnob(synthv1::DCF1_TYPE,     m_ui.Dcf1TypeKnob);
@@ -400,6 +401,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		m_ui.Dcf1Env, SLOT(setRelease(float)));
 
 	// LFO1
+	setParamKnob(synthv1::LFO1_ENABLED,	m_ui.Lfo1GroupBox->param());
 	setParamKnob(synthv1::LFO1_SHAPE,   m_ui.Lfo1ShapeKnob);
 	setParamKnob(synthv1::LFO1_WIDTH,   m_ui.Lfo1WidthKnob);
 	setParamKnob(synthv1::LFO1_BPM,     m_ui.Lfo1BpmKnob);
@@ -554,6 +556,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		m_ui.Dco2Width2Knob, SLOT(setValue(float)));
 
 	// DCF2
+	setParamKnob(synthv1::DCF2_ENABLED,  m_ui.Dcf2GroupBox->param());
 	setParamKnob(synthv1::DCF2_CUTOFF,   m_ui.Dcf2CutoffKnob);
 	setParamKnob(synthv1::DCF2_RESO,     m_ui.Dcf2ResoKnob);
 	setParamKnob(synthv1::DCF2_TYPE,     m_ui.Dcf2TypeKnob);
@@ -614,6 +617,7 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		m_ui.Dcf2Env, SLOT(setRelease(float)));
 
 	// LFO2
+	setParamKnob(synthv1::LFO2_ENABLED, m_ui.Lfo2GroupBox->param());
 	setParamKnob(synthv1::LFO2_SHAPE,   m_ui.Lfo2ShapeKnob);
 	setParamKnob(synthv1::LFO2_WIDTH,   m_ui.Lfo2WidthKnob);
 	setParamKnob(synthv1::LFO2_BPM,     m_ui.Lfo2BpmKnob);
@@ -966,10 +970,12 @@ void synthv1widget::updateParamEx ( synthv1::ParamIndex index, float fValue )
 
 	switch (index) {
 	case synthv1::DCO1_SHAPE1:
+		m_ui.Dco1Wave1->setWaveShape(fValue);
 		m_ui.Dco1Bandl1Knob->setEnabled(
 			synthv1_wave::Shape(int(fValue)) != synthv1_wave::Noise);
 		break;
 	case synthv1::DCO1_SHAPE2:
+		m_ui.Dco1Wave2->setWaveShape(fValue);
 		m_ui.Dco1Bandl2Knob->setEnabled(
 			synthv1_wave::Shape(int(fValue)) != synthv1_wave::Noise);
 		break;
@@ -986,10 +992,12 @@ void synthv1widget::updateParamEx ( synthv1::ParamIndex index, float fValue )
 		}
 		break;
 	case synthv1::DCO2_SHAPE1:
+		m_ui.Dco2Wave1->setWaveShape(fValue);
 		m_ui.Dco2Bandl1Knob->setEnabled(
 			synthv1_wave::Shape(int(fValue)) != synthv1_wave::Noise);
 		break;
 	case synthv1::DCO2_SHAPE2:
+		m_ui.Dco2Wave2->setWaveShape(fValue);
 		m_ui.Dco2Bandl2Knob->setEnabled(
 			synthv1_wave::Shape(int(fValue)) != synthv1_wave::Noise);
 		break;
@@ -1005,11 +1013,47 @@ void synthv1widget::updateParamEx ( synthv1::ParamIndex index, float fValue )
 			updateParam(synthv1::DCO1_SYNC1, 0.0f);
 		}
 		break;
+	case synthv1::DCF1_ENABLED:
+		if (m_ui.Lfo1GroupBox->isChecked()) {
+			const bool bDcf1Enabled = (fValue > 0.5f);
+			m_ui.Lfo1CutoffKnob->setEnabled(bDcf1Enabled);
+			m_ui.Lfo1ResoKnob->setEnabled(bDcf1Enabled);
+		}
+		break;
+	case synthv1::LFO1_ENABLED:
+		if (fValue > 0.5f) {
+			const bool bDcf1Enabled = m_ui.Dcf1GroupBox->isChecked();
+			m_ui.Lfo1CutoffKnob->setEnabled(bDcf1Enabled);
+			m_ui.Lfo1ResoKnob->setEnabled(bDcf1Enabled);
+		}
+		break;
+	case synthv1::DCF2_ENABLED:
+		if (m_ui.Lfo2GroupBox->isChecked()) {
+			const bool bDcf2Enabled = (fValue > 0.5f);
+			m_ui.Lfo2CutoffKnob->setEnabled(bDcf2Enabled);
+			m_ui.Lfo2ResoKnob->setEnabled(bDcf2Enabled);
+		}
+		break;
+	case synthv1::LFO2_ENABLED:
+		if (fValue > 0.5f) {
+			const bool bDcf2Enabled = m_ui.Dcf2GroupBox->isChecked();
+			m_ui.Lfo2CutoffKnob->setEnabled(bDcf2Enabled);
+			m_ui.Lfo2ResoKnob->setEnabled(bDcf2Enabled);
+		}
+		break;
 	case synthv1::DCF1_SLOPE:
-		m_ui.Dcf1TypeKnob->setEnabled(int(fValue) != 3); // !Formant
+		if (m_ui.Dcf1GroupBox->isChecked())
+			m_ui.Dcf1TypeKnob->setEnabled(int(fValue) != 3); // !Formant
 		break;
 	case synthv1::DCF2_SLOPE:
-		m_ui.Dcf2TypeKnob->setEnabled(int(fValue) != 3); // !Formant
+		if (m_ui.Dcf2GroupBox->isChecked())
+			m_ui.Dcf2TypeKnob->setEnabled(int(fValue) != 3); // !Formant
+		break;
+	case synthv1::LFO1_SHAPE:
+		m_ui.Lfo1Wave->setWaveShape(fValue);
+		break;
+	case synthv1::LFO2_SHAPE:
+		m_ui.Lfo2Wave->setWaveShape(fValue);
 		break;
 	case synthv1::KEY1_LOW:
 		m_ui.StatusBar->keybd()->setNoteLow(int(fValue));

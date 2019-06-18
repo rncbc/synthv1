@@ -64,6 +64,7 @@ struct ParamInfo {
 	{ "DCO1_TUNING",   PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // DCO1 Tuning
 	{ "DCO1_GLIDE",    PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // DCO1 Glide
 	{ "DCO1_ENVTIME",  PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // DCO1 Env.Time
+	{ "DCF1_ENABLED",  PARAM_BOOL,    1.0f,   0.0f,   1.0f }, // DCF1 Enabled
 	{ "DCF1_CUTOFF",   PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // DCF1 Cutoff
 	{ "DCF1_RESO",     PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // DCF1 Resonance
 	{ "DCF1_TYPE",     PARAM_INT,     0.0f,   0.0f,   3.0f }, // DCF1 Type
@@ -73,6 +74,7 @@ struct ParamInfo {
 	{ "DCF1_DECAY",    PARAM_FLOAT,   0.2f,   0.0f,   1.0f }, // DCF1 Decay
 	{ "DCF1_SUSTAIN",  PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // DCF1 Sustain
 	{ "DCF1_RELEASE",  PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // DCF1 Release
+	{ "LFO1_ENABLED",  PARAM_BOOL,    1.0f,   0.0f,   1.0f }, // LFO1 Enabled
 	{ "LFO1_SHAPE",    PARAM_INT,     1.0f,   0.0f,   4.0f }, // LFO1 Wave Shape
 	{ "LFO1_WIDTH",    PARAM_FLOAT,   1.0f,   0.0f,   1.0f }, // LFO1 Wave Width
 	{ "LFO1_BPM",      PARAM_FLOAT, 180.0f,   0.0f, 360.0f }, // LFO1 BPM
@@ -123,6 +125,7 @@ struct ParamInfo {
 	{ "DCO2_TUNING",   PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // DCO2 Tuning
 	{ "DCO2_GLIDE",    PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // DCO2 Glide
 	{ "DCO2_ENVTIME",  PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // DCO2 Env.Time
+	{ "DCF2_ENABLED",  PARAM_BOOL,    1.0f,   0.0f,   1.0f }, // DCF2 Enabled
 	{ "DCF2_CUTOFF",   PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // DCF2 Cutoff
 	{ "DCF2_RESO",     PARAM_FLOAT,   0.0f,   0.0f,   1.0f }, // DCF2 Resonance
 	{ "DCF2_TYPE",     PARAM_INT,     0.0f,   0.0f,   3.0f }, // DCF2 Type
@@ -132,6 +135,7 @@ struct ParamInfo {
 	{ "DCF2_DECAY",    PARAM_FLOAT,   0.2f,   0.0f,   1.0f }, // DCF2 Decay
 	{ "DCF2_SUSTAIN",  PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // DCF2 Sustain
 	{ "DCF2_RELEASE",  PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // DCF2 Release
+	{ "LFO2_ENABLED",  PARAM_BOOL,    1.0f,   0.0f,   1.0f }, // LFO2 Enabled
 	{ "LFO2_SHAPE",    PARAM_INT,     1.0f,   0.0f,   4.0f }, // LFO2 Wave Shape
 	{ "LFO2_WIDTH",    PARAM_FLOAT,   1.0f,   0.0f,   1.0f }, // LFO2 Wave Width
 	{ "LFO2_BPM",      PARAM_FLOAT, 180.0f,   0.0f, 360.0f }, // LFO2 BPM
@@ -345,6 +349,7 @@ bool synthv1_param::loadPreset (
 
 	file.close();
 
+	pSynth->stabilize();
 	pSynth->reset();
 	pSynth->running(running);
 
