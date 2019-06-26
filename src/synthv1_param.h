@@ -51,6 +51,9 @@ namespace synthv1_param
 	float paramValue(synthv1::ParamIndex index, float fScale);
 	float paramScale(synthv1::ParamIndex index, float fValue);
 	bool paramFloat(synthv1::ParamIndex index);
+
+	// Save and convert into absolute filename helper.
+	QString saveFilename(const QString& sFilename, bool bSymLink);
 };
 
 

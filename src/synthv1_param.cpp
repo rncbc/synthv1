@@ -402,4 +402,23 @@ bool synthv1_param::savePreset (
 }
 
 
+// Save and convert into absolute filename helper.
+QString synthv1_param::saveFilename ( const QString& sFilename, bool bSymLink )
+{
+	QFileInfo fi(sFilename);
+	if (bSymLink && fi.absolutePath() != QDir::current().absolutePath()) {
+		const QString& sPath = fi.absoluteFilePath();
+		const QString& sName = fi.baseName();
+		const QString& sExt  = fi.completeSuffix();
+		const QString& sLink = sName
+			+ '-' + QString::number(qHash(sPath), 16)
+			+ '.' + sExt;
+		QFile(sPath).link(sLink);
+		fi.setFile(QDir::current(), sLink);
+	}
+	else if (fi.isSymLink()) fi.setFile(fi.symLinkTarget());
+	return fi.absoluteFilePath();
+}
+
+
 // end of synthv1_param.cpp
