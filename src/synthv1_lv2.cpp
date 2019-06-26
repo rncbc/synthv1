@@ -20,7 +20,7 @@
 *****************************************************************************/
 
 #include "synthv1_lv2.h"
-
+#include "synthv1_config.h"
 #include "synthv1_sched.h"
 
 #include "synthv1_programs.h"
@@ -55,6 +55,8 @@
 
 #include <stdlib.h>
 #include <math.h>
+
+#include <QDomDocument>
 
 
 //-------------------------------------------------------------------------
@@ -350,29 +352,93 @@ uint32_t synthv1_lv2::urid_map ( const char *uri ) const
 //
 
 static LV2_State_Status synthv1_lv2_state_save ( LV2_Handle instance,
-	LV2_State_Store_Function /*store*/, LV2_State_Handle /*handle*/,
-	uint32_t /*flags*/, const LV2_Feature *const */*features*/ )
+	LV2_State_Store_Function store, LV2_State_Handle handle,
+	uint32_t flags, const LV2_Feature *const */*features*/ )
 {
 	synthv1_lv2 *pPlugin = static_cast<synthv1_lv2 *> (instance);
 	if (pPlugin == NULL)
 		return LV2_STATE_ERR_UNKNOWN;
 
-	// Nothing to do...
+	// Save state as XML chunk...
 	//
-	return LV2_STATE_SUCCESS;
+	const uint32_t key = pPlugin->urid_map(SYNTHV1_LV2_PREFIX "state");
+	if (key == 0)
+		return LV2_STATE_ERR_NO_PROPERTY;
+
+	const uint32_t type = pPlugin->urid_map(LV2_ATOM__Chunk);
+	if (type == 0)
+		return LV2_STATE_ERR_BAD_TYPE;
+#if 0
+	if ((flags & (LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE)) == 0)
+		return LV2_STATE_ERR_BAD_FLAGS;
+#else
+	flags |= (LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+#endif
+
+	QDomDocument doc(SYNTHV1_TITLE);
+
+	QDomElement eTuning = doc.createElement("tuning");
+	synthv1_param::saveTuning(pPlugin, doc, eTuning);
+	doc.appendChild(eTuning);
+
+	const QByteArray data(doc.toByteArray());
+	const char *value = data.constData();
+	size_t size = data.size();
+
+	return (*store)(handle, key, value, size, type, flags);
 }
 
 
 static LV2_State_Status synthv1_lv2_state_restore ( LV2_Handle instance,
-	LV2_State_Retrieve_Function /*retrieve*/, LV2_State_Handle /*handle*/,
-	uint32_t /*flags*/, const LV2_Feature *const */*features*/ )
+	LV2_State_Retrieve_Function retrieve, LV2_State_Handle handle,
+	uint32_t flags, const LV2_Feature *const */*features*/ )
 {
 	synthv1_lv2 *pPlugin = static_cast<synthv1_lv2 *> (instance);
 	if (pPlugin == NULL)
 		return LV2_STATE_ERR_UNKNOWN;
 
-	// Something to do...
+	// Retrieve state as XML chunk...
 	//
+	const uint32_t key = pPlugin->urid_map(SYNTHV1_LV2_PREFIX "state");
+	if (key == 0)
+		return LV2_STATE_ERR_NO_PROPERTY;
+
+	const uint32_t chunk_type = pPlugin->urid_map(LV2_ATOM__Chunk);
+	if (chunk_type == 0)
+		return LV2_STATE_ERR_BAD_TYPE;
+
+	size_t size = 0;
+	uint32_t type = 0;
+//	flags = 0;
+
+	const char *value
+		= (const char *) (*retrieve)(handle, key, &size, &type, &flags);
+
+	if (size < 2)
+		return LV2_STATE_ERR_UNKNOWN;
+
+	if (type != chunk_type)
+		return LV2_STATE_ERR_BAD_TYPE;
+
+	if ((flags & (LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE)) == 0)
+		return LV2_STATE_ERR_BAD_FLAGS;
+
+	if (value == NULL)
+		return LV2_STATE_ERR_UNKNOWN;
+
+	QDomDocument doc(SYNTHV1_TITLE);
+	if (doc.setContent(QByteArray(value, size))) {
+		for (QDomNode nChild = doc.documentElement();
+				!nChild.isNull();
+					nChild = nChild.nextSibling()) {
+			QDomElement eChild = nChild.toElement();
+			if (eChild.isNull())
+				continue;
+			if (eChild.tagName() == "tuning")
+				synthv1_param::loadTuning(pPlugin, eChild);
+		}
+	}
+
 	pPlugin->reset();
 
 	synthv1_sched::sync_notify(pPlugin, synthv1_sched::Wave, 1);
