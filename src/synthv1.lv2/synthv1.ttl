@@ -1446,24 +1446,62 @@
 	lv2:port [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 149 ;
+		lv2:symbol "TUN1_ENABLED" ;
+		lv2:name "Tuning Enabled" ;
+		lv2:portProperty lv2:toggled ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+		lv2pg:group synthv1_lv2:G401_TUN1 ;
+	] ;
+	lv2:port [
+		a lv2:InputPort, lv2:ControlPort ;
+		lv2:index 150 ;
 		lv2:symbol "KEY1_LOW" ;
 		lv2:name "Keyboard Low" ;
 		lv2:portProperty lv2:integer ;
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 127.0 ;
-		lv2pg:group synthv1_lv2:G207_KEY1 ;
+		lv2pg:group synthv1_lv2:G501_KEY1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
-		lv2:index 150 ;
+		lv2:index 151 ;
 		lv2:symbol "KEY1_HIGH" ;
 		lv2:name "Keyboard High" ;
 		lv2:portProperty lv2:integer ;
 		lv2:default 127.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 127.0 ;
-		lv2pg:group synthv1_lv2:G207_KEY1 ;
+		lv2pg:group synthv1_lv2:G501_KEY1 ;
 	] .
+
+
+synthv1_lv2:T101_REF_PITCH
+	a lv2:Parameter ;
+	rdfs:label "T101 Reference Pitch" ;
+	rdfs:range lv2atom:Float ;
+	lv2:default 440.0 ;
+	lv2:minimum 20.0 ;
+	lv2:maximum 20000.0 .
+
+synthv1_lv2:T102_REF_NOTE
+	a lv2:Parameter ;
+	rdfs:label "T102 Reference Note" ;
+	rdfs:range lv2atom:Int ;
+	lv2:default 69 ;
+	lv2:minimum 0 ;
+	lv2:maximum 127 .
+
+synthv1_lv2:T103_SCALE_FILE
+	a lv2:Parameter ;
+	rdfs:label "T103 Scale File" ;
+	rdfs:range lv2atom:Path .
+
+synthv1_lv2:T104_KEYMAP_FILE
+	a lv2:Parameter ;
+	rdfs:label "T104 Key Map File" ;
+	rdfs:range lv2atom:Path .
 
 
 synthv1_lv2:G101_DCO1
@@ -1556,7 +1594,12 @@ synthv1_lv2:G306_DYN1
 	lv2:name "Effects - Dynamic" ;
 	lv2:symbol "DYN1" .
 
-synthv1_lv2:G307_KEY1
+synthv1_lv2:G401_TUN1
+	a lv2pg:InputGroup;
+	lv2:name "Config - Tuning" ;
+	lv2:symbol "TUN1" .
+
+synthv1_lv2:G501_KEY1
 	a lv2pg:InputGroup;
 	lv2:name "Input - Keyboard" ;
 	lv2:symbol "KEY1" .

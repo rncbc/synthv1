@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Per instance micro-tuning implementation. (EXPERIMENTAL)
 - New DCF and LFO Enabled parameters. (EXPERIMENTAL)
 - Configure updated to check for qtchooser availability.
 

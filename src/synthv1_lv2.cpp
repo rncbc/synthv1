@@ -1,7 +1,7 @@
 // synthv1_lv2.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -34,6 +34,10 @@
 
 #include "lv2/lv2plug.in/ns/ext/options/options.h"
 #include "lv2/lv2plug.in/ns/ext/buf-size/buf-size.h"
+
+#ifdef CONFIG_LV2_PATCH
+#include "lv2/lv2plug.in/ns/ext/patch/patch.h"
+#endif
 
 #ifndef CONFIG_LV2_ATOM_FORGE_OBJECT
 #define lv2_atom_forge_object(forge, frame, id, otype) \
@@ -82,6 +86,16 @@ synthv1_lv2::synthv1_lv2 (
 		if (::strcmp(host_feature->URI, LV2_URID_MAP_URI) == 0) {
 			m_urid_map = (LV2_URID_Map *) host_feature->data;
 			if (m_urid_map) {
+				m_urids.t101_ref_pitch = m_urid_map->map(
+					m_urid_map->handle, SYNTHV1_LV2_PREFIX "T101_REF_PITCH");
+				m_urids.t102_ref_note = m_urid_map->map(
+					m_urid_map->handle, SYNTHV1_LV2_PREFIX "T102_REF_NOTE");
+				m_urids.t103_scale_file = m_urid_map->map(
+					m_urid_map->handle, SYNTHV1_LV2_PREFIX "T103_SCALE_FILE");
+				m_urids.t104_keymap_file = m_urid_map->map(
+					m_urid_map->handle, SYNTHV1_LV2_PREFIX "T103_KEYMAP_FILE");
+				m_urids.tun1_update = m_urid_map->map(
+					m_urid_map->handle, SYNTHV1_LV2_PREFIX "TUN1_UPDATE");
 				m_urids.atom_Blank = m_urid_map->map(
 					m_urid_map->handle, LV2_ATOM__Blank);
 				m_urids.atom_Object = m_urid_map->map(
@@ -90,6 +104,10 @@ synthv1_lv2::synthv1_lv2 (
 					m_urid_map->handle, LV2_ATOM__Float);
 				m_urids.atom_Int = m_urid_map->map(
 					m_urid_map->handle, LV2_ATOM__Int);
+				m_urids.atom_Bool = m_urid_map->map(
+					m_urid_map->handle, LV2_ATOM__Bool);
+				m_urids.atom_Path = m_urid_map->map(
+					m_urid_map->handle, LV2_ATOM__Path);
 				m_urids.time_Position = m_urid_map->map(
 					m_urid_map->handle, LV2_TIME__Position);
 				m_urids.time_beatsPerMinute = m_urid_map->map(
@@ -106,6 +124,20 @@ synthv1_lv2::synthv1_lv2 (
 			#endif
 				m_urids.state_StateChanged = m_urid_map->map(
 					m_urid_map->handle, LV2_STATE__StateChanged);
+			#ifdef CONFIG_LV2_PATCH
+				m_urids.patch_Get = m_urid_map->map(
+					m_urid_map->handle, LV2_PATCH__Get);
+				m_urids.patch_Set = m_urid_map->map(
+					m_urid_map->handle, LV2_PATCH__Set);
+				m_urids.patch_Put = m_urid_map->map(
+					m_urid_map->handle, LV2_PATCH__Put);
+				m_urids.patch_body = m_urid_map->map(
+					m_urid_map->handle, LV2_PATCH__body);
+				m_urids.patch_property = m_urid_map->map(
+					m_urid_map->handle, LV2_PATCH__property);
+				m_urids.patch_value = m_urid_map->map(
+ 					m_urid_map->handle, LV2_PATCH__value);
+			#endif
 			}
 		}
 		else
@@ -236,6 +268,53 @@ void synthv1_lv2::run ( uint32_t nframes )
 							synthv1::setTempo(host_bpm);
 					}
 				}
+			#ifdef CONFIG_LV2_PATCH
+				else 
+				if (object->body.otype == m_urids.patch_Set) {
+					// set property value
+					const LV2_Atom *property = NULL;
+					const LV2_Atom *value = NULL;
+					lv2_atom_object_get(object,
+						m_urids.patch_property, &property,
+						m_urids.patch_value, &value, 0);
+					if (property && value && property->type == m_forge.URID) {
+						const uint32_t key = ((const LV2_Atom_URID *) property)->body;
+						const LV2_URID type = value->type;
+						if (key == m_urids.t101_ref_pitch
+							&& type == m_urids.atom_Float) {
+							const float ref_pitch
+								= *(float *) LV2_ATOM_BODY_CONST(value);
+							setTuningRefPitch(ref_pitch);
+						}
+						else
+						if (key == m_urids.t102_ref_note
+							&& type == m_urids.atom_Int) {
+							const float ref_note
+								= *(int *) LV2_ATOM_BODY_CONST(value);
+							setTuningRefNote(ref_note);
+						}
+						else
+						if (key == m_urids.t103_scale_file
+							&& type == m_urids.atom_Path) {
+							const char *scale_file
+								= (const char *) LV2_ATOM_BODY_CONST(value);
+							setTuningScaleFile(scale_file);
+						}
+						else
+						if (key == m_urids.t104_keymap_file
+							&& type == m_urids.atom_Path) {
+							const char *keymap_file
+								= (const char *) LV2_ATOM_BODY_CONST(value);
+							setTuningKeyMapFile(keymap_file);
+						}
+					}
+				}
+				else
+				if (object->body.otype == m_urids.patch_Get) {
+					// put property values (probably to UI)
+					patch_put(ndelta);
+				}
+			#endif	// CONFIG_LV2_PATCH
 			}
 		}
 		// remember last time for worker response
@@ -381,8 +460,12 @@ bool synthv1_lv2::worker_response ( const void *data, uint32_t size )
 
 	if (mesg->atom.type == m_urids.state_StateChanged)
 		return state_changed();
-	else
-		return false;
+
+#ifdef CONFIG_LV2_PATCH
+	return patch_put(m_ndelta);
+#else
+	return true;
+#endif
 }
 
 
@@ -396,6 +479,45 @@ bool synthv1_lv2::state_changed (void)
 
 	return true;
 }
+
+
+#ifdef CONFIG_LV2_PATCH
+
+bool synthv1_lv2::patch_put ( uint32_t ndelta )
+{
+	static char s_szNull[1] = {'\0'};
+
+	lv2_atom_forge_frame_time(&m_forge, ndelta);
+
+	LV2_Atom_Forge_Frame patch_frame;
+	lv2_atom_forge_object(&m_forge, &patch_frame, 0, m_urids.patch_Put);
+	lv2_atom_forge_key(&m_forge, m_urids.patch_body);
+
+	LV2_Atom_Forge_Frame body_frame;
+	lv2_atom_forge_object(&m_forge, &body_frame, 0, 0);
+
+	lv2_atom_forge_key(&m_forge, m_urids.t101_ref_pitch);
+	lv2_atom_forge_float(&m_forge, tuningRefPitch());
+	lv2_atom_forge_key(&m_forge, m_urids.t102_ref_note);
+	lv2_atom_forge_int(&m_forge, tuningRefNote());
+	const char *pszScaleFile = tuningScaleFile();
+	if (pszScaleFile == NULL)
+		pszScaleFile = s_szNull;
+	lv2_atom_forge_key(&m_forge, m_urids.t103_scale_file);
+	lv2_atom_forge_path(&m_forge, pszScaleFile, ::strlen(pszScaleFile) + 1);
+	const char *pszKeyMapFile = tuningKeyMapFile();
+	if (pszKeyMapFile == NULL)
+		pszKeyMapFile = s_szNull;
+	lv2_atom_forge_key(&m_forge, m_urids.t104_keymap_file);
+	lv2_atom_forge_path(&m_forge, pszKeyMapFile, ::strlen(pszKeyMapFile) + 1);
+
+	lv2_atom_forge_pop(&m_forge, &body_frame);
+	lv2_atom_forge_pop(&m_forge, &patch_frame);
+
+	return true;
+}
+
+#endif	// CONFIG_LV2_PATCH
 
 
 //-------------------------------------------------------------------------

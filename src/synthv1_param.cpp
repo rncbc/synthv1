@@ -195,7 +195,7 @@ struct ParamInfo {
 	{ "REV1_WIDTH",    PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // Reverb Width
 	{ "DYN1_COMPRESS", PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // Dynamic Compressor
 	{ "DYN1_LIMITER",  PARAM_BOOL,    1.0f,   0.0f,   1.0f }, // Dynamic Limiter
-
+	{ "TUN1_ENABLED",  PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // Tuning Enabled
 	{ "KEY1_LOW",      PARAM_INT,     0.0f,   0.0f, 127.0f }, // Keynoard Low
 	{ "KEY1_HIGH",     PARAM_INT,   127.0f,   0.0f, 127.0f }  // Keyboard High
 };

@@ -127,6 +127,11 @@ AC_ARG_ENABLE(lv2-programs,
   [ac_lv2_programs="$enableval"],
   [ac_lv2_programs="yes"])
 
+AC_ARG_ENABLE(lv2-patch,
+  AS_HELP_STRING([--enable-lv2-patch], [enable LV2 plug-in Patch support (default=yes)]),
+  [ac_lv2_patch="$enableval"],
+  [ac_lv2_patch="yes"])
+
 
 # Enable liblo availability.
 AC_ARG_ENABLE(liblo,
@@ -538,6 +543,7 @@ if test "x$ac_lv2" = "xno"; then
    ac_lv2_ui_show="no"
    ac_lv2_ui_resize="no"
    ac_lv2_programs="no"
+   ac_lv2_patch="no"
 fi
 
 if test "x$ac_lv2_ui_x11" = "xyes"; then
@@ -616,6 +622,18 @@ if test "x$ac_lv2_programs" = "xyes"; then
    fi
 fi
 
+if test "x$ac_lv2_patch" = "xyes"; then
+   AC_CHECK_HEADER(
+      lv2/lv2plug.in/ns/ext/patch/patch.h,
+      [ac_lv2_patch="yes"], [ac_lv2_patch="no"])
+   if test "x$ac_lv2_patch" = "xyes"; then
+      AC_DEFINE(CONFIG_LV2_PATCH, 1, [Define if LV2 Patch is supported.])
+   else
+      AC_MSG_WARN([*** LV2 Patch support will be disabled.])
+   fi
+fi
+
+
 # Check for NSM support.
 if test "x$ac_nsm" = "xyes"; then
    AC_DEFINE(CONFIG_NSM, 1, [Define if NSM support is available.])
@@ -680,6 +698,7 @@ echo "  LV2 plug-in UI Idle interface support  . . . . . .: $ac_lv2_ui_idle"
 echo "  LV2 plug-in UI Show interface support  . . . . . .: $ac_lv2_ui_show"
 echo "  LV2 plug-in UI Resize interface support  . . . . .: $ac_lv2_ui_resize"
 echo "  LV2 plug-in Programs support . . . . . . . . . . .: $ac_lv2_programs"
+echo "  LV2 plug-in Patch support  . . . . . . . . . . . .: $ac_lv2_patch"
 echo "  OSC service support (liblo)  . . . . . . . . . . .: $ac_liblo"
 echo "  NSM (Non Session Management) support . . . . . . .: $ac_nsm"
 echo
