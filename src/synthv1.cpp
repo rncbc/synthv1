@@ -815,19 +815,16 @@ public:
 
 	// ctor.
 	synthv1_tun(synthv1 *pSynth) : synthv1_sched(pSynth, Tuning),
-		refPitch(440.0f), refNote(69), enabled0(false) {}
+		enabled(false), refPitch(440.0f), refNote(69) {}
 
 	// processor.
 	void process(int) { instance()->updateTuning(); }
 
-	synthv1_port enabled;
-
+	bool    enabled;
 	float   refPitch;
 	int     refNote;
 	QString scaleFile;
 	QString keyMapFile;
-
-	bool    enabled0;
 };
 
 
@@ -861,6 +858,9 @@ public:
 
 	synthv1_controls *controls();
 	synthv1_programs *programs();
+
+	void setTuningEnabled(bool enabled);
+	bool isTuningEnabled() const;
 
 	void setTuningRefPitch(float refPitch);
 	float tuningRefPitch() const;
@@ -1505,7 +1505,6 @@ synthv1_port *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::REV1_WIDTH:     pParamPort = &m_rev.width;        break;
 	case synthv1::DYN1_COMPRESS:  pParamPort = &m_dyn.compress;     break;
 	case synthv1::DYN1_LIMITER:   pParamPort = &m_dyn.limiter;      break;
-	case synthv1::TUN1_ENABLED:   pParamPort = &m_tun.enabled;      break;
 	case synthv1::KEY1_LOW:       pParamPort = &m_key.low;          break;
 	case synthv1::KEY1_HIGH:      pParamPort = &m_key.high;         break;
 	default: break;
@@ -2156,6 +2155,17 @@ synthv1_programs *synthv1_impl::programs (void)
 
 // Micro-tuning support
 
+void synthv1_impl::setTuningEnabled ( bool enabled )
+{
+	m_tun.enabled = enabled;
+}
+
+bool synthv1_impl::isTuningEnabled (void) const
+{
+	return m_tun.enabled;
+}
+
+
 void synthv1_impl::setTuningRefPitch ( float refPitch )
 {
 	m_tun.refPitch = refPitch;
@@ -2165,6 +2175,7 @@ float synthv1_impl::tuningRefPitch (void) const
 {
 	return m_tun.refPitch;
 }
+
 
 void synthv1_impl::setTuningRefNote ( int refNote )
 {
@@ -2201,7 +2212,7 @@ const char *synthv1_impl::tuningKeyMapFile (void) const
 
 void synthv1_impl::updateTuning (void)
 {
-	if (m_tun.enabled0) {
+	if (m_tun.enabled) {
 		// Instance micro-tuning, possibly from Scala keymap and scale files...
 		synthv1_tuning tuning(
 			m_tun.refPitch,
@@ -2391,11 +2402,6 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	if (lfo2_enabled) {
 		lfo2_wave.reset_test(
 			synthv1_wave::Shape(*m_lfo2.shape), *m_lfo2.width);
-	}
-
-	if (m_tun.enabled0 != *m_tun.enabled) {
-		m_tun.enabled0  = *m_tun.enabled;
-		m_tun.schedule();
 	}
 
 	// per voice
@@ -2896,6 +2902,17 @@ void synthv1::directNoteOn ( int note, int vel )
 
 
 // Micro-tuning support
+void synthv1::setTuningEnabled ( bool enabled )
+{
+	m_pImpl->setTuningEnabled(enabled);
+}
+
+bool synthv1::isTuningEnabled (void) const
+{
+	return m_pImpl->isTuningEnabled();
+}
+
+
 void synthv1::setTuningRefPitch ( float refPitch )
 {
 	m_pImpl->setTuningRefPitch(refPitch);
@@ -2905,6 +2922,7 @@ float synthv1::tuningRefPitch (void) const
 {
 	return m_pImpl->tuningRefPitch();
 }
+
 
 void synthv1::setTuningRefNote ( int refNote )
 {
