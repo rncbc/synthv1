@@ -37,7 +37,7 @@ class synthv1_sched
 public:
 
 	// plausible sched types.
-	enum Type { Wave, Programs, Controls, Controller, MidiIn, Tuning };
+	enum Type { Wave, Programs, Controls, Controller, MidiIn };
 
 	// ctor.
 	synthv1_sched(synthv1 *pSynth, Type stype, uint32_t nsize = 8);

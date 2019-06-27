@@ -615,6 +615,12 @@ void synthv1_jack::updatePreset ( bool /*bDirty*/ )
 }
 
 
+void synthv1_jack::updateTuning (void)
+{
+	synthv1::resetTuning();
+}
+
+
 void synthv1_jack::shutdown (void)
 {
 	synthv1_jack_application *pApp = synthv1_jack_application::getInstance();

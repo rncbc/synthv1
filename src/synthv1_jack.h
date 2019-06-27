@@ -73,6 +73,7 @@ public:
 protected:
  
 	void updatePreset(bool bDirty);
+	void updateTuning();
 
 private:
 

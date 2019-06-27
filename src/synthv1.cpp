@@ -809,16 +809,11 @@ private:
 
 // micro-tuning/instance implementation
 
-class synthv1_tun : public synthv1_sched
+class synthv1_tun
 {
 public:
 
-	// ctor.
-	synthv1_tun(synthv1 *pSynth) : synthv1_sched(pSynth, Tuning),
-		enabled(false), refPitch(440.0f), refNote(69) {}
-
-	// processor.
-	void process(int) { instance()->updateTuning(); }
+	synthv1_tun() : enabled(false), refPitch(440.0f), refNote(69) {}
 
 	bool    enabled;
 	float   refPitch;
@@ -874,7 +869,7 @@ public:
 	void setTuningKeyMapFile(const char *pszKeyMapFile);
 	const char *tuningKeyMapFile() const;
 
-	void updateTuning();
+	void resetTuning();
 
 	void process_midi(uint8_t *data, uint32_t size);
 	void process(float **ins, float **outs, uint32_t nframes);
@@ -1049,7 +1044,7 @@ synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
 synthv1_impl::synthv1_impl (
 	synthv1 *pSynth, uint16_t nchannels, float srate )
 	: m_controls(pSynth), m_programs(pSynth),
-		m_midi_in(pSynth), m_tun(pSynth), m_bpm(180.0f), m_running(false)
+		m_midi_in(pSynth), m_bpm(180.0f), m_running(false)
 {
 	// max env. stage length (default)
 	m_dco1.envtime0 = m_dco2.envtime0 = 0.0001f * MAX_ENV_MSECS;
@@ -1088,7 +1083,7 @@ synthv1_impl::synthv1_impl (
 	m_comp = NULL;
 
 	// Micro-tuning support, if any...
-	updateTuning();
+	resetTuning();
 
 	// load controllers & programs database...
 	m_config.loadControls(&m_controls);
@@ -2210,7 +2205,7 @@ const char *synthv1_impl::tuningKeyMapFile (void) const
 }
 
 
-void synthv1_impl::updateTuning (void)
+void synthv1_impl::resetTuning (void)
 {
 	if (m_tun.enabled) {
 		// Instance micro-tuning, possibly from Scala keymap and scale files...
@@ -2957,9 +2952,9 @@ const char *synthv1::tuningKeyMapFile (void) const
 }
 
 
-void synthv1::updateTuning (void)
+void synthv1::resetTuning (void)
 {
-	m_pImpl->updateTuning();
+	m_pImpl->resetTuning();
 }
 
 
