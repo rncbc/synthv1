@@ -458,7 +458,7 @@ void synthv1_param::loadTuning (
 	}
 
 	// Consolidate tuning state...
-	pSynth->updateTuning();
+	pSynth->resetTuning();
 }
 
 
