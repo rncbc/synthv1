@@ -368,6 +368,11 @@ static LV2_State_Status synthv1_lv2_state_save ( LV2_Handle instance,
 	if (pPlugin == NULL)
 		return LV2_STATE_ERR_UNKNOWN;
 
+	// FIXME: At this time, only micro-tonal (aka. tuning) settings
+	// are posed to be saved into some XML chunk as state...
+	if (!pPlugin->isTuningEnabled())
+		return LV2_STATE_SUCCESS;
+
 	// Save state as XML chunk...
 	//
 	const uint32_t key = pPlugin->urid_map(SYNTHV1_LV2_PREFIX "state");
@@ -385,10 +390,13 @@ static LV2_State_Status synthv1_lv2_state_save ( LV2_Handle instance,
 #endif
 
 	QDomDocument doc(SYNTHV1_TITLE);
+	QDomElement eState = doc.createElement("state");
 
 	QDomElement eTuning = doc.createElement("tuning");
 	synthv1_param::saveTuning(pPlugin, doc, eTuning);
-	doc.appendChild(eTuning);
+	eState.appendChild(eTuning);
+
+	doc.appendChild(eState);
 
 	const QByteArray data(doc.toByteArray());
 	const char *value = data.constData();
@@ -437,14 +445,17 @@ static LV2_State_Status synthv1_lv2_state_restore ( LV2_Handle instance,
 
 	QDomDocument doc(SYNTHV1_TITLE);
 	if (doc.setContent(QByteArray(value, size))) {
-		for (QDomNode nChild = doc.documentElement();
-				!nChild.isNull();
-					nChild = nChild.nextSibling()) {
-			QDomElement eChild = nChild.toElement();
-			if (eChild.isNull())
-				continue;
-			if (eChild.tagName() == "tuning")
-				synthv1_param::loadTuning(pPlugin, eChild);
+		QDomElement eState = doc.documentElement();
+		if (eState.tagName() == "state") {
+			for (QDomNode nChild = eState.firstChild();
+					!nChild.isNull();
+						nChild = nChild.nextSibling()) {
+				QDomElement eChild = nChild.toElement();
+				if (eChild.isNull())
+					continue;
+				if (eChild.tagName() == "tuning")
+					synthv1_param::loadTuning(pPlugin, eChild);
+			}
 		}
 	}
 
