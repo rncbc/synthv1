@@ -78,6 +78,7 @@ protected slots:
 	void controlsEnabled(bool);
 	void programsEnabled(bool);
 
+	void tuningTabChanged(int);
 	void tuningRefNoteClicked();
 	void tuningScaleFileClicked();
 	void tuningKeyMapFileClicked();

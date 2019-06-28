@@ -65,6 +65,10 @@ synthv1widget_config::synthv1widget_config (
 		notes << synthv1_ui::noteName(note);
 	m_ui.TuningRefNoteComboBox->insertItems(0, notes);
 
+	// Tuning specifics setup...
+	m_ui.TuningTabBar->addTab(tr("&Global"));
+	m_ui.TuningTabBar->addTab(tr("&Instance"));
+
 	// Setup options...
 	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig && m_pSynthUi) {
@@ -99,15 +103,9 @@ synthv1widget_config::synthv1widget_config (
 		loadComboBoxHistory(m_ui.TuningScaleFileComboBox);
 		loadComboBoxHistory(m_ui.TuningKeyMapFileComboBox);
 		// Micro-tonal tuning settings...
-		m_ui.TuningEnabledCheckBox->setChecked(pConfig->bTuningEnabled);
-		m_ui.TuningRefNoteComboBox->setCurrentIndex(pConfig->iTuningRefNote);
-		m_ui.TuningRefPitchSpinBox->setValue(double(pConfig->fTuningRefPitch));
-		setComboBoxCurrentItem(
-			m_ui.TuningScaleFileComboBox,
-			QFileInfo(pConfig->sTuningScaleFile));
-		setComboBoxCurrentItem(
-			m_ui.TuningKeyMapFileComboBox,
-			QFileInfo(pConfig->sTuningKeyMapFile));
+		const int iTuningTab = (m_pSynthUi->isTuningEnabled() ? 1 : 0);
+		m_ui.TuningTabBar->setCurrentIndex(iTuningTab);
+		tuningTabChanged(iTuningTab);
 	}
 
 	// Signal/slots connections...
@@ -171,6 +169,9 @@ synthv1widget_config::synthv1widget_config (
 		SLOT(programsContextMenuRequested(const QPoint&)));
 
 	// Tuning slots...
+	QObject::connect(m_ui.TuningTabBar,
+		SIGNAL(currentChanged(int)),
+		SLOT(tuningTabChanged(int)));
 	QObject::connect(m_ui.TuningEnabledCheckBox,
 		SIGNAL(toggled(bool)),
 		SLOT(tuningChanged()));
@@ -444,6 +445,39 @@ void synthv1widget_config::programsActivated (void)
 
 
 // tuning command slots
+void synthv1widget_config::tuningTabChanged ( int iTuningTab )
+{
+	if (iTuningTab == 0) {
+		// Global (default) scope...
+		synthv1_config *pConfig = synthv1_config::getInstance();
+		if (pConfig) {
+			m_ui.TuningEnabledCheckBox->setChecked(pConfig->bTuningEnabled);
+			m_ui.TuningRefNoteComboBox->setCurrentIndex(pConfig->iTuningRefNote);
+			m_ui.TuningRefPitchSpinBox->setValue(double(pConfig->fTuningRefPitch));
+			setComboBoxCurrentItem(
+				m_ui.TuningScaleFileComboBox,
+				QFileInfo(pConfig->sTuningScaleFile));
+			setComboBoxCurrentItem(
+				m_ui.TuningKeyMapFileComboBox,
+				QFileInfo(pConfig->sTuningKeyMapFile));
+		}
+	}
+	else
+	if (m_pSynthUi) {
+		// Instance scope...
+		m_ui.TuningEnabledCheckBox->setChecked(m_pSynthUi->isTuningEnabled());
+		m_ui.TuningRefNoteComboBox->setCurrentIndex(m_pSynthUi->tuningRefNote());
+		m_ui.TuningRefPitchSpinBox->setValue(double(m_pSynthUi->tuningRefPitch()));
+		setComboBoxCurrentItem(
+			m_ui.TuningScaleFileComboBox,
+			QFileInfo(QString::fromUtf8(m_pSynthUi->tuningScaleFile())));
+		setComboBoxCurrentItem(
+			m_ui.TuningKeyMapFileComboBox,
+			QFileInfo(QString::fromUtf8(m_pSynthUi->tuningKeyMapFile())));
+	}
+}
+
+
 void synthv1widget_config::tuningRefNoteClicked (void)
 {
 	m_ui.TuningRefNoteComboBox->setCurrentIndex(69);
@@ -618,11 +652,25 @@ void synthv1widget_config::accept (void)
 
 	if (m_iDirtyTuning > 0 && pConfig && m_pSynthUi) {
 		// Micro-tonal tuning settings...
-		pConfig->bTuningEnabled = m_ui.TuningEnabledCheckBox->isChecked();
-		pConfig->iTuningRefNote = m_ui.TuningRefNoteComboBox->currentIndex();
-		pConfig->fTuningRefPitch = float(m_ui.TuningRefPitchSpinBox->value());
-		pConfig->sTuningScaleFile = comboBoxCurrentItem(m_ui.TuningScaleFileComboBox);
-		pConfig->sTuningKeyMapFile = comboBoxCurrentItem(m_ui.TuningKeyMapFileComboBox);
+		if (m_ui.TuningTabBar->currentIndex() == 0) {
+			// Global (default) scope...
+			pConfig->bTuningEnabled = m_ui.TuningEnabledCheckBox->isChecked();
+			pConfig->iTuningRefNote = m_ui.TuningRefNoteComboBox->currentIndex();
+			pConfig->fTuningRefPitch = float(m_ui.TuningRefPitchSpinBox->value());
+			pConfig->sTuningScaleFile = comboBoxCurrentItem(m_ui.TuningScaleFileComboBox);
+			pConfig->sTuningKeyMapFile = comboBoxCurrentItem(m_ui.TuningKeyMapFileComboBox);
+		} else {
+			m_pSynthUi->setTuningEnabled(
+				m_ui.TuningEnabledCheckBox->isChecked());
+			m_pSynthUi->setTuningRefNote(
+				m_ui.TuningRefNoteComboBox->currentIndex());
+			m_pSynthUi->setTuningRefPitch(
+				float(m_ui.TuningRefPitchSpinBox->value()));
+			m_pSynthUi->setTuningScaleFile(comboBoxCurrentItem(
+				m_ui.TuningScaleFileComboBox).toUtf8().constData());
+			m_pSynthUi->setTuningKeyMapFile(comboBoxCurrentItem(
+				m_ui.TuningKeyMapFileComboBox).toUtf8().constData());
+		}
 		// Reset/update micro-tonal tuning...
 		m_pSynthUi->resetTuning();
 		// Save other conveniency options...
