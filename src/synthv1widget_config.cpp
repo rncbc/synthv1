@@ -69,6 +69,12 @@ synthv1widget_config::synthv1widget_config (
 	m_ui.TuningTabBar->addTab(tr("&Global"));
 	m_ui.TuningTabBar->addTab(tr("&Instance"));
 
+	// Dialog dirty flags.
+	m_iDirtyTuning   = 0;
+	m_iDirtyControls = 0;
+	m_iDirtyPrograms = 0;
+	m_iDirtyOptions  = 0;
+
 	// Setup options...
 	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig && m_pSynthUi) {
@@ -221,12 +227,6 @@ synthv1widget_config::synthv1widget_config (
 	QObject::connect(m_ui.DialogButtonBox,
 		SIGNAL(rejected()),
 		SLOT(reject()));
-
-	// Dialog dirty flags.
-	m_iDirtyTuning   = 0;
-	m_iDirtyControls = 0;
-	m_iDirtyPrograms = 0;
-	m_iDirtyOptions  = 0;
 
 	// Done.
 	stabilize();
@@ -447,6 +447,21 @@ void synthv1widget_config::programsActivated (void)
 // tuning command slots
 void synthv1widget_config::tuningTabChanged ( int iTuningTab )
 {
+	// Prevent loss of some tuning changes here...
+	if (m_iDirtyTuning > 0 &&
+		QMessageBox::warning(this,
+			tr("Warning") + " - " SYNTHV1_TITLE,
+			tr("%1 tuning settings have been changed.\n\n"
+			"Do you want to discard the changes?")
+			.arg(m_ui.TuningTabBar->tabText(1 - iTuningTab).remove('&')),
+			QMessageBox::Discard | QMessageBox::Cancel)
+			== QMessageBox::Cancel) {
+		const bool bBlockSignals = m_ui.TuningTabBar->blockSignals(true);
+		m_ui.TuningTabBar->setCurrentIndex(1 - iTuningTab);
+		m_ui.TuningTabBar->blockSignals(bBlockSignals);
+		return;
+	}
+
 	if (iTuningTab == 0) {
 		// Global (default) scope...
 		synthv1_config *pConfig = synthv1_config::getInstance();
@@ -475,6 +490,9 @@ void synthv1widget_config::tuningTabChanged ( int iTuningTab )
 			m_ui.TuningKeyMapFileComboBox,
 			QFileInfo(QString::fromUtf8(m_pSynthUi->tuningKeyMapFile())));
 	}
+
+	// Reset tuning dirty flag...
+	m_iDirtyTuning = 0;
 }
 
 
