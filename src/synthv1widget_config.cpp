@@ -1,7 +1,7 @@
 // synthv1widget_config.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -624,7 +624,7 @@ void synthv1widget_config::accept (void)
 		pConfig->sTuningScaleFile = comboBoxCurrentItem(m_ui.TuningScaleFileComboBox);
 		pConfig->sTuningKeyMapFile = comboBoxCurrentItem(m_ui.TuningKeyMapFileComboBox);
 		// Reset/update micro-tonal tuning...
-		m_pSynthUi->updateTuning();
+		m_pSynthUi->resetTuning();
 		// Save other conveniency options...
 		saveComboBoxHistory(m_ui.TuningScaleFileComboBox);
 		saveComboBoxHistory(m_ui.TuningKeyMapFileComboBox);

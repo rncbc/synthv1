@@ -603,22 +603,25 @@ bool synthv1_lv2::patch_put ( uint32_t ndelta )
 	LV2_Atom_Forge_Frame body_frame;
 	lv2_atom_forge_object(&m_forge, &body_frame, 0, 0);
 
+	const bool bTuningEnabled = synthv1::isTuningEnabled();
 	lv2_atom_forge_key(&m_forge, m_urids.p201_tuning_enabled);
-	lv2_atom_forge_bool(&m_forge, synthv1::isTuningEnabled());
-	lv2_atom_forge_key(&m_forge, m_urids.p202_tuning_refPitch);
-	lv2_atom_forge_float(&m_forge, synthv1::tuningRefPitch());
-	lv2_atom_forge_key(&m_forge, m_urids.p203_tuning_refNote);
-	lv2_atom_forge_int(&m_forge, synthv1::tuningRefNote());
-	const char *pszScaleFile = synthv1::tuningScaleFile();
-	if (pszScaleFile == NULL)
-		pszScaleFile = s_szNull;
-	lv2_atom_forge_key(&m_forge, m_urids.p204_tuning_scaleFile);
-	lv2_atom_forge_path(&m_forge, pszScaleFile, ::strlen(pszScaleFile) + 1);
-	const char *pszKeyMapFile = synthv1::tuningKeyMapFile();
-	if (pszKeyMapFile == NULL)
-		pszKeyMapFile = s_szNull;
-	lv2_atom_forge_key(&m_forge, m_urids.p205_tuning_keyMapFile);
-	lv2_atom_forge_path(&m_forge, pszKeyMapFile, ::strlen(pszKeyMapFile) + 1);
+	lv2_atom_forge_bool(&m_forge, bTuningEnabled);
+	if (bTuningEnabled) {
+		lv2_atom_forge_key(&m_forge, m_urids.p202_tuning_refPitch);
+		lv2_atom_forge_float(&m_forge, synthv1::tuningRefPitch());
+		lv2_atom_forge_key(&m_forge, m_urids.p203_tuning_refNote);
+		lv2_atom_forge_int(&m_forge, synthv1::tuningRefNote());
+		const char *pszScaleFile = synthv1::tuningScaleFile();
+		if (pszScaleFile == NULL)
+			pszScaleFile = s_szNull;
+		lv2_atom_forge_key(&m_forge, m_urids.p204_tuning_scaleFile);
+		lv2_atom_forge_path(&m_forge, pszScaleFile, ::strlen(pszScaleFile) + 1);
+		const char *pszKeyMapFile = synthv1::tuningKeyMapFile();
+		if (pszKeyMapFile == NULL)
+			pszKeyMapFile = s_szNull;
+		lv2_atom_forge_key(&m_forge, m_urids.p205_tuning_keyMapFile);
+		lv2_atom_forge_path(&m_forge, pszKeyMapFile, ::strlen(pszKeyMapFile) + 1);
+	}
 
 	lv2_atom_forge_pop(&m_forge, &body_frame);
 	lv2_atom_forge_pop(&m_forge, &patch_frame);
