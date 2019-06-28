@@ -288,35 +288,40 @@ void synthv1_lv2::run ( uint32_t nframes )
 							&& type == m_urids.atom_Bool) {
 							const uint32_t enabled
 								= *(uint32_t *) LV2_ATOM_BODY_CONST(value);
-							setTuningEnabled(enabled > 0);
+							synthv1::setTuningEnabled(enabled > 0);
+							updateTuning();
 						}
 						else
 						if (key == m_urids.p202_tuning_refPitch
 							&& type == m_urids.atom_Float) {
 							const float refPitch
 								= *(float *) LV2_ATOM_BODY_CONST(value);
-							setTuningRefPitch(refPitch);
+							synthv1::setTuningRefPitch(refPitch);
+							updateTuning();
 						}
 						else
 						if (key == m_urids.p203_tuning_refNote
 							&& type == m_urids.atom_Int) {
 							const uint32_t refNote
 								= *(uint32_t *) LV2_ATOM_BODY_CONST(value);
-							setTuningRefNote(refNote);
+							synthv1::setTuningRefNote(refNote);
+							updateTuning();
 						}
 						else
 						if (key == m_urids.p204_tuning_scaleFile
 							&& type == m_urids.atom_Path) {
 							const char *scaleFile
 								= (const char *) LV2_ATOM_BODY_CONST(value);
-							setTuningScaleFile(scaleFile);
+							synthv1::setTuningScaleFile(scaleFile);
+							updateTuning();
 						}
 						else
 						if (key == m_urids.p205_tuning_keyMapFile
 							&& type == m_urids.atom_Path) {
 							const char *keyMapFile
 								= (const char *) LV2_ATOM_BODY_CONST(value);
-							setTuningKeyMapFile(keyMapFile);
+							synthv1::setTuningKeyMapFile(keyMapFile);
+							updateTuning();
 						}
 					}
 				}
