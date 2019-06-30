@@ -28,6 +28,10 @@
 #include <QPixmap>
 #include <QHBoxLayout>
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+#define horizontalAdvance  width
+#endif
+
 
 //-------------------------------------------------------------------------
 // synthv1widget_status - Custom status-bar widget.
