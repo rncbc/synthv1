@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Updated for the newer Qt5 development tools (>= 5.13).
 - Per instance custom tuning (micro-tonal) option has
   been added to the previously existing global settings
   (cf. Help > Configure... > Tuning > Global, Instance).
