@@ -9,6 +9,8 @@
 @prefix lv2atom: <http://lv2plug.in/ns/ext/atom#> .
 @prefix lv2midi: <http://lv2plug.in/ns/ext/midi#> .
 @prefix lv2time: <http://lv2plug.in/ns/ext/time#> .
+@prefix lv2state: <http://lv2plug.in/ns/ext/state#> .
+@prefix lv2patch: <http://lv2plug.in/ns/ext/patch#> .
 @prefix lv2worker: <http://lv2plug.in/ns/ext/worker#> .
 @prefix lv2pg:   <http://lv2plug.in/ns/ext/port-groups#> .
 
