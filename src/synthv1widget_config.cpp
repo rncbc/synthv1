@@ -527,7 +527,7 @@ void synthv1widget_config::tuningScaleFileClicked (void)
 		options |= QFileDialog::DontUseNativeDialog;
 		pParentWidget = QWidget::window();
 	}
-#if 1//QT_VERSION < 0x040400
+#if 1//QT_VERSION < QT_VERSION_CHECK(4, 4, 0)
 	sTuningScaleFile = QFileDialog::getOpenFileName(pParentWidget,
 		sTitle, pConfig->sTuningScaleDir, sFilter, NULL, options);
 #else
@@ -576,7 +576,7 @@ void synthv1widget_config::tuningKeyMapFileClicked (void)
 		options |= QFileDialog::DontUseNativeDialog;
 		pParentWidget = QWidget::window();
 	}
-#if 1//QT_VERSION < 0x040400
+#if 1//QT_VERSION < QT_VERSION_CHECK(4, 4, 0)
 	sTuningKeyMapFile = QFileDialog::getOpenFileName(pParentWidget,
 		sTitle, pConfig->sTuningKeyMapDir, sFilter, NULL, options);
 #else

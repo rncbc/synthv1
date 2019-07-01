@@ -52,7 +52,7 @@ synthv1widget_preset::synthv1widget_preset ( QWidget *pParent )
 	m_pOpenButton->setIcon(QIcon(":/images/presetOpen.png"));
 	m_pComboBox->setEditable(true);
 	m_pComboBox->setMinimumWidth(240);
-#if QT_VERSION >= 0x040200
+#if QT_VERSION >= QT_VERSION_CHECK(4, 2, 0)
 	m_pComboBox->setCompleter(NULL);
 #endif
 	m_pComboBox->setInsertPolicy(QComboBox::NoInsert);
@@ -239,7 +239,7 @@ void synthv1widget_preset::openPreset (void)
 		options |= QFileDialog::DontUseNativeDialog;
 		pParentWidget = QWidget::window();
 	}
-#if 1//QT_VERSION < 0x040400
+#if 1//QT_VERSION < QT_VERSION_CHECK(4, 4, 0)
 	files = QFileDialog::getOpenFileNames(pParentWidget,
 		sTitle, pConfig->sPresetDir, sFilter, NULL, options);
 #else
@@ -307,7 +307,7 @@ void synthv1widget_preset::savePreset ( const QString& sPreset )
 			options |= QFileDialog::DontUseNativeDialog;
 			pParentWidget = QWidget::window();
 		}
-	#if 1//QT_VERSION < 0x040400
+	#if 1//QT_VERSION < QT_VERSION_CHECK(4, 4, 0)
 		sFilename = QFileDialog::getSaveFileName(pParentWidget,
 			sTitle, sFilename, sFilter, NULL, options);
 	#else
