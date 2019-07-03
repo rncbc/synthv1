@@ -88,7 +88,7 @@ protected:
 	bool state_changed();
 
 #ifdef CONFIG_LV2_PATCH
-	bool patch_put(uint32_t ndelta);
+	bool patch_put(uint32_t ndelta, uint32_t type = 0);
 #endif
 
 private:
