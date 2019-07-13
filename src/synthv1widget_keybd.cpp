@@ -321,7 +321,7 @@ void synthv1widget_keybd::updatePixmap (void)
 	m_pixmap.fill(pal.window().color());
 
 	QPainter painter(&m_pixmap);
-	painter.initFrom(this);
+	painter.begin(this);
 
 	const float wn = float(w - 4) / float(NUM_NOTES);
 	const float wk = 12.0f * wn / 7.0f;
@@ -392,7 +392,7 @@ void synthv1widget_keybd::paintEvent ( QPaintEvent *pPaintEvent )
 	}
 
 	// Are we sticking in some note?
-	rgbOver = pal.highlight().color().dark(120);
+	rgbOver = pal.highlight().color().darker(120);
 	rgbOver.setAlpha(180);
 	for (int n = 0; n < NUM_NOTES; ++n) {
 		Note& note = m_notes[n];

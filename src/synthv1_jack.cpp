@@ -615,6 +615,12 @@ void synthv1_jack::updatePreset ( bool /*bDirty*/ )
 }
 
 
+void synthv1_jack::updateTuning (void)
+{
+	synthv1::resetTuning();
+}
+
+
 void synthv1_jack::shutdown (void)
 {
 	synthv1_jack_application *pApp = synthv1_jack_application::getInstance();
@@ -698,7 +704,7 @@ synthv1_jack_application::synthv1_jack_application ( int& argc, char **argv )
 	else
 		m_pApp = new QCoreApplication(argc, argv);
 
-#if QT_VERSION >= 0x050600
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
 	if (m_bGui) m_pApp->setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 

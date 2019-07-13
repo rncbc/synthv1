@@ -28,6 +28,10 @@
 #include <QPixmap>
 #include <QHBoxLayout>
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+#define horizontalAdvance  width
+#endif
+
 
 //-------------------------------------------------------------------------
 // synthv1widget_status - Custom status-bar widget.
@@ -82,7 +86,7 @@ synthv1widget_status::synthv1widget_status ( QWidget *pParent )
 	const QFontMetrics fm(QStatusBar::font());
 	m_pModifiedLabel = new QLabel();
 	m_pModifiedLabel->setAlignment(Qt::AlignHCenter);
-	m_pModifiedLabel->setMinimumSize(QSize(fm.width("MOD") + 4, fm.height()));
+	m_pModifiedLabel->setMinimumSize(QSize(fm.horizontalAdvance("MOD") + 4, fm.height()));
 	m_pModifiedLabel->setToolTip(tr("Modification status"));
 	m_pModifiedLabel->setAutoFillBackground(true);
 	QStatusBar::addPermanentWidget(m_pModifiedLabel);

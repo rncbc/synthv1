@@ -44,6 +44,13 @@ namespace synthv1_param
 		const QString& sFilename,
 		bool bSymLink = false);
 
+	// Tuning serialization methods.
+	void loadTuning(synthv1 *pSynth,
+		const QDomElement& eTuning);
+	void saveTuning(synthv1 *pSynth,
+		QDomDocument& doc, QDomElement& eTuning,
+		bool bSymLink = false);
+
 	// Default parameter name/value helpers.
 	const char *paramName(synthv1::ParamIndex index);
 	float paramDefaultValue(synthv1::ParamIndex index);
@@ -51,6 +58,10 @@ namespace synthv1_param
 	float paramValue(synthv1::ParamIndex index, float fScale);
 	float paramScale(synthv1::ParamIndex index, float fValue);
 	bool paramFloat(synthv1::ParamIndex index);
+
+	// Load/save and convert canonical/absolute filename helpers.
+	QString loadFilename(const QString& sFilename);
+	QString saveFilename(const QString& sFilename, bool bSymLink);
 };
 
 

@@ -237,7 +237,24 @@ public:
 
 	void directNoteOn(int note, int vel);
 
-	void updateTuning();
+	void setTuningEnabled(bool enabled);
+	bool isTuningEnabled() const;
+
+	void setTuningRefPitch(float refPitch);
+	float tuningRefPitch() const;
+
+	void setTuningRefNote(int refNote);
+	int tuningRefNote() const;
+
+	void setTuningScaleFile(const char *pszScaleFile);
+	const char *tuningScaleFile() const;
+
+	void setTuningKeyMapFile(const char *pszKeyMapFile);
+	const char *tuningKeyMapFile() const;
+
+	void resetTuning();
+
+	virtual void updateTuning() = 0;
 
 private:
 

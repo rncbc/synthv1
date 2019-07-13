@@ -43,7 +43,7 @@
 #endif
 #endif
 
-#if QT_VERSION < 0x050000
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #define CONFIG_PLUGINSDIR CONFIG_LIBDIR "/qt4/plugins"
 #else
 #define CONFIG_PLUGINSDIR CONFIG_LIBDIR "/qt5/plugins"

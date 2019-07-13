@@ -807,6 +807,22 @@ private:
 };
 
 
+// micro-tuning/instance implementation
+
+class synthv1_tun
+{
+public:
+
+	synthv1_tun() : enabled(false), refPitch(440.0f), refNote(69) {}
+
+	bool    enabled;
+	float   refPitch;
+	int     refNote;
+	QString scaleFile;
+	QString keyMapFile;
+};
+
+
 // polyphonic synth implementation
 
 class synthv1_impl
@@ -838,7 +854,22 @@ public:
 	synthv1_controls *controls();
 	synthv1_programs *programs();
 
-	void updateTuning();
+	void setTuningEnabled(bool enabled);
+	bool isTuningEnabled() const;
+
+	void setTuningRefPitch(float refPitch);
+	float tuningRefPitch() const;
+
+	void setTuningRefNote(int refNote);
+	int tuningRefNote() const;
+
+	void setTuningScaleFile(const char *pszScaleFile);
+	const char *tuningScaleFile() const;
+
+	void setTuningKeyMapFile(const char *pszKeyMapFile);
+	const char *tuningKeyMapFile() const;
+
+	void resetTuning();
 
 	void process_midi(uint8_t *data, uint32_t size);
 	void process(float **ins, float **outs, uint32_t nframes);
@@ -916,6 +947,7 @@ private:
 	synthv1_controls m_controls;
 	synthv1_programs m_programs;
 	synthv1_midi_in  m_midi_in;
+	synthv1_tun      m_tun;
 
 	uint16_t m_nchannels;
 	float    m_srate;
@@ -1051,7 +1083,7 @@ synthv1_impl::synthv1_impl (
 	m_comp = NULL;
 
 	// Micro-tuning support, if any...
-	updateTuning();
+	resetTuning();
 
 	// load controllers & programs database...
 	m_config.loadControls(&m_controls);
@@ -2117,11 +2149,81 @@ synthv1_programs *synthv1_impl::programs (void)
 
 
 // Micro-tuning support
-void synthv1_impl::updateTuning (void)
-{
 
+void synthv1_impl::setTuningEnabled ( bool enabled )
+{
+	m_tun.enabled = enabled;
+}
+
+bool synthv1_impl::isTuningEnabled (void) const
+{
+	return m_tun.enabled;
+}
+
+
+void synthv1_impl::setTuningRefPitch ( float refPitch )
+{
+	m_tun.refPitch = refPitch;
+}
+
+float synthv1_impl::tuningRefPitch (void) const
+{
+	return m_tun.refPitch;
+}
+
+
+void synthv1_impl::setTuningRefNote ( int refNote )
+{
+	m_tun.refNote = refNote;
+}
+
+int synthv1_impl::tuningRefNote (void) const
+{
+	return m_tun.refNote;
+}
+
+
+void synthv1_impl::setTuningScaleFile ( const char *pszScaleFile )
+{
+	m_tun.scaleFile = QString::fromUtf8(pszScaleFile);
+}
+
+const char *synthv1_impl::tuningScaleFile (void) const
+{
+	return m_tun.scaleFile.toUtf8().constData();
+}
+
+
+void synthv1_impl::setTuningKeyMapFile ( const char *pszKeyMapFile )
+{
+	m_tun.keyMapFile = QString::fromUtf8(pszKeyMapFile);
+}
+
+const char *synthv1_impl::tuningKeyMapFile (void) const
+{
+	return m_tun.keyMapFile.toUtf8().constData();
+}
+
+
+void synthv1_impl::resetTuning (void)
+{
+	if (m_tun.enabled) {
+		// Instance micro-tuning, possibly from Scala keymap and scale files...
+		synthv1_tuning tuning(
+			m_tun.refPitch,
+			m_tun.refNote);
+		if (m_tun.keyMapFile.isEmpty())
+		if (!m_tun.keyMapFile.isEmpty())
+			tuning.loadKeyMapFile(m_tun.keyMapFile);
+		if (!m_tun.scaleFile.isEmpty())
+			tuning.loadScaleFile(m_tun.scaleFile);
+		for (int note = 0; note < MAX_NOTES; ++note)
+			m_freqs[note] = tuning.noteToPitch(note);
+		// Done instance tuning.
+	}
+	else
 	if (m_config.bTuningEnabled) {
-		// Custom micro-tuning, possibly from Scala keymap and scale files...
+		// Global/config micro-tuning, possibly from Scala keymap and scale files...
 		synthv1_tuning tuning(
 			m_config.fTuningRefPitch,
 			m_config.iTuningRefNote);
@@ -2131,12 +2233,12 @@ void synthv1_impl::updateTuning (void)
 			tuning.loadScaleFile(m_config.sTuningScaleFile);
 		for (int note = 0; note < MAX_NOTES; ++note)
 			m_freqs[note] = tuning.noteToPitch(note);
-		// Done custom tuning.
+		// Done global/config tuning.
 	} else {
-		// Native tuning, 12-tone equal temperament western standard...
+		// Native/default tuning, 12-tone equal temperament western standard...
 		for (int note = 0; note < MAX_NOTES; ++note)
 			m_freqs[note] = synthv1_freq(note);
-		// Done native tuning.
+		// Done native/default tuning.
 	}
 }
 
@@ -2795,9 +2897,64 @@ void synthv1::directNoteOn ( int note, int vel )
 
 
 // Micro-tuning support
-void synthv1::updateTuning (void)
+void synthv1::setTuningEnabled ( bool enabled )
 {
-	m_pImpl->updateTuning();
+	m_pImpl->setTuningEnabled(enabled);
+}
+
+bool synthv1::isTuningEnabled (void) const
+{
+	return m_pImpl->isTuningEnabled();
+}
+
+
+void synthv1::setTuningRefPitch ( float refPitch )
+{
+	m_pImpl->setTuningRefPitch(refPitch);
+}
+
+float synthv1::tuningRefPitch (void) const
+{
+	return m_pImpl->tuningRefPitch();
+}
+
+
+void synthv1::setTuningRefNote ( int refNote )
+{
+	m_pImpl->setTuningRefNote(refNote);
+}
+
+int synthv1::tuningRefNote (void) const
+{
+	return m_pImpl->tuningRefNote();
+}
+
+
+void synthv1::setTuningScaleFile ( const char *pszScaleFile )
+{
+	m_pImpl->setTuningScaleFile(pszScaleFile);
+}
+
+const char *synthv1::tuningScaleFile (void) const
+{
+	return m_pImpl->tuningScaleFile();
+}
+
+
+void synthv1::setTuningKeyMapFile ( const char *pszKeyMapFile )
+{
+	m_pImpl->setTuningKeyMapFile(pszKeyMapFile);
+}
+
+const char *synthv1::tuningKeyMapFile (void) const
+{
+	return m_pImpl->tuningKeyMapFile();
+}
+
+
+void synthv1::resetTuning (void)
+{
+	m_pImpl->resetTuning();
 }
 
 

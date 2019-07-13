@@ -1,7 +1,7 @@
 // synthv1_lv2.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 *****************************************************************************/
 
 #include "synthv1_lv2.h"
-
+#include "synthv1_config.h"
 #include "synthv1_sched.h"
 
 #include "synthv1_programs.h"
@@ -34,6 +34,10 @@
 
 #include "lv2/lv2plug.in/ns/ext/options/options.h"
 #include "lv2/lv2plug.in/ns/ext/buf-size/buf-size.h"
+
+#ifdef CONFIG_LV2_PATCH
+#include "lv2/lv2plug.in/ns/ext/patch/patch.h"
+#endif
 
 #ifndef CONFIG_LV2_ATOM_FORGE_OBJECT
 #define lv2_atom_forge_object(forge, frame, id, otype) \
@@ -51,6 +55,8 @@
 
 #include <stdlib.h>
 #include <math.h>
+
+#include <QDomDocument>
 
 
 //-------------------------------------------------------------------------
@@ -82,6 +88,18 @@ synthv1_lv2::synthv1_lv2 (
 		if (::strcmp(host_feature->URI, LV2_URID_MAP_URI) == 0) {
 			m_urid_map = (LV2_URID_Map *) host_feature->data;
 			if (m_urid_map) {
+				m_urids.p201_tuning_enabled = m_urid_map->map(
+					m_urid_map->handle, SYNTHV1_LV2_PREFIX "P201_TUNING_ENABLED");
+				m_urids.p202_tuning_refPitch = m_urid_map->map(
+					m_urid_map->handle, SYNTHV1_LV2_PREFIX "P202_TUNING_REF_PITCH");
+				m_urids.p203_tuning_refNote = m_urid_map->map(
+					m_urid_map->handle, SYNTHV1_LV2_PREFIX "P203_TUNING_REF_NOTE");
+				m_urids.p204_tuning_scaleFile = m_urid_map->map(
+					m_urid_map->handle, SYNTHV1_LV2_PREFIX "P204_TUNING_SCALE_FILE");
+				m_urids.p205_tuning_keyMapFile = m_urid_map->map(
+					m_urid_map->handle, SYNTHV1_LV2_PREFIX "P205_TUNING_KEYMAP_FILE");
+				m_urids.tun1_update = m_urid_map->map(
+					m_urid_map->handle, SYNTHV1_LV2_PREFIX "TUN1_UPDATE");
 				m_urids.atom_Blank = m_urid_map->map(
 					m_urid_map->handle, LV2_ATOM__Blank);
 				m_urids.atom_Object = m_urid_map->map(
@@ -90,6 +108,10 @@ synthv1_lv2::synthv1_lv2 (
 					m_urid_map->handle, LV2_ATOM__Float);
 				m_urids.atom_Int = m_urid_map->map(
 					m_urid_map->handle, LV2_ATOM__Int);
+				m_urids.atom_Bool = m_urid_map->map(
+					m_urid_map->handle, LV2_ATOM__Bool);
+				m_urids.atom_Path = m_urid_map->map(
+					m_urid_map->handle, LV2_ATOM__Path);
 				m_urids.time_Position = m_urid_map->map(
 					m_urid_map->handle, LV2_TIME__Position);
 				m_urids.time_beatsPerMinute = m_urid_map->map(
@@ -106,6 +128,20 @@ synthv1_lv2::synthv1_lv2 (
 			#endif
 				m_urids.state_StateChanged = m_urid_map->map(
 					m_urid_map->handle, LV2_STATE__StateChanged);
+			#ifdef CONFIG_LV2_PATCH
+				m_urids.patch_Get = m_urid_map->map(
+					m_urid_map->handle, LV2_PATCH__Get);
+				m_urids.patch_Set = m_urid_map->map(
+					m_urid_map->handle, LV2_PATCH__Set);
+				m_urids.patch_Put = m_urid_map->map(
+					m_urid_map->handle, LV2_PATCH__Put);
+				m_urids.patch_body = m_urid_map->map(
+					m_urid_map->handle, LV2_PATCH__body);
+				m_urids.patch_property = m_urid_map->map(
+					m_urid_map->handle, LV2_PATCH__property);
+				m_urids.patch_value = m_urid_map->map(
+ 					m_urid_map->handle, LV2_PATCH__value);
+			#endif
 			}
 		}
 		else
@@ -236,6 +272,65 @@ void synthv1_lv2::run ( uint32_t nframes )
 							synthv1::setTempo(host_bpm);
 					}
 				}
+			#ifdef CONFIG_LV2_PATCH
+				else 
+				if (object->body.otype == m_urids.patch_Set) {
+					// set property value
+					const LV2_Atom *property = NULL;
+					const LV2_Atom *value = NULL;
+					lv2_atom_object_get(object,
+						m_urids.patch_property, &property,
+						m_urids.patch_value, &value, 0);
+					if (property && value && property->type == m_forge.URID) {
+						const uint32_t key = ((const LV2_Atom_URID *) property)->body;
+						const LV2_URID type = value->type;
+						if (key == m_urids.p201_tuning_enabled
+							&& type == m_urids.atom_Bool) {
+							const uint32_t enabled
+								= *(uint32_t *) LV2_ATOM_BODY_CONST(value);
+							synthv1::setTuningEnabled(enabled > 0);
+							updateTuning();
+						}
+						else
+						if (key == m_urids.p202_tuning_refPitch
+							&& type == m_urids.atom_Float) {
+							const float refPitch
+								= *(float *) LV2_ATOM_BODY_CONST(value);
+							synthv1::setTuningRefPitch(refPitch);
+							updateTuning();
+						}
+						else
+						if (key == m_urids.p203_tuning_refNote
+							&& type == m_urids.atom_Int) {
+							const uint32_t refNote
+								= *(uint32_t *) LV2_ATOM_BODY_CONST(value);
+							synthv1::setTuningRefNote(refNote);
+							updateTuning();
+						}
+						else
+						if (key == m_urids.p204_tuning_scaleFile
+							&& type == m_urids.atom_Path) {
+							const char *scaleFile
+								= (const char *) LV2_ATOM_BODY_CONST(value);
+							synthv1::setTuningScaleFile(scaleFile);
+							updateTuning();
+						}
+						else
+						if (key == m_urids.p205_tuning_keyMapFile
+							&& type == m_urids.atom_Path) {
+							const char *keyMapFile
+								= (const char *) LV2_ATOM_BODY_CONST(value);
+							synthv1::setTuningKeyMapFile(keyMapFile);
+							updateTuning();
+						}
+					}
+				}
+				else
+				if (object->body.otype == m_urids.patch_Get) {
+					// put all property values (probably to UI)
+					patch_put(ndelta);
+				}
+			#endif	// CONFIG_LV2_PATCH
 			}
 		}
 		// remember last time for worker response
@@ -271,29 +366,104 @@ uint32_t synthv1_lv2::urid_map ( const char *uri ) const
 //
 
 static LV2_State_Status synthv1_lv2_state_save ( LV2_Handle instance,
-	LV2_State_Store_Function /*store*/, LV2_State_Handle /*handle*/,
-	uint32_t /*flags*/, const LV2_Feature *const */*features*/ )
+	LV2_State_Store_Function store, LV2_State_Handle handle,
+	uint32_t flags, const LV2_Feature *const */*features*/ )
 {
 	synthv1_lv2 *pPlugin = static_cast<synthv1_lv2 *> (instance);
 	if (pPlugin == NULL)
 		return LV2_STATE_ERR_UNKNOWN;
 
-	// Nothing to do...
+	// FIXME: At this time, only micro-tonal (aka. tuning) settings
+	// are posed to be saved into some XML chunk as state...
+	if (!pPlugin->isTuningEnabled())
+		return LV2_STATE_SUCCESS;
+
+	// Save state as XML chunk...
 	//
-	return LV2_STATE_SUCCESS;
+	const uint32_t key = pPlugin->urid_map(SYNTHV1_LV2_PREFIX "state");
+	if (key == 0)
+		return LV2_STATE_ERR_NO_PROPERTY;
+
+	const uint32_t type = pPlugin->urid_map(LV2_ATOM__Chunk);
+	if (type == 0)
+		return LV2_STATE_ERR_BAD_TYPE;
+#if 0
+	if ((flags & (LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE)) == 0)
+		return LV2_STATE_ERR_BAD_FLAGS;
+#else
+	flags |= (LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+#endif
+
+	QDomDocument doc(SYNTHV1_TITLE);
+	QDomElement eState = doc.createElement("state");
+
+	QDomElement eTuning = doc.createElement("tuning");
+	synthv1_param::saveTuning(pPlugin, doc, eTuning);
+	eState.appendChild(eTuning);
+
+	doc.appendChild(eState);
+
+	const QByteArray data(doc.toByteArray());
+	const char *value = data.constData();
+	size_t size = data.size();
+
+	return (*store)(handle, key, value, size, type, flags);
 }
 
 
 static LV2_State_Status synthv1_lv2_state_restore ( LV2_Handle instance,
-	LV2_State_Retrieve_Function /*retrieve*/, LV2_State_Handle /*handle*/,
-	uint32_t /*flags*/, const LV2_Feature *const */*features*/ )
+	LV2_State_Retrieve_Function retrieve, LV2_State_Handle handle,
+	uint32_t flags, const LV2_Feature *const */*features*/ )
 {
 	synthv1_lv2 *pPlugin = static_cast<synthv1_lv2 *> (instance);
 	if (pPlugin == NULL)
 		return LV2_STATE_ERR_UNKNOWN;
 
-	// Something to do...
+	// Retrieve state as XML chunk...
 	//
+	const uint32_t key = pPlugin->urid_map(SYNTHV1_LV2_PREFIX "state");
+	if (key == 0)
+		return LV2_STATE_ERR_NO_PROPERTY;
+
+	const uint32_t chunk_type = pPlugin->urid_map(LV2_ATOM__Chunk);
+	if (chunk_type == 0)
+		return LV2_STATE_ERR_BAD_TYPE;
+
+	size_t size = 0;
+	uint32_t type = 0;
+//	flags = 0;
+
+	const char *value
+		= (const char *) (*retrieve)(handle, key, &size, &type, &flags);
+
+	if (size < 2)
+		return LV2_STATE_ERR_UNKNOWN;
+
+	if (type != chunk_type)
+		return LV2_STATE_ERR_BAD_TYPE;
+
+	if ((flags & (LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE)) == 0)
+		return LV2_STATE_ERR_BAD_FLAGS;
+
+	if (value == NULL)
+		return LV2_STATE_ERR_UNKNOWN;
+
+	QDomDocument doc(SYNTHV1_TITLE);
+	if (doc.setContent(QByteArray(value, size))) {
+		QDomElement eState = doc.documentElement();
+		if (eState.tagName() == "state") {
+			for (QDomNode nChild = eState.firstChild();
+					!nChild.isNull();
+						nChild = nChild.nextSibling()) {
+				QDomElement eChild = nChild.toElement();
+				if (eChild.isNull())
+					continue;
+				if (eChild.tagName() == "tuning")
+					synthv1_param::loadTuning(pPlugin, eChild);
+			}
+		}
+	}
+
 	pPlugin->reset();
 
 	synthv1_sched::sync_notify(pPlugin, synthv1_sched::Wave, 1);
@@ -359,6 +529,18 @@ void synthv1_lv2::updatePreset ( bool /*bDirty*/ )
 }
 
 
+void synthv1_lv2::updateTuning (void)
+{
+	if (m_schedule) {
+		synthv1_lv2_worker_message mesg;
+		mesg.atom.type = m_urids.tun1_update;
+		mesg.atom.size = 0; // nothing else matters.
+		m_schedule->schedule_work(
+			m_schedule->handle, sizeof(mesg), &mesg);
+	}
+}
+
+
 bool synthv1_lv2::worker_work ( const void *data, uint32_t size )
 {
 	if (size != sizeof(synthv1_lv2_worker_message))
@@ -368,6 +550,15 @@ bool synthv1_lv2::worker_work ( const void *data, uint32_t size )
 		= (const synthv1_lv2_worker_message *) data;
 
 	return (mesg->atom.type == m_urids.state_StateChanged);
+	if (mesg->atom.type == m_urids.state_StateChanged)
+		return true;
+	else
+	if (mesg->atom.type == m_urids.tun1_update) {
+		synthv1::resetTuning();
+		return true;
+	}
+
+	return false;
 }
 
 
@@ -381,8 +572,12 @@ bool synthv1_lv2::worker_response ( const void *data, uint32_t size )
 
 	if (mesg->atom.type == m_urids.state_StateChanged)
 		return state_changed();
-	else
-		return false;
+
+#ifdef CONFIG_LV2_PATCH
+	return patch_put(m_ndelta, mesg->atom.type);
+#else
+	return true;
+#endif
 }
 
 
@@ -396,6 +591,60 @@ bool synthv1_lv2::state_changed (void)
 
 	return true;
 }
+
+
+#ifdef CONFIG_LV2_PATCH
+
+bool synthv1_lv2::patch_put ( uint32_t ndelta, uint32_t type )
+{
+	static char s_szNull[1] = {'\0'};
+
+	if (type == m_urids.patch_Put)
+		type = 0;
+
+	lv2_atom_forge_frame_time(&m_forge, ndelta);
+
+	LV2_Atom_Forge_Frame patch_frame;
+	lv2_atom_forge_object(&m_forge, &patch_frame, 0, m_urids.patch_Put);
+	lv2_atom_forge_key(&m_forge, m_urids.patch_body);
+
+	LV2_Atom_Forge_Frame body_frame;
+	lv2_atom_forge_object(&m_forge, &body_frame, 0, 0);
+
+	if (type == 0 || type == m_urids.p201_tuning_enabled) {
+		lv2_atom_forge_key(&m_forge, m_urids.p201_tuning_enabled);
+		lv2_atom_forge_bool(&m_forge, synthv1::isTuningEnabled());
+	}
+	if (type == 0 || type == m_urids.p202_tuning_refPitch) {
+		lv2_atom_forge_key(&m_forge, m_urids.p202_tuning_refPitch);
+		lv2_atom_forge_float(&m_forge, synthv1::tuningRefPitch());
+	}
+	if (type == 0 || type == m_urids.p203_tuning_refNote) {
+		lv2_atom_forge_key(&m_forge, m_urids.p203_tuning_refNote);
+		lv2_atom_forge_int(&m_forge, synthv1::tuningRefNote());
+	}
+	if (type == 0 || type == m_urids.p204_tuning_scaleFile) {
+		const char *pszScaleFile = synthv1::tuningScaleFile();
+		if (pszScaleFile == NULL)
+			pszScaleFile = s_szNull;
+		lv2_atom_forge_key(&m_forge, m_urids.p204_tuning_scaleFile);
+		lv2_atom_forge_path(&m_forge, pszScaleFile, ::strlen(pszScaleFile) + 1);
+	}
+	if (type == 0 || type == m_urids.p205_tuning_keyMapFile) {
+		const char *pszKeyMapFile = synthv1::tuningKeyMapFile();
+		if (pszKeyMapFile == NULL)
+			pszKeyMapFile = s_szNull;
+		lv2_atom_forge_key(&m_forge, m_urids.p205_tuning_keyMapFile);
+		lv2_atom_forge_path(&m_forge, pszKeyMapFile, ::strlen(pszKeyMapFile) + 1);
+	}
+
+	lv2_atom_forge_pop(&m_forge, &body_frame);
+	lv2_atom_forge_pop(&m_forge, &patch_frame);
+
+	return true;
+}
+
+#endif	// CONFIG_LV2_PATCH
 
 
 //-------------------------------------------------------------------------

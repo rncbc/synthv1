@@ -68,6 +68,9 @@
      </item>
      <item>
       <widget class="QTabBar" name="TabBar">
+       <property name="shape">
+        <enum>QTabBar::RoundedNorth</enum>
+       </property>
       </widget>
      </item>
      <item>

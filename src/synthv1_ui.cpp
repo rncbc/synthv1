@@ -110,9 +110,64 @@ void synthv1_ui::directNoteOn ( int note, int vel )
 }
 
 
-void synthv1_ui::updateTuning (void)
+void synthv1_ui::setTuningEnabled ( bool enabled )
 {
-	m_pSynth->updateTuning();
+	m_pSynth->setTuningEnabled(enabled);
+}
+
+bool synthv1_ui::isTuningEnabled (void) const
+{
+	return m_pSynth->isTuningEnabled();
+}
+
+
+void synthv1_ui::setTuningRefPitch ( float refPitch )
+{
+	m_pSynth->setTuningRefPitch(refPitch);
+}
+
+float synthv1_ui::tuningRefPitch (void) const
+{
+	return m_pSynth->tuningRefPitch();
+}
+
+
+void synthv1_ui::setTuningRefNote ( int refNote )
+{
+	m_pSynth->setTuningRefNote(refNote);
+}
+
+int synthv1_ui::tuningRefNote (void) const
+{
+	return m_pSynth->tuningRefNote();
+}
+
+
+void synthv1_ui::setTuningScaleFile ( const char *pszScaleFile )
+{
+	m_pSynth->setTuningScaleFile(pszScaleFile);
+}
+
+const char *synthv1_ui::tuningScaleFile (void) const
+{
+	return m_pSynth->tuningScaleFile();
+}
+
+
+void synthv1_ui::setTuningKeyMapFile ( const char *pszKeyMapFile )
+{
+	m_pSynth->setTuningKeyMapFile(pszKeyMapFile);
+}
+
+const char *synthv1_ui::tuningKeyMapFile (void) const
+{
+	return m_pSynth->tuningKeyMapFile();
+}
+
+
+void synthv1_ui::resetTuning (void)
+{
+	m_pSynth->resetTuning();
 }
 
 

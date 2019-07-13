@@ -9,6 +9,8 @@
 @prefix lv2atom: <http://lv2plug.in/ns/ext/atom#> .
 @prefix lv2midi: <http://lv2plug.in/ns/ext/midi#> .
 @prefix lv2time: <http://lv2plug.in/ns/ext/time#> .
+@prefix lv2state: <http://lv2plug.in/ns/ext/state#> .
+@prefix lv2patch: <http://lv2plug.in/ns/ext/patch#> .
 @prefix lv2worker: <http://lv2plug.in/ns/ext/worker#> .
 @prefix lv2pg:   <http://lv2plug.in/ns/ext/port-groups#> .
 
@@ -19,13 +21,18 @@
 	doap:name "synthv1" ;
 	doap:maintainer [
 		foaf:name "rncbc aka. Rui Nuno Capela" ;
-		foaf:homepage <http://www.rncbc.org> ;
+		foaf:homepage <https://www.rncbc.org> ;
 		foaf:mbox <mailto:rncbc@rncbc.org> ;
 	] ;
 	lv2:requiredFeature lv2urid:map, lv2worker:schedule ;
 	lv2:optionalFeature lv2:hardRTCapable ;
 	lv2:extensionData lv2worker:interface ;
 	lv2ui:ui synthv1_lv2:ui_x11, synthv1_lv2:ui_external ;
+	lv2patch:writable synthv1_lv2:P201_TUNING_ENABLED,
+		synthv1_lv2:P202_TUNING_REF_PITCH,
+		synthv1_lv2:P203_TUNING_REF_NOTE,
+		synthv1_lv2:P204_TUNING_SCALE_FILE,
+		synthv1_lv2:P205_TUNING_KEYMAP_FILE ;
 	lv2:port [
 		a lv2:InputPort, lv2atom:AtomPort ;
 		lv2atom:bufferType lv2atom:Sequence ;
@@ -34,7 +41,7 @@
 		lv2:index 0 ;
 		lv2:symbol "in";
 		lv2:name "MIDI In";
-	] , [
+	], [
 		a lv2:OutputPort, lv2atom:AtomPort ;
 		lv2atom:bufferType lv2atom:Sequence ;
 		lv2:designation lv2:control ;
@@ -1452,7 +1459,7 @@
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 127.0 ;
-		lv2pg:group synthv1_lv2:G207_KEY1 ;
+		lv2pg:group synthv1_lv2:G501_KEY1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 150 ;
@@ -1462,8 +1469,40 @@
 		lv2:default 127.0 ;
 		lv2:minimum 0.0 ;
 		lv2:maximum 127.0 ;
-		lv2pg:group synthv1_lv2:G207_KEY1 ;
+		lv2pg:group synthv1_lv2:G501_KEY1 ;
 	] .
+
+
+synthv1_lv2:P201_TUNING_ENABLED
+	a lv2:Parameter ;
+	rdfs:label "P201 Tuning Enabled" ;
+	rdfs:range lv2atom:Bool .
+
+synthv1_lv2:P202_TUNING_REF_PITCH
+	a lv2:Parameter ;
+	rdfs:label "P202 Tuning Reference Pitch" ;
+	rdfs:range lv2atom:Float ;
+	lv2:default 440.0 ;
+	lv2:minimum 20.0 ;
+	lv2:maximum 20000.0 .
+
+synthv1_lv2:P203_TUNING_REF_NOTE
+	a lv2:Parameter ;
+	rdfs:label "P203 Tuning Reference Note" ;
+	rdfs:range lv2atom:Int ;
+	lv2:default 69 ;
+	lv2:minimum 0 ;
+	lv2:maximum 127 .
+
+synthv1_lv2:P204_TUNING_SCALE_FILE
+	a lv2:Parameter ;
+	rdfs:label "P204 Tuning Scale File" ;
+	rdfs:range lv2atom:Path .
+
+synthv1_lv2:P205_TUNING_KEYMAP_FILE
+	a lv2:Parameter ;
+	rdfs:label "P205 Tuning Key Map File" ;
+	rdfs:range lv2atom:Path .
 
 
 synthv1_lv2:G101_DCO1
@@ -1556,7 +1595,12 @@ synthv1_lv2:G306_DYN1
 	lv2:name "Effects - Dynamic" ;
 	lv2:symbol "DYN1" .
 
-synthv1_lv2:G307_KEY1
+synthv1_lv2:G401_TUN1
+	a lv2pg:InputGroup;
+	lv2:name "Config - Tuning" ;
+	lv2:symbol "TUN1" .
+
+synthv1_lv2:G501_KEY1
 	a lv2pg:InputGroup;
 	lv2:name "Input - Keyboard" ;
 	lv2:symbol "KEY1" .

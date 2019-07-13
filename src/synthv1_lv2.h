@@ -1,7 +1,7 @@
 // synthv1_lv2.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -83,8 +83,13 @@ public:
 protected:
 
 	void updatePreset(bool bDirty);
+	void updateTuning();
 
 	bool state_changed();
+
+#ifdef CONFIG_LV2_PATCH
+	bool patch_put(uint32_t ndelta, uint32_t type = 0);
+#endif
 
 private:
 
@@ -92,10 +97,18 @@ private:
 
 	struct lv2_urids
 	{
+		LV2_URID p201_tuning_enabled;
+		LV2_URID p202_tuning_refPitch;
+		LV2_URID p203_tuning_refNote;
+		LV2_URID p204_tuning_scaleFile;
+		LV2_URID p205_tuning_keyMapFile;
+		LV2_URID tun1_update;
 		LV2_URID atom_Blank;
 		LV2_URID atom_Object;
 		LV2_URID atom_Float;
 		LV2_URID atom_Int;
+		LV2_URID atom_Bool;
+		LV2_URID atom_Path;
 		LV2_URID time_Position;
 		LV2_URID time_beatsPerMinute;
 		LV2_URID midi_MidiEvent;
@@ -103,7 +116,14 @@ private:
 		LV2_URID bufsz_maxBlockLength;
 		LV2_URID bufsz_nominalBlockLength;
 		LV2_URID state_StateChanged;
-
+	#ifdef CONFIG_LV2_PATCH
+		LV2_URID patch_Get;
+		LV2_URID patch_Set;
+		LV2_URID patch_Put;
+		LV2_URID patch_body;
+		LV2_URID patch_property;
+		LV2_URID patch_value;
+	#endif
 	} m_urids;
 
 	LV2_Atom_Forge m_forge;
