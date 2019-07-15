@@ -1,7 +1,7 @@
 // synthv1_config.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -311,6 +311,7 @@ void synthv1_config::load (void)
 	sPresetDir = QSettings::value("/PresetDir").toString();
 	iKnobDialMode = QSettings::value("/KnobDialMode", 0).toInt();
 	iKnobEditMode = QSettings::value("/KnobEditMode", 0).toInt();
+	fRandomizePercent = QSettings::value("/RandomizePercent", 20.0f).toFloat();
 	bControlsEnabled = QSettings::value("/ControlsEnabled", false).toBool();
 	bProgramsEnabled = QSettings::value("/ProgramsEnabled", false).toBool();
 	QSettings::endGroup();
@@ -350,6 +351,7 @@ void synthv1_config::save (void)
 	QSettings::setValue("/PresetDir", sPresetDir);
 	QSettings::setValue("/KnobDialMode", iKnobDialMode);
 	QSettings::setValue("/KnobEditMode", iKnobEditMode);
+	QSettings::setValue("/RandomizePercent", fRandomizePercent);
 	QSettings::setValue("/ControlsEnabled", bControlsEnabled);
 	QSettings::setValue("/ProgramsEnabled", bProgramsEnabled);
 	QSettings::endGroup();

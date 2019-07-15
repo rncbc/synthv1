@@ -42,6 +42,8 @@
 #include <QShowEvent>
 #include <QHideEvent>
 
+#include <math.h>
+
 
 //-------------------------------------------------------------------------
 // synthv1widget - impl.
@@ -779,6 +781,11 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 		SLOT(resetParams()));
 
 
+	// Randomize params...
+	QObject::connect(m_ui.RandomParamsButton,
+		SIGNAL(clicked()),
+		SLOT(randomParams()));
+
 	// Swap params A/B
 	QObject::connect(m_ui.SwapParamsAButton,
 		SIGNAL(toggled(bool)),
@@ -1118,6 +1125,42 @@ void synthv1widget::resetParams (void)
 
 	m_ui.StatusBar->showMessage(tr("Reset preset"), 5000);
 	updateDirtyPreset(false);
+}
+
+
+// Randomize params (partial).
+void synthv1widget::randomParams (void)
+{
+	synthv1_ui *pSynthUi = ui_instance();
+	if (pSynthUi == NULL)
+		return;
+
+	float p = 1.0f;
+
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig)
+		p = 0.01f * pConfig->fRandomizePercent;
+
+	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
+		const synthv1::ParamIndex index = synthv1::ParamIndex(i);
+		// TODO: Filter non-randomizable parameters!...
+		synthv1widget_param *pParam = paramKnob(index);
+		if (pParam) {
+			const float v = pParam->value();
+			const float q = 1000.0f * ::fabsf(pParam->maximum() - pParam->minimum());
+			const float r = pParam->minimum() + 0.001f * float(::rand() % int(q));
+			float fValue = v;
+			if (synthv1_param::paramFloat(index))
+				fValue += p * (r - v);
+			else
+				fValue += ::roundf(r - v);
+			setParamValue(index, fValue);
+			updateParam(index, fValue);
+		}
+	}
+
+	m_ui.StatusBar->showMessage(tr("Randomize"), 5000);
+	updateDirtyPreset(true);
 }
 
 
