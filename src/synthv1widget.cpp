@@ -1143,7 +1143,23 @@ void synthv1widget::randomParams (void)
 
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
 		const synthv1::ParamIndex index = synthv1::ParamIndex(i);
-		// TODO: Filter non-randomizable parameters!...
+		// Filter out some non-randomizable parameters!...
+		if (index == synthv1::DCO1_OCTAVE  ||
+			index == synthv1::DCO1_TUNING  ||
+			index == synthv1::DCO1_ENVTIME ||
+			index == synthv1::DCF1_ENABLED ||
+			index == synthv1::LFO1_ENABLED) 
+			continue;
+		if (index >= synthv1::OUT1_WIDTH && index < synthv1::DCO2_SHAPE1)
+			continue;
+		if (index == synthv1::DCO2_OCTAVE  ||
+			index == synthv1::DCO2_TUNING  ||
+			index == synthv1::DCO2_ENVTIME ||
+			index == synthv1::DCF2_ENABLED ||
+			index == synthv1::LFO2_ENABLED) 
+			continue;
+		if (index >= synthv1::OUT2_WIDTH)
+			break;
 		synthv1widget_param *pParam = paramKnob(index);
 		if (pParam) {
 			const float v = pParam->value();
