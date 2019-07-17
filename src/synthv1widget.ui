@@ -41,6 +41,16 @@
       <widget class="synthv1widget_preset" name="Preset" />
      </item>
      <item>
+      <widget class="QToolButton" name="RandomParamsButton">
+       <property name="toolTip">
+        <string>Randomize</string>
+       </property>
+       <property name="text">
+        <string>Random</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QToolButton" name="SwapParamsAButton">
        <property name="toolTip">
         <string>Swap A</string>

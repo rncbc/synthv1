@@ -63,6 +63,9 @@ public:
 	int iKnobDialMode;
 	int iKnobEditMode;
 
+	// Default randomize factor (percent).
+	float fRandomizePercent;
+
 	// Special persistent options.
 	bool bControlsEnabled;
 	bool bProgramsEnabled;

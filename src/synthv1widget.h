@@ -93,6 +93,9 @@ protected slots:
 	// Reset param knobs to default value.
 	void resetParams();
 
+	// Randomize params (partial).
+	void randomParams();
+
 	// Swap params A/B.
 	void swapParams(bool bOn);
 
