@@ -44,6 +44,8 @@
 
 #include <math.h>
 
+#include <random>
+
 
 //-------------------------------------------------------------------------
 // synthv1widget - impl.
@@ -1149,6 +1151,8 @@ void synthv1widget::randomParams (void)
 		QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel)
 		return;
 
+	std::default_random_engine re(::time(NULL));
+
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
 		const synthv1::ParamIndex index = synthv1::ParamIndex(i);
 		// Filter out some non-randomizable parameters!...
@@ -1170,14 +1174,16 @@ void synthv1widget::randomParams (void)
 			break;
 		synthv1widget_param *pParam = paramKnob(index);
 		if (pParam) {
-			const float v = pParam->value();
-			const float q = 1000.0f * ::fabsf(pParam->maximum() - pParam->minimum());
-			const float r = pParam->minimum() + 0.001f * float(::rand() % int(q + 1));
-			float fValue = v;
-			if (synthv1_param::paramFloat(index))
-				fValue += p * (r - v);
+			std::normal_distribution<float> nd;
+			const float q = 0.5f * p * (pParam->maximum() - pParam->minimum());
+			float fValue = pParam->value() + q * nd(re);
+			if (!synthv1_param::paramFloat(index))
+				fValue = std::round(fValue);
+			if (fValue < pParam->minimum())
+				fValue = pParam->minimum();
 			else
-				fValue += ::roundf(r - v);
+			if (fValue > pParam->maximum())
+				fValue = pParam->maximum();
 			setParamValue(index, fValue);
 			updateParam(index, fValue);
 		}

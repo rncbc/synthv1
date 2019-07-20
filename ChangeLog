@@ -4,6 +4,13 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- All randomizers now compliant to the standard normal
+  distribution. (EXPERIMENTAL)
+- Make sure compiler flags comply to c++11 as standard.
+
+
 0.9.9  2019-07-18  A Summer'19 Release.
 
 - Randomization of current parameters is now available
