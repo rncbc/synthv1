@@ -342,7 +342,7 @@ public:
 			xrpn_item& item = get_item(channel);
 			if (item.is_any() && item.type() != synthv1_controls::RPN)
 				enqueue(item);
-			if (item.is_status() // RPN NULL [MSB]
+			if (item.is_status() // RPN nullptr [MSB]
 				&& item.type() == synthv1_controls::RPN && item.is_param_lsb()
 				&& item.param_lsb() == 0x7f && event.value == 0x7f) {
 				item.clear();
@@ -366,7 +366,7 @@ public:
 			xrpn_item& item = get_item(channel);
 			if (item.is_any() && item.type() != synthv1_controls::RPN)
 				enqueue(item);
-			if (item.is_status() // RPN NULL [LSB]
+			if (item.is_status() // RPN nullptr [LSB]
 				&& item.type() == synthv1_controls::RPN && item.is_param_msb()
 				&& item.param_msb() == 0x7f && event.value == 0x7f) {
 				item.clear();

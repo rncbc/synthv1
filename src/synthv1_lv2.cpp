@@ -75,13 +75,13 @@ synthv1_lv2::synthv1_lv2 (
 {
 	::memset(&m_urids, 0, sizeof(m_urids));
 
-	m_urid_map = NULL;
-	m_atom_in  = NULL;
-	m_atom_out = NULL;
-	m_schedule = NULL;
+	m_urid_map = nullptr;
+	m_atom_in  = nullptr;
+	m_atom_out = nullptr;
+	m_schedule = nullptr;
 	m_ndelta   = 0;
 
-	const LV2_Options_Option *host_options = NULL;
+	const LV2_Options_Option *host_options = nullptr;
 
 	for (int i = 0; host_features && host_features[i]; ++i) {
 		const LV2_Feature *host_feature = host_features[i];
@@ -182,7 +182,7 @@ synthv1_lv2::synthv1_lv2 (
 	m_ins  = new float * [nchannels];
 	m_outs = new float * [nchannels];
 	for (uint16_t k = 0; k < nchannels; ++k)
-		m_ins[k] = m_outs[k] = NULL;
+		m_ins[k] = m_outs[k] = nullptr;
 }
 
 
@@ -240,7 +240,7 @@ void synthv1_lv2::run ( uint32_t nframes )
 
 	if (m_atom_in) {
 		LV2_ATOM_SEQUENCE_FOREACH(m_atom_in, event) {
-			if (event == NULL)
+			if (event == nullptr)
 				continue;
 			if (event->body.type == m_urids.midi_MidiEvent) {
 				uint8_t *data = (uint8_t *) LV2_ATOM_BODY(&event->body);
@@ -263,9 +263,9 @@ void synthv1_lv2::run ( uint32_t nframes )
 				const LV2_Atom_Object *object
 					= (LV2_Atom_Object *) &event->body;
 				if (object->body.otype == m_urids.time_Position) {
-					LV2_Atom *atom = NULL;
+					LV2_Atom *atom = nullptr;
 					lv2_atom_object_get(object,
-						m_urids.time_beatsPerMinute, &atom, NULL);
+						m_urids.time_beatsPerMinute, &atom, nullptr);
 					if (atom && atom->type == m_urids.atom_Float) {
 						const float host_bpm = ((LV2_Atom_Float *) atom)->body;
 						if (::fabsf(host_bpm - synthv1::tempo()) > 0.001f)
@@ -276,8 +276,8 @@ void synthv1_lv2::run ( uint32_t nframes )
 				else 
 				if (object->body.otype == m_urids.patch_Set) {
 					// set property value
-					const LV2_Atom *property = NULL;
-					const LV2_Atom *value = NULL;
+					const LV2_Atom *property = nullptr;
+					const LV2_Atom *value = nullptr;
 					lv2_atom_object_get(object,
 						m_urids.patch_property, &property,
 						m_urids.patch_value, &value, 0);
@@ -335,7 +335,7 @@ void synthv1_lv2::run ( uint32_t nframes )
 		}
 		// remember last time for worker response
 		m_ndelta = ndelta;
-	//	m_atom_in = NULL;
+	//	m_atom_in = nullptr;
 	}
 
 	if (nframes > ndelta)
@@ -370,7 +370,7 @@ static LV2_State_Status synthv1_lv2_state_save ( LV2_Handle instance,
 	uint32_t flags, const LV2_Feature *const */*features*/ )
 {
 	synthv1_lv2 *pPlugin = static_cast<synthv1_lv2 *> (instance);
-	if (pPlugin == NULL)
+	if (pPlugin == nullptr)
 		return LV2_STATE_ERR_UNKNOWN;
 
 	// FIXME: At this time, only micro-tonal (aka. tuning) settings
@@ -416,7 +416,7 @@ static LV2_State_Status synthv1_lv2_state_restore ( LV2_Handle instance,
 	uint32_t flags, const LV2_Feature *const */*features*/ )
 {
 	synthv1_lv2 *pPlugin = static_cast<synthv1_lv2 *> (instance);
-	if (pPlugin == NULL)
+	if (pPlugin == nullptr)
 		return LV2_STATE_ERR_UNKNOWN;
 
 	// Retrieve state as XML chunk...
@@ -445,7 +445,7 @@ static LV2_State_Status synthv1_lv2_state_restore ( LV2_Handle instance,
 	if ((flags & (LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE)) == 0)
 		return LV2_STATE_ERR_BAD_FLAGS;
 
-	if (value == NULL)
+	if (value == nullptr)
 		return LV2_STATE_ERR_UNKNOWN;
 
 	QDomDocument doc(SYNTHV1_TITLE);
@@ -506,7 +506,7 @@ const LV2_Program_Descriptor *synthv1_lv2::get_program ( uint32_t index )
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 void synthv1_lv2::select_program ( uint32_t bank, uint32_t program )
@@ -625,14 +625,14 @@ bool synthv1_lv2::patch_put ( uint32_t ndelta, uint32_t type )
 	}
 	if (type == 0 || type == m_urids.p204_tuning_scaleFile) {
 		const char *pszScaleFile = synthv1::tuningScaleFile();
-		if (pszScaleFile == NULL)
+		if (pszScaleFile == nullptr)
 			pszScaleFile = s_szNull;
 		lv2_atom_forge_key(&m_forge, m_urids.p204_tuning_scaleFile);
 		lv2_atom_forge_path(&m_forge, pszScaleFile, ::strlen(pszScaleFile) + 1);
 	}
 	if (type == 0 || type == m_urids.p205_tuning_keyMapFile) {
 		const char *pszKeyMapFile = synthv1::tuningKeyMapFile();
-		if (pszKeyMapFile == NULL)
+		if (pszKeyMapFile == nullptr)
 			pszKeyMapFile = s_szNull;
 		lv2_atom_forge_key(&m_forge, m_urids.p205_tuning_keyMapFile);
 		lv2_atom_forge_path(&m_forge, pszKeyMapFile, ::strlen(pszKeyMapFile) + 1);
@@ -709,7 +709,7 @@ static const LV2_Program_Descriptor *synthv1_lv2_programs_get_program (
 	if (pPlugin)
 		return pPlugin->get_program(index);
 	else
-		return NULL;
+		return nullptr;
 }
 
 static void synthv1_lv2_programs_select_program (
@@ -758,7 +758,7 @@ static const LV2_Worker_Interface synthv1_lv2_worker_interface =
 {
 	synthv1_lv2_worker_work,
 	synthv1_lv2_worker_response,
-	NULL
+	nullptr
 };
 
 
@@ -775,7 +775,7 @@ static const void *synthv1_lv2_extension_data ( const char *uri )
 	if (::strcmp(uri, LV2_STATE__interface) == 0)
 		return &synthv1_lv2_state_interface;
 
-	return NULL;
+	return nullptr;
 }
 
 
@@ -794,7 +794,7 @@ static const LV2_Descriptor synthv1_lv2_descriptor =
 
 LV2_SYMBOL_EXPORT const LV2_Descriptor *lv2_descriptor ( uint32_t index )
 {
-	return (index == 0 ? &synthv1_lv2_descriptor : NULL);
+	return (index == 0 ? &synthv1_lv2_descriptor : nullptr);
 }
 
 

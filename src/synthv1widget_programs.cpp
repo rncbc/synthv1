@@ -80,7 +80,7 @@ QSize synthv1widget_programs::ItemDelegate::sizeHint (
 QWidget *synthv1widget_programs::ItemDelegate::createEditor ( QWidget *pParent,
 	const QStyleOptionViewItem& /*option*/, const QModelIndex& index ) const
 {
-	QWidget *pEditor = NULL;
+	QWidget *pEditor = nullptr;
 
 	switch (index.column()) {
 	case 0: // Data.
@@ -265,7 +265,7 @@ void synthv1widget_programs::loadPrograms ( synthv1_programs *pPrograms )
 	QTreeWidget::clear();
 
 	QList<QTreeWidgetItem *> items;
-	QTreeWidgetItem *pCurrentItem = NULL;
+	QTreeWidgetItem *pCurrentItem = nullptr;
 	const synthv1_programs::Banks& banks = pPrograms->banks();
 	synthv1_programs::Banks::ConstIterator bank_iter = banks.constBegin();
 	const synthv1_programs::Banks::ConstIterator& bank_end = banks.constEnd();
@@ -370,8 +370,8 @@ void synthv1widget_programs::addProgramItem (void)
 QTreeWidgetItem *synthv1widget_programs::newBankItem (void)
 {
 	QTreeWidgetItem *pItem = QTreeWidget::currentItem();
-	QTreeWidgetItem *pBankItem = (pItem ? pItem->parent() : NULL);
-	if (pBankItem == NULL)
+	QTreeWidgetItem *pBankItem = (pItem ? pItem->parent() : nullptr);
+	if (pBankItem == nullptr)
 		pBankItem = pItem;
 
 	int iBank = 0;
@@ -390,7 +390,7 @@ QTreeWidgetItem *synthv1widget_programs::newBankItem (void)
 		if (iBankData < pBankItem->data(0, Qt::UserRole).toInt())
 			break;
 		if (++iBankData > 16383)
-			return NULL;
+			return nullptr;
 	}
 
 	pBankItem = new QTreeWidgetItem(QStringList()
@@ -407,18 +407,18 @@ QTreeWidgetItem *synthv1widget_programs::newBankItem (void)
 QTreeWidgetItem *synthv1widget_programs::newProgramItem (void)
 {
 	QTreeWidgetItem *pItem = QTreeWidget::currentItem();
-	QTreeWidgetItem *pBankItem = (pItem ? pItem->parent() : NULL);
-	QTreeWidgetItem *pProgItem = NULL;
-	if (pBankItem == NULL)
+	QTreeWidgetItem *pBankItem = (pItem ? pItem->parent() : nullptr);
+	QTreeWidgetItem *pProgItem = nullptr;
+	if (pBankItem == nullptr)
 		pBankItem = pItem;
 	else
 		pProgItem = pItem;
-	if (pBankItem == NULL)
+	if (pBankItem == nullptr)
 		pBankItem = QTreeWidget::topLevelItem(0);
-	if (pBankItem == NULL)
+	if (pBankItem == nullptr)
 		pBankItem = newBankItem();
-	if (pBankItem == NULL)
-		return NULL;
+	if (pBankItem == nullptr)
+		return nullptr;
 
 	const int iBankData
 		= pBankItem->data(0, Qt::UserRole).toInt();
@@ -439,7 +439,7 @@ QTreeWidgetItem *synthv1widget_programs::newProgramItem (void)
 		if (iProgData < pProgItem->data(0, Qt::UserRole).toInt())
 			break;
 		if (++iProgData > 127)
-			return NULL;
+			return nullptr;
 	}
 
 	pProgItem = new QTreeWidgetItem(QStringList()
@@ -512,14 +512,14 @@ void synthv1widget_programs::itemChangedSlot ( QTreeWidgetItem *pItem, int )
 
 void synthv1widget_programs::itemExpandedSlot ( QTreeWidgetItem *pItem )
 {
-	if (pItem->parent() == NULL)
+	if (pItem->parent() == nullptr)
 		pItem->setIcon(0, QIcon(":/images/presetBankOpen.png"));
 }
 
 
 void synthv1widget_programs::itemCollapsedSlot ( QTreeWidgetItem *pItem )
 {
-	if (pItem->parent() == NULL)
+	if (pItem->parent() == nullptr)
 		pItem->setIcon(0, QIcon(":/images/presetBank.png"));
 }
 

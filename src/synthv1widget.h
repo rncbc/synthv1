@@ -179,7 +179,7 @@ class synthv1widget_sched : public QObject
 public:
 
 	// ctor.
-	synthv1widget_sched(synthv1 *pSynth, QObject *pParent = NULL)
+	synthv1widget_sched(synthv1 *pSynth, QObject *pParent = nullptr)
 		: QObject(pParent), m_notifier(pSynth, this) {}
 
 signals:

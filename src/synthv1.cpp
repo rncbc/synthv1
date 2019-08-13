@@ -155,7 +155,7 @@ class synthv1_port
 {
 public:
 
-	synthv1_port() : m_port(NULL), m_value(0.0f), m_vport(0.0f) {}
+	synthv1_port() : m_port(nullptr), m_value(0.0f), m_vport(0.0f) {}
 
 	virtual ~synthv1_port() {}
 
@@ -930,9 +930,9 @@ protected:
 	void free_voice ( synthv1_voice *pv )
 	{
 		if (m_lfo1.psync == pv)
-			m_lfo1.psync = NULL;
+			m_lfo1.psync = nullptr;
 		if (m_lfo2.psync == pv)
-			m_lfo2.psync = NULL;
+			m_lfo2.psync = nullptr;
 
 		m_play_list.remove(pv);
 		m_free_list.append(pv);
@@ -1064,23 +1064,23 @@ synthv1_impl::synthv1_impl (
 	}
 
 	for (int note = 0; note < MAX_NOTES; ++note)
-		m_note1[note] = m_note2[note] = NULL;
+		m_note1[note] = m_note2[note] = nullptr;
 
 	// local buffers none yet
-	m_sfxs = NULL;
+	m_sfxs = nullptr;
 	m_nsize = 0;
 
 	// flangers none yet
-	m_flanger = NULL;
+	m_flanger = nullptr;
 
 	// phasers none yet
-	m_phaser = NULL;
+	m_phaser = nullptr;
 
 	// delays none yet
-	m_delay = NULL;
+	m_delay = nullptr;
 
 	// compressors none yet
-	m_comp = NULL;
+	m_comp = nullptr;
 
 	// Micro-tuning support, if any...
 	resetTuning();
@@ -1134,25 +1134,25 @@ void synthv1_impl::setChannels ( uint16_t nchannels )
 	// deallocate flangers
 	if (m_flanger) {
 		delete [] m_flanger;
-		m_flanger = NULL;
+		m_flanger = nullptr;
 	}
 
 	// deallocate phasers
 	if (m_phaser) {
 		delete [] m_phaser;
-		m_phaser = NULL;
+		m_phaser = nullptr;
 	}
 
 	// deallocate delays
 	if (m_delay) {
 		delete [] m_delay;
-		m_delay = NULL;
+		m_delay = nullptr;
 	}
 
 	// deallocate compressors
 	if (m_comp) {
 		delete [] m_comp;
-		m_comp = NULL;
+		m_comp = nullptr;
 	}
 }
 
@@ -1223,7 +1223,7 @@ void synthv1_impl::alloc_sfxs ( uint32_t nsize )
 		for (uint16_t k = 0; k < m_nchannels; ++k)
 			delete [] m_sfxs[k];
 		delete [] m_sfxs;
-		m_sfxs = NULL;
+		m_sfxs = nullptr;
 		m_nsize = 0;
 	}
 
@@ -1301,7 +1301,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 {
 	static float s_fDummy = 0.0f;
 
-	if (pfParam == NULL)
+	if (pfParam == nullptr)
 		pfParam = &s_fDummy;
 
 	synthv1_port *pParamPort = paramPort(index);
@@ -1354,7 +1354,7 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 
 synthv1_port *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 {
-	synthv1_port *pParamPort = NULL;
+	synthv1_port *pParamPort = nullptr;
 
 	switch (index) {
 	case synthv1::DCO1_SHAPE1:    pParamPort = &m_dco1.shape1;      break;
@@ -1595,7 +1595,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 							m_lfo1.env.note_off_fast(&pv->lfo1_env);
 							m_dca1.env.note_off_fast(&pv->dca1_env);
 							if (++n1 > 1) { // there shall be only one
-								m_note1[pv->note1] = NULL;
+								m_note1[pv->note1] = nullptr;
 								pv->note1 = -1;
 							}
 						}
@@ -1608,7 +1608,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					m_dcf1.env.note_off_fast(&pv->dcf1_env);
 					m_lfo1.env.note_off_fast(&pv->lfo1_env);
 					m_dca1.env.note_off_fast(&pv->dca1_env);
-					m_note1[pv->note1] = NULL;
+					m_note1[pv->note1] = nullptr;
 					pv->note1 = -1;
 				}
 			}
@@ -1624,7 +1624,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 							m_lfo2.env.note_off_fast(&pv->lfo2_env);
 							m_dca2.env.note_off_fast(&pv->dca2_env);
 							if (++n2 > 1) { // there shall be only one
-								m_note2[pv->note2] = NULL;
+								m_note2[pv->note2] = nullptr;
 								pv->note2 = -1;
 							}
 						}
@@ -1637,7 +1637,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					m_dcf2.env.note_off_fast(&pv->dcf2_env);
 					m_lfo2.env.note_off_fast(&pv->lfo2_env);
 					m_dca2.env.note_off_fast(&pv->dca2_env);
-					m_note2[pv->note2] = NULL;
+					m_note2[pv->note2] = nullptr;
 					pv->note2 = -1;
 				}
 			}
@@ -1674,13 +1674,13 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 						pv->dco12.sync(&pv->dco11);
 					} else {
 						pv->dco1_freq2 *= synthv1_freq2(+ dco1_detune);
-						pv->dco12.sync(NULL);
+						pv->dco12.sync(nullptr);
 					}
 					if (*m_dco1.sync2 > 0.5f) {
 						pv->dco11.sync(&pv->dco12);
 					} else {
 						pv->dco1_freq1 *= synthv1_freq2(- dco1_detune);
-						pv->dco11.sync(NULL);
+						pv->dco11.sync(nullptr);
 					}
 					// phases
 					const float dco1_phase = *m_dco1.phase * PHASE_SCALE;
@@ -1707,7 +1707,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					const float lfo1_pshift
 						= (m_lfo1.psync ? m_lfo1.psync->lfo1.pshift() : 0.0f);
 					pv->lfo1_sample = pv->lfo1.start(lfo1_pshift);
-					if (*m_lfo1.sync > 0.0f && m_lfo1.psync == NULL)
+					if (*m_lfo1.sync > 0.0f && m_lfo1.psync == nullptr)
 						m_lfo1.psync = pv;
 					// glides (portamento)
 					const float dco1_frames
@@ -1753,13 +1753,13 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 						pv->dco22.sync(&pv->dco21);
 					} else {
 						pv->dco2_freq2 *= synthv1_freq2(+ dco2_detune);
-						pv->dco22.sync(NULL);
+						pv->dco22.sync(nullptr);
 					}
 					if (*m_dco2.sync2 > 0.5f) {
 						pv->dco21.sync(&pv->dco22);
 					} else {
 						pv->dco2_freq1 *= synthv1_freq2(- dco2_detune);
-						pv->dco21.sync(NULL);
+						pv->dco21.sync(nullptr);
 					}
 					// phases
 					const float dco2_phase = *m_dco2.phase * PHASE_SCALE;
@@ -1786,7 +1786,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					const float lfo2_pshift
 						= (m_lfo2.psync ? m_lfo2.psync->lfo2.pshift() : 0.0f);
 					pv->lfo2_sample = pv->lfo2.start(lfo2_pshift);
-					if (*m_lfo2.sync > 0.0f && m_lfo2.psync == NULL)
+					if (*m_lfo2.sync > 0.0f && m_lfo2.psync == nullptr)
 						m_lfo2.psync = pv;
 					// glides (portamento)
 					const float dco2_frames
@@ -1824,7 +1824,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 							m_dcf1.env.note_off(&pv->dcf1_env);
 							m_lfo1.env.note_off(&pv->lfo1_env);
 						}
-						m_note1[pv->note1] = NULL;
+						m_note1[pv->note1] = nullptr;
 						pv->note1 = -1;
 						// mono legato?
 						if (*m_def1.mono > 0.0f) {
@@ -1852,7 +1852,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 							m_dcf2.env.note_off(&pv->dcf2_env);
 							m_lfo2.env.note_off(&pv->lfo2_env);
 						}
-						m_note2[pv->note2] = NULL;
+						m_note2[pv->note2] = nullptr;
 						pv->note2 = -1;
 						// mono legato?
 						if (*m_def2.mono > 0.0f) {
@@ -1994,9 +1994,9 @@ void synthv1_impl::allNotesOff (void)
 	synthv1_voice *pv = m_play_list.next();
 	while (pv) {
 		if (pv->note1 >= 0)
-			m_note1[pv->note1] = NULL;
+			m_note1[pv->note1] = nullptr;
 		if (pv->note2 >= 0)
-			m_note2[pv->note2] = NULL;
+			m_note2[pv->note2] = nullptr;
 		free_voice(pv);
 		pv = m_play_list.next();
 	}
@@ -2006,8 +2006,8 @@ void synthv1_impl::allNotesOff (void)
 	dco2_last1 = 0.0f;
 	dco2_last2 = 0.0f;
 
-	m_lfo1.psync = NULL;
-	m_lfo2.psync = NULL;
+	m_lfo1.psync = nullptr;
+	m_lfo2.psync = nullptr;
 
 	m_direct_note = 0;
 }
@@ -2020,7 +2020,7 @@ void synthv1_impl::allNotesOff_1 (void)
 			m_dca1.env.note_off_fast(&pv->dca1_env);
 			m_dcf1.env.note_off_fast(&pv->dcf1_env);
 			m_lfo1.env.note_off_fast(&pv->lfo1_env);
-			m_note1[pv->note1] = NULL;
+			m_note1[pv->note1] = nullptr;
 			pv->note1 = -1;
 		}
 		pv = pv->next();
@@ -2039,7 +2039,7 @@ void synthv1_impl::allNotesOff_2 (void)
 			m_dca2.env.note_off_fast(&pv->dca2_env);
 			m_dcf2.env.note_off_fast(&pv->dcf2_env);
 			m_lfo2.env.note_off_fast(&pv->lfo2_env);
-			m_note2[pv->note2] = NULL;
+			m_note2[pv->note2] = nullptr;
 			pv->note2 = -1;
 		}
 		pv = pv->next();
@@ -2062,7 +2062,7 @@ void synthv1_impl::allSustainOff_1 (void)
 				m_dca1.env.note_off(&pv->dca1_env);
 				m_dcf1.env.note_off(&pv->dcf1_env);
 				m_lfo1.env.note_off(&pv->lfo1_env);
-				m_note1[pv->note1] = NULL;
+				m_note1[pv->note1] = nullptr;
 				pv->note1 = -1;
 			}
 		}
@@ -2081,7 +2081,7 @@ void synthv1_impl::allSustainOff_2 (void)
 				m_dca2.env.note_off(&pv->dca2_env);
 				m_dcf2.env.note_off(&pv->dcf2_env);
 				m_lfo2.env.note_off(&pv->lfo2_env);
-				m_note2[pv->note2] = NULL;
+				m_note2[pv->note2] = nullptr;
 				pv->note2 = -1;
 			}
 		}
@@ -2280,19 +2280,19 @@ void synthv1_impl::reset (void)
 		m_out2.width.value_ptr());
 
 	// flangers
-	if (m_flanger == NULL)
+	if (m_flanger == nullptr)
 		m_flanger = new synthv1_fx_flanger [m_nchannels];
 
 	// phasers
-	if (m_phaser == NULL)
+	if (m_phaser == nullptr)
 		m_phaser = new synthv1_fx_phaser [m_nchannels];
 
 	// delays
-	if (m_delay == NULL)
+	if (m_delay == nullptr)
 		m_delay = new synthv1_fx_delay [m_nchannels];
 
 	// compressors
-	if (m_comp == NULL)
+	if (m_comp == nullptr)
 		m_comp = new synthv1_fx_comp [m_nchannels];
 
 	// reverbs
