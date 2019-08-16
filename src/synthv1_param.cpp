@@ -274,7 +274,7 @@ bool synthv1_param::paramFloat ( synthv1::ParamIndex index )
 bool synthv1_param::loadPreset (
 	synthv1 *pSynth, const QString& sFilename )
 {
-	if (pSynth == NULL)
+	if (pSynth == nullptr)
 		return false;
 
 	QFileInfo fi(sFilename);
@@ -367,7 +367,7 @@ bool synthv1_param::loadPreset (
 bool synthv1_param::savePreset (
 	synthv1 *pSynth, const QString& sFilename, bool bSymLink )
 {
-	if (pSynth == NULL)
+	if (pSynth == nullptr)
 		return false;
 
 	pSynth->stabilize();
@@ -418,7 +418,7 @@ bool synthv1_param::savePreset (
 void synthv1_param::loadTuning (
 	synthv1 *pSynth, const QDomElement& eTuning )
 {
-	if (pSynth == NULL)
+	if (pSynth == nullptr)
 		return;
 
 	pSynth->setTuningEnabled(eTuning.attribute("enabled").toInt() > 0);
@@ -465,7 +465,7 @@ void synthv1_param::loadTuning (
 void synthv1_param::saveTuning (
 	synthv1 *pSynth, QDomDocument& doc, QDomElement& eTuning, bool bSymLink )
 {
-	if (pSynth == NULL)
+	if (pSynth == nullptr)
 		return;
 
 	eTuning.setAttribute("enabled", int(pSynth->isTuningEnabled()));

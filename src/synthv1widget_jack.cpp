@@ -58,7 +58,7 @@
 synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 	: synthv1widget(), m_pSynth(pSynth)
 	#ifdef CONFIG_NSM
-		, m_pNsmClient(NULL)
+		, m_pNsmClient(nullptr)
 	#endif
 {
 	// Special style paths...

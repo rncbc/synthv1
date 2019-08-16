@@ -1,7 +1,7 @@
 // synthv1widget_preset.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@ synthv1widget_preset::synthv1widget_preset ( QWidget *pParent )
 	m_pComboBox->setEditable(true);
 	m_pComboBox->setMinimumWidth(240);
 #if QT_VERSION >= QT_VERSION_CHECK(4, 2, 0)
-	m_pComboBox->setCompleter(NULL);
+	m_pComboBox->setCompleter(nullptr);
 #endif
 	m_pComboBox->setInsertPolicy(QComboBox::NoInsert);
 	m_pSaveButton->setIcon(QIcon(":/images/presetSave.png"));
@@ -140,7 +140,7 @@ bool synthv1widget_preset::queryPreset (void)
 		return true;
 
 	synthv1_config *pConfig = synthv1_config::getInstance();
-	if (pConfig == NULL)
+	if (pConfig == nullptr)
 		return false;
 
 	if (m_iDirtyPreset > 0) {
@@ -224,7 +224,7 @@ void synthv1widget_preset::newPreset (void)
 void synthv1widget_preset::openPreset (void)
 {
 	synthv1_config *pConfig = synthv1_config::getInstance();
-	if (pConfig == NULL)
+	if (pConfig == nullptr)
 		return;
 
 	QStringList files;
@@ -233,7 +233,7 @@ void synthv1widget_preset::openPreset (void)
 	const QString& sTitle  = tr("Open Preset") + " - " SYNTHV1_TITLE;
 	const QString& sFilter = tr("Preset files (*.%1)").arg(sExt);
 
-	QWidget *pParentWidget = NULL;
+	QWidget *pParentWidget = nullptr;
 	QFileDialog::Options options = 0;
 	if (pConfig->bDontUseNativeDialogs) {
 		options |= QFileDialog::DontUseNativeDialog;
@@ -241,7 +241,7 @@ void synthv1widget_preset::openPreset (void)
 	}
 #if 1//QT_VERSION < QT_VERSION_CHECK(4, 4, 0)
 	files = QFileDialog::getOpenFileNames(pParentWidget,
-		sTitle, pConfig->sPresetDir, sFilter, NULL, options);
+		sTitle, pConfig->sPresetDir, sFilter, nullptr, options);
 #else
 	QFileDialog fileDialog(pParentWidget,
 		sTitle, pConfig->sPresetDir, sFilter);
@@ -292,7 +292,7 @@ void synthv1widget_preset::savePreset ( const QString& sPreset )
 		return;
 
 	synthv1_config *pConfig = synthv1_config::getInstance();
-	if (pConfig == NULL)
+	if (pConfig == nullptr)
 		return;
 
 	const QString sExt(SYNTHV1_TITLE);
@@ -301,7 +301,7 @@ void synthv1widget_preset::savePreset ( const QString& sPreset )
 	if (!fi.exists()) {
 		const QString& sTitle  = tr("Save Preset") + " - " SYNTHV1_TITLE;
 		const QString& sFilter = tr("Preset files (*.%1)").arg(sExt);
-		QWidget *pParentWidget = NULL;
+		QWidget *pParentWidget = nullptr;
 		QFileDialog::Options options = 0;
 		if (pConfig->bDontUseNativeDialogs) {
 			options |= QFileDialog::DontUseNativeDialog;
@@ -309,7 +309,7 @@ void synthv1widget_preset::savePreset ( const QString& sPreset )
 		}
 	#if 1//QT_VERSION < QT_VERSION_CHECK(4, 4, 0)
 		sFilename = QFileDialog::getSaveFileName(pParentWidget,
-			sTitle, sFilename, sFilter, NULL, options);
+			sTitle, sFilename, sFilter, nullptr, options);
 	#else
 		QFileDialog fileDialog(pParentWidget,
 			sTitle, sFilename, sFilter);
@@ -358,7 +358,7 @@ void synthv1widget_preset::deletePreset (void)
 		return;
 
 	synthv1_config *pConfig = synthv1_config::getInstance();
-	if (pConfig == NULL)
+	if (pConfig == nullptr)
 		return;
 	if (QMessageBox::warning(QWidget::window(),
 		tr("Warning") + " - " SYNTHV1_TITLE,

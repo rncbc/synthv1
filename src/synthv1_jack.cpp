@@ -65,7 +65,7 @@ protected:
 	void run()
 	{
 		snd_seq_t *seq = m_synth->alsa_seq();
-		if (seq == NULL)
+		if (seq == nullptr)
 			return;
 
 		m_running = true;
@@ -82,7 +82,7 @@ protected:
 		while (m_running && poll_rc >= 0) {
 			poll_rc = ::poll(pfds, nfds, 200);
 			while (poll_rc > 0) {
-				snd_seq_event_t *ev = NULL;
+				snd_seq_event_t *ev = nullptr;
 				snd_seq_event_input(seq, &ev);
 				m_synth->alsa_capture(ev);
 			//	snd_seq_free_event(ev);
@@ -161,27 +161,27 @@ static void synthv1_jack_session_event (
 
 synthv1_jack::synthv1_jack (void) : synthv1(2)
 {
-	m_client = NULL;
+	m_client = nullptr;
 
 	m_activated = false;
 
-	m_audio_ins = NULL;
-	m_audio_outs = NULL;
+	m_audio_ins = nullptr;
+	m_audio_outs = nullptr;
 
-	m_ins = m_outs = NULL;
+	m_ins = m_outs = nullptr;
 
 	::memset(m_params, 0, synthv1::NUM_PARAMS * sizeof(float));
 
 #ifdef CONFIG_JACK_MIDI
-	m_midi_in = NULL;
+	m_midi_in = nullptr;
 #endif
 #ifdef CONFIG_ALSA_MIDI
-	m_alsa_seq     = NULL;
+	m_alsa_seq     = nullptr;
 //	m_alsa_client  = -1;
 	m_alsa_port    = -1;
-	m_alsa_decoder = NULL;
-	m_alsa_buffer  = NULL;
-	m_alsa_thread  = NULL;
+	m_alsa_decoder = nullptr;
+	m_alsa_buffer  = nullptr;
+	m_alsa_thread  = nullptr;
 #endif
 
 	synthv1::programs()->enabled(true);
@@ -299,8 +299,8 @@ void synthv1_jack::open ( const char *client_id )
 	}
 
 	// open client
-	m_client = ::jack_client_open(client_id, JackNullOption, NULL);
-	if (m_client == NULL)
+	m_client = ::jack_client_open(client_id, JackNullOption, nullptr);
+	if (m_client == nullptr)
 		return;
 
 	// set sample rate
@@ -321,11 +321,11 @@ void synthv1_jack::open ( const char *client_id )
 		::snprintf(port_name, sizeof(port_name), "in_%d", k + 1);
 		m_audio_ins[k] = ::jack_port_register(m_client,
 			port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
-		m_ins[k] = NULL;
+		m_ins[k] = nullptr;
 		::snprintf(port_name, sizeof(port_name), "out_%d", k + 1);
 		m_audio_outs[k] = ::jack_port_register(m_client,
 			port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
-		m_outs[k] = NULL;
+		m_outs[k] = nullptr;
 	}
 
 	// register midi port
@@ -334,12 +334,12 @@ void synthv1_jack::open ( const char *client_id )
 		"in", JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0);
 #endif
 #ifdef CONFIG_ALSA_MIDI
-	m_alsa_seq     = NULL;
+	m_alsa_seq     = nullptr;
 //	m_alsa_client  = -1;
 	m_alsa_port    = -1;
-	m_alsa_decoder = NULL;
-	m_alsa_buffer  = NULL;
-	m_alsa_thread  = NULL;
+	m_alsa_decoder = nullptr;
+	m_alsa_buffer  = nullptr;
+	m_alsa_thread  = nullptr;
 	// open alsa sequencer client...
 	if (snd_seq_open(&m_alsa_seq, "hw", SND_SEQ_OPEN_INPUT, 0) >= 0) {
 		snd_seq_set_client_name(m_alsa_seq, client_id);
@@ -407,15 +407,15 @@ void synthv1_jack::close (void)
 	if (m_alsa_seq) {
 		if (m_alsa_thread) {
 			delete m_alsa_thread;
-			m_alsa_thread = NULL;
+			m_alsa_thread = nullptr;
 		}
 		if (m_alsa_buffer) {
 			::jack_ringbuffer_free(m_alsa_buffer);
-			m_alsa_buffer = NULL;
+			m_alsa_buffer = nullptr;
 		}
 		if (m_alsa_decoder) {
 			snd_midi_event_free(m_alsa_decoder);
-			m_alsa_decoder = NULL;
+			m_alsa_decoder = nullptr;
 		}
 		if (m_alsa_port >= 0) {
 			snd_seq_delete_simple_port(m_alsa_seq, m_alsa_port);
@@ -423,18 +423,18 @@ void synthv1_jack::close (void)
 		}
 		snd_seq_close(m_alsa_seq);
 	//	m_alsa_client = -1;
-		m_alsa_seq = NULL;
+		m_alsa_seq = nullptr;
 	}
 #endif
 
-	if (m_client == NULL)
+	if (m_client == nullptr)
 		return;
 
 #ifdef CONFIG_JACK_MIDI
 	// unregister midi ports
 	if (m_midi_in) {
 		::jack_port_unregister(m_client, m_midi_in);
-		m_midi_in = NULL;
+		m_midi_in = nullptr;
 	}
 #endif
 
@@ -444,39 +444,39 @@ void synthv1_jack::close (void)
 	for (uint16_t k = 0; k < nchannels; ++k) {
 		if (m_audio_outs && m_audio_outs[k]) {
 			::jack_port_unregister(m_client, m_audio_outs[k]);
-			m_audio_outs[k] = NULL;
+			m_audio_outs[k] = nullptr;
 		}
 		if (m_outs && m_outs[k])
-			m_outs[k] = NULL;
+			m_outs[k] = nullptr;
 		if (m_audio_ins && m_audio_ins[k]) {
 			::jack_port_unregister(m_client, m_audio_ins[k]);
-			m_audio_ins[k] = NULL;
+			m_audio_ins[k] = nullptr;
 		}
 		if (m_ins && m_ins[k])
-			m_ins[k] = NULL;
+			m_ins[k] = nullptr;
 	}
 
 	if (m_outs) {
 		delete [] m_outs;
-		m_outs = NULL;
+		m_outs = nullptr;
 	}
 	if (m_ins) {
 		delete [] m_ins;
-		m_ins = NULL;
+		m_ins = nullptr;
 	}
 
 	if (m_audio_outs) {
 		delete [] m_audio_outs;
-		m_audio_outs = NULL;
+		m_audio_outs = nullptr;
 	}
 	if (m_audio_ins) {
 		delete [] m_audio_ins;
-		m_audio_ins = NULL;
+		m_audio_ins = nullptr;
 	}
 
 	// close client
 	::jack_client_close(m_client);
-	m_client = NULL;
+	m_client = nullptr;
 }
 
 
@@ -491,10 +491,10 @@ snd_seq_t *synthv1_jack::alsa_seq (void) const
 // alsa event capture.
 void synthv1_jack::alsa_capture ( snd_seq_event_t *ev )
 {
-	if (m_alsa_decoder == NULL)
+	if (m_alsa_decoder == nullptr)
 		return;
 
-	if (ev == NULL)
+	if (ev == nullptr)
 		return;
 
 	// ignored events...
@@ -635,7 +635,7 @@ void synthv1_jack::shutdown_close (void)
 
 	if (m_client) {
 		::jack_client_close(m_client);
-		m_client = NULL;
+		m_client = nullptr;
 	}
 
 	close();
@@ -681,10 +681,10 @@ static void synthv1_sigterm_handler ( int /*signo*/ )
 
 // Constructor.
 synthv1_jack_application::synthv1_jack_application ( int& argc, char **argv )
-	: QObject(NULL), m_pApp(NULL), m_bGui(true),
-		m_pSynth(NULL), m_pWidget(NULL)
+	: QObject(nullptr), m_pApp(nullptr), m_bGui(true),
+		m_pSynth(nullptr), m_pWidget(nullptr)
 	  #ifdef CONFIG_NSM
-		, m_pNsmClient(NULL)
+		, m_pNsmClient(nullptr)
 	  #endif
 {
 #ifdef Q_WS_X11
@@ -725,11 +725,11 @@ synthv1_jack_application::synthv1_jack_application ( int& argc, char **argv )
 	// Install SIGTERM signal handler.
 	struct sigaction sigterm;
 	sigterm.sa_handler = synthv1_sigterm_handler;
-	::sigemptyset(&sigterm.sa_mask);
+	sigemptyset(&sigterm.sa_mask);
 	sigterm.sa_flags = 0;
 	sigterm.sa_flags |= SA_RESTART;
-	::sigaction(SIGTERM, &sigterm, NULL);
-	::sigaction(SIGQUIT, &sigterm, NULL);
+	::sigaction(SIGTERM, &sigterm, nullptr);
+	::sigaction(SIGQUIT, &sigterm, nullptr);
 
 	// Ignore SIGHUP/SIGINT signals.
 	::signal(SIGHUP, SIG_IGN);
@@ -737,7 +737,7 @@ synthv1_jack_application::synthv1_jack_application ( int& argc, char **argv )
 
 #else
 
-	m_pSigtermNotifier = NULL;
+	m_pSigtermNotifier = nullptr;
 
 #endif	// !HAVE_SIGNAL_H
 
@@ -749,7 +749,7 @@ synthv1_jack_application::synthv1_jack_application ( int& argc, char **argv )
 // Destructor.
 synthv1_jack_application::~synthv1_jack_application (void)
 {
-	g_pInstance = NULL;
+	g_pInstance = nullptr;
 
 #ifdef HAVE_SIGNAL_H
 	if (m_pSigtermNotifier) delete m_pSigtermNotifier;
@@ -801,7 +801,7 @@ bool synthv1_jack_application::parse_args (void)
 // Startup methods.
 bool synthv1_jack_application::setup (void)
 {
-	if (m_pApp == NULL)
+	if (m_pApp == nullptr)
 		return false;
 
 	if (!parse_args()) {
@@ -872,10 +872,10 @@ int synthv1_jack_application::exec (void)
 
 void synthv1_jack_application::openSession (void)
 {
-	if (m_pSynth == NULL)
+	if (m_pSynth == nullptr)
 		return;
 
-	if (m_pNsmClient == NULL)
+	if (m_pNsmClient == nullptr)
 		return;
 
 	if (!m_pNsmClient->is_active())
@@ -920,10 +920,10 @@ void synthv1_jack_application::openSession (void)
 
 void synthv1_jack_application::saveSession (void)
 {
-	if (m_pSynth == NULL)
+	if (m_pSynth == nullptr)
 		return;
 
-	if (m_pNsmClient == NULL)
+	if (m_pNsmClient == nullptr)
 		return;
 
 	if (!m_pNsmClient->is_active())
@@ -948,7 +948,7 @@ void synthv1_jack_application::saveSession (void)
 
 void synthv1_jack_application::showSession (void)
 {
-	if (m_pNsmClient == NULL)
+	if (m_pNsmClient == nullptr)
 		return;
 
 	if (!m_pNsmClient->is_active())
@@ -967,7 +967,7 @@ void synthv1_jack_application::showSession (void)
 
 void synthv1_jack_application::hideSession (void)
 {
-	if (m_pNsmClient == NULL)
+	if (m_pNsmClient == nullptr)
 		return;
 
 	if (!m_pNsmClient->is_active())
@@ -1024,7 +1024,7 @@ void synthv1_jack_application::shutdown_slot (void)
 
 
 // Pseudo-singleton instance.
-synthv1_jack_application *synthv1_jack_application::g_pInstance = NULL;
+synthv1_jack_application *synthv1_jack_application::g_pInstance = nullptr;
 
 synthv1_jack_application *synthv1_jack_application::getInstance (void)
 {

@@ -139,7 +139,7 @@ const synthv1widget_controls::Names& synthv1widget_controls::controllerNames (vo
 		{126, QT_TR_NOOP("Mono Operation") },
 		{127, QT_TR_NOOP("Poly Operation") },
 
-		{  0, NULL }
+		{  0, nullptr }
 	};
 
 	static Names s_controllerNames;
@@ -174,7 +174,7 @@ const synthv1widget_controls::Names& synthv1widget_controls::rpnNames (void)
 		{  3, QT_TR_NOOP("Tuning Program") },
 		{  4, QT_TR_NOOP("Tuning Bank") },
 
-		{  0, NULL }
+		{  0, nullptr }
 	};
 
 	static Names s_rpnNames;
@@ -225,7 +225,7 @@ const synthv1widget_controls::Names& synthv1widget_controls::nrpnNames (void)
 		{ 3840, QT_TR_NOOP("Drum Chorus Send") },
 		{ 3968, QT_TR_NOOP("Drum Variation Send") },
 
-		{    0, NULL }
+		{    0, nullptr }
 	};
 
 	static struct
@@ -284,7 +284,7 @@ const synthv1widget_controls::Names& synthv1widget_controls::nrpnNames (void)
 		{ 80, QT_TR_NOOP("Mute Triangle") },
 		{ 81, QT_TR_NOOP("Open Triangle") },
 
-		{  0, NULL }
+		{  0, nullptr }
 	};
 
 	static Names s_nrpnNames;
@@ -338,7 +338,7 @@ const synthv1widget_controls::Names& synthv1widget_controls::control14Names (voi
 		{ 18, QT_TR_NOOP("General Purpose Slider 3 (14bit)") },
 		{ 19, QT_TR_NOOP("General Purpose Slider 4 (14bit)") },
 
-		{  0, NULL }
+		{  0, nullptr }
 	};
 
 	static Names s_control14Names;
@@ -469,7 +469,7 @@ QSize synthv1widget_controls::ItemDelegate::sizeHint (
 QWidget *synthv1widget_controls::ItemDelegate::createEditor ( QWidget *pParent,
 	const QStyleOptionViewItem& /*option*/, const QModelIndex& index ) const
 {
-	QWidget *pEditor = NULL;
+	QWidget *pEditor = nullptr;
 
 	switch (index.column()) {
 	case 0: // Channel.

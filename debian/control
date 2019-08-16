@@ -5,7 +5,7 @@ Maintainer: Rui Nuno Capela <rncbc@rncbc.org>
 Build-Depends: debhelper (>= 5), automake, pkg-config,
   qtchooser, qtbase5-dev (>= 5.1), qtbase5-dev-tools (>= 5.1),
   qttools5-dev-tools (>= 5.1), libjack-dev, libasound2-dev,
-  lv2-dev, liblo0-dev
+  lv2-dev, liblo-dev
 Standards-Version: 3.9.7
 
 Package: synthv1

@@ -1,7 +1,7 @@
 // synthv1_lv2ui.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2018, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -61,7 +61,7 @@ void synthv1_lv2ui::write_function (
 // synthv1_lv2ui - LV2 UI desc.
 //
 
-static QApplication *synthv1_lv2ui_qapp_instance = NULL;
+static QApplication *synthv1_lv2ui_qapp_instance = nullptr;
 static unsigned int  synthv1_lv2ui_qapp_refcount = 0;
 
 
@@ -71,7 +71,7 @@ static LV2UI_Handle synthv1_lv2ui_instantiate (
 	LV2UI_Controller controller, LV2UI_Widget *widget,
 	const LV2_Feature *const *features )
 {
-	synthv1_lv2 *pSynth = NULL;
+	synthv1_lv2 *pSynth = nullptr;
 
 	for (int i = 0; features && features[i]; ++i) {
 		if (::strcmp(features[i]->URI, LV2_INSTANCE_ACCESS_URI) == 0) {
@@ -80,12 +80,12 @@ static LV2UI_Handle synthv1_lv2ui_instantiate (
 		}
 	}
 
-	if (pSynth == NULL)
-		return NULL;
+	if (pSynth == nullptr)
+		return nullptr;
 
-	if (qApp == NULL && synthv1_lv2ui_qapp_instance == NULL) {
+	if (qApp == nullptr && synthv1_lv2ui_qapp_instance == nullptr) {
 		static int s_argc = 1;
-		static const char *s_argv[] = { __func__, NULL };
+		static const char *s_argv[] = { __func__, nullptr };
 		synthv1_lv2ui_qapp_instance = new QApplication(s_argc, (char **) s_argv);
 	}
 	synthv1_lv2ui_qapp_refcount++;
@@ -104,7 +104,7 @@ static void synthv1_lv2ui_cleanup ( LV2UI_Handle ui )
 	#if 0//Avoid destructing the possibly shared QApplication instance...
 		if (--synthv1_lv2ui_qapp_refcount == 0 && synthv1_lv2ui_qapp_instance) {
 			delete synthv1_lv2ui_qapp_instance;
-			synthv1_lv2ui_qapp_instance = NULL;
+			synthv1_lv2ui_qapp_instance = nullptr;
 		}
 	#endif
 	}
@@ -191,7 +191,7 @@ int synthv1_lv2ui_resize ( LV2UI_Handle ui, int width, int height )
 
 static const LV2UI_Resize synthv1_lv2ui_resize_interface =
 {
-	NULL, // handle: host should use its own when calling ui_resize().
+	nullptr, // handle: host should use its own when calling ui_resize().
 	synthv1_lv2ui_resize
 };
 
@@ -215,7 +215,7 @@ static const void *synthv1_lv2ui_extension_data ( const char *uri )
 		return (void *) &synthv1_lv2ui_resize_interface;
 	else
 #endif
-	return NULL;
+	return nullptr;
 }
 
 
@@ -228,8 +228,8 @@ static LV2UI_Handle synthv1_lv2ui_x11_instantiate (
 	const LV2_Feature *const *ui_features )
 {
 	WId winid, parent = 0;
-	LV2UI_Resize *resize = NULL;
-	synthv1_lv2 *pSynth = NULL;
+	LV2UI_Resize *resize = nullptr;
+	synthv1_lv2 *pSynth = nullptr;
 
 	for (int i = 0; ui_features[i]; ++i) {
 		if (::strcmp(ui_features[i]->URI, LV2_INSTANCE_ACCESS_URI) == 0)
@@ -242,14 +242,14 @@ static LV2UI_Handle synthv1_lv2ui_x11_instantiate (
 			resize = (LV2UI_Resize *) ui_features[i]->data;
 	}
 
-	if (pSynth == NULL)
-		return NULL;
+	if (pSynth == nullptr)
+		return nullptr;
 	if (!parent)
-		return NULL;
+		return nullptr;
 
-	if (qApp == NULL && synthv1_lv2ui_qapp_instance == NULL) {
+	if (qApp == nullptr && synthv1_lv2ui_qapp_instance == nullptr) {
 		static int s_argc = 1;
-		static const char *s_argv[] = { __func__, NULL };
+		static const char *s_argv[] = { __func__, nullptr };
 		synthv1_lv2ui_qapp_instance = new QApplication(s_argc, (char **) s_argv);
 	}
 	synthv1_lv2ui_qapp_refcount++;
@@ -314,8 +314,8 @@ static LV2UI_Handle synthv1_lv2ui_external_instantiate (
 	LV2UI_Controller controller, LV2UI_Widget *widget,
 	const LV2_Feature *const *ui_features )
 {
-	synthv1_lv2 *pSynth = NULL;
-	LV2_External_UI_Host *external_host = NULL;
+	synthv1_lv2 *pSynth = nullptr;
+	LV2_External_UI_Host *external_host = nullptr;
 
 	for (int i = 0; ui_features[i] && !external_host; ++i) {
 		if (::strcmp(ui_features[i]->URI, LV2_INSTANCE_ACCESS_URI) == 0)
@@ -327,9 +327,9 @@ static LV2UI_Handle synthv1_lv2ui_external_instantiate (
 		}
 	}
 
-	if (qApp == NULL && synthv1_lv2ui_qapp_instance == NULL) {
+	if (qApp == nullptr && synthv1_lv2ui_qapp_instance == nullptr) {
 		static int s_argc = 1;
-		static const char *s_argv[] = { __func__, NULL };
+		static const char *s_argv[] = { __func__, nullptr };
 		synthv1_lv2ui_qapp_instance = new QApplication(s_argc, (char **) s_argv);
 	}
 	synthv1_lv2ui_qapp_refcount++;
@@ -355,7 +355,7 @@ static void synthv1_lv2ui_external_cleanup ( LV2UI_Handle ui )
 		delete pExtWidget;
 		if (--synthv1_lv2ui_qapp_refcount == 0 && synthv1_lv2ui_qapp_instance) {
 			delete synthv1_lv2ui_qapp_instance;
-			synthv1_lv2ui_qapp_instance = NULL;
+			synthv1_lv2ui_qapp_instance = nullptr;
 		}
 	}
 }
@@ -372,7 +372,7 @@ static void synthv1_lv2ui_external_port_event (
 
 static const void *synthv1_lv2ui_external_extension_data ( const char * )
 {
-	return NULL;
+	return nullptr;
 }
 
 #endif	// CONFIG_LV2_UI_EXTERNAL
@@ -425,7 +425,7 @@ LV2_SYMBOL_EXPORT const LV2UI_Descriptor *lv2ui_descriptor ( uint32_t index )
 		return &synthv1_lv2ui_external_descriptor;
 	else
 #endif
-	return NULL;
+	return nullptr;
 }
 
 

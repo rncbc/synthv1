@@ -32,7 +32,7 @@
 //
 
 // Singleton instance accessor (static).
-synthv1_config *synthv1_config::g_pSettings = NULL;
+synthv1_config *synthv1_config::g_pSettings = nullptr;
 
 synthv1_config *synthv1_config::getInstance (void)
 {
@@ -55,7 +55,7 @@ synthv1_config::~synthv1_config (void)
 {
 	save();
 
-	g_pSettings = NULL;
+	g_pSettings = nullptr;
 }
 
 
