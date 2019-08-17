@@ -1175,7 +1175,7 @@ void synthv1widget::randomParams (void)
 		synthv1widget_param *pParam = paramKnob(index);
 		if (pParam) {
 			std::normal_distribution<float> nd;
-			const float q = 0.5f * p * (pParam->maximum() - pParam->minimum());
+			const float q = p * (pParam->maximum() - pParam->minimum());
 			float fValue = pParam->value() + q * nd(re);
 			if (!synthv1_param::paramFloat(index))
 				fValue = std::round(fValue);
