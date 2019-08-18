@@ -1176,9 +1176,11 @@ void synthv1widget::randomParams (void)
 		if (pParam) {
 			std::normal_distribution<float> nd;
 			const float q = p * (pParam->maximum() - pParam->minimum());
-			float fValue = pParam->value() + q * nd(re);
-			if (!synthv1_param::paramFloat(index))
-				fValue = std::round(fValue);
+			float fValue = pParam->value();
+			if (synthv1_param::paramFloat(index))
+				fValue += 0.5f * q * nd(re);
+			else
+				fValue = std::round(fValue + q * nd(re));
 			if (fValue < pParam->minimum())
 				fValue = pParam->minimum();
 			else
