@@ -31,7 +31,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Configure - synthv1</string>
+   <string>Configure</string>
   </property>
   <property name="windowIcon">
    <iconset resource="synthv1.qrc">:/images/synthv1.png</iconset>
