@@ -96,8 +96,9 @@ if (POLICY CMP0075)
 endif ()
 
 # Check for Qt
-find_package (Qt5 REQUIRED NO_MODULE COMPONENTS Core Gui Widgets Xml)
-find_package (Qt5LinguistTools)
+find_package (Qt5 REQUIRED COMPONENTS Core Gui Widgets Xml)
+
+#find_package (Qt5LinguistTools)
 
 include (CheckIncludeFile)
 include (CheckIncludeFiles)

@@ -1,13 +1,11 @@
 set(NAME synthv1)
 
 include_directories (
-  ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}
+  ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 configure_file (cmake_config.h ${CMAKE_CURRENT_BINARY_DIR}/config.h)
-
-configure_file (${NAME}.desktop ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.desktop)
 
 set (HEADERS
   synthv1.h
@@ -197,6 +195,8 @@ if (UNIX AND NOT APPLE)
      DESTINATION ${CMAKE_INSTALL_LIBDIR}/lv2/${NAME}.lv2)
   install (TARGETS ${NAME}_jack RUNTIME
      DESTINATION ${CMAKE_INSTALL_BINDIR})
+  install (FILES ${NAME}.desktop
+     DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
   install (FILES images/${NAME}.png
      DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/32x32/apps)
   install (FILES appdata/${NAME}.appdata.xml
