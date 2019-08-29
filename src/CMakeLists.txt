@@ -159,6 +159,9 @@ set_target_properties (${NAME}_lv2   PROPERTIES CXX_STANDARD 11)
 set_target_properties (${NAME}_lv2ui PROPERTIES CXX_STANDARD 11)
 set_target_properties (${NAME}_jack  PROPERTIES CXX_STANDARD 11)
 
+set_target_properties (${NAME}       PROPERTIES VERSION ${CONFIG_VERSION})
+set_target_properties (${NAME}_ui    PROPERTIES VERSION ${CONFIG_VERSION})
+
 target_link_libraries (${NAME}       PRIVATE Qt5::Core Qt5::Xml)
 target_link_libraries (${NAME}_ui    PRIVATE Qt5::Widgets ${NAME})
 target_link_libraries (${NAME}_lv2   PRIVATE Qt5::Core Qt5::Xml ${NAME})
