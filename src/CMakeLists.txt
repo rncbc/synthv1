@@ -182,20 +182,26 @@ endif ()
 
 
 if (UNIX AND NOT APPLE)
+  if (CONFIG_PREFIX MATCHES $ENV{HOME})
+    set_target_properties (${NAME}_jack PROPERTIES LINK_OPTIONS "-Wl,-rpath,${CONFIG_LIBDIR}")
+    set (CONFIG_LV2DIR ${CONFIG_PREFIX}/.lv2)
+  else ()
+    set (CONFIG_LV2DIR ${CONFIG_LIBDIR}/lv2)
+  endif ()
   install (TARGETS ${NAME} LIBRARY
      DESTINATION ${CMAKE_INSTALL_LIBDIR})
   install (TARGETS ${NAME}_ui LIBRARY
      DESTINATION ${CMAKE_INSTALL_LIBDIR})
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/lib${NAME}_lv2.so
      RENAME ${NAME}.so
-     DESTINATION ${CMAKE_INSTALL_LIBDIR}/lv2/${NAME}.lv2)
+     DESTINATION ${CONFIG_LV2DIR}/${NAME}.lv2)
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/lib${NAME}_lv2ui.so
      RENAME ${NAME}_ui.so
-     DESTINATION ${CMAKE_INSTALL_LIBDIR}/lv2/${NAME}.lv2)
+     DESTINATION ${CONFIG_LV2DIR}/${NAME}.lv2)
   install (FILES ${NAME}.lv2/manifest.ttl
      ${NAME}.lv2/${NAME}.ttl
      ${NAME}.lv2/${NAME}_ui.ttl
-     DESTINATION ${CMAKE_INSTALL_LIBDIR}/lv2/${NAME}.lv2)
+     DESTINATION ${CONFIG_LV2DIR}/${NAME}.lv2)
   install (TARGETS ${NAME}_jack RUNTIME
      DESTINATION ${CMAKE_INSTALL_BINDIR})
   install (FILES ${NAME}.desktop
