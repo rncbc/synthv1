@@ -6,7 +6,9 @@ ChangeLog
 
 GIT HEAD
 
-- Fix HiDPI display screen effective support (Qt >= 5.6).
+- Added alternate yet non-official CMake build option.
+  (EXPERIMENTAL)
+^- Fix HiDPI display screen effective support (Qt >= 5.6).
 - All randomizers now compliant to the standard normal
   distribution. (EXPERIMENTAL)
 - Make sure compiler flags comply to c++11 as standard.
