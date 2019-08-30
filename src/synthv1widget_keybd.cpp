@@ -321,7 +321,7 @@ void synthv1widget_keybd::updatePixmap (void)
 	m_pixmap.fill(pal.window().color());
 
 	QPainter painter(&m_pixmap);
-	painter.begin(this);
+//	painter.initFrom(this);
 
 	const float wn = float(w - 4) / float(NUM_NOTES);
 	const float wk = 12.0f * wn / 7.0f;

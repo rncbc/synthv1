@@ -189,6 +189,7 @@ if (UNIX AND NOT APPLE)
   endif ()
   set (LINK_OPTIONS "-Wl,-rpath,${CONFIG_LIBDIR}")
   target_link_options (${NAME}_ui    PRIVATE ${LINK_OPTIONS})
+  target_link_options (${NAME}_lv2   PRIVATE ${LINK_OPTIONS})
   target_link_options (${NAME}_lv2ui PRIVATE ${LINK_OPTIONS})
   target_link_options (${NAME}_jack  PRIVATE ${LINK_OPTIONS})
   install (TARGETS ${NAME} LIBRARY
