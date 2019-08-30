@@ -106,6 +106,9 @@ include (CheckIncludeFileCXX)
 include (CheckFunctionExists)
 include (CheckLibraryExists)
 
+# Make sure we get some subtle optimizations out there...
+add_compile_options (-ffast-math)
+
 # Checks for header files.
 if (UNIX AND NOT APPLE)
   check_include_files ("fcntl.h;unistd.h;signal.h" HAVE_SIGNAL_H)
