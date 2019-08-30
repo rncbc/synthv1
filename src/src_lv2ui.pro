@@ -59,7 +59,7 @@ unix {
 
 	QMAKE_CLEAN += $${TARGET_LV2UI}.so
 
-	LIBS += -l$${NAME} -l$${NAME}_ui -L$${NAME}.lv2 -Wl,-rpath,$${LIBDIR}:$${LV2DIR}/$${NAME}.lv2
+	LIBS += -l$${NAME} -l$${NAME}_ui -L$${NAME}.lv2 -Wl,-rpath,$${LIBDIR}
 }
 
 QT += widgets xml

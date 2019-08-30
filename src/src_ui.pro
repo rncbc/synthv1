@@ -71,7 +71,7 @@ unix {
 
 	target.path = $${LIBDIR}
 
-	LIBS += -l$${NAME} -Wl,-rpath,$${LIBDIR}
+	LIBS += -l$${NAME}
 }
 
 QT += widgets xml
