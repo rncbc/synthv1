@@ -147,7 +147,7 @@ bool synthv1widget_preset::queryPreset (void)
 		const QString& sPreset(pConfig->sPreset);
 		if (sPreset.isEmpty()) {
 			if (QMessageBox::warning(this,
-				tr("Warning") + " - " SYNTHV1_TITLE,
+				tr("Warning"),
 				tr("Some parameters have been changed.\n\n"
 				"Do you want to discard the changes?"),
 				QMessageBox::Discard |
@@ -155,7 +155,7 @@ bool synthv1widget_preset::queryPreset (void)
 				return false;
 		} else {
 			switch (QMessageBox::warning(this,
-				tr("Warning") + " - " SYNTHV1_TITLE,
+				tr("Warning"),
 				tr("Some preset parameters have been changed:\n\n"
 				"\"%1\".\n\nDo you want to save the changes?")
 				.arg(sPreset),
@@ -230,7 +230,7 @@ void synthv1widget_preset::openPreset (void)
 	QStringList files;
 
 	const QString  sExt(SYNTHV1_TITLE);
-	const QString& sTitle  = tr("Open Preset") + " - " SYNTHV1_TITLE;
+	const QString& sTitle  = tr("Open Preset");
 	const QString& sFilter = tr("Preset files (*.%1)").arg(sExt);
 
 	QWidget *pParentWidget = nullptr;
@@ -299,7 +299,7 @@ void synthv1widget_preset::savePreset ( const QString& sPreset )
 	QFileInfo fi(QDir(pConfig->sPresetDir), sPreset + '.' + sExt);
 	QString sFilename = fi.absoluteFilePath();
 	if (!fi.exists()) {
-		const QString& sTitle  = tr("Save Preset") + " - " SYNTHV1_TITLE;
+		const QString& sTitle  = tr("Save Preset");
 		const QString& sFilter = tr("Preset files (*.%1)").arg(sExt);
 		QWidget *pParentWidget = nullptr;
 		QFileDialog::Options options = 0;
@@ -325,7 +325,7 @@ void synthv1widget_preset::savePreset ( const QString& sPreset )
 	#endif
 	} else {
 		if (QMessageBox::warning(QWidget::window(),
-			tr("Warning") + " - " SYNTHV1_TITLE,
+			tr("Warning"),
 			tr("About to replace preset:\n\n"
 			"\"%1\"\n\n"
 			"Are you sure?")
@@ -361,7 +361,7 @@ void synthv1widget_preset::deletePreset (void)
 	if (pConfig == nullptr)
 		return;
 	if (QMessageBox::warning(QWidget::window(),
-		tr("Warning") + " - " SYNTHV1_TITLE,
+		tr("Warning"),
 		tr("About to remove preset:\n\n"
 		"\"%1\"\n\n"
 		"Are you sure?")
