@@ -88,26 +88,17 @@ qt5_add_resources (QRC_SOURCES_UI ${RESOURCES_UI})
 
 set (HEADERS_LV2
   synthv1_lv2.h
-)
-
-set (SOURCES_LV2
-  synthv1_lv2.cpp
-)
-
-qt5_wrap_cpp (MOC_SOURCES_LV2 ${HEADERS_LV2})
-
-
-set (HEADERS_LV2UI
   synthv1_lv2ui.h
   synthv1widget_lv2.h
 )
 
-set (SOURCES_LV2UI
+set (SOURCES_LV2
+  synthv1_lv2.cpp
   synthv1_lv2ui.cpp
   synthv1widget_lv2.cpp
 )
 
-qt5_wrap_cpp (MOC_SOURCES_LV2UI ${HEADERS_LV2UI})
+qt5_wrap_cpp (MOC_SOURCES_LV2 ${HEADERS_LV2})
 
 
 set (HEADERS_JACK
@@ -125,12 +116,12 @@ set (SOURCES_JACK
 qt5_wrap_cpp (MOC_SOURCES_JACK ${HEADERS_JACK})
 
 
-add_library (${NAME} SHARED
+add_library (${NAME} STATIC
   ${MOC_SOURCES}
   ${SOURCES}
 )
 
-add_library (${NAME}_ui SHARED
+add_library (${NAME}_ui STATIC
   ${UI_SOURCES_UI}
   ${MOC_SOURCES_UI}
   ${QRC_SOURCES_UI}
@@ -142,11 +133,6 @@ add_library (${NAME}_lv2 MODULE
   ${SOURCES_LV2}
 )
 
-add_library (${NAME}_lv2ui MODULE
-  ${MOC_SOURCES_LV2UI}
-  ${SOURCES_LV2UI}
-)
-
 add_executable (${NAME}_jack
   ${MOC_SOURCES_JACK}
   ${SOURCES_JACK}
@@ -156,16 +142,11 @@ add_executable (${NAME}_jack
 set_target_properties (${NAME}       PROPERTIES CXX_STANDARD 11)
 set_target_properties (${NAME}_ui    PROPERTIES CXX_STANDARD 11)
 set_target_properties (${NAME}_lv2   PROPERTIES CXX_STANDARD 11)
-set_target_properties (${NAME}_lv2ui PROPERTIES CXX_STANDARD 11)
 set_target_properties (${NAME}_jack  PROPERTIES CXX_STANDARD 11)
-
-set_target_properties (${NAME}       PROPERTIES VERSION ${CONFIG_VERSION})
-set_target_properties (${NAME}_ui    PROPERTIES VERSION ${CONFIG_VERSION})
 
 target_link_libraries (${NAME}       PRIVATE Qt5::Core Qt5::Xml)
 target_link_libraries (${NAME}_ui    PRIVATE Qt5::Widgets ${NAME})
 target_link_libraries (${NAME}_lv2   PRIVATE Qt5::Core Qt5::Xml ${NAME})
-target_link_libraries (${NAME}_lv2ui PRIVATE Qt5::Widgets ${NAME}_ui)
 target_link_libraries (${NAME}_jack  PRIVATE Qt5::Widgets ${NAME} ${NAME}_ui)
 
 if (CONFIG_JACK)
@@ -187,20 +168,8 @@ if (UNIX AND NOT APPLE)
   else ()
     set (CONFIG_LV2DIR ${CONFIG_LIBDIR}/lv2)
   endif ()
-  set (LINK_OPTIONS "-Wl,-rpath,${CONFIG_LIBDIR}")
-  target_link_options (${NAME}_ui    PRIVATE ${LINK_OPTIONS})
-  target_link_options (${NAME}_lv2   PRIVATE ${LINK_OPTIONS})
-  target_link_options (${NAME}_lv2ui PRIVATE ${LINK_OPTIONS})
-  target_link_options (${NAME}_jack  PRIVATE ${LINK_OPTIONS})
-  install (TARGETS ${NAME} LIBRARY
-     DESTINATION ${CMAKE_INSTALL_LIBDIR})
-  install (TARGETS ${NAME}_ui LIBRARY
-     DESTINATION ${CMAKE_INSTALL_LIBDIR})
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/lib${NAME}_lv2.so
      RENAME ${NAME}.so
-     DESTINATION ${CONFIG_LV2DIR}/${NAME}.lv2)
-  install (FILES ${CMAKE_CURRENT_BINARY_DIR}/lib${NAME}_lv2ui.so
-     RENAME ${NAME}_ui.so
      DESTINATION ${CONFIG_LV2DIR}/${NAME}.lv2)
   install (FILES ${NAME}.lv2/manifest.ttl
      ${NAME}.lv2/${NAME}.ttl
