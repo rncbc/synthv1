@@ -50,6 +50,9 @@ public:
 	int noteLow() const;
 	int noteHigh() const;
 
+	// Highlighted note getter.
+	int noteKey() const;
+
 public slots:
 
 	// Keyboard note range setters.
@@ -61,6 +64,9 @@ public slots:
 	void noteOff(int iNote);
 
 	void allNotesOff();
+
+	// Highlighted note setter.
+	void setNoteKey(int iNoteKey);
 
 signals:
 
@@ -164,6 +170,9 @@ protected:
 
 	// Default note-on velocity.
 	int m_iVelocity;
+
+	// Current highlighted note.
+	int m_iNoteKey;
 };
 
 
