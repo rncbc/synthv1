@@ -167,7 +167,7 @@ int synthv1widget_keybd::noteHigh (void) const
 
 void synthv1widget_keybd::setNoteKey ( int iNoteKey )
 {
-	if (iNoteKey > MIN_NOTE && MAX_NOTE >= iNoteKey) {
+	if (iNoteKey >= MIN_NOTE && MAX_NOTE >= iNoteKey) {
 		m_notes[iNoteKey].rect = noteRect(iNoteKey, true);
 		m_iNoteKey = iNoteKey;
 	} else {
