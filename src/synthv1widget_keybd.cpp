@@ -69,6 +69,8 @@ synthv1widget_keybd::synthv1widget_keybd ( QWidget *pParent )
 	m_iTimeout   = 0;
 	m_iVelocity  = (MIN_VELOCITY + MAX_VELOCITY) / 2;
 
+	m_iNoteKey   = -1;
+
 	resetDragState();
 
 	// Trap for help/tool-tips and leave events.
@@ -160,6 +162,25 @@ void synthv1widget_keybd::setNoteHigh ( int iNoteHigh )
 int synthv1widget_keybd::noteHigh (void) const
 {
 	return m_iNoteHigh;
+}
+
+
+void synthv1widget_keybd::setNoteKey ( int iNoteKey )
+{
+	if (iNoteKey >= MIN_NOTE && MAX_NOTE >= iNoteKey) {
+		m_notes[iNoteKey].rect = noteRect(iNoteKey, true);
+		m_iNoteKey = iNoteKey;
+	} else {
+		m_iNoteKey = -1;
+	}
+
+	QWidget::update();
+}
+
+
+int synthv1widget_keybd::noteKey (void) const
+{
+	return m_iNoteKey;
 }
 
 
@@ -351,8 +372,8 @@ void synthv1widget_keybd::updatePixmap (void)
 	QLinearGradient gradDark(0, 0, 0, h3);
 	gradDark.setColorAt(0.0, rgbLight);
 	gradDark.setColorAt(0.4, rgbDark);
-	gradDark.setColorAt(0.96, rgbDark);
-	gradDark.setColorAt(0.98, rgbLight);
+	gradDark.setColorAt(0.92, rgbDark);
+	gradDark.setColorAt(0.96, rgbLight);
 	gradDark.setColorAt(1.0, rgbDark);
 	painter.setBrush(gradDark);
 
@@ -368,6 +389,9 @@ void synthv1widget_keybd::updatePixmap (void)
 
 	m_iNoteLowX  = noteRect(m_iNoteLow).left();
 	m_iNoteHighX = noteRect(m_iNoteHigh).right();
+
+	if (m_iNoteKey >= MIN_NOTE && MAX_NOTE >= m_iNoteKey)
+		m_notes[m_iNoteKey].rect = noteRect(m_iNoteKey, true);
 }
 
 
@@ -412,6 +436,13 @@ void synthv1widget_keybd::paintEvent ( QPaintEvent *pPaintEvent )
 			painter.fillRect(0, 0, x1, h, rgbOver);
 		if (x2 < w)
 			painter.fillRect(x2, 0, w, h, rgbOver);
+	}
+
+	// Current highlighted note.
+	if (m_iNoteKey >= MIN_NOTE && MAX_NOTE >= m_iNoteKey) {
+		rgbOver = pal.highlight().color().lighter();
+		rgbOver.setAlpha(120);
+		painter.fillRect(m_notes[m_iNoteKey].rect, rgbOver);
 	}
 }
 
