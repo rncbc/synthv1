@@ -23,7 +23,6 @@ Architecture: any
 Depends: synthv1-common (= ${binary:Version}),
  ${misc:Depends},
  ${shlibs:Depends},
-Provides: synthv1_lv2, synthv1_lv2ui
 Description: An old-school polyphonic subtractive synthesizer - LV2 plugin
   An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
   with stereo fx.
@@ -35,7 +34,6 @@ Architecture: any
 Depends: synthv1-common (= ${binary:Version}),
  ${misc:Depends},
  ${shlibs:Depends},
-Provides: synthv1_core, synthv1_ui
 Description: An old-school polyphonic subtractive synthesizer - Common files
   An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
   with stereo fx.
