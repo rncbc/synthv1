@@ -10,8 +10,35 @@ Standards-Version: 3.9.7
 
 Package: synthv1
 Architecture: any
-Depends: libjack0, ${shlibs:Depends}, ${misc:Depends}
-Description: an old-school polyphonic synthesizer
-  An old-school 4-oscillator subtractive polyphonic synthesizer
+Depends: padthv1-common (= ${binary:Version}),
+  libjack0, ${shlibs:Depends}, ${misc:Depends}
+Description: An old-school polyphonic subtractive synthesizer - JACK standalone
+  An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
   with stereo fx.
+  .
+  This package provides the standalone JACK client application (synthv1_jack)
 
+Package: synthv1-lv2
+Architecture: any
+Depends: synthv1-common (= ${binary:Version}),
+ ${misc:Depends},
+ ${shlibs:Depends},
+Provides: synthv1_lv2, synthv1_lv2ui
+Description: An old-school polyphonic subtractive synthesizer - LV2 plugin
+  An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
+  with stereo fx.
+  .
+  This package provides the LV2 plugin (http://synthv1.sourceforge.net/lv2)
+
+Package: synthv1-common
+Architecture: any
+Depends: synthv1-common (= ${binary:Version}),
+ ${misc:Depends},
+ ${shlibs:Depends},
+Provides: synthv1_core, synthv1_ui
+Description: An old-school polyphonic subtractive synthesizer - Common files
+  An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
+  with stereo fx.
+  .
+  This package provides files shared by both the LV2 plugin and the standalone
+  application.

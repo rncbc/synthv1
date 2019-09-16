@@ -1,0 +1,5 @@
+debian/tmp/usr/lib*/libsynthv1.so*
+debian/tmp/usr/lib*/libsynthv1_ui.so*
+debian/tmp/usr/share/mime/packages/synthv1.xml
+debian/tmp/usr/share/icons/hicolor/32x32/mimetypes/application-x-synthv1*.png
+debian/tmp/usr/share/icons/hicolor/scalable/mimetypes/application-x-synthv1*.svg
