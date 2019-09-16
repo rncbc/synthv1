@@ -8,7 +8,7 @@
 %define debug_package %{nil}
 %endif
 
-Summary:	An old-school polyphonic synthesizer
+#Summary:	An old-school polyphonic subtractive synthesizer
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
@@ -33,9 +33,41 @@ BuildRequires:	libjack-devel
 BuildRequires:	liblo-devel
 BuildRequires:	lv2-devel
 
-%description
-  An old-school all-digital 4-oscillator subtractive polyphonic
-  synthesizer with stereo fx.
+#package -n %{name}
+Summary:	An old-school polyphonic subtractive synthesizer - JACK standalone
+Provides:	%{name}_jack
+Requires:	%{name}-common = %{version}
+
+%description -n %{name}
+  An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
+  with stereo fx.
+  .
+  This package provides the standalone JACK client application (synthv1_jack)
+
+
+%package -n %{name}-lv2
+Summary:	An old-school polyphonic subtractive synthesizer - LV2 plugin
+Provides:	%{name}_lv2, %{name}_lv2ui
+Requires:	%{name}-common = %{version}
+
+%description -n %{name}-lv2
+  An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
+  with stereo fx.
+  .
+  This package provides the LV2 plugin (http://synthv1.sourceforge.net/lv2)
+
+
+%package -n %{name}-common
+Summary:	An old-school polyphonic subtractive synthesizer - Common files
+Provides:	%{name}_core, %{name}_ui
+
+%description -n %{name}-common
+  An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
+  with stereo fx.
+  .
+  This package provides files shared by both the LV2 plugin and the
+  standalone JACK client application.
+
 
 %prep
 %setup
@@ -51,17 +83,33 @@ BuildRequires:	lv2-devel
 %clean
 [ -d "%{buildroot}" -a "%{buildroot}" != "/" ] && %__rm -rf "%{buildroot}"
 
-%post
+%post -n %{name}-common
 /sbin/ldconfig
 
-%postun
+%postun -n %{name}-common
 /sbin/ldconfig
 
-%files
+
+%files -n %{name}
 %defattr(-,root,root)
-%doc AUTHORS COPYING ChangeLog README TODO
-%{_libdir}/lib%{name}.so*
-%{_libdir}/lib%{name}_ui.so*
+%dir %{_datadir}/metainfo
+#dir %{_datadir}/applications
+%dir %{_datadir}/icons/hicolor
+%dir %{_datadir}/icons/hicolor/32x32
+%dir %{_datadir}/icons/hicolor/32x32/apps
+%dir %{_datadir}/icons/hicolor/scalable
+%dir %{_datadir}/icons/hicolor/scalable/apps
+#dir %{_datadir}/man
+#dir %{_datadir}/man/man1
+%{_bindir}/%{name}_jack
+%{_datadir}/metainfo/%{name}.appdata.xml
+%{_datadir}/applications/%{name}.desktop
+%{_datadir}/icons/hicolor/32x32/apps/%{name}.png
+%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
+%{_datadir}/man/man1/%{name}*.1.gz
+
+%files -n %{name}-lv2
+%defattr(-,root,root)
 %dir %{_libdir}/lv2
 %dir %{_libdir}/lv2/%{name}.lv2
 %{_libdir}/lv2/%{name}.lv2/manifest.ttl
@@ -69,28 +117,23 @@ BuildRequires:	lv2-devel
 %{_libdir}/lv2/%{name}.lv2/%{name}.so
 %{_libdir}/lv2/%{name}.lv2/%{name}_ui.ttl
 %{_libdir}/lv2/%{name}.lv2/%{name}_ui.so
-%dir %{_datadir}/metainfo
+
+%files -n %{name}-common
+%defattr(-,root,root)
+%doc AUTHORS COPYING ChangeLog README TODO
 #dir %{_datadir}/mime
 #dir %{_datadir}/mime/packages
-#dir %{_datadir}/applications
 %dir %{_datadir}/icons/hicolor
 %dir %{_datadir}/icons/hicolor/32x32
-%dir %{_datadir}/icons/hicolor/32x32/apps
 %dir %{_datadir}/icons/hicolor/32x32/mimetypes
 %dir %{_datadir}/icons/hicolor/scalable
-%dir %{_datadir}/icons/hicolor/scalable/apps
 %dir %{_datadir}/icons/hicolor/scalable/mimetypes
-#dir %{_datadir}/man
-#dir %{_datadir}/man/man1
-%{_bindir}/%{name}_jack
-%{_datadir}/metainfo/%{name}.appdata.xml
+%{_libdir}/lib%{name}.so*
+%{_libdir}/lib%{name}_ui.so*
 %{_datadir}/mime/packages/%{name}.xml
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/32x32/apps/%{name}.png
 %{_datadir}/icons/hicolor/32x32/mimetypes/application-x-%{name}*.png
-%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 %{_datadir}/icons/hicolor/scalable/mimetypes/application-x-%{name}*.svg
-%{_datadir}/man/man1/%{name}*.1.gz
+
 
 %changelog
 * Thu Jul 18 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.9.9
