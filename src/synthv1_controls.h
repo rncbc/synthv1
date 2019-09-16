@@ -93,9 +93,6 @@ public:
 	struct Data
 	{
 		Data () : index(-1), flags(0), val(0.0f), sync(false) {}
-		Data (const Data& data)
-			: index(data.index), flags(data.flags),
-			  val(data.val), sync(data.sync) {}
 
 		int index;
 		int flags;
