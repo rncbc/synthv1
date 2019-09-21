@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- Upstream packaging is now split on JACK standalone,
+  LV2 plugin and common core and UI packages, similar
+  to recent Debian practice. (EXPERIMENTAL)
 - Added alternate yet non-official CMake build option.
   (EXPERIMENTAL)
 ^- Fix HiDPI display screen effective support (Qt >= 5.6).
