@@ -4,16 +4,15 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.10  2019-09-24  An Early-Fall'19 Release.
 
 - Upstream packaging is now split on JACK standalone,
   LV2 plugin and common core and UI packages, similar
-  to recent Debian practice. (EXPERIMENTAL)
+  to recent Debian practice.
 - Added alternate yet non-official CMake build option.
-  (EXPERIMENTAL)
-^- Fix HiDPI display screen effective support (Qt >= 5.6).
+- Fix HiDPI display screen effective support (Qt >= 5.6).
 - All randomizers now compliant to the standard normal
-  distribution. (EXPERIMENTAL)
+  distribution.
 - Make sure compiler flags comply to c++11 as standard.
 
 
