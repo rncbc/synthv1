@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 46
+%define release 47
 
 %define _prefix	@ac_prefix@
 
@@ -109,6 +109,8 @@ Requires:	%{name}-common = %{version}
 
 
 %changelog
+* Tue Sep 24 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.9.10
+- An Early-Fall'19 release.
 * Thu Jul 18 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.9.9
 - A Summer'19 release.
 * Thu Jun  6 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.9.8
