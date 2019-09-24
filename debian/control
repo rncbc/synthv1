@@ -4,14 +4,16 @@ Priority: extra
 Maintainer: Rui Nuno Capela <rncbc@rncbc.org>
 Build-Depends: debhelper (>= 5), automake, pkg-config,
   qtchooser, qtbase5-dev (>= 5.1), qtbase5-dev-tools (>= 5.1),
-  qttools5-dev-tools (>= 5.1), libjack-dev, libasound2-dev,
-  lv2-dev, liblo-dev
+  qttools5-dev-tools (>= 5.1), libjack-dev | libjack-jackd2-dev,
+  libasound2-dev, lv2-dev, liblo-dev
 Standards-Version: 3.9.7
 
 Package: synthv1
 Architecture: any
-Depends: padthv1-common (= ${binary:Version}),
-  libjack0, ${shlibs:Depends}, ${misc:Depends}
+Depends: synthv1-common (= ${binary:Version}),
+  libjack0 | libjack-jackd2-0,
+  ${shlibs:Depends},
+  ${misc:Depends}
 Description: An old-school polyphonic subtractive synthesizer - JACK standalone
   An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
   with stereo fx.
@@ -21,8 +23,8 @@ Description: An old-school polyphonic subtractive synthesizer - JACK standalone
 Package: synthv1-lv2
 Architecture: any
 Depends: synthv1-common (= ${binary:Version}),
- ${misc:Depends},
- ${shlibs:Depends},
+  ${misc:Depends},
+  ${shlibs:Depends},
 Description: An old-school polyphonic subtractive synthesizer - LV2 plugin
   An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
   with stereo fx.
@@ -32,8 +34,8 @@ Description: An old-school polyphonic subtractive synthesizer - LV2 plugin
 Package: synthv1-common
 Architecture: any
 Depends: synthv1-common (= ${binary:Version}),
- ${misc:Depends},
- ${shlibs:Depends},
+  ${misc:Depends},
+  ${shlibs:Depends},
 Description: An old-school polyphonic subtractive synthesizer - Common files
   An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
   with stereo fx.
