@@ -22,13 +22,12 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %if %{defined fedora}
 BuildRequires:	pkgconfig
-BuildRequires:	qt5-qtbase-devel >= 5.1, qt5-linguist
 BuildRequires:	alsa-lib-devel
 %else
 BuildRequires:	pkg-config
-BuildRequires:	libqt5-qtbase-devel >= 5.1, libqt5-linguist
 BuildRequires:	alsa-devel
 %endif
+BuildRequires:	qtbase-static >= 5.13.1
 BuildRequires:	libjack-devel
 BuildRequires:	liblo-devel
 BuildRequires:	lv2-devel

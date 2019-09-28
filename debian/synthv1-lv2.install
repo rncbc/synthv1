@@ -2,4 +2,3 @@ debian/tmp/usr/lib*/lv2/synthv1.lv2/manifest.ttl
 debian/tmp/usr/lib*/lv2/synthv1.lv2/synthv1.ttl
 debian/tmp/usr/lib*/lv2/synthv1.lv2/synthv1.so
 debian/tmp/usr/lib*/lv2/synthv1.lv2/synthv1_ui.ttl
-debian/tmp/usr/lib*/lv2/synthv1.lv2/synthv1_ui.so
