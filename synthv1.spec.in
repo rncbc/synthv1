@@ -61,7 +61,7 @@ Requires:	%{name}-common = %{version}
 [ -x ./autogen.sh ] && ./autogen.sh
 
 %build
-%configure
+%configure --with-qt=/opt/qtbase-static/5.13.1
 %__make %{?_smp_mflags}
 
 %install

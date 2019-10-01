@@ -5,7 +5,8 @@ NAME = synthv1
 TARGET = $${NAME}_lv2
 TEMPLATE = lib
 CONFIG += shared plugin
-LIBS += -L.
+
+unix { LIBS += -L. -l$${NAME} -l$${NAME}_ui }
 
 include(src_lv2.pri)
 
@@ -65,8 +66,6 @@ unix {
 	QMAKE_POST_LINK += $${QMAKE_COPY} -vp $(TARGET) $${TARGET_LV2}.so
 
 	QMAKE_CLEAN += $${TARGET_LV2}.so
-
-	LIBS += -l$${NAME} -l$${NAME}_ui
 }
 
 QT += widgets xml
