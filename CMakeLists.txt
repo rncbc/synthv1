@@ -24,6 +24,8 @@ if (GIT_DESCRIBE_RESULT EQUAL 0)
   if (GIT_REVPARSE_RESULT EQUAL 0 AND NOT GIT_REVPARSE_OUTPUT STREQUAL "master")
     set (VERSION "${VERSION} [${GIT_REVPARSE_OUTPUT}]")
   endif ()
+else ()
+  set (VERSION "${VERSION} [xstatic]")
 endif ()
 
 set (PACKAGE_NAME "synthv1")

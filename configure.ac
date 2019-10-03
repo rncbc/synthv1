@@ -17,7 +17,7 @@ AC_CACHE_VAL([ac_cv_build_version], [
          ac_cv_build_version="$ac_cv_build_version [[$ac_cv_build_version_extra]]"
       fi
    else
-      ac_cv_build_version=$PACKAGE_VERSION
+      ac_cv_build_version="$PACKAGE_VERSION [xstatic]"
    fi
 ])
 ac_build_version="$ac_cv_build_version"
