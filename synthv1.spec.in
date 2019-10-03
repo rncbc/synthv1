@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 47
+%define release 48
 
 %define _prefix	@ac_prefix@
 
@@ -27,7 +27,7 @@ BuildRequires:	alsa-lib-devel
 BuildRequires:	pkg-config
 BuildRequires:	alsa-devel
 %endif
-BuildRequires:	qtbase-static >= 5.13.1
+BuildRequires:	qtbase5-static >= 5.13.1
 BuildRequires:	libjack-devel
 BuildRequires:	liblo-devel
 BuildRequires:	lv2-devel
@@ -108,6 +108,8 @@ Requires:	%{name}-common = %{version}
 
 
 %changelog
+* Thu Oct  3 2019 Rui Nuno Capela <rncbc@rncbc.org>
+- [xstatic] Prepared for qtbase5-static build.
 * Tue Sep 24 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.9.10
 - An Early-Fall'19 release.
 * Thu Jul 18 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.9.9
