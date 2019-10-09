@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(synthv1, 0.9.10, rncbc@rncbc.org)
+AC_INIT(synthv1, 0.9.11, rncbc@rncbc.org)
 
 AC_CONFIG_SRCDIR(src/synthv1.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -16,8 +16,6 @@ AC_CACHE_VAL([ac_cv_build_version], [
       if test "x$ac_cv_build_version_extra" != "xmaster"; then
          ac_cv_build_version="$ac_cv_build_version [[$ac_cv_build_version_extra]]"
       fi
-   else
-      ac_cv_build_version="$PACKAGE_VERSION [xstatic]"
    fi
 ])
 ac_build_version="$ac_cv_build_version"

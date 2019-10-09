@@ -4,6 +4,14 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Upstream packaging is now split to JACK standalone and
+  LV2 plugin only: the former shared common core and UI
+  package is now duplicated but statically linked though. 
+  (EXPERIMENTAL)
+
+
 0.9.10  2019-09-24  An Early-Fall'19 Release.
 
 - Upstream packaging is now split on JACK standalone,
