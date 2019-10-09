@@ -16,7 +16,6 @@ Description: An old-school polyphonic subtractive synthesizer - JACK standalone
   with stereo fx.
   .
   This package provides the standalone JACK client application (synthv1_jack)
-Replaces: synthv1-common
 
 Package: synthv1-lv2
 Architecture: any
