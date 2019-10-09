@@ -22,17 +22,21 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %if %{defined fedora}
 BuildRequires:	pkgconfig
-#BuildRequires:	qt5-qtbase-devel >= 5.1, qt5-linguist
+#BuildRequires:	qt5-qtbase-devel >= 5.1
+BuildRequires:	qt5-linguist
 BuildRequires:	alsa-lib-devel
 %else
 BuildRequires:	pkg-config
-#BuildRequires:	libqt5-qtbase-devel >= 5.1, libqt5-linguist
+#BuildRequires:	libqt5-qtbase-devel >= 5.1
+BuildRequires:	libqt5-linguist
 BuildRequires:	alsa-devel
 %endif
 BuildRequires:	qtbase5-static >= 5.13.1
 BuildRequires:	libjack-devel
 BuildRequires:	liblo-devel
 BuildRequires:	lv2-devel
+
+BuildRequires:	pkgconfig(egl)
 
 #package -n %{name}
 Summary:	An old-school polyphonic subtractive synthesizer - JACK standalone
@@ -68,6 +72,7 @@ Obsoletes:	%{name}-common < %{version}
 
 %install
 %__make DESTDIR="%{buildroot}" install
+%__rm %{buildroot}/${_libdir}/*.a
 
 %clean
 [ -d "%{buildroot}" -a "%{buildroot}" != "/" ] && %__rm -rf "%{buildroot}"
