@@ -72,7 +72,6 @@ Obsoletes:	%{name}-common < %{version}
 
 %install
 %__make DESTDIR="%{buildroot}" install
-%__rm -f %{buildroot}/%{_libdir}/*.a
 
 %clean
 [ -d "%{buildroot}" -a "%{buildroot}" != "/" ] && %__rm -rf "%{buildroot}"
