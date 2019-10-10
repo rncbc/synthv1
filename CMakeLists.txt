@@ -25,7 +25,7 @@ if (GIT_DESCRIBE_RESULT EQUAL 0)
     set (VERSION "${VERSION} [${GIT_REVPARSE_OUTPUT}]")
   endif ()
 else ()
-  set (VERSION "${VERSION} [xstatic]")
+  set (VERSION "${VERSION}")
 endif ()
 
 set (PACKAGE_NAME "synthv1")
