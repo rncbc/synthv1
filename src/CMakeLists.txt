@@ -162,6 +162,14 @@ if (CONFIG_LIBLO)
 endif ()
 
 
+if (UNIX AND NOT APPLE AND NOT CONFIG_DEBUG)
+  add_custom_command(TARGET ${NAME}_lv2  POST_BUILD
+    COMMAND strip lib${NAME}_lv2.so)
+  add_custom_command(TARGET ${NAME}_jack POST_BUILD
+    COMMAND strip ${NAME}_jack)
+endif ()
+
+
 if (UNIX AND NOT APPLE)
   if (CONFIG_PREFIX MATCHES $ENV{HOME})
     set (CONFIG_LV2DIR ${CONFIG_PREFIX}/.lv2)
