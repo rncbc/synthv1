@@ -6,6 +6,12 @@ ChangeLog
 
 GIT HEAD
 
+- When using autotools and ./configure --with-qt=...,
+  it is also necessary to adjust the PKG_CONFIG_PATH
+  environment variable (after a merge request by plcl
+  aka. Pedro López-Cabanillas, while on qmidinet,
+  thanks). (EXPERIMENTAL)
+
 - Upstream packaging is now split to JACK standalone and
   LV2 plugin only: the former shared common core and UI
   package is now duplicated but statically linked though. 
