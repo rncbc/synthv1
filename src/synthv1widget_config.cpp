@@ -88,8 +88,6 @@ synthv1widget_config::synthv1widget_config (
 			iCustomStyleTheme = m_ui.CustomStyleThemeComboBox->findText(
 				pConfig->sCustomStyleTheme);
 		m_ui.CustomStyleThemeComboBox->setCurrentIndex(iCustomStyleTheme);
-		m_ui.CustomStyleThemeTextLabel->setEnabled(!bPlugin);
-		m_ui.CustomStyleThemeComboBox->setEnabled(!bPlugin);
 		m_ui.RandomizePercentSpinBox->setValue(pConfig->fRandomizePercent);
 		// Load controllers database...
 		synthv1_controls *pControls = m_pSynthUi->controls();
