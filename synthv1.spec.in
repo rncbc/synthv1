@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 48
+%define release 50
 
 %define _prefix	@ac_prefix@
 
@@ -114,6 +114,8 @@ Obsoletes:	%{name}-common < %{version}
 
 
 %changelog
+* Thu Oct 31 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.9.11
+- A Holloween'19 Release.
 * Thu Oct  3 2019 Rui Nuno Capela <rncbc@rncbc.org>
 - [xstatic] Prepared for qtbase5-static build.
 * Tue Sep 24 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.9.10

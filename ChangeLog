@@ -4,18 +4,17 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.11  2019-10-31  A Holloween'19 Release.
 
 - When using autotools and ./configure --with-qt=...,
   it is also necessary to adjust the PKG_CONFIG_PATH
   environment variable (after a merge request by plcl
   aka. Pedro López-Cabanillas, while on qmidinet,
-  thanks). (EXPERIMENTAL)
+  thanks).
 
 - Upstream packaging is now split to JACK standalone and
   LV2 plugin only: the former shared common core and UI
   package is now duplicated but statically linked though. 
-  (EXPERIMENTAL)
 
 
 0.9.10  2019-09-24  An Early-Fall'19 Release.
