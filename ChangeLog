@@ -4,7 +4,7 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-0.9.11  2019-10-31  A Holloween'19 Release.
+0.9.11  2019-10-31  A Halloween'19 Release.
 
 - When using autotools and ./configure --with-qt=...,
   it is also necessary to adjust the PKG_CONFIG_PATH
