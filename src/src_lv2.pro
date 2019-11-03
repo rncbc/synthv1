@@ -63,7 +63,7 @@ unix {
 		$${TARGET_LV2UI}.ttl \
 		$${NAME}.lv2/manifest.ttl
 
-	Release:QMAKE_POST_LINK += strip $(TARGET);
+	release:QMAKE_POST_LINK += strip -v $(TARGET);
 	QMAKE_POST_LINK += $${QMAKE_COPY} -vp $(TARGET) $${TARGET_LV2}.so
 
 	QMAKE_CLEAN += $${TARGET_LV2}.so
