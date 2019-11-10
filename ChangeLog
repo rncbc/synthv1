@@ -4,6 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Move QApplication construction/destruction from LV2 UI
+  to plug-in instantiation and cleanup. (EXPERIMENTAL)
+
+
 0.9.11  2019-10-31  A Halloween'19 Release.
 
 - When using autotools and ./configure --with-qt=...,
