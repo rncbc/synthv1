@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- Second attempt to fix the yet non-official though
+  CMake build configuration. (EXPERIMENTAL)
+
 - Move QApplication construction/destruction from LV2 UI
   to plug-in instantiation and cleanup. (EXPERIMENTAL)
 

@@ -136,11 +136,13 @@ if (CONFIG_JACK)
     set (CMAKE_REQUIRED_LIBRARIES "${JACK_LIBRARIES};${CMAKE_REQUIRED_LIBRARIES}")
     # Check for JACK MIDI headers availability.
     if (CONFIG_JACK_MIDI)
-      check_include_file (jack/midiport.h CONFIG_JACK_MIDI)
+      check_include_file (jack/midiport.h HAVE_JACK_MIDIPORT_H)
+      set (CONFIG_JACK_MIDI ${HAVE_JACK_MIDIPORT_H})
     endif ()
     # Check for JACK session headers availability.
     if (CONFIG_JACK_SESSION)
-      check_include_file (jack/session.h CONFIG_JACK_SESSION)
+      check_include_file (jack/session.h HAVE_JACK_SESSION_H)
+      set (CONFIG_JACK_SESSION ${HAVE_JACK_SESSION_H})
     endif ()
     # Check for JACK session event callback availability.
     if (CONFIG_JACK_SESSION)
@@ -196,11 +198,13 @@ if (CONFIG_LV2)
     link_libraries (${LV2_LIBRARIES})
   # set (CMAKE_REQUIRED_LIBRARIES "${LV2_LIBRARIES};${CMAKE_REQUIRED_LIBRARIES}")
     # Check for LV2 Atom support.
-    check_include_file (lv2/lv2plug.in/ns/ext/atom/atom.h CONFIG_LV2_ATOM)
+    check_include_file (lv2/lv2plug.in/ns/ext/atom/atom.h HAVE_LV2_ATOM_H)
+    set (CONFIG_LV2_ATOM ${HAVE_LV2_ATOM_H})
     set (CONFIG_LV2_ATOM_FORGE_OBJECT ${CONFIG_LV2_ATOM})
     set (CONFIG_LV2_ATOM_FORGE_KEY ${CONFIG_LV2_ATOM})
     # Check for LV2 UI support.
-    check_include_file (lv2/lv2plug.in/ns/extensions/ui/ui.h CONFIG_LV2_UI)
+    check_include_file (lv2/lv2plug.in/ns/extensions/ui/ui.h HAVE_LV2_UI_H)
+    set (CONFIG_LV2_UI ${HAVE_LV2_UI_H})
     if (NOT CONFIG_LV2_UI)
       set (CONFIG_LV2_UI_X11 0)
       set (CONFIG_LV2_UI_EXTERNAL 0)
@@ -224,15 +228,18 @@ else ()
 endif ()
 
 if (CONFIG_LV2_UI_EXTERNAL)
-  check_include_file (lv2_external_ui.h, CONFIG_LV2_UI_EXTERNAL)
+  check_include_file (lv2_external_ui.h, HAVE_LV2_EXTERNAL_UI_H)
+  set (CONFIG_LV2_UI_EXTERNAL ${HAVE_LV2_EXTERNAL_UI_H})
 endif ()
 
 if (CONFIG_LV2_PROGRAMS)
-  check_include_file (lv2_programs.h CONFIG_LV2_PROGRAMS)
+  check_include_file (lv2_programs.h HAVE_LV2_PROGRAMS_H)
+  set (CONFIG_LV2_PROGRAMS ${HAVE_LV2_PROGRAMS_H})
 endif ()
 
 if (CONFIG_LV2_PATCH)
-  check_include_file (lv2/lv2plug.in/ns/ext/patch/patch.h CONFIG_LV2_PATCH)
+  check_include_file (lv2/lv2plug.in/ns/ext/patch/patch.h HAVE_LV2_PATCH_H)
+  set (CONFIG_LV2_PATCH ${HAVE_LV2_PATCH_H})
 endif ()
 
 
