@@ -17,7 +17,7 @@
 
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 50
+%define release 51
 
 %define _prefix	@ac_prefix@
 
@@ -48,7 +48,7 @@ BuildRequires:	pkg-config
 BuildRequires:	libqt5-linguist
 BuildRequires:	alsa-devel
 %endif
-BuildRequires:	qtbase5-static >= 5.13.1
+BuildRequires:	qtbase5-static >= 5.13
 BuildRequires:	libjack-devel
 BuildRequires:	liblo-devel
 BuildRequires:	lv2-devel
@@ -84,7 +84,7 @@ Obsoletes:	%{name}-common < %{version}
 [ -x ./autogen.sh ] && ./autogen.sh
 
 %build
-%configure --with-qt=/opt/qtbase5-static/5.13.1
+%configure --with-qt=/opt/qtbase5-static/5.13.2
 %__make %{?_smp_mflags}
 
 %install
