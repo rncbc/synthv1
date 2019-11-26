@@ -35,6 +35,7 @@ sources = \
 	src/$(name)_programs.cpp \
 	src/$(name)_controls.cpp
 
+
 headers_ui = \
 	src/$(name_ui).h \
 	src/$(name)widget.h \
@@ -63,12 +64,12 @@ sources_ui = \
 	src/$(name)widget_control.cpp \
 	src/$(name)widget_config.cpp
 
-forms = \
+forms_ui = \
 	src/$(name)widget.ui \
 	src/$(name)widget_config.ui \
 	src/$(name)widget_control.ui
 
-resources = \
+resources_ui = \
 	src/$(name).qrc
 
 
@@ -101,7 +102,6 @@ sources_jack = \
 	src/$(name)_jack.cpp \
 	src/$(name)widget_jack.cpp
 
-
 export datadir = @ac_datadir@
 export mandir = @ac_mandir@
 
@@ -116,7 +116,7 @@ all:	core ui @ac_all_targets@
 core:	$(name).mak $(sources) $(headers)
 	@$(MAKE) -f $(name).mak
 
-ui:	$(name_ui).mak $(sources_ui) $(headers_ui) $(resources) ${forms}
+ui:	$(name_ui).mak $(sources_ui) $(headers_ui) $(resources_ui) ${forms_ui} core
 	@$(MAKE) -f $(name_ui).mak
 
 lv2:	$(name_lv2).mak $(sources_lv2) $(headers_lv2) ui core
@@ -148,7 +148,7 @@ install_ui:	ui
 install_lv2:	lv2
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_lv2).mak install
 
-install_jack:	jack $(name).1
+install_jack:	jack
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_jack).mak install
 	@install -d -v -m 0755 $(DESTDIR)$(mandir)/man1
 	@install -v -m 0644 $(name)*.1 $(DESTDIR)$(mandir)/man1

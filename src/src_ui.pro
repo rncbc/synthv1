@@ -6,7 +6,10 @@ TARGET = $${NAME}_ui
 TEMPLATE = lib
 CONFIG += static
 
-unix { LIBS += -L. -l$${NAME} }
+unix { 
+	LIBS += -L. -l$${NAME}
+	PRE_TARGETDEPS += lib$${NAME}.a
+}
 
 include(src_ui.pri)
 

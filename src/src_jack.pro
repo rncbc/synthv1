@@ -5,7 +5,10 @@ NAME = synthv1
 TARGET = $${NAME}_jack
 TEMPLATE = app
 
-unix { LIBS += -L. -l$${NAME} -l$${NAME}_ui }
+unix {
+	LIBS += -L. -l$${NAME} -l$${NAME}_ui
+	PRE_TARGETDEPS += lib$${NAME}.a lib$${NAME}_ui.a
+}
 
 include(src_jack.pri)
 

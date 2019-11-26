@@ -6,7 +6,10 @@ TARGET = $${NAME}_lv2
 TEMPLATE = lib
 CONFIG += shared plugin
 
-unix { LIBS += -L. -l$${NAME} -l$${NAME}_ui }
+unix {
+	LIBS += -L. -l$${NAME} -l$${NAME}_ui
+	PRE_TARGETDEPS += lib$${NAME}.a lib$${NAME}_ui.a
+}
 
 include(src_lv2.pri)
 
