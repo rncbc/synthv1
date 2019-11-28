@@ -39,6 +39,9 @@
 #include <QByteArray>
 #endif
 
+// Forward decls.
+class QApplication;
+
 
 //-------------------------------------------------------------------------
 // synthv1_lv2 - decl.
@@ -79,6 +82,11 @@ public:
 
 	bool worker_work(const void *data, uint32_t size);
 	bool worker_response(const void *data, uint32_t size);
+
+	static void qapp_instantiate();
+	static void qapp_cleanup();
+
+	static QApplication *qapp_instance();
 
 protected:
 
@@ -143,6 +151,9 @@ private:
 	LV2_Program_Descriptor m_program;
 	QByteArray m_aProgramName;
 #endif
+
+	static QApplication *g_qapp_instance;
+	static unsigned int  g_qapp_refcount;
 };
 
 
