@@ -324,6 +324,7 @@ void synthv1_config::load (void)
 	QSettings::endGroup();
 
 	QSettings::beginGroup("/Custom");
+	sCustomColorTheme = QSettings::value("/ColorTheme").toString();
 	sCustomStyleTheme = QSettings::value("/StyleTheme").toString();
 	QSettings::endGroup();
 
@@ -362,6 +363,7 @@ void synthv1_config::save (void)
 	QSettings::endGroup();
 
 	QSettings::beginGroup("/Custom");
+	QSettings::setValue("/ColorTheme", sCustomColorTheme);
 	QSettings::setValue("/StyleTheme", sCustomStyleTheme);
 	QSettings::endGroup();
 

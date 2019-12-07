@@ -27,6 +27,7 @@ HEADERS = \
 	synthv1widget_programs.h \
 	synthv1widget_controls.h \
 	synthv1widget_control.h \
+	synthv1widget_palette.h \
 	synthv1widget_config.h
 
 SOURCES = \
@@ -42,11 +43,13 @@ SOURCES = \
 	synthv1widget_programs.cpp \
 	synthv1widget_controls.cpp \
 	synthv1widget_control.cpp \
+	synthv1widget_palette.cpp \
 	synthv1widget_config.cpp
 
 FORMS = \
 	synthv1widget.ui \
 	synthv1widget_control.ui \
+	synthv1widget_palette.ui \
 	synthv1widget_config.ui
 
 RESOURCES += synthv1.qrc

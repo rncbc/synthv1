@@ -48,6 +48,7 @@ headers_ui = \
 	src/$(name)widget_programs.h \
 	src/$(name)widget_controls.h \
 	src/$(name)widget_control.h \
+	src/$(name)widget_palette.h \
 	src/$(name)widget_config.h
 
 sources_ui = \
@@ -62,12 +63,14 @@ sources_ui = \
 	src/$(name)widget_programs.cpp \
 	src/$(name)widget_controls.cpp \
 	src/$(name)widget_control.cpp \
+	src/$(name)widget_palette.cpp \
 	src/$(name)widget_config.cpp
 
 forms_ui = \
 	src/$(name)widget.ui \
-	src/$(name)widget_config.ui \
-	src/$(name)widget_control.ui
+	src/$(name)widget_control.ui \
+	src/$(name)widget_palette.ui \
+	src/$(name)widget_config.ui
 
 resources_ui = \
 	src/$(name).qrc

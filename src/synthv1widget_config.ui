@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>rncbc aka Rui Nuno Capela</author>
- <comment>synthv1 - An old-school polyphonic synthesizer
+ <comment>synthv1 - an old-school polyphonic synthesizer
 
   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
@@ -50,7 +50,7 @@
        <string>Options</string>
       </attribute>
       <layout class="QGridLayout">
-       <item row="0" column="0" colspan="3">
+       <item row="0" column="0" colspan="4">
         <widget class="QCheckBox" name="UseNativeDialogsCheckBox">
          <property name="toolTip">
           <string>Whether to use desktop environment's native dialogs where applicable</string>
@@ -139,6 +139,63 @@
         </widget>
        </item>
        <item row="3" column="0">
+        <widget class="QLabel" name="CustomColorThemeTextLabel">
+         <property name="text">
+          <string>Custom &amp;color theme:</string>
+         </property>
+         <property name="buddy">
+          <cstring>CustomColorThemeComboBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QComboBox" name="CustomColorThemeComboBox">
+         <property name="toolTip">
+          <string>Custom color palette theme</string>
+         </property>
+         <property name="editable">
+          <bool>false</bool>
+         </property>
+         <item>
+          <property name="text">
+           <string>(default)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Wonton Soup</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>KXStudio</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QToolButton" name="CustomColorThemeToolButton">
+         <property name="minimumSize">
+          <size>
+           <width>22</width>
+           <height>22</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Manage custom color palette themes</string>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
         <widget class="QLabel" name="CustomStyleThemeTextLabel">
          <property name="text">
           <string>Custom &amp;style theme:</string>
@@ -148,7 +205,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="4" column="1">
         <widget class="QComboBox" name="CustomStyleThemeComboBox">
          <property name="toolTip">
           <string>Custom widget style theme</string>
@@ -163,7 +220,7 @@
          </item>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item row="5" column="0">
         <widget class="QLabel" name="RandomizePercentTextLabel">
          <property name="text">
           <string>&amp;Randomize factor:</string>
@@ -173,7 +230,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="5" column="1">
         <widget class="QDoubleSpinBox" name="RandomizePercentSpinBox">
          <property name="toolTip">
           <string>Randomizer deviation from current value</string>
@@ -201,7 +258,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0" colspan="3">
+       <item row="6" column="0" colspan="4">
         <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -831,6 +888,8 @@
   <tabstop>UseNativeDialogsCheckBox</tabstop>
   <tabstop>KnobDialModeComboBox</tabstop>
   <tabstop>KnobEditModeComboBox</tabstop>
+  <tabstop>CustomColorThemeComboBox</tabstop>
+  <tabstop>CustomColorThemeToolButton</tabstop>
   <tabstop>CustomStyleThemeComboBox</tabstop>
   <tabstop>ProgramsAddBankToolButton</tabstop>
   <tabstop>ProgramsAddItemToolButton</tabstop>

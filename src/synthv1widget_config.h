@@ -58,6 +58,8 @@ public:
 protected slots:
 
 	// command slots.
+	void editCustomColorThemes();
+
 	void controlsAddItem();
 	void controlsEditItem();
 	void controlsDeleteItem();
@@ -93,6 +95,10 @@ protected slots:
 	void reject();
 
 protected:
+
+	// Custom color/style themes settlers.
+	void resetCustomColorThemes(const QString& sCustomColorTheme);
+	void resetCustomStyleThemes(const QString& sCustomColorTheme);
 
 	// Combo box history persistence helper prototypes.
 	void loadComboBoxHistory(QComboBox *pComboBox);

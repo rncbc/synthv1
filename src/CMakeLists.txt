@@ -52,6 +52,7 @@ set (HEADERS_UI
   synthv1widget_programs.h
   synthv1widget_controls.h
   synthv1widget_control.h
+  synthv1widget_palette.h
   synthv1widget_config.h
 )
 
@@ -68,6 +69,7 @@ set (SOURCES_UI
   synthv1widget_programs.cpp
   synthv1widget_controls.cpp
   synthv1widget_control.cpp
+  synthv1widget_palette.cpp
   synthv1widget_config.cpp
 )
 

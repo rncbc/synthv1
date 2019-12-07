@@ -22,6 +22,8 @@
 #include "synthv1widget_config.h"
 #include "synthv1widget_param.h"
 
+#include "synthv1widget_palette.h"
+
 #include "synthv1_ui.h"
 
 #include "synthv1_controls.h"
@@ -54,11 +56,6 @@ synthv1widget_config::synthv1widget_config (
 	// Setup UI struct...
 	m_ui.setupUi(this);
 
-	// Custom style themes...
-	//m_ui.CustomStyleThemeComboBox->clear();
-	//m_ui.CustomStyleThemeComboBox->addItem(tr("(default)"));
-	m_ui.CustomStyleThemeComboBox->addItems(QStyleFactory::keys());
-
 	// Note names.
 	QStringList notes;
 	for (int note = 0; note < 128; ++note)
@@ -83,12 +80,18 @@ synthv1widget_config::synthv1widget_config (
 		m_ui.UseNativeDialogsCheckBox->setChecked(pConfig->bUseNativeDialogs);
 		m_ui.KnobDialModeComboBox->setCurrentIndex(pConfig->iKnobDialMode);
 		m_ui.KnobEditModeComboBox->setCurrentIndex(pConfig->iKnobEditMode);
-		int iCustomStyleTheme = 0;
-		if (!pConfig->sCustomStyleTheme.isEmpty())
-			iCustomStyleTheme = m_ui.CustomStyleThemeComboBox->findText(
-				pConfig->sCustomStyleTheme);
-		m_ui.CustomStyleThemeComboBox->setCurrentIndex(iCustomStyleTheme);
 		m_ui.RandomizePercentSpinBox->setValue(pConfig->fRandomizePercent);
+		// Custom display options (only for no-plugin forms)...
+		if (bPlugin) {
+			m_ui.CustomColorThemeTextLabel->setEnabled(false);
+			m_ui.CustomColorThemeComboBox->setEnabled(false);
+			m_ui.CustomColorThemeToolButton->setEnabled(false);
+			m_ui.CustomStyleThemeTextLabel->setEnabled(false);
+			m_ui.CustomStyleThemeComboBox->setEnabled(false);
+		} else {
+			resetCustomColorThemes(pConfig->sCustomColorTheme);
+			resetCustomStyleThemes(pConfig->sCustomStyleTheme);
+		}
 		// Load controllers database...
 		synthv1_controls *pControls = m_pSynthUi->controls();
 		if (pControls) {
@@ -215,6 +218,12 @@ synthv1widget_config::synthv1widget_config (
 	QObject::connect(m_ui.KnobEditModeComboBox,
 		SIGNAL(activated(int)),
 		SLOT(optionsChanged()));
+	QObject::connect(m_ui.CustomColorThemeComboBox,
+		SIGNAL(activated(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(m_ui.CustomColorThemeToolButton,
+		SIGNAL(clicked()),
+		SLOT(editCustomColorThemes()));
 	QObject::connect(m_ui.CustomStyleThemeComboBox,
 		SIGNAL(activated(int)),
 		SLOT(optionsChanged()));
@@ -733,6 +742,11 @@ void synthv1widget_config::accept (void)
 		pConfig->iKnobEditMode = m_ui.KnobEditModeComboBox->currentIndex();
 		synthv1widget_edit::setEditMode(
 			synthv1widget_edit::EditMode(pConfig->iKnobEditMode));
+		const QString sOldCustomColorTheme = pConfig->sCustomColorTheme;
+		if (m_ui.CustomColorThemeComboBox->currentIndex() > 0)
+			pConfig->sCustomColorTheme = m_ui.CustomColorThemeComboBox->currentText();
+		else
+			pConfig->sCustomColorTheme.clear();
 		const QString sOldCustomStyleTheme = pConfig->sCustomStyleTheme;
 		if (m_ui.CustomStyleThemeComboBox->currentIndex() > 0)
 			pConfig->sCustomStyleTheme = m_ui.CustomStyleThemeComboBox->currentText();
@@ -740,7 +754,17 @@ void synthv1widget_config::accept (void)
 			pConfig->sCustomStyleTheme.clear();
 		pConfig->fRandomizePercent = float(m_ui.RandomizePercentSpinBox->value());
 		int iNeedRestart = 0;
- 		if (pConfig->sCustomStyleTheme != sOldCustomStyleTheme) {
+ 		if (pConfig->sCustomColorTheme != sOldCustomColorTheme) {
+			if (pConfig->sCustomColorTheme.isEmpty()) {
+				++iNeedRestart;
+			} else {
+				QPalette pal;
+				if (synthv1widget_palette::namedPalette(
+						pConfig, pConfig->sCustomColorTheme, pal))
+					QApplication::setPalette(pal);
+			}
+ 		}
+		if (pConfig->sCustomStyleTheme != sOldCustomStyleTheme) {
 			if (pConfig->sCustomStyleTheme.isEmpty()) {
 				++iNeedRestart;
 			} else {
@@ -794,6 +818,75 @@ void synthv1widget_config::reject (void)
 
 	if (bReject)
 		QDialog::reject();
+}
+
+
+// Custom color palette theme manager.
+void synthv1widget_config::editCustomColorThemes (void)
+{
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig == nullptr)
+		return;
+
+	synthv1widget_palette form(this);
+	form.setSettings(pConfig);
+
+	QString sCustomColorTheme;
+	int iDirtyCustomColorTheme = 0;
+
+	const int iCustomColorTheme
+		= m_ui.CustomColorThemeComboBox->currentIndex();
+	if (iCustomColorTheme > 0) {
+		sCustomColorTheme = m_ui.CustomColorThemeComboBox->itemText(iCustomColorTheme);
+		form.setPaletteName(sCustomColorTheme);
+	}
+
+	if (form.exec() == QDialog::Accepted) {
+		sCustomColorTheme = form.paletteName();
+		++iDirtyCustomColorTheme;
+	}
+
+	if (iDirtyCustomColorTheme > 0 || form.isDirty()) {
+		resetCustomColorThemes(sCustomColorTheme);
+		optionsChanged();
+	}
+}
+
+
+// Custom color palette themes settler.
+void synthv1widget_config::resetCustomColorThemes (
+	const QString& sCustomColorTheme )
+{
+	m_ui.CustomColorThemeComboBox->clear();
+	m_ui.CustomColorThemeComboBox->addItem(
+		tr("(default)"));
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig) m_ui.CustomColorThemeComboBox->addItems(
+		synthv1widget_palette::namedPaletteList(pConfig));
+
+	int iCustomColorTheme = 0;
+	if (!sCustomColorTheme.isEmpty())
+		iCustomColorTheme = m_ui.CustomColorThemeComboBox->findText(
+			sCustomColorTheme);
+	m_ui.CustomColorThemeComboBox->setCurrentIndex(iCustomColorTheme);
+}
+
+
+// Custom widget style themes settler.
+void synthv1widget_config::resetCustomStyleThemes (
+	const QString& sCustomStyleTheme )
+{
+	m_ui.CustomStyleThemeComboBox->clear();
+	m_ui.CustomStyleThemeComboBox->addItem(
+		tr("(default)"));
+	m_ui.CustomStyleThemeComboBox->addItems(
+		QStyleFactory::keys());
+
+	int iCustomStyleTheme = 0;
+	if (!sCustomStyleTheme.isEmpty())
+		iCustomStyleTheme = m_ui.CustomStyleThemeComboBox->findText(
+			sCustomStyleTheme);
+	m_ui.CustomStyleThemeComboBox->setCurrentIndex(iCustomStyleTheme);
 }
 
 
