@@ -67,7 +67,7 @@ synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 	if (QDir(CONFIG_PLUGINSDIR).exists())
 		QApplication::addLibraryPath(CONFIG_PLUGINSDIR);
 
-	// Custom color/style theme...
+	// Custom color/style themes...
 	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig) {
 		if (!pConfig->sCustomColorTheme.isEmpty()) {

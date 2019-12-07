@@ -23,8 +23,29 @@
 
 #include "synthv1_lv2.h"
 
+#include <QApplication>
+#include <QFileInfo>
+#include <QDir>
+
+#include "synthv1widget_palette.h"
 
 #include <QCloseEvent>
+
+#include <QStyleFactory>
+
+#ifndef CONFIG_LIBDIR
+#if defined(__x86_64__)
+#define CONFIG_LIBDIR CONFIG_PREFIX "/lib64"
+#else
+#define CONFIG_LIBDIR CONFIG_PREFIX "/lib"
+#endif
+#endif
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+#define CONFIG_PLUGINSDIR CONFIG_LIBDIR "/qt4/plugins"
+#else
+#define CONFIG_PLUGINSDIR CONFIG_LIBDIR "/qt5/plugins"
+#endif
 
 
 //-------------------------------------------------------------------------
@@ -35,6 +56,29 @@ synthv1widget_lv2::synthv1widget_lv2 ( synthv1_lv2 *pSynth,
 	LV2UI_Controller controller, LV2UI_Write_Function write_function )
 	: synthv1widget()
 {
+	// Check whether under a dedicated application instance...
+	QApplication *pApp = synthv1_lv2::qapp_instance();
+	if (pApp) {
+		// Special style paths...
+		if (QDir(CONFIG_PLUGINSDIR).exists())
+			pApp->addLibraryPath(CONFIG_PLUGINSDIR);
+		// Custom color/style themes...
+		synthv1_config *pConfig = synthv1_config::getInstance();
+		if (pConfig) {
+			if (!pConfig->sCustomColorTheme.isEmpty()) {
+				QPalette pal;
+				if (synthv1widget_palette::namedPalette(
+						pConfig, pConfig->sCustomColorTheme, pal))
+					pApp->setPalette(pal);
+			}
+			if (!pConfig->sCustomStyleTheme.isEmpty()) {
+				pApp->setStyle(
+					QStyleFactory::create(pConfig->sCustomStyleTheme));
+			}
+		}
+	}
+
+	// Initialize (user) interface stuff...
 	m_pSynthUi = new synthv1_lv2ui(pSynth, controller, write_function);
 
 #ifdef CONFIG_LV2_UI_EXTERNAL
