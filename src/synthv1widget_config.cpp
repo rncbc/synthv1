@@ -44,6 +44,10 @@
 #include <QStyleFactory>
 
 
+// Default (empty/blank) name.
+static const char *g_pszDefName = QT_TR_NOOP("(default)");
+
+
 //----------------------------------------------------------------------------
 // synthv1widget_config -- UI wrapper form.
 
@@ -851,7 +855,7 @@ void synthv1widget_config::resetCustomColorThemes (
 {
 	m_ui.CustomColorThemeComboBox->clear();
 	m_ui.CustomColorThemeComboBox->addItem(
-		tr("(default)"));
+		tr(g_pszDefName));
 	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig) m_ui.CustomColorThemeComboBox->addItems(
 		synthv1widget_palette::namedPaletteList(pConfig));
@@ -870,7 +874,7 @@ void synthv1widget_config::resetCustomStyleThemes (
 {
 	m_ui.CustomStyleThemeComboBox->clear();
 	m_ui.CustomStyleThemeComboBox->addItem(
-		tr("(default)"));
+		tr(g_pszDefName));
 	m_ui.CustomStyleThemeComboBox->addItems(
 		QStyleFactory::keys());
 

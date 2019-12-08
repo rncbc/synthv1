@@ -42,7 +42,7 @@
 // Local static consts.
 static const char *ColorThemesGroup   = "/ColorThemes/";
 
-static const char *synthv1widget_paletteGroup = "/synthv1widget_palette/";
+static const char *PaletteEditorGroup = "/PaletteEditor/";
 static const char *DefaultDirKey      = "DefaultDir";
 static const char *ShowDetailsKey     = "ShowDetails";
 static const char *DefaultSuffix      = "conf";
@@ -76,7 +76,7 @@ static struct
 	{ "ToolTipText",     QPalette::ToolTipText     },
 	{ "NoRole",          QPalette::NoRole          },
 
-	{  nullptr,             QPalette::NoRole          }
+	{  nullptr,          QPalette::NoRole          }
 };
 
 
