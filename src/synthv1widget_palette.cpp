@@ -828,7 +828,7 @@ void synthv1widget_palette::reject (void)
 void synthv1widget_palette::setDefaultDir ( const QString& dir )
 {
 	if (m_settings) {
-		m_settings->beginGroup(synthv1widget_paletteGroup);
+		m_settings->beginGroup(PaletteEditorGroup);
 		m_settings->setValue(DefaultDirKey, dir);
 		m_settings->endGroup();
 	}
@@ -840,7 +840,7 @@ QString synthv1widget_palette::defaultDir (void) const
 	QString dir;
 
 	if (m_settings) {
-		m_settings->beginGroup(synthv1widget_paletteGroup);
+		m_settings->beginGroup(PaletteEditorGroup);
 		dir = m_settings->value(DefaultDirKey).toString();
 		m_settings->endGroup();
 	}
@@ -852,7 +852,7 @@ QString synthv1widget_palette::defaultDir (void) const
 void synthv1widget_palette::setShowDetails ( bool on )
 {
 	if (m_settings) {
-		m_settings->beginGroup(synthv1widget_paletteGroup);
+		m_settings->beginGroup(PaletteEditorGroup);
 		m_settings->setValue(ShowDetailsKey, on);
 		m_settings->endGroup();
 	}
@@ -864,7 +864,7 @@ bool synthv1widget_palette::isShowDetails (void) const
 	bool on = false;
 
 	if (m_settings) {
-		m_settings->beginGroup(synthv1widget_paletteGroup);
+		m_settings->beginGroup(PaletteEditorGroup);
 		on = m_settings->value(ShowDetailsKey).toBool();
 		m_settings->endGroup();
 	}
