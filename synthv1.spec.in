@@ -84,7 +84,8 @@ Obsoletes:	%{name}-common < %{version}
 [ -x ./autogen.sh ] && ./autogen.sh
 
 %build
-%configure --with-qt=/opt/qtbase5-static/5.13.2
+QTDIR=$(find /opt/qtbase5-static -maxdepth 1 -type d | sort -nr | head -1)
+%configure --with-qt=$QTDIR
 %__make %{?_smp_mflags}
 
 %install
