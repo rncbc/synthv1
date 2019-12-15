@@ -19,23 +19,23 @@ license:
 
 website:
 
-  http://synthv1.sourceforge.net
   https://synthv1.sourceforge.io
+  http://synthv1.sourceforge.net
 
 project page:
 
-  http://sourceforge.net/projects/synthv1
+  https://sourceforge.net/projects/synthv1
 
 git repos:
 
-  http://git.code.sf.net/p/synthv1/code
+  https://git.code.sf.net/p/synthv1/code
   https://github.com/rncbc/synthv1.git
   https://gitlab.com/rncbc/synthv1.git
   https://bitbucket.org/rncbc/synthv1.git
 
 weblog:
 
-  http://www.rncbc.org
+  https://www.rncbc.org
 
 
 requirements:
@@ -44,15 +44,15 @@ requirements:
 
   - Qt framework, C++ class library and tools for
     cross-platform application and UI development
-    http://qt.io/
+    https://qt.io/
 
   optional (opted-in at build time),
 
   - JACK Audio Connection Kit
-    http://jackaudio.org/
+    https://jackaudio.org/
 
   - ALSA, Advanced Linux Sound Architecture
-    http://www.alsa-project.org/
+    https://www.alsa-project.org/
 
   - LV2, Audio Plugin Standard, the extensible successor of LADSPA
     http://lv2plug.in/
@@ -90,4 +90,4 @@ cheers && enjoy.
 --
 rncbc aka. Rui Nuno Capela
 rncbc@rncbc.org
-http://www.rncbc.org
+https://www.rncbc.org
