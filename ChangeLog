@@ -4,17 +4,17 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.12  2019-12-26  The Winter'19 Release.
 
 - Custom color (palette) theme editor introduced; color
   (palette) theme changes are now effective immediately,
-  except on default. (EXPERIMENTAL)
+  except on default.
 
 - Second attempt to fix the yet non-official though
-  CMake build configuration. (EXPERIMENTAL)
+  CMake build configuration.
 
 - Move QApplication construction/destruction from LV2 UI
-  to plug-in instantiation and cleanup. (EXPERIMENTAL)
+  to plug-in instantiation and cleanup.
 
 
 0.9.11  2019-10-31  A Halloween'19 Release.
