@@ -4,15 +4,21 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Remove -v (verbose) flag from 'strip' post-link command.
+- Fixed CMake build by adding missing Custom Color Theme
+  (palette) form file (.ui).
+- Bumped copyright headers into the New Year (2020).
+
+
 0.9.12  2019-12-26  The Winter'19 Release.
 
 - Custom color (palette) theme editor introduced; color
   (palette) theme changes are now effective immediately,
   except on default.
-
 - Second attempt to fix the yet non-official though
   CMake build configuration.
-
 - Move QApplication construction/destruction from LV2 UI
   to plug-in instantiation and cleanup.
 
@@ -22,9 +28,7 @@ ChangeLog
 - When using autotools and ./configure --with-qt=...,
   it is also necessary to adjust the PKG_CONFIG_PATH
   environment variable (after a merge request by plcl
-  aka. Pedro López-Cabanillas, while on qmidinet,
-  thanks).
-
+  aka. Pedro López-Cabanillas, while on qmidinet).
 - Upstream packaging is now split to JACK standalone and
   LV2 plugin only: the former shared common core and UI
   package is now duplicated but statically linked though. 
