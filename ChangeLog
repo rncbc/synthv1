@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- Fixed crash when showing the tooltip of a negative note
+  number that results from dragging over and beyond the
+  left edge of the virtual piano keyboard.
 - Remove -v (verbose) flag from 'strip' post-link command.
 - Fixed CMake build by adding missing Custom Color Theme
   (palette) form file (.ui).

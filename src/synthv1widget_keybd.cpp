@@ -1,7 +1,7 @@
 // synthv1widget_keybd.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -706,6 +706,10 @@ bool synthv1widget_keybd::eventFilter ( QObject *pObject, QEvent *pEvent )
 void synthv1widget_keybd::noteToolTip ( const QPoint& pos ) const
 {
 	const int iNote = (NUM_NOTES * pos.x() / QWidget::width());
+
+	if (iNote < MIN_NOTE || MAX_NOTE > iNote)
+		return;
+
 	QToolTip::showText(QWidget::mapToGlobal(pos),
 		QString("%1 (%2)").arg(noteName(iNote)).arg(iNote));
 }
