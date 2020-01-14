@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- Make man page compression reproducible (after request
+  by Jelle van der Waa, thanks).
 - Fixed crash when showing the tooltip of a negative note
   number that results from dragging over and beyond the
   left edge of the virtual piano keyboard.
