@@ -1,7 +1,7 @@
 // synthv1_jack.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -211,7 +211,7 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 		return 0;
 
 	const uint16_t nchannels = synthv1::channels();
-	float *ins[nchannels], *outs[nchannels];
+	float **ins = m_ins, **outs = m_outs;
 	for (uint16_t k = 0; k < nchannels; ++k) {
 		ins[k]  = static_cast<float *> (
 			::jack_port_get_buffer(m_audio_ins[k], nframes));
