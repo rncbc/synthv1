@@ -245,8 +245,8 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 						outs[k] += nread;
 					}
 				}
+				ndelta = event.time;
 			}
-			ndelta = event.time;
 			synthv1::process_midi(event.buffer, event.size);
 		}
 	}
