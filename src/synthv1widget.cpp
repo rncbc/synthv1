@@ -256,6 +256,12 @@ synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_ui.Lfo2VolumeKnob->setMinimum(-1.0f);
 	m_ui.Lfo2VolumeKnob->setMaximum(+1.0f);
 
+    // added by scotty to try to support linnstruments need for bigger bend range
+    m_ui.Def1PitchbendKnob->setMinimum(0.0f);
+    m_ui.Def1PitchbendKnob->setMaximum(+4.0f);
+    m_ui.Def2PitchbendKnob->setMinimum(0.0f);
+    m_ui.Def2PitchbendKnob->setMaximum(+4.0f);
+
 
 	// Channel filters
 	QStringList channels;
