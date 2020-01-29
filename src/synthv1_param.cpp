@@ -1,7 +1,7 @@
 // synthv1_param.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -102,7 +102,7 @@ struct ParamInfo {
 	{ "OUT1_FXSEND",   PARAM_FLOAT,   1.0f,   0.0f,   1.0f }, // OUT1 FX Send
 	{ "OUT1_VOLUME",   PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // OUT1 Volume
 
-	{ "DEF1_PITCHBEND",PARAM_FLOAT,   4.0f,   0.0f,   4.0f }, // DEF1 Pitchbend
+	{ "DEF1_PITCHBEND",PARAM_FLOAT,   0.2f,   0.0f,   4.0f }, // DEF1 Pitchbend
 	{ "DEF1_MODWHEEL", PARAM_FLOAT,   0.2f,   0.0f,   1.0f }, // DEF1 Modwheel
 	{ "DEF1_PRESSURE", PARAM_FLOAT,   0.2f,   0.0f,   1.0f }, // DEF1 Pressure
 	{ "DEF1_VELOCITY", PARAM_FLOAT,   0.2f,   0.0f,   1.0f }, // DEF1 Velocity
@@ -163,7 +163,7 @@ struct ParamInfo {
 	{ "OUT2_FXSEND",   PARAM_FLOAT,   1.0f,   0.0f,   1.0f }, // OUT2 FX Send
 	{ "OUT2_VOLUME",   PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // OUT2 Volume
 
-	{ "DEF2_PITCHBEND",PARAM_FLOAT,   4.0f,   0.0f,   4.0f }, // DEF2 Pitchbend
+	{ "DEF2_PITCHBEND",PARAM_FLOAT,   0.2f,   0.0f,   4.0f }, // DEF2 Pitchbend
 	{ "DEF2_MODWHEEL", PARAM_FLOAT,   0.2f,   0.0f,   1.0f }, // DEF2 Modwheel
 	{ "DEF2_PRESSURE", PARAM_FLOAT,   0.2f,   0.0f,   1.0f }, // DEF2 Pressure
 	{ "DEF2_VELOCITY", PARAM_FLOAT,   0.2f,   0.0f,   1.0f }, // DEF2 Velocity
