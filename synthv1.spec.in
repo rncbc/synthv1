@@ -1,7 +1,7 @@
 #
 # spec file for package synthv1
 #
-# Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+# Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -84,8 +84,8 @@ Obsoletes:	%{name}-common < %{version}
 [ -x ./autogen.sh ] && ./autogen.sh
 
 %build
-QTDIR=$(find /opt/qtbase5-static -maxdepth 1 -type d | sort -nr | head -1)
-%configure --with-qt=$QTDIR
+source /opt/qtbase5-static/*/bin/qtbase5-static-env.sh
+%configure
 %__make %{?_smp_mflags}
 
 %install
