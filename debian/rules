@@ -1,15 +1,14 @@
 #!/usr/bin/make -f
 #
+QTDIR ?= $(shell find /opt/qtbase5-static -maxdepth 1 -type d | sort -nr | head -1)
 
 %:
 	dh $@
 
 override_dh_auto_configure:
 	# Add here commands to configure the package.
-	. /opt/qtbase5-static/*/bin/qtbase5-static-env.sh
-
 	./autogen.sh
-	./configure --prefix=/usr
+	./configure --prefix=/usr --with-qt=$(QTDIR)
 	# --- end custom part for configure
 
 override_dh_clean:
