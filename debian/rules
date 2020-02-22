@@ -6,10 +6,10 @@
 
 override_dh_auto_configure:
 	# Add here commands to configure the package.
-	source /opt/qtbase5-static/*/bin/qtbase5-static-env.sh
+	. /opt/qtbase5-static/*/bin/qtbase5-static-env.sh
 
 	./autogen.sh
-	./configure --prefix=/usr --with-qt=$(QTDIR)
+	./configure --prefix=/usr
 	# --- end custom part for configure
 
 override_dh_clean:
