@@ -4,11 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.13  2020-03-26  A Spring'20 Release.
 
 - Maximum pitch-bend range has been expanded to 0..400%,
   allegedly to support some PME driven instruments (as
-  kindly requested by sacarlson PR#10). (EXPERIMENTAL)
+  kindly requested by sacarlson PR#10).
 - Make man page compression reproducible (after request
   by Jelle van der Waa, thanks).
 - Fixed crash when showing the tooltip of a negative note
