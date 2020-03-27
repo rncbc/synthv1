@@ -4,6 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Early fixing to build for Qt >= 5.15.0.
+
+
 0.9.13  2020-03-26  A Spring'20 Release.
 
 - Maximum pitch-bend range has been expanded to 0..400%,
