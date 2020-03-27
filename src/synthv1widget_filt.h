@@ -35,7 +35,7 @@ class synthv1widget_filt : public QFrame
 public:
 
 	// Constructor.
-	synthv1widget_filt(QWidget *pParent = 0, Qt::WindowFlags wflags = 0);
+	synthv1widget_filt(QWidget *pParent = nullptr);
 	// Destructor.
 	~synthv1widget_filt();
 

@@ -50,7 +50,7 @@ public:
 	// Pseudo-constructor.
 	static void showInstance(
 		synthv1_controls *pControls, synthv1::ParamIndex index,
-		const QString& sTitle, QWidget *pParent = 0, Qt::WindowFlags wflags = 0);
+		const QString& sTitle, QWidget *pParent = nullptr);
 
 	// Control accessors.
 	void setControls(synthv1_controls *pControls, synthv1::ParamIndex index);
@@ -79,7 +79,7 @@ protected slots:
 protected:
 
 	// Constructor.
-	synthv1widget_control(QWidget *pParent = 0, Qt::WindowFlags wflags = 0);
+	synthv1widget_control(QWidget *pParent = nullptr);
 
 	// Destructor.
 	~synthv1widget_control();

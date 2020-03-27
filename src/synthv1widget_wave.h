@@ -39,7 +39,7 @@ class synthv1widget_wave : public QFrame
 public:
 
 	// Constructor.
-	synthv1widget_wave(QWidget *pParent = 0, Qt::WindowFlags wflags = 0);
+	synthv1widget_wave(QWidget *pParent = nullptr);
 	// Destructor.
 	~synthv1widget_wave();
 

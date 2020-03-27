@@ -48,7 +48,7 @@ class synthv1widget : public QWidget
 public:
 
 	// Constructor
-	synthv1widget(QWidget *pParent = 0, Qt::WindowFlags wflags = 0);
+	synthv1widget(QWidget *pParent = nullptr);
 
 	// Destructor.
 	virtual ~synthv1widget();

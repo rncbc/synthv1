@@ -1,7 +1,7 @@
 // synthv1widget_param.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -730,7 +730,7 @@ void synthv1widget_combo::comboBoxValueChanged ( int iComboValue )
 void synthv1widget_combo::wheelEvent ( QWheelEvent *pWheelEvent )
 {
 	const int delta
-		= (pWheelEvent->delta() / 120);
+		= (pWheelEvent->angleDelta().y() / 120);
 	if (delta) {
 		float fValue = value() + float(delta);
 		if (fValue < minimum())

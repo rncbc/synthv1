@@ -52,8 +52,8 @@
 //
 
 // Constructor.
-synthv1widget::synthv1widget ( QWidget *pParent, Qt::WindowFlags wflags )
-	: QWidget(pParent, wflags), p_ui(new Ui::synthv1widget), m_ui(*p_ui)
+synthv1widget::synthv1widget ( QWidget *pParent )
+	: QWidget(pParent), p_ui(new Ui::synthv1widget), m_ui(*p_ui)
 {
 	Q_INIT_RESOURCE(synthv1);
 
