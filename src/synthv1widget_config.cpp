@@ -750,7 +750,22 @@ void synthv1widget_config::accept (void)
 			pConfig->sCustomStyleTheme.clear();
 		pConfig->fRandomizePercent = float(m_ui.RandomizePercentSpinBox->value());
 		int iNeedRestart = 0;
+		if (pConfig->sCustomStyleTheme != sOldCustomStyleTheme) {
+		#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+			++iNeedRestart;
+		#else		
+			if (pConfig->sCustomStyleTheme.isEmpty()) {
+				++iNeedRestart;
+			} else {
+				QApplication::setStyle(
+					QStyleFactory::create(pConfig->sCustomStyleTheme));
+			}
+		#endif
+ 		}
  		if (pConfig->sCustomColorTheme != sOldCustomColorTheme) {
+		#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+			++iNeedRestart;
+		#else		
 			if (pConfig->sCustomColorTheme.isEmpty()) {
 				++iNeedRestart;
 			} else {
@@ -759,14 +774,7 @@ void synthv1widget_config::accept (void)
 						pConfig, pConfig->sCustomColorTheme, pal))
 					QApplication::setPalette(pal);
 			}
- 		}
-		if (pConfig->sCustomStyleTheme != sOldCustomStyleTheme) {
-			if (pConfig->sCustomStyleTheme.isEmpty()) {
-				++iNeedRestart;
-			} else {
-				QApplication::setStyle(
-					QStyleFactory::create(pConfig->sCustomStyleTheme));
-			}
+		#endif
  		}
 		// Show restart message if needed...
  		if (iNeedRestart > 0) {
