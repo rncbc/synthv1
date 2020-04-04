@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- Prevent execution of duplicate or redundant MIDI bank-
+  select/program-change commands. (EXPERIMENTAL)
 - Early fixing to build for Qt >= 5.15.0.
 
 

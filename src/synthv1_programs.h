@@ -1,7 +1,7 @@
 // synthv1_programs.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2016, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -132,10 +132,12 @@ protected:
 		// schedule (override)
 		void select_program(uint16_t bank_id, uint16_t prog_id)
 		{
-			m_bank_id = bank_id;
-			m_prog_id = prog_id;
-
-			schedule();
+			if (m_bank_id != bank_id ||
+				m_prog_id != prog_id) {
+				m_bank_id  = bank_id;
+				m_prog_id  = prog_id;
+				schedule();
+			}
 		}
 
 		// process (virtual).
