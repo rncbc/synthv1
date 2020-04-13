@@ -73,6 +73,8 @@ public:
 protected:
  
 	void updatePreset(bool bDirty);
+	void updateParam(synthv1::ParamIndex index);
+	void updateParams();
 	void updateTuning();
 
 private:

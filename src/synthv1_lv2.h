@@ -1,7 +1,7 @@
 // synthv1_lv2.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -91,6 +91,8 @@ public:
 protected:
 
 	void updatePreset(bool bDirty);
+	void updateParam(synthv1::ParamIndex index);
+	void updateParams();
 	void updateTuning();
 
 	bool state_changed();
@@ -98,6 +100,9 @@ protected:
 #ifdef CONFIG_LV2_PATCH
 	bool patch_put(uint32_t ndelta, uint32_t type = 0);
 #endif
+
+	bool port_event(synthv1::ParamIndex index);
+	bool port_events();
 
 private:
 
@@ -117,6 +122,7 @@ private:
 		LV2_URID atom_Int;
 		LV2_URID atom_Bool;
 		LV2_URID atom_Path;
+		LV2_URID atom_portEvent;
 		LV2_URID time_Position;
 		LV2_URID time_beatsPerMinute;
 		LV2_URID midi_MidiEvent;

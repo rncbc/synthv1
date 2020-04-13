@@ -12,6 +12,7 @@
 @prefix lv2state: <http://lv2plug.in/ns/ext/state#> .
 @prefix lv2patch: <http://lv2plug.in/ns/ext/patch#> .
 @prefix lv2worker: <http://lv2plug.in/ns/ext/worker#> .
+@prefix lv2resize: <http://lv2plug.in/ns/ext/resize-port#> .
 @prefix lv2pg:   <http://lv2plug.in/ns/ext/port-groups#> .
 
 @prefix synthv1_lv2: <http://synthv1.sourceforge.net/lv2#> .
@@ -45,6 +46,7 @@
 		a lv2:OutputPort, lv2atom:AtomPort ;
 		lv2atom:bufferType lv2atom:Sequence ;
 		lv2:designation lv2:control ;
+		lv2resize:minimumSize 4096 ;
 		lv2:index 1 ;
 		lv2:symbol "notify";
 		lv2:name "Notify";

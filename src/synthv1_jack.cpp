@@ -615,6 +615,18 @@ void synthv1_jack::updatePreset ( bool /*bDirty*/ )
 }
 
 
+void synthv1_jack::updateParam ( synthv1::ParamIndex /*index*/ )
+{
+	// nothing to do here...
+}
+
+
+void synthv1_jack::updateParams (void)
+{
+	// nothing to do here...
+}
+
+
 void synthv1_jack::updateTuning (void)
 {
 	synthv1::resetTuning();

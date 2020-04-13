@@ -1,7 +1,7 @@
 // synthv1_controls.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -26,6 +26,8 @@
 #include "synthv1_sched.h"
 
 #include <QMap>
+
+#include <math.h>
 
 
 //-------------------------------------------------------------------------
@@ -179,17 +181,29 @@ protected:
 
 		// ctor.
 		SchedOut (synthv1 *pSynth)
-			: synthv1_sched(pSynth, Controls) {}
+			: synthv1_sched(pSynth, Controls), m_value(0.0f) {}
 
-		void schedule_event(synthv1::ParamIndex index, float fValue)
+		void schedule_event(synthv1::ParamIndex index, float value)
 		{
-			instance()->setParamValue(index, fValue);
-
-			schedule(int(index));
+			if (::fabsf(value - m_value) > 0.001f) {
+				m_value = value;
+				schedule(int(index));
+			}
 		}
 
 		// process (virtual stub).
-		void process(int) {}
+		void process(int sid)
+		{
+			synthv1 *pSynth = instance();
+			synthv1::ParamIndex index = synthv1::ParamIndex(sid);
+			pSynth->setParamValue(index, m_value);
+			pSynth->updateParam(index);
+		}
+
+	private:
+
+		// instance variables
+		float m_value;
 	};
 
 private:
