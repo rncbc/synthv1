@@ -760,7 +760,7 @@ bool synthv1_lv2::port_events (void)
 	LV2_Atom_Forge_Frame tup_frame;
 	lv2_atom_forge_tuple(&m_forge, &tup_frame);
 
-	for (int i = 0; i < synthv1::NUM_PARAMS; ++i) {
+	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
 		synthv1::ParamIndex index = synthv1::ParamIndex(i);
 		lv2_atom_forge_int(&m_forge, int32_t(ParamBase + index));
 		lv2_atom_forge_float(&m_forge, synthv1::paramValue(index));
