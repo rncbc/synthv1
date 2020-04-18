@@ -99,7 +99,7 @@ protected:
 
 #ifdef CONFIG_LV2_PATCH
 	bool patch_set(LV2_URID key);
-	bool patch_get();
+	bool patch_get(LV2_URID key);
 #endif
 
 	bool port_event(synthv1::ParamIndex index);
