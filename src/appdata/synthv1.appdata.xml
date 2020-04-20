@@ -19,7 +19,7 @@
  <launchable type="desktop-id">synthv1.desktop</launchable>
  <provides>
 ​  <binary>synthv1_jack</binary>
-​ </provides>
+ </provides>
  <screenshots>
   <screenshot type="default">
    <image>https://synthv1.sourceforge.io/image/synthv1-screenshot9.png</image>
