@@ -629,18 +629,10 @@ bool synthv1_lv2::worker_work ( const void *data, uint32_t size )
 	const synthv1_lv2_worker_message *mesg
 		= (const synthv1_lv2_worker_message *) data;
 
-	if (mesg->atom.type == m_urids.atom_PortEvent)
-		return true;
-	else
-	if (mesg->atom.type == m_urids.state_StateChanged)
-		return true;
-	else
-	if (mesg->atom.type == m_urids.tun1_update) {
+	if (mesg->atom.type == m_urids.tun1_update)
 		synthv1::resetTuning();
-		return true;
-	}
 
-	return false;
+	return true;
 }
 
 
@@ -663,7 +655,7 @@ bool synthv1_lv2::worker_response ( const void *data, uint32_t size )
 		return state_changed();
 
 #ifdef CONFIG_LV2_PATCH
-	return patch_get(0);
+	return patch_get(mesg->atom.type);
 #else
 	return true;
 #endif
@@ -727,13 +719,16 @@ bool synthv1_lv2::patch_set ( LV2_URID key )
 
 bool synthv1_lv2::patch_get ( LV2_URID key )
 {
-	if (key) return patch_set(key);
+	if (key == 0 || key == m_urids.tun1_update) {
+		patch_set(m_urids.p201_tuning_enabled);
+		patch_set(m_urids.p202_tuning_refPitch);
+		patch_set(m_urids.p203_tuning_refNote);
+		patch_set(m_urids.p204_tuning_scaleFile);
+		patch_set(m_urids.p205_tuning_keyMapFile);
+		if (key) return true;
+	}
 
-	patch_set(m_urids.p201_tuning_enabled);
-	patch_set(m_urids.p202_tuning_refPitch);
-	patch_set(m_urids.p203_tuning_refNote);
-	patch_set(m_urids.p204_tuning_scaleFile);
-	patch_set(m_urids.p205_tuning_keyMapFile);
+	if (key) patch_set(key);
 
 	return true;
 }
