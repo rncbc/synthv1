@@ -1486,7 +1486,7 @@ synthv1_lv2:P202_TUNING_REF_PITCH
 	rdfs:range lv2atom:Float ;
 	lv2:default 440.0 ;
 	lv2:minimum 20.0 ;
-	lv2:maximum 20000.0 .
+	lv2:maximum 8000.0 .
 
 synthv1_lv2:P203_TUNING_REF_NOTE
 	a lv2:Parameter ;

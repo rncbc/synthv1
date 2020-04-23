@@ -689,7 +689,7 @@
                <double>20.0</double>
               </property>
               <property name="maximum">
-               <double>20000.0</double>
+               <double>8000.0</double>
               </property>
               <property name="value">
                <double>440.0</double>
