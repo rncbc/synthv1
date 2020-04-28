@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Fixed initial window title for the LV2 External UI.
 - LV2 Atom/Port-event host notification support has been
   implemented (unofficial). (EXPERIMENTAL)
 - Prevent execution of duplicate or redundant MIDI bank-

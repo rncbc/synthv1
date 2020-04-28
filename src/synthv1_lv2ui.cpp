@@ -1,7 +1,7 @@
 // synthv1_lv2ui.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -250,6 +250,7 @@ static LV2UI_Handle synthv1_lv2ui_x11_instantiate (
 struct synthv1_lv2ui_external_widget
 {
 	LV2_External_UI_Widget external;
+	LV2_External_UI_Host  *external_host;
 	synthv1widget_lv2     *widget;
 };
 
@@ -268,6 +269,11 @@ static void synthv1_lv2ui_external_show ( LV2_External_UI_Widget *ui_external )
 	if (pExtWidget) {
 		synthv1widget_lv2 *widget = pExtWidget->widget;
 		if (widget) {
+			if (pExtWidget->external_host &&
+				pExtWidget->external_host->plugin_human_id) {
+				widget->setWindowTitle(QString::fromLocal8Bit(
+					pExtWidget->external_host->plugin_human_id));
+			}
 			widget->show();
 			widget->raise();
 			widget->activateWindow();
@@ -306,6 +312,7 @@ static LV2UI_Handle synthv1_lv2ui_external_instantiate (
 	pExtWidget->external.run  = synthv1_lv2ui_external_run;
 	pExtWidget->external.show = synthv1_lv2ui_external_show;
 	pExtWidget->external.hide = synthv1_lv2ui_external_hide;
+	pExtWidget->external_host = external_host;
 	pExtWidget->widget = new synthv1widget_lv2(pSynth, controller, write_function);
 	if (external_host)
 		pExtWidget->widget->setExternalHost(external_host);
