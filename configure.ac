@@ -132,6 +132,11 @@ AC_ARG_ENABLE(lv2-patch,
   [ac_lv2_patch="$enableval"],
   [ac_lv2_patch="yes"])
 
+AC_ARG_ENABLE(lv2-port-event,
+  AS_HELP_STRING([--enable-lv2-port-event], [enable LV2 plug-in Port-event support (EXPERIMENTAL) (default=no)]),
+  [ac_lv2_port_event="$enableval"],
+  [ac_lv2_port_event="no"])
+
 
 # Enable liblo availability.
 AC_ARG_ENABLE(liblo,
@@ -567,6 +572,7 @@ if test "x$ac_lv2" = "xno"; then
    ac_lv2_ui_resize="no"
    ac_lv2_programs="no"
    ac_lv2_patch="no"
+   ac_lv2_port_event="no"
 fi
 
 if test "x$ac_lv2_ui_x11" = "xyes"; then
@@ -656,6 +662,10 @@ if test "x$ac_lv2_patch" = "xyes"; then
    fi
 fi
 
+if test "x$ac_lv2_port_event" = "xyes"; then
+   AC_DEFINE(CONFIG_LV2_PORT_EVENT, 1, [Define if LV2 Port-event is supported. (EXPERIMENTAL)])
+fi
+
 
 # Check for NSM support.
 if test "x$ac_nsm" = "xyes"; then
@@ -722,6 +732,7 @@ echo "  LV2 plug-in UI Show interface support  . . . . . .: $ac_lv2_ui_show"
 echo "  LV2 plug-in UI Resize interface support  . . . . .: $ac_lv2_ui_resize"
 echo "  LV2 plug-in Programs support . . . . . . . . . . .: $ac_lv2_programs"
 echo "  LV2 plug-in Patch support  . . . . . . . . . . . .: $ac_lv2_patch"
+echo "  LV2 plug-in Port-event support (EXPERIMENTAL)  . .: $ac_lv2_port_event"
 echo "  OSC service support (liblo)  . . . . . . . . . . .: $ac_liblo"
 echo "  NSM (Non Session Management) support . . . . . . .: $ac_nsm"
 echo
