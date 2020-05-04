@@ -4,14 +4,14 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.14  2020-05-05  A Mid-Spring'20 Release.
 
 - Fixed initial DCF1, LFO1 group enablement (GUI).
 - Fixed initial window title for the LV2 External UI.
 - LV2 Atom/Port-event host notification support has been
-  implemented (unofficial). (EXPERIMENTAL)
+  implemented (unofficial).
 - Prevent execution of duplicate or redundant MIDI bank-
-  select/program-change commands. (EXPERIMENTAL)
+  select/program-change commands.
 - Early fixing to build for Qt >= 5.15.0.
 
 
