@@ -961,6 +961,7 @@ synthv1widget_group::synthv1widget_group ( QWidget *pParent )
 
 	m_pParam = new synthv1widget_param(this);
 	m_pParam->setToolTip(QGroupBox::toolTip());
+	m_pParam->setValue(0.5f); // HACK: half-way on.
 
 	QObject::connect(m_pParam,
 		 SIGNAL(valueChanged(float)),

@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Fixed initial DCF1, LFO1 group enablement (GUI).
 - Fixed initial window title for the LV2 External UI.
 - LV2 Atom/Port-event host notification support has been
   implemented (unofficial). (EXPERIMENTAL)
