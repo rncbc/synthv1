@@ -2,7 +2,7 @@ project(SYNTHV1)
 
 cmake_minimum_required(VERSION 3.1)
 
-set (VERSION "0.9.14")
+set (VERSION "0.9.15")
 
 set (CONFIG_VERSION ${VERSION})
 execute_process (
@@ -85,7 +85,7 @@ option (CONFIG_LV2_PROGRAMS "Enable LV2 plug-in Programs support (default=yes)" 
 
 option (CONFIG_LV2_PATCH "Enable LV2 plug-in Patch support (default=yes)" 1)
 
-option (CONFIG_LV2_PORT_EVENT "Enable LV2 plug-in Port-event support (EXPERIMENTAL) (default=no)" 0)
+option (CONFIG_LV2_PORT_EVENT "Enable LV2 plug-in Port-event support (EXPERIMENTAL) (default=yes)" 1)
 
 
 # Enable liblo availability.
