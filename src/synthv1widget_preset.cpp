@@ -67,7 +67,7 @@ synthv1widget_preset::synthv1widget_preset ( QWidget *pParent )
 	m_pResetButton->setToolTip(tr("Reset Preset"));
 
 	QHBoxLayout *pHBoxLayout = new QHBoxLayout();
-	pHBoxLayout->setMargin(2);
+	pHBoxLayout->setContentsMargins(2, 2, 2, 2);
 	pHBoxLayout->setSpacing(4);
 	pHBoxLayout->addWidget(m_pNewButton);
 	pHBoxLayout->addWidget(m_pOpenButton);
