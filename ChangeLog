@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Note velocity doesn't affect DCF envelope anymore.
 - Avoid glib event-loop upon LV2 plug-in instantiation.
 
 
