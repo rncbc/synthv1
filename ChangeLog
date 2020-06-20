@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- A long awaited expedite "Panic" button is now featured.
 - Note velocity doesn't affect DCF envelope anymore.
 - Avoid glib event-loop upon LV2 plug-in instantiation.
 

@@ -99,6 +99,9 @@ protected slots:
 	// Swap params A/B.
 	void swapParams(bool bOn);
 
+	// Panic: all-notes/sound-off (reset).
+	void panic();
+	
 	// Schedule notification updater.
 	void updateSchedNotify(int stype, int sid);
 

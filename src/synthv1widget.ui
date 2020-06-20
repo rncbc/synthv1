@@ -74,6 +74,16 @@
       </widget>
      </item>
      <item>
+      <widget class="QToolButton" name="PanicButton">
+       <property name="toolTip">
+        <string>Panic</string>
+       </property>
+       <property name="text">
+        <string>Panic</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QTabBar" name="TabBar">
        <property name="shape">
         <enum>QTabBar::RoundedNorth</enum>

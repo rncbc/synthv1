@@ -802,6 +802,11 @@ synthv1widget::synthv1widget ( QWidget *pParent )
 		SIGNAL(toggled(bool)),
 		SLOT(swapParams(bool)));
 
+	// Randomize params...
+	QObject::connect(m_ui.PanicButton,
+		SIGNAL(clicked()),
+		SLOT(panic()));
+	
 	// Direct stacked-page signal/slot
 	QObject::connect(m_ui.TabBar, SIGNAL(currentChanged(int)),
 		m_ui.StackedWidget, SLOT(setCurrentIndex(int)));
@@ -1227,6 +1232,15 @@ void synthv1widget::swapParams ( bool bOn )
 	const bool bSwapA = m_ui.SwapParamsAButton->isChecked();
 	m_ui.StatusBar->showMessage(tr("Swap %1").arg(bSwapA ? 'A' : 'B'), 5000);
 	updateDirtyPreset(true);
+}
+
+
+// Panic: all-notes/sound-off (reset).
+void synthv1widget::panic (void)
+{
+	synthv1_ui *pSynthUi = ui_instance();
+	if (pSynthUi)
+		pSynthUi->reset();
 }
 
 
