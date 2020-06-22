@@ -3,8 +3,7 @@ synthv1 - an old-school polyphonic synthesizer
 
 ChangeLog
 
-
-GIT HEAD
+0.9.15  2020-06-22  An Early-Summer'20 Release
 
 - A long awaited expedite "Panic" button is now featured.
 - Note velocity doesn't affect DCF envelope anymore.
