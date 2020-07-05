@@ -92,7 +92,11 @@ synthv1widget_preset::synthv1widget_preset ( QWidget *pParent )
 		SIGNAL(editTextChanged(const QString&)),
 		SLOT(stabilizePreset()));
 	QObject::connect(m_pComboBox,
+	#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+		SIGNAL(textActivated(const QString&)),
+	#else
 		SIGNAL(activated(const QString&)),
+	#endif
 		SLOT(activatePreset(const QString&)));
 	QObject::connect(m_pSaveButton,
 		SIGNAL(clicked()),
