@@ -55,10 +55,11 @@ requirements:
     https://www.alsa-project.org/
 
   - LV2, Audio Plugin Standard, the extensible successor of LADSPA
-    http://lv2plug.in/
+    https://lv2plug.in/
 
-  - NSM, Non Session Management
-    http://non.tuxfamily.org/nsm/
+  - NSM, New Session Management
+    https://linuxaudio.github.io/new-session-manager/
+    (formerly http://non.tuxfamily.org/nsm/)
 
   - liblo, Lightweight OSC implementation
     (needed for NSM support)
