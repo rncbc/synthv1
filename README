@@ -4,69 +4,63 @@ synthv1 - an old-school polyphonic synthesizer
   an old-school 4-oscillator subtractive polyphonic synthesizer
   with stereo fx.
 
-features:
+Features:
 
-  - pure stand-alone JACK client with JACK-session, NSM and both JACK MIDI
-    and ALSA MIDI input support;
+  - pure stand-alone JACK [1] client with JACK-session, NSM [3] and both
+    JACK MIDI and ALSA MIDI [2] input support;
 
-  - LV2 instrument plugin.
+  - LV2 [4] instrument plugin.
     URI: http://synthv1.sourceforge.net/lv2
 
-license:
+License:
 
-  synthv1 is free, open-source software, distributed under the terms of
-  the GNU General Public License (GPL) version 2 or later.
+  synthv1 is free, Linux Audio [5] open-source software, distributed under
+  the terms of the GNU General Public License (GPL) [6] version 2 or later.
 
-website:
+Website:
 
   https://synthv1.sourceforge.io
   http://synthv1.sourceforge.net
 
-project page:
+Project page:
 
   https://sourceforge.net/projects/synthv1
 
-git repos:
+Git repos:
 
   https://git.code.sf.net/p/synthv1/code
   https://github.com/rncbc/synthv1.git
   https://gitlab.com/rncbc/synthv1.git
   https://bitbucket.org/rncbc/synthv1.git
 
-weblog:
+Weblog:
 
   https://www.rncbc.org
 
-
-requirements:
+Requirements:
 
   mandatory,
 
-  - Qt framework, C++ class library and tools for
+  - Qt framework [7], C++ class library and tools for
     cross-platform application and UI development
     https://qt.io/
 
   optional (opted-in at build time),
 
-  - JACK Audio Connection Kit
+  - JACK [1] Audio Connection Kit
     https://jackaudio.org/
 
-  - ALSA, Advanced Linux Sound Architecture
+  - ALSA [2], Advanced Linux Sound Architecture
     https://www.alsa-project.org/
 
-  - LV2, Audio Plugin Standard, the extensible successor of LADSPA
+  - LV2 [4], Audio Plugin Standard, the extensible successor of LADSPA
     https://lv2plug.in/
 
-  - NSM, New Session Management
-    https://linuxaudio.github.io/new-session-manager/
-    (formerly http://non.tuxfamily.org/nsm/)
-
-  - liblo, Lightweight OSC implementation
-    (needed for NSM support)
+  - liblo [8], Lightweight OSC implementation
+    (needed for NSM support [3])
     http://liblo.sourceforge.net/
 
-
-installation:
+Installation:
 
   - unpack tarball as usual; in the extracted source directory:
 
@@ -81,13 +75,41 @@ installation:
 
     ./autogen.sh
 
-
-acknowledgements:
+Acknowledgements:
 
   synthv1 logo/icon is an original fine work of Jarle Richard Akselsen.
 
+References:
 
-cheers && enjoy.
+ [1] JACK Audio Connection Kit
+     https://jackaudio.org/
+
+ [2] ALSA, Advanced Linux Sound Architecture
+     https://www.alsa-project.org/
+
+ [3] New Session Management (NSM)
+     https://linuxaudio.github.io/new-session-manager/
+    (formerly http://non.tuxfamily.org/nsm/)
+
+ [4] LV2, Audio Plugin Standard, the extensible successor of LADSPA
+     http://lv2plug.in/
+
+ [5] Linux Audio consortium of libre software for audio-related work
+     https://linuxaudio.org
+
+ [6] GNU General Public License
+     https://www.gnu.org/copyleft/gpl.html
+
+ [7] Qt framework, C++ class library and tools for
+     cross-platform application and UI development
+     https://qt.io/
+
+ [8] liblo [8], Lightweight OSC implementation
+     (needed for NSM support)
+     http://liblo.sourceforge.net/
+
+
+Cheers && Enjoy.
 --
 rncbc aka. Rui Nuno Capela
 rncbc@rncbc.org
