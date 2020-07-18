@@ -25,9 +25,10 @@
 		foaf:homepage <https://www.rncbc.org> ;
 		foaf:mbox <mailto:rncbc@rncbc.org> ;
 	] ;
+	doap:license <http://usefulinc.com/doap/licenses/gpl> ;
 	lv2:requiredFeature lv2urid:map, lv2worker:schedule ;
 	lv2:optionalFeature lv2:hardRTCapable ;
-	lv2:extensionData lv2worker:interface ;
+	lv2:extensionData lv2state:interface, lv2worker:interface ;
 	lv2ui:ui synthv1_lv2:ui_x11, synthv1_lv2:ui_external ;
 	lv2patch:writable synthv1_lv2:P201_TUNING_ENABLED,
 		synthv1_lv2:P202_TUNING_REF_PITCH,
@@ -37,7 +38,7 @@
 	lv2:port [
 		a lv2:InputPort, lv2atom:AtomPort ;
 		lv2atom:bufferType lv2atom:Sequence ;
-		lv2atom:supports lv2midi:MidiEvent, lv2time:Position ;
+		lv2atom:supports lv2midi:MidiEvent, lv2time:Position, lv2patch:Message ;
 		lv2:designation lv2:control ;
 		lv2:index 0 ;
 		lv2:symbol "in";
@@ -45,6 +46,7 @@
 	], [
 		a lv2:OutputPort, lv2atom:AtomPort ;
 		lv2atom:bufferType lv2atom:Sequence ;
+		lv2atom:supports lv2patch:Message ;
 		lv2:designation lv2:control ;
 		lv2resize:minimumSize 5120 ;
 		lv2:index 1 ;
