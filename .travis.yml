@@ -1,7 +1,7 @@
 language: cpp
 
 sudo: required
-dist: bionic
+dist: focal
 
 notifications: 
   email:
@@ -15,7 +15,7 @@ branches:
   - master
 
 before_install:
-- sudo add-apt-repository --yes ppa:rncbc/bionic
+- sudo add-apt-repository --yes ppa:rncbc/focal
 - sudo apt-get update -qq
 
 install:
