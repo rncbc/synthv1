@@ -734,7 +734,7 @@ echo "  LV2 plug-in Programs support . . . . . . . . . . .: $ac_lv2_programs"
 echo "  LV2 plug-in Patch support  . . . . . . . . . . . .: $ac_lv2_patch"
 echo "  LV2 plug-in Port-event support (EXPERIMENTAL)  . .: $ac_lv2_port_event"
 echo "  OSC service support (liblo)  . . . . . . . . . . .: $ac_liblo"
-echo "  NSM (Non Session Management) support . . . . . . .: $ac_nsm"
+echo "  NSM (New Session Management) support . . . . . . .: $ac_nsm"
 echo
 echo "  Install prefix . . . . . . . . . . . . . . . . . .: $ac_prefix"
 echo
