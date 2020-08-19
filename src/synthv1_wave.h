@@ -1,7 +1,7 @@
 // synthv1_wave.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -175,7 +175,7 @@ public:
 			phase.itab  = m_ntabs;
 			phase.ftab  = 0.0f;
 		} else if (freq < m_max_freq) {
-			phase.ftab  = fast_flog2f(m_max_freq / freq);
+			phase.ftab  = fast_log2f(m_max_freq / freq);
 			phase.itab  = uint16_t(phase.ftab);
 			phase.ftab -= float(phase.itab);
 		} else {
@@ -187,7 +187,7 @@ public:
 protected:
 
 	// fast log2f approximation.
-	static inline float fast_flog2f ( float x )
+	static inline float fast_log2f ( float x )
 	{
 		union { float f; uint32_t i; } u;
 		u.f = x;
