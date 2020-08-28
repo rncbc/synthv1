@@ -4,6 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Fixed unitialized number of voices variable; early-bird
+  adaptations to Qt6 (PREVIEW).
+
+
 0.9.16  2020-08-06  A Summer'20 Release.
 
 - Fixed deprecated stuff on an early preparation for Qt6.
