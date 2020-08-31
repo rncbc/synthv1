@@ -703,27 +703,10 @@ synthv1_jack_application::synthv1_jack_application ( int& argc, char **argv )
 	m_bGui = (::getenv("DISPLAY") != 0);
 #endif
 	for (int i = 1; i < argc; ++i) {
-		QString sArg = QString::fromLocal8Bit(argv[i]);
-		QString sVal;
-		const int iEqual = sArg.indexOf('=');
-		if (iEqual >= 0) {
-			sVal = sArg.right(sArg.length() - iEqual - 1);
-			sArg = sArg.left(iEqual);
-		}
-		else if (i < argc - 1) {
-			sVal = QString::fromLocal8Bit(argv[i + 1]);;
-			if (sVal.at(0) == '-')
-				sVal.clear();
-		}
-		if (sArg.at(0) != '-')
-			m_presets.append(sArg);
-		else
+		const QString& sArg
+			= QString::fromLocal8Bit(argv[i]);
 		if (sArg == "-g" || sArg == "--no-gui")
 			m_bGui = false;
-		if (sArg == "-n" || sArg == "--client-name") {
-			if (!sVal.isEmpty())
-				m_sClientName = sVal;
-		}
 	}
 
 	if (m_bGui) {
@@ -803,11 +786,35 @@ synthv1_jack_application::~synthv1_jack_application (void)
 bool synthv1_jack_application::parse_args (void)
 {
 	QTextStream out(stderr);
-
 	const QStringList& args = m_pApp->arguments();
-	QStringListIterator iter(args);
-	while (iter.hasNext()) {
-		const QString& sArg = iter.next();
+	const int argc = args.count();
+
+	for (int i = 1; i < argc; ++i) {
+
+		QString sArg = args.at(i);
+
+		QString sVal;
+		const int iEqual = sArg.indexOf('=');
+		if (iEqual >= 0) {
+			sVal = sArg.right(sArg.length() - iEqual - 1);
+			sArg = sArg.left(iEqual);
+		}
+		else if (i < argc - 1) {
+			sVal = args.at(i + 1);
+			if (sVal.at(0) == '-')
+				sVal.clear();
+		}
+
+		if (sArg == "-n" || sArg == "--client-name") {
+			if (sVal.isNull()) {
+				out << QObject::tr("Option -n requires an argument (client-name).\n\n");
+				return false;
+			}
+			m_sClientName = sVal;
+			if (iEqual < 0)
+				++i;
+		}
+		else
 		if (sArg == "-h" || sArg == "--help") {
 			out << QObject::tr(
 				"Usage: %1 [options] [preset-file]\n\n"
@@ -828,6 +835,11 @@ bool synthv1_jack_application::parse_args (void)
 				.arg(SYNTHV1_TITLE)
 				.arg(CONFIG_BUILD_VERSION);
 			return false;
+		}
+		else {
+			// If we don't have one by now,
+			// this will be the startup preset file...
+			m_presets.append(sArg);
 		}
 	}
 
