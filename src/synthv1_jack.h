@@ -43,13 +43,13 @@ class synthv1_jack : public synthv1
 {
 public:
 
-	synthv1_jack();
+	synthv1_jack(const char *client_name);
 
 	~synthv1_jack();
 
 	jack_client_t *client() const;
 
-	void open(const char *client_id);
+	void open(const char *client_name);
 	void close();
 
 	void activate();
@@ -181,6 +181,7 @@ private:
 	QCoreApplication *m_pApp;
 	bool m_bGui;
 
+	QString m_sClientName;
 	QStringList m_presets;
 
 	synthv1_jack *m_pSynth;

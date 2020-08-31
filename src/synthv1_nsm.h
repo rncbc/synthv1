@@ -1,7 +1,7 @@
 // synthv1_nsm.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ public:
 	// Session client accessors.
 	const QString& path_name() const;
 	const QString& display_name() const;
-	const QString& client_id() const;
+	const QString& client_name() const;
 
 	// Session client methods.
 	void announce(const QString& app_name, const QString& capabilities);
@@ -97,7 +97,7 @@ public:
 	void nsm_open(
 		const char *path_name,
 		const char *display_name,
-		const char *client_id);
+		const char *client_name);
 
 	void nsm_save();
 	void nsm_loaded();
@@ -131,7 +131,7 @@ private:
 	QString    m_capabilities;
 	QString    m_path_name;
 	QString    m_display_name;
-	QString    m_client_id;
+	QString    m_client_name;
 };
 
 

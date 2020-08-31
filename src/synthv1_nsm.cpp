@@ -1,7 +1,7 @@
 // synthv1_nsm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -247,9 +247,9 @@ const QString& synthv1_nsm::display_name (void) const
 }
 
 
-const QString& synthv1_nsm::client_id (void) const
+const QString& synthv1_nsm::client_name (void) const
 {
-	return m_client_id;
+	return m_client_name;
 }
 
 
@@ -370,7 +370,7 @@ void synthv1_nsm::nsm_announce_error (
 
 	m_path_name.clear();
 	m_display_name.clear();
-	m_client_id.clear();
+	m_client_name.clear();
 
 	emit active(false);
 
@@ -399,18 +399,18 @@ void synthv1_nsm::nsm_announce_reply (
 void synthv1_nsm::nsm_open (
 	const char *path_name,
 	const char *display_name,
-	const char *client_id )
+	const char *client_name )
 {
 	m_path_name = path_name;
 	m_display_name = display_name;
-	m_client_id = client_id;
+	m_client_name = client_name;
 
 #ifdef CONFIG_DEBUG
 	qDebug("synthv1_nsm::nsm_open: "
-		"path_name=\"%s\" display_name=\"%s\" client_id=\"%s\".",
+		"path_name=\"%s\" display_name=\"%s\" client_name=\"%s\".",
 		m_path_name.toUtf8().constData(),
 		m_display_name.toUtf8().constData(),
-		m_client_id.toUtf8().constData());
+		m_client_name.toUtf8().constData());
 #endif
 
 	emit open();
@@ -422,10 +422,10 @@ void synthv1_nsm::nsm_save (void)
 {
 #ifdef CONFIG_DEBUG
 	qDebug("synthv1_nsm::nsm_save: "
-		"path_name=\"%s\" display_name=\"%s\" client_id=\"%s\".",
+		"path_name=\"%s\" display_name=\"%s\" client_name=\"%s\".",
 		m_path_name.toUtf8().constData(),
 		m_display_name.toUtf8().constData(),
-		m_client_id.toUtf8().constData());
+		m_client_name.toUtf8().constData());
 #endif
 
 	emit save();
@@ -437,10 +437,10 @@ void synthv1_nsm::nsm_loaded (void)
 {
 #ifdef CONFIG_DEBUG
 	qDebug("synthv1_nsm::nsm_loaded: "
-		"path_name=\"%s\" display_name=\"%s\" client_id=\"%s\".",
+		"path_name=\"%s\" display_name=\"%s\" client_name=\"%s\".",
 		m_path_name.toUtf8().constData(),
 		m_display_name.toUtf8().constData(),
-		m_client_id.toUtf8().constData());
+		m_client_name.toUtf8().constData());
 #endif
 
 	emit loaded();
@@ -452,10 +452,10 @@ void synthv1_nsm::nsm_show (void)
 {
 #ifdef CONFIG_DEBUG
 	qDebug("synthv1_nsm::nsm_show: "
-		"path_name=\"%s\" display_name=\"%s\" client_id=\"%s\".",
+		"path_name=\"%s\" display_name=\"%s\" client_name=\"%s\".",
 		m_path_name.toUtf8().constData(),
 		m_display_name.toUtf8().constData(),
-		m_client_id.toUtf8().constData());
+		m_client_name.toUtf8().constData());
 #endif
 
 	emit show();
@@ -467,10 +467,10 @@ void synthv1_nsm::nsm_hide (void)
 {
 #ifdef CONFIG_DEBUG
 	qDebug("synthv1_nsm::nsm_hide: "
-		"path_name=\"%s\" display_name=\"%s\" client_id=\"%s\".",
+		"path_name=\"%s\" display_name=\"%s\" client_name=\"%s\".",
 		m_path_name.toUtf8().constData(),
 		m_display_name.toUtf8().constData(),
-		m_client_id.toUtf8().constData());
+		m_client_name.toUtf8().constData());
 #endif
 
 	emit hide();

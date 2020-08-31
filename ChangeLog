@@ -6,6 +6,10 @@ ChangeLog
 
 GIT HEAD
 
+- Added -n, --client-name to the JACK stand-alone client
+  application command line option arguments (from samplv1
+  PR#31, by Paul Asmuth, thanks).
+
 - Fixed unitialized number of voices variable; early-bird
   adaptations to Qt6 (PREVIEW).
 

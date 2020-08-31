@@ -159,7 +159,7 @@ static void synthv1_jack_session_event (
 // synthv1_jack - impl.
 //
 
-synthv1_jack::synthv1_jack (void) : synthv1(2)
+synthv1_jack::synthv1_jack (const char *client_name) : synthv1(2)
 {
 	m_client = nullptr;
 
@@ -187,7 +187,7 @@ synthv1_jack::synthv1_jack (void) : synthv1(2)
 	synthv1::programs()->enabled(true);
 	synthv1::controls()->enabled(true);
 
-	open(SYNTHV1_TITLE);
+	open(client_name);
 	activate();
 }
 
@@ -289,7 +289,7 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 }
 
 
-void synthv1_jack::open ( const char *client_id )
+void synthv1_jack::open ( const char *client_name )
 {
 	// init param ports
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
@@ -299,7 +299,7 @@ void synthv1_jack::open ( const char *client_id )
 	}
 
 	// open client
-	m_client = ::jack_client_open(client_id, JackNullOption, nullptr);
+	m_client = ::jack_client_open(client_name, JackNullOption, nullptr);
 	if (m_client == nullptr)
 		return;
 
@@ -342,7 +342,7 @@ void synthv1_jack::open ( const char *client_id )
 	m_alsa_thread  = nullptr;
 	// open alsa sequencer client...
 	if (snd_seq_open(&m_alsa_seq, "hw", SND_SEQ_OPEN_INPUT, 0) >= 0) {
-		snd_seq_set_client_name(m_alsa_seq, client_id);
+		snd_seq_set_client_name(m_alsa_seq, client_name);
 	//	m_alsa_client = snd_seq_client_id(m_alsa_seq);
 		m_alsa_port = snd_seq_create_simple_port(m_alsa_seq, "in",
 			SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE,
@@ -694,7 +694,7 @@ static void synthv1_sigterm_handler ( int /*signo*/ )
 // Constructor.
 synthv1_jack_application::synthv1_jack_application ( int& argc, char **argv )
 	: QObject(nullptr), m_pApp(nullptr), m_bGui(true),
-		m_pSynth(nullptr), m_pWidget(nullptr)
+		m_sClientName(SYNTHV1_TITLE), m_pSynth(nullptr), m_pWidget(nullptr)
 	  #ifdef CONFIG_NSM
 		, m_pNsmClient(nullptr)
 	  #endif
@@ -703,12 +703,27 @@ synthv1_jack_application::synthv1_jack_application ( int& argc, char **argv )
 	m_bGui = (::getenv("DISPLAY") != 0);
 #endif
 	for (int i = 1; i < argc; ++i) {
-		const QString& sArg = QString::fromLocal8Bit(argv[i]);
-		if (sArg[0] != '-')
+		QString sArg = QString::fromLocal8Bit(argv[i]);
+		QString sVal;
+		const int iEqual = sArg.indexOf('=');
+		if (iEqual >= 0) {
+			sVal = sArg.right(sArg.length() - iEqual - 1);
+			sArg = sArg.left(iEqual);
+		}
+		else if (i < argc - 1) {
+			sVal = QString::fromLocal8Bit(argv[i + 1]);;
+			if (sVal.at(0) == '-')
+				sVal.clear();
+		}
+		if (sArg.at(0) != '-')
 			m_presets.append(sArg);
 		else
 		if (sArg == "-g" || sArg == "--no-gui")
 			m_bGui = false;
+		if (sArg == "-n" || sArg == "--client-name") {
+			if (!sVal.isEmpty())
+				m_sClientName = sVal;
+		}
 	}
 
 	if (m_bGui) {
@@ -799,6 +814,7 @@ bool synthv1_jack_application::parse_args (void)
 				SYNTHV1_TITLE " - " SYNTHV1_SUBTITLE "\n\n"
 				"Options:\n\n"
 				"  -g, --no-gui\n\tDisable the graphical user interface (GUI)\n\n"
+				"  -n, --client-name=[label]\n\tSet the JACK client name (default: synthv1)\n\n"
 				"  -h, --help\n\tShow help about command line options\n\n"
 				"  -v, --version\n\tShow version information\n\n")
 				.arg(args.at(0));
@@ -834,7 +850,12 @@ bool synthv1_jack_application::setup (void)
 		SIGNAL(shutdown_signal()),
 		SLOT(shutdown_slot()));
 
-	m_pSynth = new synthv1_jack();
+	const QByteArray aClientName
+		= m_sClientName.toLocal8Bit();
+	const char *client_name
+		= aClientName.constData();
+
+	m_pSynth = new synthv1_jack(client_name);
 
 	if (m_bGui) {
 		m_pWidget = new synthv1widget_jack(m_pSynth);
@@ -869,7 +890,7 @@ bool synthv1_jack_application::setup (void)
 		QString caps(":switch:dirty:");
 		if (m_bGui)
 			caps += "optional-gui:";
-		m_pNsmClient->announce(SYNTHV1_TITLE, caps.toLatin1().constData());
+		m_pNsmClient->announce(SYNTHV1_TITLE, caps.toLocal8Bit().constData());
 		if (m_pWidget)
 			m_pWidget->setNsmClient(m_pNsmClient);
 	}
@@ -909,11 +930,11 @@ void synthv1_jack_application::openSession (void)
 	m_pSynth->deactivate();
 	m_pSynth->close();
 
-	const QString& client_id = m_pNsmClient->client_id();
+	const QString& client_name = m_pNsmClient->client_name();
 	const QString& path_name = m_pNsmClient->path_name();
 	const QString& display_name = m_pNsmClient->display_name();
 
-	m_pSynth->open(client_id.toUtf8().constData());
+	m_pSynth->open(client_name.toUtf8().constData());
 	m_pSynth->activate();
 
 	const QDir dir(path_name);
@@ -954,7 +975,7 @@ void synthv1_jack_application::saveSession (void)
 	qDebug("synthv1_jack::saveSession()");
 #endif
 
-//	const QString& client_id = m_pNsmClient->client_id();
+//	const QString& client_name = m_pNsmClient->client_name();
 	const QString& path_name = m_pNsmClient->path_name();
 //	const QString& display_name = m_pNsmClient->display_name();
 //	const QFileInfo fi(path_name, display_name + '.' + SYNTHV1_TITLE);
