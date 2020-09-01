@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- Early fixing to build for Qt >= 6.0.0 and comply with
+  the c++17 standard.
+
 - Added -n, --client-name to the JACK stand-alone client
   application command line option arguments (from samplv1
   PR#31, by Paul Asmuth, thanks).

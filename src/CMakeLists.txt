@@ -142,10 +142,10 @@ add_executable (${NAME}_jack
 )
 
 
-set_target_properties (${NAME}       PROPERTIES CXX_STANDARD 11)
-set_target_properties (${NAME}_ui    PROPERTIES CXX_STANDARD 11)
-set_target_properties (${NAME}_lv2   PROPERTIES CXX_STANDARD 11)
-set_target_properties (${NAME}_jack  PROPERTIES CXX_STANDARD 11)
+set_target_properties (${NAME}       PROPERTIES CXX_STANDARD 17)
+set_target_properties (${NAME}_ui    PROPERTIES CXX_STANDARD 17)
+set_target_properties (${NAME}_lv2   PROPERTIES CXX_STANDARD 17)
+set_target_properties (${NAME}_jack  PROPERTIES CXX_STANDARD 17)
 
 target_link_libraries (${NAME}       PUBLIC Qt5::Core Qt5::Xml)
 target_link_libraries (${NAME}_ui    PUBLIC Qt5::Widgets ${NAME})
