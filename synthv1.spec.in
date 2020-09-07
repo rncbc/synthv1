@@ -17,7 +17,7 @@
 
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 57
+%define release 58
 
 %define _prefix	@ac_prefix@
 
@@ -132,6 +132,8 @@ source /opt/qtbase5-static/*/bin/qtbase5-static-env.sh
 
 
 %changelog
+* Tue Sep  8 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.9.17
+- Late Summer'20 Release.
 * Thu Aug  6 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.9.16
 - A Summer'20 Release.
 * Mon Jun 22 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.9.15

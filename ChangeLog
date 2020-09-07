@@ -4,17 +4,13 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
-
-- Early fixing to build for Qt >= 6.0.0 and comply with
-  the c++17 standard.
+0.9.17  2020-09-08  Late Summer'10 Release.
 
 - Added -n, --client-name to the JACK stand-alone client
-  application command line option arguments (from samplv1
-  PR#31, by Paul Asmuth, thanks).
+  application command line option arguments.
 
 - Fixed unitialized number of voices variable; early-bird
-  adaptations to Qt6 (PREVIEW).
+  adaptations to Qt6 >= 6.0.0 and C++17 standard.
 
 
 0.9.16  2020-08-06  A Summer'20 Release.
