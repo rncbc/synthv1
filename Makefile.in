@@ -154,8 +154,11 @@ install_lv2:	lv2
 install_jack:	jack
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_jack).mak install
 	@install -d -v -m 0755 $(DESTDIR)$(mandir)/man1
-	@install -v -m 0644 $(name)*.1 $(DESTDIR)$(mandir)/man1
-	@gzip -nvf $(DESTDIR)$(mandir)/man1/$(name)*.1
+	@install -v -m 0644 $(name).1 $(DESTDIR)$(mandir)/man1/$(name).1
+	@gzip -nvf $(DESTDIR)$(mandir)/man1/$(name).1
+	@install -d -v -m 0755 $(DESTDIR)$(mandir)/fr/man1
+	@install -v -m 0644 $(name).fr.1 $(DESTDIR)$(mandir)/fr/man1/$(name).1
+	@gzip -nvf $(DESTDIR)$(mandir)/fr/man1/$(name).1
 
 
 uninstall_core:	core
@@ -169,7 +172,8 @@ uninstall_lv2:	lv2
 
 uninstall_jack:	jack
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name_jack).mak uninstall
-	@rm -vf $(DESTDIR)$(mandir)/man1/$(name)*.1.gz
+	@rm -vf $(DESTDIR)$(mandir)/man1/$(name).1.gz
+	@rm -vf $(DESTDIR)$(mandir)/fr/man1/$(name).1.gz
 
 
 clean_core:	$(name).mak

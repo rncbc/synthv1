@@ -111,6 +111,8 @@ source /opt/qtbase5-static/*/bin/qtbase5-static-env.sh
 %dir %{_datadir}/icons/hicolor/scalable/mimetypes
 #dir %{_datadir}/man
 #dir %{_datadir}/man/man1
+#dir %{_datadir}/man/fr
+#dir %{_datadir}/man/fr/man1
 %{_bindir}/%{name}_jack
 %{_datadir}/metainfo/%{name}.appdata.xml
 %{_datadir}/applications/%{name}.desktop
@@ -119,7 +121,8 @@ source /opt/qtbase5-static/*/bin/qtbase5-static-env.sh
 %{_datadir}/icons/hicolor/32x32/mimetypes/application-x-%{name}*.png
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 %{_datadir}/icons/hicolor/scalable/mimetypes/application-x-%{name}*.svg
-%{_datadir}/man/man1/%{name}*.1.gz
+%{_datadir}/man/man1/%{name}.1.gz
+%{_datadir}/man/fr/man1/%{name}.1.gz
 
 %files -n %{name}-lv2
 %defattr(-,root,root)
