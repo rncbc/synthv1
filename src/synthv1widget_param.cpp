@@ -260,7 +260,7 @@ float synthv1widget_param::defaultValue (void) const
 // Mouse behavior event handler.
 void synthv1widget_param::mousePressEvent ( QMouseEvent *pMouseEvent )
 {
-	if (pMouseEvent->button() == Qt::MidButton) {
+	if (pMouseEvent->button() == Qt::MiddleButton) {
 		if (m_iDefaultValue < 1) {
 			m_fDefaultValue = 0.5f * (maximum() + minimum());
 			m_iDefaultValue++;
@@ -389,7 +389,7 @@ void synthv1widget_dial::mouseMoveEvent ( QMouseEvent *pMouseEvent )
 void synthv1widget_dial::mouseReleaseEvent ( QMouseEvent *pMouseEvent )
 {
 	if (g_dialMode == DefaultMode
-		&& pMouseEvent->button() != Qt::MidButton) {
+		&& pMouseEvent->button() != Qt::MiddleButton) {
 		QDial::mouseReleaseEvent(pMouseEvent);
 	} else if (m_bMousePressed) {
 		m_bMousePressed = false;
