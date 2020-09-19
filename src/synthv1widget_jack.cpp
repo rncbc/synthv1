@@ -1,7 +1,7 @@
 // synthv1widget_jack.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -157,7 +157,11 @@ void synthv1widget_jack::closeEvent ( QCloseEvent *pCloseEvent )
 	// Let's be sure about that...
 	if (queryClose()) {
 		pCloseEvent->accept();
+	#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+		QApplication::exit(0);
+	#else
 		QApplication::quit();
+	#endif
 	} else {
 		pCloseEvent->ignore();
 	}

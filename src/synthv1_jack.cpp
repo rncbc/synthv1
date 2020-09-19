@@ -603,7 +603,11 @@ void synthv1_jack::sessionEvent ( void *pvSessionArg )
 	jack_session_event_free(pJackSessionEvent);
 
 	if (bQuit)
+	#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+		QCoreApplication::exit(0);
+	#else
 		QCoreApplication::quit();
+	#endif
 }
 
 #endif	// CONFIG_JACK_SESSION
