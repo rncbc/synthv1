@@ -299,7 +299,7 @@ void synthv1widget_keybd::allNotesTimeout (void)
 void synthv1widget_keybd::dragNoteOn ( const QPoint& pos )
 {
 	// Compute new key cordinates...
-	const int iNote = (NUM_NOTES * pos.x() / QWidget::width());
+	const int iNote = noteAt(pos);
 
 	if (iNote < m_iNoteLow || iNote > m_iNoteHigh || iNote == m_iNoteOn)
 		return;
@@ -333,6 +333,32 @@ void synthv1widget_keybd::dragNoteOff (void)
 //	noteOff(iNote);
 
 	emit noteOnClicked(iNote, 0);
+}
+
+
+// Piano keyboard note descriminator.
+int synthv1widget_keybd::noteAt ( const QPoint& pos ) const
+{
+	const int w = QWidget::width();
+	const int h = QWidget::height();
+
+	const float wn = float(w - 4) / float(NUM_NOTES);
+	const int yk = (h << 1) / 3;
+
+	int iNote = int(float(pos.x()) / wn);
+	if (pos.y() >=  yk) {
+		int k = (iNote % 12);
+		if (k >= 5) ++k;
+		if (k & 1) {
+			const int xk = 12 * iNote * int(wn + 0.5f) / 7;
+			if (pos.x() >= xk)
+				++iNote;
+			else
+				--iNote;
+		}
+	}
+
+	return iNote;
 }
 
 
@@ -534,30 +560,24 @@ void synthv1widget_keybd::mouseMoveEvent ( QMouseEvent *pMouseEvent )
 		break;
 	case DragNoteLow:
 		if (m_bNoteRange) {
-			const int w = QWidget::width();
-			if (w > 0) {
-				const int iNoteLow = safeNoteLow((NUM_NOTES * pos.x()) / w);
-				m_iNoteLowX = noteRect(iNoteLow).left();
-				QWidget::update();
-				QToolTip::showText(
-					QCursor::pos(),
-					tr("Low: %1 (%2)")
-						.arg(noteName(iNoteLow)).arg(iNoteLow), this);
-			}
+			const int iNoteLow = safeNoteLow(noteAt(pos));
+			m_iNoteLowX = noteRect(iNoteLow).left();
+			QWidget::update();
+			QToolTip::showText(
+				QCursor::pos(),
+				tr("Low: %1 (%2)")
+					.arg(noteName(iNoteLow)).arg(iNoteLow), this);
 		}
 		break;
 	case DragNoteHigh:
 		if (m_bNoteRange) {
-			const int w = QWidget::width();
-			if (w > 0) {
-				const int iNoteHigh = safeNoteHigh((NUM_NOTES * pos.x()) / w);
-				m_iNoteHighX = noteRect(iNoteHigh).right();
-				QWidget::update();
-				QToolTip::showText(
-					QCursor::pos(),
-					tr("High: %1 (%2)")
-						.arg(noteName(iNoteHigh)).arg(iNoteHigh), this);
-			}
+			const int iNoteHigh = safeNoteHigh(noteAt(pos));
+			m_iNoteHighX = noteRect(iNoteHigh).right();
+			QWidget::update();
+			QToolTip::showText(
+				QCursor::pos(),
+				tr("High: %1 (%2)")
+					.arg(noteName(iNoteHigh)).arg(iNoteHigh), this);
 		}
 		break;
 	case DragNoteRange:
@@ -624,20 +644,14 @@ void synthv1widget_keybd::mouseReleaseEvent ( QMouseEvent *pMouseEvent )
 	switch (m_dragState) {
 	case DragNoteLow:
 		if (m_bNoteRange) {
-			const int w = QWidget::width();
-			if (w > 0) {
-				setNoteLow((NUM_NOTES * pos.x()) / w);
-				emit noteRangeChanged();
-			}
+			setNoteLow(noteAt(pos));
+			emit noteRangeChanged();
 		}
 		break;
 	case DragNoteHigh:
 		if (m_bNoteRange) {
-			const int w = QWidget::width();
-			if (w > 0) {
-				setNoteHigh((NUM_NOTES * pos.x()) / w);
-				emit noteRangeChanged();
-			}
+			setNoteHigh(noteAt(pos));
+			emit noteRangeChanged();
 		}
 		break;
 	case DragNoteRange:
@@ -717,7 +731,7 @@ bool synthv1widget_keybd::eventFilter ( QObject *pObject, QEvent *pEvent )
 // Present a tooltip for a note.
 void synthv1widget_keybd::noteToolTip ( const QPoint& pos ) const
 {
-	const int iNote = (NUM_NOTES * pos.x() / QWidget::width());
+	const int iNote = noteAt(pos);
 
 	if (iNote < MIN_NOTE || MAX_NOTE > iNote)
 		return;

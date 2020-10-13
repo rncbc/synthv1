@@ -96,6 +96,9 @@ protected:
 	void dragNoteOn(const QPoint& pos);
 	void dragNoteOff();
 
+	// Piano keyboard note descriminator.
+	int noteAt(const QPoint& pos) const;
+
 	// (Re)create the complete view pixmap.
 	void updatePixmap();
 
