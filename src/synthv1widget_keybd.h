@@ -23,6 +23,7 @@
 #define __synthv1widget_keybd_h
 
 #include <QWidget>
+#include <QPainterPath>
 #include <QPixmap>
 
 
@@ -89,6 +90,7 @@ protected:
 
 	// Piano key rectangle finder.
 	QRect noteRect(int iNote, bool bOn = false) const;
+	QPainterPath notePath(int iNote, bool bOn = false) const;
 
 	// Piano keyboard note-on/off handlers.
 	void dragNoteOn(const QPoint& pos);
@@ -140,8 +142,8 @@ protected:
 	// Current notes being keyed on.
 	struct Note
 	{
-		bool  on;
-		QRect rect;
+		bool         on;
+		QPainterPath path;
 
 	} m_notes[NUM_NOTES];
 

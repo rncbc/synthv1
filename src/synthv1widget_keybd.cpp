@@ -168,7 +168,7 @@ int synthv1widget_keybd::noteHigh (void) const
 void synthv1widget_keybd::setNoteKey ( int iNoteKey )
 {
 	if (iNoteKey >= MIN_NOTE && MAX_NOTE >= iNoteKey) {
-		m_notes[iNoteKey].rect = noteRect(iNoteKey, true);
+		m_notes[iNoteKey].path = notePath(iNoteKey, true);
 		m_iNoteKey = iNoteKey;
 	} else {
 		m_iNoteKey = -1;
@@ -187,6 +187,14 @@ int synthv1widget_keybd::noteKey (void) const
 // Piano key rectangle finder.
 QRect synthv1widget_keybd::noteRect ( int iNote, bool bOn ) const
 {
+	return notePath(iNote, bOn).boundingRect().toRect();
+}
+
+
+QPainterPath synthv1widget_keybd::notePath ( int iNote, bool bOn ) const
+{
+	QPainterPath path;
+
 	const int w = QWidget::width();
 	const int h = QWidget::height();
 
@@ -197,21 +205,25 @@ QRect synthv1widget_keybd::noteRect ( int iNote, bool bOn ) const
 	if (k >= 5) ++k;
 
 	const int nk = (iNote / 12) * 7 + (k >> 1);
-	int x2 = int(wk * float(nk));
-	int w2 = int(wn + 0.5f);
-	int h2 = h;
+	const int x2 = int(wk * float(nk));
+	const int w2 = int(wn + 0.5f);
+
+	QPainterPath path1;
+	path1.addRect(x2 + int(wk - float(w2 >> 1)), 0, w2 + 1, (h << 1) / 3);
+
 	if (k & 1) {
-		x2 += int(wk - float(w2 >> 1));
-		h2  = (h << 1) / 3;
-		++w2;
+		path = path1;
 	} else if (bOn) {
-		x2 += (w2 >> 1);
-		--w2;
+		path.addRect(x2, 0, wk, h);
+		if ((k == 0 || k == 2 || k == 6 || k == 8  || k == 10) && iNote < MAX_NOTE)
+			path = path.subtracted(path1.translated(+ 0.5f, 0.0f));
+		if ((k == 2 || k == 4 || k == 8 || k == 10 || k == 12) && iNote > MIN_NOTE)
+			path = path.subtracted(path1.translated(+ 0.5f - wk, 0.0f));
 	} else {
-		w2 <<= 1;
+		path.addRect(x2, 0, (w2 << 1), h);
 	}
 
-	return QRect(x2, 0, w2, h2);
+	return path;
 }
 
 
@@ -228,9 +240,9 @@ void synthv1widget_keybd::noteOn ( int iNote )
 
 	// Now for the sounding new one...
 	note.on = true;
-	note.rect = noteRect(iNote, true);
+	note.path = notePath(iNote, true);
 
-	QWidget::update(note.rect);
+	QWidget::update(note.path.boundingRect().toRect());
 }
 
 
@@ -247,7 +259,7 @@ void synthv1widget_keybd::noteOff ( int iNote )
 	// Now for the sounding new one...
 	note.on = false;
 
-	QWidget::update(note.rect);
+	QWidget::update(note.path.boundingRect().toRect());
 }
 
 
@@ -274,7 +286,7 @@ void synthv1widget_keybd::allNotesTimeout (void)
 		Note& note = m_notes[n];
 		if (note.on) {
 			note.on = false;
-			QWidget::update(note.rect);
+			QWidget::update(note.path.boundingRect().toRect());
 			emit noteOnClicked(n, 0);
 		}
 	}
@@ -391,7 +403,7 @@ void synthv1widget_keybd::updatePixmap (void)
 	m_iNoteHighX = noteRect(m_iNoteHigh).right();
 
 	if (m_iNoteKey >= MIN_NOTE && MAX_NOTE >= m_iNoteKey)
-		m_notes[m_iNoteKey].rect = noteRect(m_iNoteKey, true);
+		m_notes[m_iNoteKey].path = notePath(m_iNoteKey, true);
 }
 
 
@@ -421,7 +433,7 @@ void synthv1widget_keybd::paintEvent ( QPaintEvent *pPaintEvent )
 	for (int n = 0; n < NUM_NOTES; ++n) {
 		Note& note = m_notes[n];
 		if (note.on)
-			painter.fillRect(note.rect, rgbOver);
+			painter.fillPath(note.path, rgbOver);
 	}
 
 	// Keyboard range lines...
@@ -442,7 +454,7 @@ void synthv1widget_keybd::paintEvent ( QPaintEvent *pPaintEvent )
 	if (m_iNoteKey >= MIN_NOTE && MAX_NOTE >= m_iNoteKey) {
 		rgbOver = pal.highlight().color().lighter();
 		rgbOver.setAlpha(120);
-		painter.fillRect(m_notes[m_iNoteKey].rect, rgbOver);
+		painter.fillPath(m_notes[m_iNoteKey].path, rgbOver);
 	}
 }
 
