@@ -342,15 +342,14 @@ int synthv1widget_keybd::noteAt ( const QPoint& pos ) const
 	const int w = QWidget::width();
 	const int h = QWidget::height();
 
-	const float wn = float(w - 4) / float(NUM_NOTES);
 	const int yk = (h << 1) / 3;
 
-	int iNote = int(float(pos.x()) / wn);
+	int iNote = (NUM_NOTES * pos.x()) / w;
 	if (pos.y() >=  yk) {
 		int k = (iNote % 12);
 		if (k >= 5) ++k;
 		if (k & 1) {
-			const int xk = 12 * iNote * int(wn + 0.5f) / 7;
+			const int xk = ((w * iNote) + (w >> 1)) / NUM_NOTES;
 			if (pos.x() >= xk)
 				++iNote;
 			else
@@ -733,7 +732,7 @@ void synthv1widget_keybd::noteToolTip ( const QPoint& pos ) const
 {
 	const int iNote = noteAt(pos);
 
-	if (iNote < MIN_NOTE || MAX_NOTE > iNote)
+	if (iNote < MIN_NOTE || iNote > MAX_NOTE)
 		return;
 
 	QToolTip::showText(QWidget::mapToGlobal(pos),
