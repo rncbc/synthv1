@@ -241,7 +241,7 @@ struct synthv1_env
 {
 	// envelope stages
 
-	enum Stage { Idle = 0, Attack, Decay, Sustain, Release };
+	enum Stage { Idle = 0, Attack, Decay, Sustain, Release, End };
 
 	// per voice
 
@@ -310,7 +310,7 @@ struct synthv1_env
 		}
 		else if (p->stage == Release) {
 			p->running = false;
-			p->stage = Idle;
+			p->stage = End;
 			p->frames = 0;
 			p->phase = 0.0f;
 			p->delta = 0.0f;
@@ -2629,8 +2629,8 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 			if (pv->dca2_env.running && pv->dca2_env.frames == 0)
 				m_dca2.env.next(&pv->dca2_env);
 
-			if (pv->dca1_env.stage == synthv1_env::Idle &&
-				pv->dca2_env.stage == synthv1_env::Idle) {
+			if (pv->dca1_env.stage == synthv1_env::End &&
+				pv->dca2_env.stage == synthv1_env::End) {
 				if (pv->note1 < 0 && pv->note2 < 0)
 					free_voice(pv);
 				nblock = 0;
