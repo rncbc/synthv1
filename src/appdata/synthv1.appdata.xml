@@ -18,7 +18,7 @@
  </description>
  <launchable type="desktop-id">synthv1.desktop</launchable>
  <provides>
-​  <binary>synthv1_jack</binary>
+  <binary>synthv1_jack</binary>
  </provides>
  <screenshots>
   <screenshot type="default">
