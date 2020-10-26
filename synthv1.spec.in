@@ -25,7 +25,7 @@
 %define debug_package %{nil}
 %endif
 
-#Summary:	An old-school polyphonic subtractive synthesizer
+Summary:	An old-school polyphonic subtractive synthesizer
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
@@ -33,7 +33,7 @@ License:	GPL-2.0+
 Group:		Productivity/Multimedia/Sound/Midi
 Source0:	%{name}-%{version}.tar.gz
 URL:		http://synthv1.sourceforge.net
-#Packager:	rncbc.org
+Packager:	rncbc.org
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
@@ -55,12 +55,12 @@ BuildRequires:	lv2-devel
 
 BuildRequires:	pkgconfig(egl)
 
-#package -n %{name}
+%package -n %{name}-jack
 Summary:	An old-school polyphonic subtractive synthesizer - JACK standalone
 Provides:	%{name}_jack
-Obsoletes:	%{name}-common < %{version}
+Obsoletes:	%{name}-common <= %{version}, %{name} <= %{version}
 
-%description -n %{name}
+%description -n %{name}-jack
   An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
   with stereo fx.
   .
@@ -70,7 +70,7 @@ Obsoletes:	%{name}-common < %{version}
 %package -n %{name}-lv2
 Summary:	An old-school polyphonic subtractive synthesizer - LV2 plugin
 Provides:	%{name}_lv2, %{name}_lv2ui
-Obsoletes:	%{name}-common < %{version}
+Obsoletes:	%{name}-common <= %{version}
 
 %description -n %{name}-lv2
   An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
@@ -95,7 +95,7 @@ source /opt/qtbase5-static/*/bin/qtbase5-static-env.sh
 [ -d "%{buildroot}" -a "%{buildroot}" != "/" ] && %__rm -rf "%{buildroot}"
 
 
-%files -n %{name}
+%files -n %{name}-jack
 %defattr(-,root,root)
 %doc AUTHORS COPYING ChangeLog README TODO
 #dir %{_datadir}/applications

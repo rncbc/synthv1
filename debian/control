@@ -8,10 +8,10 @@ Build-Depends: debhelper (>= 9), automake, pkg-config,
   lv2-dev, liblo-dev
 Standards-Version: 3.9.7
 
-Package: synthv1
+Package: synthv1-jack
 Architecture: any
 Depends: libjack0 | libjack-jackd2-0, ${misc:Depends}, ${shlibs:Depends}
-Replaces: synthv1-common (<= ${source:Version})
+Replaces: synthv1-common (<= ${source:Version}), synthv1 (<= ${source:Version})
 Description: An old-school polyphonic subtractive synthesizer - JACK standalone
   An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
   with stereo fx.
