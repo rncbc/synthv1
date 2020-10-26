@@ -55,6 +55,11 @@ BuildRequires:	lv2-devel
 
 BuildRequires:	pkgconfig(egl)
 
+%description
+  An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
+  with stereo fx.
+
+
 %package -n %{name}-jack
 Summary:	An old-school polyphonic subtractive synthesizer - JACK standalone
 Provides:	%{name}_jack
