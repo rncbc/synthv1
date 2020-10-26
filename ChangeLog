@@ -4,10 +4,14 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.18  2020-10-27  A Fall'20 Release.
+
+- Upstream package naming for the JACK standalone and LV2
+  plugin deliverables are suffixed to '-jack' and '-lv2',
+  respectively.
 
 - White keys on the virtual piano keyboard are now fully
-  highlighted. (EXPERIMENTAL)
+  highlighted.
 
 
 0.9.17  2020-09-08  Late Summer'10 Release.
