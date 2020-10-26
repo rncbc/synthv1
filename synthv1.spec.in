@@ -140,6 +140,8 @@ source /opt/qtbase5-static/*/bin/qtbase5-static-env.sh
 
 
 %changelog
+* Tue Oct 27 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.9.18
+- Fall'20 Release.
 * Tue Sep  8 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.9.17
 - Late Summer'20 Release.
 * Thu Aug  6 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.9.16
