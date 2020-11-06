@@ -23,14 +23,14 @@ install:
 - sudo apt-get install -qq qttools5-static
 - sudo apt-get install -qq qttranslations5-static
 - sudo apt-get install -qq qtwayland5-static
-- sudo source /opt/qtbase5-static/*/bin/qtbase5-static-env.sh
-- sudo apt-get install -qq libjack-dev libasound2-dev liblo-dev lv2-dev
+- sudo apt-get install -qq libjack-dev libasound2-dev lv2-dev liblo-dev
 
 before_script:
 - git fetch --unshallow --tags -q
 - ./autogen.sh
 
 script:
+- source /opt/qtbase5-static/*/bin/qtbase5-static-env.sh
 - ./configure
 - make
 - sudo make install
