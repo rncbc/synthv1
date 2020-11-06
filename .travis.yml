@@ -19,7 +19,11 @@ before_install:
 - sudo apt-get update -qq
 
 install:
-- sudo apt-get install -qq qtbase5-static qttools5-static; source /opt/qtbase5-static/*/bin/qtbase5-static-env.sh
+- sudo apt-get install -qq qtbase5-static
+- sudo apt-get install -qq qttools5-static
+- sudo apt-get install -qq qttranslations5-static
+- sudo apt-get install -qq qtwayland5-static
+- sudo source /opt/qtbase5-static/*/bin/qtbase5-static-env.sh
 - sudo apt-get install -qq libjack-dev libasound2-dev liblo-dev lv2-dev
 
 before_script:

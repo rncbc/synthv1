@@ -4,6 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Get a chance on bringing Wayland into the picture when
+  dealing Qt static-linked deliverables. (EXPERIMENTAL)
+
+
 0.9.18  2020-10-27  A Fall'20 Release.
 
 - Upstream package naming for the JACK standalone and LV2
