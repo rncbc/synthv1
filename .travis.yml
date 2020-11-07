@@ -22,7 +22,6 @@ install:
 - sudo apt-get install -qq qtbase5-static
 - sudo apt-get install -qq qttools5-static
 - sudo apt-get install -qq qttranslations5-static
-- sudo apt-get install -qq qtwayland5-static
 - sudo apt-get install -qq libjack-dev libasound2-dev lv2-dev liblo-dev
 
 before_script:
