@@ -40,7 +40,7 @@ public:
 	static const uint32_t NUM_VTABS = 5;
 	static const uint32_t NUM_VOWELS = 5;
 	static const uint32_t NUM_FORMANTS = 5;
-	static const uint32_t NUM_STEPS = 32;
+	static const uint32_t NUM_STEPS = 320;
 
 	// 2-pole filter coeffs.
 	struct Coeffs { float a0, b1, b2; };

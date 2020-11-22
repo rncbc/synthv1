@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- Reduced formant filters coefficient slew rate, aiming
+  for a tenfold DSP performance gain. (EXPERIMENTAL)
 - Get a chance on bringing Wayland into the picture when
   dealing Qt static-linked deliverables. (EXPERIMENTAL)
 
@@ -15,7 +17,6 @@ GIT HEAD
 - Upstream package naming for the JACK standalone and LV2
   plugin deliverables are suffixed to '-jack' and '-lv2',
   respectively.
-
 - White keys on the virtual piano keyboard are now fully
   highlighted.
 
@@ -24,7 +25,6 @@ GIT HEAD
 
 - Added -n, --client-name to the JACK stand-alone client
   application command line option arguments.
-
 - Fixed unitialized number of voices variable; early-bird
   adaptations to Qt6 >= 6.0.0 and C++17 standard.
 

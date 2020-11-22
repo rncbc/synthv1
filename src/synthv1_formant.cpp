@@ -1,7 +1,7 @@
 // synthv1_formant.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -23,9 +23,11 @@
 
 
 //---------------------------------------------------------------------
-// synthv1_formant - formant parallel filter after Dennis H. Klatt's
-//                   Software for a cascade/parallel formant synthesizer
-//                   1979 MIT; 1980 Acoustical Society of America.
+// formant filter.
+//
+// A formant parallel filter after Dennis H. Klatt's
+// Software for a cascade/parallel formant synthesizer
+// 1979 MIT; 1980 Acoustical Society of America.
 //
 
 // formant tables.
