@@ -100,6 +100,13 @@ if (POLICY CMP0075)
   cmake_policy (SET CMP0075 NEW)
 endif ()
 
+# Fix for CXX_VISIBILITY_PRESET policy.
+if (POLICY CMP0063)
+  cmake_policy (SET CMP0063 NEW)
+  set (CMAKE_CXX_VISIBILITY_PRESET hidden)
+  set (CMAKE_VISIBILITY_INLINES_HIDDEN 1)
+endif ()
+
 # Check for Qt
 find_package (Qt5 REQUIRED COMPONENTS Core Gui Widgets Xml)
 
