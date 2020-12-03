@@ -231,10 +231,6 @@ elif test $ac_gxx_version_major -ge 6 -a $ac_gxx_version_major -lt 11; then
    ac_cflags="-std=c++17 $ac_cflags"
 fi
 
-# Make all symbols hidden.
-ac_cflags="$ac_cflags -fvisibility=hidden -fvisibility-inlines-hidden"
-
-
 # Check for proper flags.
 ac_arch=$(uname -m)
 
@@ -420,7 +416,7 @@ AC_CHECK_LIB(m, main)
 AC_CHECK_LIB(X11, main)
 AC_CHECK_LIB(Xext, main)
 
-ac_cflags="-ffast-math $ac_cflags"
+ac_cflags="-ffast-math -fvisibility=hidden -fvisibility-inlines-hidden $ac_cflags"
 
 ac_jack_cflags="$ac_cflags"
 ac_jack_ldflags="$ac_ldflags"
