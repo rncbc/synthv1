@@ -1,4 +1,4 @@
-project(SYNTHV1)
+project(synthv1)
 
 cmake_minimum_required(VERSION 3.1)
 

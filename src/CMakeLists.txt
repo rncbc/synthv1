@@ -1,4 +1,4 @@
-set(NAME synthv1)
+# project(synthv1)
 
 include_directories (
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -119,57 +119,57 @@ set (SOURCES_JACK
 qt5_wrap_cpp (MOC_SOURCES_JACK ${HEADERS_JACK})
 
 
-add_library (${NAME} STATIC
+add_library (${PROJECT_NAME} STATIC
   ${MOC_SOURCES}
   ${SOURCES}
 )
 
-add_library (${NAME}_ui STATIC
+add_library (${PROJECT_NAME}_ui STATIC
   ${UI_SOURCES_UI}
   ${MOC_SOURCES_UI}
   ${QRC_SOURCES_UI}
   ${SOURCES_UI}
 )
 
-add_library (${NAME}_lv2 MODULE
+add_library (${PROJECT_NAME}_lv2 MODULE
   ${MOC_SOURCES_LV2}
   ${SOURCES_LV2}
 )
 
-add_executable (${NAME}_jack
+add_executable (${PROJECT_NAME}_jack
   ${MOC_SOURCES_JACK}
   ${SOURCES_JACK}
 )
 
 
-set_target_properties (${NAME}       PROPERTIES CXX_STANDARD 17)
-set_target_properties (${NAME}_ui    PROPERTIES CXX_STANDARD 17)
-set_target_properties (${NAME}_lv2   PROPERTIES CXX_STANDARD 17)
-set_target_properties (${NAME}_jack  PROPERTIES CXX_STANDARD 17)
+set_target_properties (${PROJECT_NAME}       PROPERTIES CXX_STANDARD 17)
+set_target_properties (${PROJECT_NAME}_ui    PROPERTIES CXX_STANDARD 17)
+set_target_properties (${PROJECT_NAME}_lv2   PROPERTIES CXX_STANDARD 17)
+set_target_properties (${PROJECT_NAME}_jack  PROPERTIES CXX_STANDARD 17)
 
-target_link_libraries (${NAME}       PUBLIC Qt5::Core Qt5::Xml)
-target_link_libraries (${NAME}_ui    PUBLIC Qt5::Widgets ${NAME})
-target_link_libraries (${NAME}_lv2   PRIVATE ${NAME}_ui)
-target_link_libraries (${NAME}_jack  PRIVATE ${NAME}_ui)
+target_link_libraries (${PROJECT_NAME}       PUBLIC Qt5::Core Qt5::Xml)
+target_link_libraries (${PROJECT_NAME}_ui    PUBLIC Qt5::Widgets ${PROJECT_NAME})
+target_link_libraries (${PROJECT_NAME}_lv2   PRIVATE ${PROJECT_NAME}_ui)
+target_link_libraries (${PROJECT_NAME}_jack  PRIVATE ${PROJECT_NAME}_ui)
 
 if (CONFIG_JACK)
-  target_link_libraries (${NAME}_jack PRIVATE ${JACK_LIBRARIES})
+  target_link_libraries (${PROJECT_NAME}_jack PRIVATE ${JACK_LIBRARIES})
 endif ()
 
 if (CONFIG_ALSA_MIDI)
-  target_link_libraries (${NAME}_jack PRIVATE ${ALSA_LIBRARIES})
+  target_link_libraries (${PROJECT_NAME}_jack PRIVATE ${ALSA_LIBRARIES})
 endif ()
 
 if (CONFIG_LIBLO)
-  target_link_libraries (${NAME}_jack PRIVATE ${LIBLO_LIBRARIES})
+  target_link_libraries (${PROJECT_NAME}_jack PRIVATE ${LIBLO_LIBRARIES})
 endif ()
 
 
 if (UNIX AND NOT APPLE AND NOT CONFIG_DEBUG)
-  add_custom_command(TARGET ${NAME}_lv2  POST_BUILD
-    COMMAND strip lib${NAME}_lv2.so)
-  add_custom_command(TARGET ${NAME}_jack POST_BUILD
-    COMMAND strip ${NAME}_jack)
+  add_custom_command(TARGET ${PROJECT_NAME}_lv2  POST_BUILD
+    COMMAND strip lib${PROJECT_NAME}_lv2.so)
+  add_custom_command(TARGET ${PROJECT_NAME}_jack POST_BUILD
+    COMMAND strip ${PROJECT_NAME}_jack)
 endif ()
 
 
@@ -179,27 +179,27 @@ if (UNIX AND NOT APPLE)
   else ()
     set (CONFIG_LV2DIR ${CONFIG_LIBDIR}/lv2)
   endif ()
-  install (FILES ${CMAKE_CURRENT_BINARY_DIR}/lib${NAME}_lv2.so
-     RENAME ${NAME}.so
-     DESTINATION ${CONFIG_LV2DIR}/${NAME}.lv2)
-  install (FILES ${NAME}.lv2/manifest.ttl
-     ${NAME}.lv2/${NAME}.ttl
-     ${NAME}.lv2/${NAME}_ui.ttl
-     DESTINATION ${CONFIG_LV2DIR}/${NAME}.lv2)
-  install (TARGETS ${NAME}_jack RUNTIME
+  install (FILES ${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}_lv2.so
+     RENAME ${PROJECT_NAME}.so
+     DESTINATION ${CONFIG_LV2DIR}/${PROJECT_NAME}.lv2)
+  install (FILES ${PROJECT_NAME}.lv2/manifest.ttl
+     ${PROJECT_NAME}.lv2/${PROJECT_NAME}.ttl
+     ${PROJECT_NAME}.lv2/${PROJECT_NAME}_ui.ttl
+     DESTINATION ${CONFIG_LV2DIR}/${PROJECT_NAME}.lv2)
+  install (TARGETS ${PROJECT_NAME}_jack RUNTIME
      DESTINATION ${CMAKE_INSTALL_BINDIR})
-  install (FILES ${NAME}.desktop
+  install (FILES ${PROJECT_NAME}.desktop
      DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
-  install (FILES images/${NAME}.png
+  install (FILES images/${PROJECT_NAME}.png
      DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/32x32/apps)
-  install (FILES images/${NAME}.svg
+  install (FILES images/${PROJECT_NAME}.svg
      DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
-  install (FILES appdata/${NAME}.appdata.xml
+  install (FILES appdata/${PROJECT_NAME}.appdata.xml
      DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
-  install (FILES mimetypes/${NAME}.xml
+  install (FILES mimetypes/${PROJECT_NAME}.xml
      DESTINATION ${CMAKE_INSTALL_DATADIR}/mime/packages)
-  install (FILES mimetypes/application-x-${NAME}-preset.png
+  install (FILES mimetypes/application-x-${PROJECT_NAME}-preset.png
      DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/32x32/mimetypes)
-  install (FILES mimetypes/application-x-${NAME}-preset.svg
+  install (FILES mimetypes/application-x-${PROJECT_NAME}-preset.svg
      DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/mimetypes)
 endif ()
