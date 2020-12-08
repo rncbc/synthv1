@@ -6,8 +6,9 @@ ChangeLog
 
 GIT HEAD
 
-- Reduced formant filters coefficient slew rate, aiming
-  for a tenfold DSP performance gain. (EXPERIMENTAL)
+- Fixed display of old knob/dial values on status-bar.
+- Reduced formant filter coefficient slew rate, aiming
+  to a tenfold DSP performance gain. (EXPERIMENTAL)
 - Get a chance on bringing Wayland into the picture when
   dealing Qt static-linked deliverables. (EXPERIMENTAL)
 
