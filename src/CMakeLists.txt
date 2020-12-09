@@ -84,9 +84,9 @@ set (RESOURCES_UI
   synthv1.qrc
 )
 
-qt5_wrap_ui (UI_SOURCES_UI ${FORMS_UI})
-qt5_wrap_cpp (MOC_SOURCES_UI ${HEADERS_UI})
-qt5_add_resources (QRC_SOURCES_UI ${RESOURCES_UI})
+qt_wrap_ui (UI_SOURCES_UI ${FORMS_UI})
+qt_wrap_cpp (MOC_SOURCES_UI ${HEADERS_UI})
+qt_add_resources (QRC_SOURCES_UI ${RESOURCES_UI})
 
 
 set (HEADERS_LV2
@@ -101,7 +101,7 @@ set (SOURCES_LV2
   synthv1widget_lv2.cpp
 )
 
-qt5_wrap_cpp (MOC_SOURCES_LV2 ${HEADERS_LV2})
+qt_wrap_cpp (MOC_SOURCES_LV2 ${HEADERS_LV2})
 
 
 set (HEADERS_JACK
@@ -116,7 +116,7 @@ set (SOURCES_JACK
   synthv1widget_jack.cpp
 )
 
-qt5_wrap_cpp (MOC_SOURCES_JACK ${HEADERS_JACK})
+qt_wrap_cpp (MOC_SOURCES_JACK ${HEADERS_JACK})
 
 
 add_library (${PROJECT_NAME} STATIC
@@ -147,8 +147,8 @@ set_target_properties (${PROJECT_NAME}_ui    PROPERTIES CXX_STANDARD 17)
 set_target_properties (${PROJECT_NAME}_lv2   PROPERTIES CXX_STANDARD 17)
 set_target_properties (${PROJECT_NAME}_jack  PROPERTIES CXX_STANDARD 17)
 
-target_link_libraries (${PROJECT_NAME}       PUBLIC Qt5::Core Qt5::Xml)
-target_link_libraries (${PROJECT_NAME}_ui    PUBLIC Qt5::Widgets ${PROJECT_NAME})
+target_link_libraries (${PROJECT_NAME}       PUBLIC Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Xml)
+target_link_libraries (${PROJECT_NAME}_ui    PUBLIC Qt${QT_VERSION_MAJOR}::Widgets ${PROJECT_NAME})
 target_link_libraries (${PROJECT_NAME}_lv2   PRIVATE ${PROJECT_NAME}_ui)
 target_link_libraries (${PROJECT_NAME}_jack  PRIVATE ${PROJECT_NAME}_ui)
 
