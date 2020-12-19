@@ -4,13 +4,13 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.19  20220-12-19  A Winter'20 Release.
 
 - Fixed display of old knob/dial values on status-bar.
 - Reduced formant filter coefficient slew rate, aiming
-  to a tenfold DSP performance gain. (EXPERIMENTAL)
+  to a tenfold DSP performance gain.
 - Get a chance on bringing Wayland into the picture when
-  dealing Qt static-linked deliverables. (EXPERIMENTAL)
+  dealing Qt static-linked deliverables.
 
 
 0.9.18  2020-10-27  A Fall'20 Release.
