@@ -4,6 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Early preparations for the New Year develop(ment) cycle.
+
+
 0.9.19  20220-12-19  A Winter'20 Release.
 
 - Fixed display of old knob/dial values on status-bar.
