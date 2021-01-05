@@ -1,7 +1,7 @@
 // synthv1_controls.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -569,7 +569,6 @@ private:
 //---------------------------------------------------------------------
 // synthv1_controls - impl.
 //
-#include <math.h>
 
 synthv1_controls::synthv1_controls ( synthv1 *pSynth )
 	: m_pImpl(new synthv1_controls::Impl()), m_enabled(false),
@@ -665,8 +664,8 @@ void synthv1_controls::process_event ( const Event& event )
 		const float v0 = data.val;
 		const float v1 = synthv1_param::paramScale(index,
 			m_sched_in.instance()->paramValue(index));
-		const float d1 = ::fabsf(v1 - fScale);
-		const float d2 = ::fabsf(v1 - v0) * d1;
+		const float d1 = qAbs(v1 - fScale);
+		const float d2 = qAbs(v1 - v0) * d1;
 		bSync = (d2 < 0.001f);
 		if (bSync) {
 			data.val = fScale;

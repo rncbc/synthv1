@@ -1,7 +1,7 @@
 // synthv1widget_wave.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -27,8 +27,6 @@
 #include <QPainterPath>
 #include <QMouseEvent>
 #include <QWheelEvent>
-
-#include <math.h>
 
 
 // Safe value capping.
@@ -86,7 +84,7 @@ float synthv1widget_wave::waveShape (void) const
 
 void synthv1widget_wave::setWaveWidth ( float fWaveWidth )
 {
-	if (::fabsf(fWaveWidth - m_pWave->width()) > 0.001f) {
+	if (qAbs(fWaveWidth - m_pWave->width()) > 0.001f) {
 		m_pWave->reset(m_pWave->shape(), safe_value(fWaveWidth));
 		update();
 		emit waveWidthChanged(waveWidth());

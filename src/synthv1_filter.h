@@ -1,7 +1,7 @@
 // synthv1_filter.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2016, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -22,9 +22,9 @@
 #ifndef __synthv1_filter_h
 #define __synthv1_filter_h
 
-#include <stdint.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdint>
+#include <cstdlib>
+#include <cmath>
 
 
 //-------------------------------------------------------------------------

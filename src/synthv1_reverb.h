@@ -1,7 +1,7 @@
 // synthv1_reverb.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -22,8 +22,8 @@
 #ifndef __synthv1_reverb_h
 #define __synthv1_reverb_h
 
-#include <stdint.h>
-#include <string.h>
+#include <cstdint>
+#include <cstring>
 
 
 //-------------------------------------------------------------------------
