@@ -1,7 +1,7 @@
 // synthv1widget_jack.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -53,6 +53,9 @@ public:
 	synthv1_nsm *nsmClient() const;
 #endif	// CONFIG_NSM
 
+	// Dirty flag method.
+	void updateDirtyPreset(bool bDirtyPreset);
+
 protected:
 
 	// Synth engine accessor.
@@ -60,9 +63,6 @@ protected:
 
 	// Param port method.
 	void updateParam(synthv1::ParamIndex index, float fValue) const;
-
-	// Dirty flag method.
-	void updateDirtyPreset(bool bDirtyPreset);
 
 	// Application close.
 	void closeEvent(QCloseEvent *pCloseEvent);

@@ -1067,8 +1067,14 @@ void synthv1_jack_application::handle_sigterm (void)
 	char c;
 
 	if (::read(g_fdSigterm[1], &c, sizeof(c)) > 0) {
-		if (m_pApp)
-			m_pApp->quit();
+		if (m_pApp && m_pWidget) {
+		#ifdef CONFIG_NSM
+			if (m_pNsmClient && m_pNsmClient->is_active())
+				m_pWidget->updateDirtyPreset(false);
+		#endif
+			if (m_pWidget->queryClose())
+				m_pApp->quit();
+		}
 	}
 }
 
