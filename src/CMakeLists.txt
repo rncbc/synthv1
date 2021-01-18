@@ -1,9 +1,6 @@
 # project(synthv1)
 
-include_directories (
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  ${CMAKE_CURRENT_BINARY_DIR}
-)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 configure_file (cmake_config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
@@ -36,7 +33,11 @@ set (SOURCES
   synthv1_controls.cpp
 )
 
-qt5_wrap_cpp (MOC_SOURCES ${HEADERS})
+if (QT_VERSION VERSION_LESS 5.15.0)
+  qt5_wrap_cpp (MOC_SOURCES ${HEADERS})
+else ()
+  qt_wrap_cpp (MOC_SOURCES ${HEADERS})
+endif()
 
 
 set (HEADERS_UI
@@ -84,9 +85,15 @@ set (RESOURCES_UI
   synthv1.qrc
 )
 
-qt_wrap_ui (UI_SOURCES_UI ${FORMS_UI})
-qt_wrap_cpp (MOC_SOURCES_UI ${HEADERS_UI})
-qt_add_resources (QRC_SOURCES_UI ${RESOURCES_UI})
+if (QT_VERSION VERSION_LESS 5.15.0)
+  qt5_wrap_ui (UI_SOURCES_UI ${FORMS_UI})
+  qt5_wrap_cpp (MOC_SOURCES_UI ${HEADERS_UI})
+  qt5_add_resources (QRC_SOURCES_UI ${RESOURCES_UI})
+else ()
+  qt_wrap_ui (UI_SOURCES_UI ${FORMS_UI})
+  qt_wrap_cpp (MOC_SOURCES_UI ${HEADERS_UI})
+  qt_add_resources (QRC_SOURCES_UI ${RESOURCES_UI})
+endif ()
 
 
 set (HEADERS_LV2
@@ -101,7 +108,11 @@ set (SOURCES_LV2
   synthv1widget_lv2.cpp
 )
 
-qt_wrap_cpp (MOC_SOURCES_LV2 ${HEADERS_LV2})
+if (QT_VERSION VERSION_LESS 5.15.0)
+  qt5_wrap_cpp (MOC_SOURCES_LV2 ${HEADERS_LV2})
+else ()
+  qt_wrap_cpp (MOC_SOURCES_LV2 ${HEADERS_LV2})
+endif ()
 
 
 set (HEADERS_JACK
@@ -116,7 +127,11 @@ set (SOURCES_JACK
   synthv1widget_jack.cpp
 )
 
-qt_wrap_cpp (MOC_SOURCES_JACK ${HEADERS_JACK})
+if (QT_VERSION VERSION_LESS 5.15.0)
+  qt5_wrap_cpp (MOC_SOURCES_JACK ${HEADERS_JACK})
+else ()
+  qt_wrap_cpp (MOC_SOURCES_JACK ${HEADERS_JACK})
+endif ()
 
 
 add_library (${PROJECT_NAME} STATIC
@@ -153,15 +168,15 @@ target_link_libraries (${PROJECT_NAME}_lv2   PRIVATE ${PROJECT_NAME}_ui)
 target_link_libraries (${PROJECT_NAME}_jack  PRIVATE ${PROJECT_NAME}_ui)
 
 if (CONFIG_JACK)
-  target_link_libraries (${PROJECT_NAME}_jack PRIVATE ${JACK_LIBRARIES})
+  target_link_libraries (${PROJECT_NAME}_jack PRIVATE PkgConfig::JACK)
 endif ()
 
 if (CONFIG_ALSA_MIDI)
-  target_link_libraries (${PROJECT_NAME}_jack PRIVATE ${ALSA_LIBRARIES})
+  target_link_libraries (${PROJECT_NAME}_jack PRIVATE PkgConfig::ALSA)
 endif ()
 
 if (CONFIG_LIBLO)
-  target_link_libraries (${PROJECT_NAME}_jack PRIVATE ${LIBLO_LIBRARIES})
+  target_link_libraries (${PROJECT_NAME}_jack PRIVATE PkgConfig::LIBLO)
 endif ()
 
 

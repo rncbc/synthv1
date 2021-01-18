@@ -18,3 +18,4 @@ qrc_*.cpp
 .ui_*
 synthv1_ui.ttl
 synthv1_jack
+build/

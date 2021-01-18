@@ -1,6 +1,6 @@
-project(synthv1)
+cmake_minimum_required(VERSION 3.10)
 
-cmake_minimum_required(VERSION 3.1)
+project(synthv1)
 
 set (VERSION "0.9.20")
 
@@ -133,7 +133,7 @@ find_package (PkgConfig REQUIRED)
 
 # Check for JACK libraries.
 if (CONFIG_JACK)
-  pkg_check_modules (JACK jack>=0.100.0)
+  pkg_check_modules (JACK IMPORTED_TARGET jack>=0.100.0)
   if (JACK_FOUND)
     include_directories (${JACK_INCLUDE_DIRS})
     link_directories (${JACK_LIBRARY_DIRS})
@@ -159,7 +159,7 @@ if (CONFIG_JACK)
     endif ()
     # Check for ALSA libraries.
     if (CONFIG_ALSA_MIDI)
-      pkg_check_modules (ALSA alsa)
+      pkg_check_modules (ALSA IMPORTED_TARGET alsa)
       set (CONFIG_ALSA_MIDI ${ALSA_FOUND})
       if (CONFIG_ALSA_MIDI)
         include_directories (${ALSA_INCLUDE_DIRS})
@@ -186,7 +186,7 @@ endif ()
 
 # Check for LIBLO libraries.
 if (CONFIG_LIBLO)
-  pkg_check_modules (LIBLO liblo)
+  pkg_check_modules (LIBLO IMPORTED_TARGET liblo)
   if (LIBLO_FOUND)
     include_directories (${LIBLO_INCLUDE_DIRS})
     link_directories (${LIBLO_LIBRARY_DIRS})
