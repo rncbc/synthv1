@@ -2,6 +2,13 @@
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/config.h)
+    file(REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/config.h)
+endif()
 configure_file (cmake_config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 set (HEADERS
@@ -32,12 +39,6 @@ set (SOURCES
   synthv1_programs.cpp
   synthv1_controls.cpp
 )
-
-if (QT_VERSION VERSION_LESS 5.15.0)
-  qt5_wrap_cpp (MOC_SOURCES ${HEADERS})
-else ()
-  qt_wrap_cpp (MOC_SOURCES ${HEADERS})
-endif()
 
 
 set (HEADERS_UI
@@ -85,16 +86,6 @@ set (RESOURCES_UI
   synthv1.qrc
 )
 
-if (QT_VERSION VERSION_LESS 5.15.0)
-  qt5_wrap_ui (UI_SOURCES_UI ${FORMS_UI})
-  qt5_wrap_cpp (MOC_SOURCES_UI ${HEADERS_UI})
-  qt5_add_resources (QRC_SOURCES_UI ${RESOURCES_UI})
-else ()
-  qt_wrap_ui (UI_SOURCES_UI ${FORMS_UI})
-  qt_wrap_cpp (MOC_SOURCES_UI ${HEADERS_UI})
-  qt_add_resources (QRC_SOURCES_UI ${RESOURCES_UI})
-endif ()
-
 
 set (HEADERS_LV2
   synthv1_lv2.h
@@ -107,12 +98,6 @@ set (SOURCES_LV2
   synthv1_lv2ui.cpp
   synthv1widget_lv2.cpp
 )
-
-if (QT_VERSION VERSION_LESS 5.15.0)
-  qt5_wrap_cpp (MOC_SOURCES_LV2 ${HEADERS_LV2})
-else ()
-  qt_wrap_cpp (MOC_SOURCES_LV2 ${HEADERS_LV2})
-endif ()
 
 
 set (HEADERS_JACK
@@ -127,32 +112,26 @@ set (SOURCES_JACK
   synthv1widget_jack.cpp
 )
 
-if (QT_VERSION VERSION_LESS 5.15.0)
-  qt5_wrap_cpp (MOC_SOURCES_JACK ${HEADERS_JACK})
-else ()
-  qt_wrap_cpp (MOC_SOURCES_JACK ${HEADERS_JACK})
-endif ()
-
 
 add_library (${PROJECT_NAME} STATIC
-  ${MOC_SOURCES}
+  ${HEADERS}
   ${SOURCES}
 )
 
 add_library (${PROJECT_NAME}_ui STATIC
-  ${UI_SOURCES_UI}
-  ${MOC_SOURCES_UI}
-  ${QRC_SOURCES_UI}
+  ${HEADERS_UI}
   ${SOURCES_UI}
+  ${FORMS_UI}
+  ${RESOURCES_UI}
 )
 
 add_library (${PROJECT_NAME}_lv2 MODULE
-  ${MOC_SOURCES_LV2}
+  ${HEADERS_LV2}
   ${SOURCES_LV2}
 )
 
 add_executable (${PROJECT_NAME}_jack
-  ${MOC_SOURCES_JACK}
+  ${HEADERS_JACK}
   ${SOURCES_JACK}
 )
 
