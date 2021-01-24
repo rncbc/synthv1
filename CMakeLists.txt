@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(synthv1)
+project(synthv1
+  VERSION 0.9.20
+  DESCRIPTION "an old-school polyphonic synthesizer"
+  LANGUAGES C CXX)
 
-set (VERSION "0.9.20")
-
-set (CONFIG_VERSION ${VERSION})
+set (CONFIG_VERSION ${PROJECT_VERSION})
 execute_process (
   COMMAND git describe --tags --dirty --abbrev=6
   OUTPUT_VARIABLE GIT_DESCRIBE_OUTPUT
@@ -25,7 +26,7 @@ if (GIT_DESCRIBE_RESULT EQUAL 0)
     set (VERSION "${VERSION} [${GIT_REVPARSE_OUTPUT}]")
   endif ()
 else ()
-  set (VERSION "${VERSION}")
+  set (VERSION "${PROJECT_VERSION}")
 endif ()
 
 set (PACKAGE_NAME "synthv1")
