@@ -289,8 +289,10 @@ int synthv1_jack::process ( jack_nframes_t nframes )
 
 
 #ifdef CONFIG_JACK_SESSION
+#if defined(Q_CC_GNU) || defined(Q_CC_MINGW)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 #endif
 
 void synthv1_jack::open ( const char *client_name )
@@ -380,7 +382,9 @@ void synthv1_jack::open ( const char *client_name )
 }
 
 #ifdef CONFIG_JACK_SESSION
+#if defined(Q_CC_GNU) || defined(Q_CC_MINGW)
 #pragma GCC diagnostic pop
+#endif
 #endif
 
 
@@ -573,8 +577,10 @@ void synthv1_jack::alsa_capture ( snd_seq_event_t *ev )
 
 #ifdef CONFIG_JACK_SESSION
 
+#if defined(Q_CC_GNU) || defined(Q_CC_MINGW)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 
 // JACK session event handler.
 void synthv1_jack::sessionEvent ( void *pvSessionArg )
@@ -619,7 +625,9 @@ void synthv1_jack::sessionEvent ( void *pvSessionArg )
 	#endif
 }
 
+#if defined(Q_CC_GNU) || defined(Q_CC_MINGW)
 #pragma GCC diagnostic pop
+#endif
 
 #endif	// CONFIG_JACK_SESSION
 
