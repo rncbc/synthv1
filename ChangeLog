@@ -8,7 +8,7 @@ GIT HEAD
 
 - When under under the NSM auspices, fix SIGTERM handler
   on exit and just hide the main-window on close (applies
-  to the JACK stand-alone only). (EXPERIMENTAL)
+  to the JACK stand-alone only).
 
 
 0.9.19  20220-12-19  A Winter'20 Release.
