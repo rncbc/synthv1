@@ -6,6 +6,11 @@ ChangeLog
 
 GIT HEAD
 
+- Bumped version micro/dot number into the next develop cycle.
+
+
+0.9.20  2021-02-10  A Winter'21 Release.
+
 - When under under the NSM auspices, fix SIGTERM handler
   on exit and just hide the main-window on close (applies
   to the JACK stand-alone only).
