@@ -708,7 +708,7 @@ static void synthv1_sigterm_handler ( int /*signo*/ )
 {
 	char c = 1;
 
-	(::write(g_fdSigterm[0], &c, sizeof(c)) > 0);
+	(void) (::write(g_fdSigterm[0], &c, sizeof(c)) > 0);
 }
 
 #endif	// HAVE_SIGNAL_H
