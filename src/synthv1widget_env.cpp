@@ -153,11 +153,9 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 	const bool bDark = (pal.window().color().value() < 0x7f);
 	const QColor& rgbLite = (isEnabled()
 		? (bDark ? Qt::darkYellow : Qt::yellow) : pal.mid().color());
-    const QColor& rgbDark = pal.window().color().darker(180);
+	const QColor& rgbDark = pal.window().color().darker(220);
 
 	painter.fillRect(rect, rgbDark);
-
-	painter.setPen(bDark ? Qt::gray : Qt::darkGray);
 
 	QLinearGradient grad(0, 0, w << 1, h << 1);
 	grad.setColorAt(0.0f, rgbLite);
@@ -166,9 +164,11 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 	painter.setRenderHint(QPainter::Antialiasing, true);
 
 	painter.setBrush(grad);
+	painter.setPen(rgbLite);
 	painter.drawPath(path);
 
 	painter.setBrush(pal.mid().color());
+	painter.setPen(bDark ? Qt::gray : Qt::darkGray);
 	painter.drawRect(nodeRect(1));
 	painter.setBrush(rgbLite);
 	painter.drawRect(nodeRect(2));
