@@ -77,6 +77,12 @@ protected:
 	void mouseMoveEvent(QMouseEvent *pMouseEvent);
 	void mouseReleaseEvent(QMouseEvent *pMouseEvent);
 
+	// Resize canvas.
+	void resizeEvent(QResizeEvent *);
+
+	// Update the drawing polygon.
+	void updatePolygon();
+
 private:
 
 	// Instance state.

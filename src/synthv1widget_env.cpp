@@ -63,7 +63,7 @@ void synthv1widget_env::setAttack ( float fAttack )
 {
 	if (::fabsf(m_fAttack - fAttack) > 0.001f) {
 		m_fAttack = safe_value(fAttack);
-		update();
+		updatePolygon();
 		emit attackChanged(attack());
 	}
 }
@@ -78,7 +78,7 @@ void synthv1widget_env::setDecay ( float fDecay )
 {
 	if (::fabsf(m_fDecay - fDecay) > 0.001f) {
 		m_fDecay = safe_value(fDecay);
-		update();
+		updatePolygon();
 		emit decayChanged(decay());
 	}
 }
@@ -93,7 +93,7 @@ void synthv1widget_env::setSustain ( float fSustain )
 {
 	if (::fabsf(m_fSustain - fSustain) > 0.001f) {
 		m_fSustain = safe_value(fSustain);
-		update();
+		updatePolygon();
 		emit sustainChanged(sustain());
 	}
 }
@@ -108,7 +108,7 @@ void synthv1widget_env::setRelease ( float fRelease )
 {
 	if (::fabsf(m_fRelease - fRelease) > 0.001f) {
 		m_fRelease = safe_value(fRelease);
-		update();
+		updatePolygon();
 		emit releaseChanged(release());
 	}
 }
@@ -124,35 +124,16 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 {
 	QPainter painter(this);
 
-	const QRect& rect = QWidget::rect();
-	const int h  = rect.height();
-	const int w  = rect.width();
-
-	const int w4 = (w - 12) >> 2;
-
-	const int x1 = int(m_fAttack  * float(w4)) + 6;
-	const int x2 = int(m_fDecay   * float(w4)) + x1;
-	const int x3 = x2 + w4;
-	const int x4 = int(m_fRelease * float(w4)) + x3;
-
-	const int y3 = h - int(m_fSustain * float(h - 12)) - 6;
-
-	m_poly.putPoints(0, 7,
-		0,  h,
-		6,  h - 6,
-		x1, 6,
-		x2, y3,
-		x3, y3,
-		x4, h - 6,
-		x4, h);
+	const QRect& rect = QFrame::rect();
+	const int h = rect.height();
+	const int w = rect.width();
 
 	QPainterPath path;
 	path.addPolygon(m_poly);
 
 	const QPalette& pal = palette();
 	const bool bDark = (pal.window().color().value() < 0x7f);
-	const QColor& rgbLite = (isEnabled()
-		? (bDark ? Qt::darkYellow : Qt::yellow) : pal.mid().color());
+	const QColor& rgbLite = (isEnabled() ? Qt::darkYellow : pal.mid().color());
 	const QColor& rgbDark = pal.window().color().darker(220);
 
 	painter.fillRect(rect, rgbDark);
@@ -167,9 +148,10 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 	painter.setPen(rgbLite);
 	painter.drawPath(path);
 
-	painter.setBrush(pal.mid().color());
-	painter.setPen(bDark ? Qt::gray : Qt::darkGray);
+	painter.setPen(Qt::darkGray);
+	painter.setBrush(pal.midlight().color());
 	painter.drawRect(nodeRect(1));
+	painter.setPen(bDark ? Qt::gray : Qt::darkGray);
 	painter.setBrush(rgbLite);
 	painter.drawRect(nodeRect(2));
 	painter.drawRect(nodeRect(3));
@@ -307,6 +289,44 @@ void synthv1widget_env::mouseReleaseEvent ( QMouseEvent *pMouseEvent )
 		m_iDragNode = -1;
 		unsetCursor();
 	}
+}
+
+
+// Resize canvas.
+void synthv1widget_env::resizeEvent ( QResizeEvent *pResizeEvent )
+{
+	QFrame::resizeEvent(pResizeEvent);
+
+	updatePolygon();
+}
+
+
+// Update the drawing polygon.
+void synthv1widget_env::updatePolygon (void)
+{
+	const QRect& rect = QFrame::rect();
+	const int h  = rect.height();
+	const int w  = rect.width();
+
+	const int w4 = (w - 12) >> 2;
+
+	const int x1 = int(m_fAttack  * float(w4)) + 6;
+	const int x2 = int(m_fDecay   * float(w4)) + x1;
+	const int x3 = x2 + w4;
+	const int x4 = int(m_fRelease * float(w4)) + x3;
+
+	const int y3 = h - int(m_fSustain * float(h - 12)) - 6;
+
+	m_poly.putPoints(0, 7,
+		0,  h,
+		6,  h - 6,
+		x1, 6,
+		x2, y3,
+		x3, y3,
+		x4, h - 6,
+		x4, h);
+
+	QFrame::update();
 }
 
 

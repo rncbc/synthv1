@@ -224,9 +224,8 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 	}
 
 	const QPalette& pal = palette();
-	const bool bDark = (pal.window().color().value() < 0x7f);
-	const QColor& rgbLite = (isEnabled()
-		? (bDark ? Qt::darkYellow : Qt::yellow) : pal.mid().color());
+//	const bool bDark = (pal.window().color().value() < 0x7f);
+	const QColor& rgbLite = (isEnabled() ? Qt::darkYellow : pal.mid().color());
 	const QColor& rgbDark = pal.window().color().darker(220);
 
 	painter.fillRect(rect, rgbDark);
