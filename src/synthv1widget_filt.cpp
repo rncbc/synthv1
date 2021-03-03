@@ -224,7 +224,7 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 	}
 
 	const QPalette& pal = palette();
-//	const bool bDark = (pal.window().color().value() < 0x7f);
+	const bool bDark = (pal.window().color().value() < 0x7f);
 	const QColor& rgbLite = (isEnabled() ? Qt::yellow : pal.mid().color());
 	const QColor& rgbDark = pal.window().color().darker();
 
@@ -232,7 +232,7 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 
 	QColor rgbLite1(rgbLite);
 	QColor rgbDrop1(Qt::black);
-	rgbLite1.setAlpha(120);
+	rgbLite1.setAlpha(bDark ? 120 : 220);
 	rgbDrop1.setAlpha(80);
 
 	QLinearGradient grad(0, 0, w << 1, h << 1);

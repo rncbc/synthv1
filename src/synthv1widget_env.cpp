@@ -140,7 +140,7 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 
 	QColor rgbLite1(rgbLite);
 	QColor rgbDrop1(Qt::black);
-	rgbLite1.setAlpha(120);
+	rgbLite1.setAlpha(bDark ? 120 : 220);
 	rgbDrop1.setAlpha(80);
 
 	QLinearGradient grad(0, 0, w << 1, h << 1);
@@ -157,7 +157,7 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 	painter.setPen(bDark ? Qt::gray : Qt::darkGray);
 	painter.setBrush(pal.mid().color());
 	painter.drawRect(nodeRect(1));
-	painter.setBrush(rgbLite.darker());
+	painter.setBrush(rgbLite1);
 	painter.drawRect(nodeRect(2));
 	painter.drawRect(nodeRect(3));
 	painter.drawRect(nodeRect(4));

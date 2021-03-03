@@ -122,7 +122,7 @@ void synthv1widget_wave::paintEvent ( QPaintEvent *pPaintEvent )
 
 	painter.fillRect(rect, rgbDark);
 
-	painter.setPen(bDark ? pal.mid().color() : pal.midlight().color());
+	painter.setPen(pal.mid().color());
 	painter.drawLine(w2, 0, w2, h);
 	painter.drawLine(0, h2, w, h2);
 
@@ -130,7 +130,7 @@ void synthv1widget_wave::paintEvent ( QPaintEvent *pPaintEvent )
 
 	QColor rgbLite1(rgbLite);
 	QColor rgbDrop1(Qt::black);
-	rgbLite1.setAlpha(120);
+	rgbLite1.setAlpha(bDark ? 120 : 220);
 	rgbDrop1.setAlpha(80);
 
 	painter.setPen(QPen(rgbDrop1, 2));
