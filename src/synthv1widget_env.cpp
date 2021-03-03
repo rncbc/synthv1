@@ -133,7 +133,8 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 
 	const QPalette& pal = palette();
 	const bool bDark = (pal.window().color().value() < 0x7f);
-	const QColor& rgbLite = (isEnabled() ? Qt::darkYellow : pal.mid().color());
+	const QColor& rgbLite = (isEnabled()
+		? (bDark ? Qt::darkYellow : Qt::yellow) : pal.mid().color());
 	const QColor& rgbDark = pal.window().color().darker(220);
 
 	painter.fillRect(rect, rgbDark);
@@ -148,10 +149,9 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 	painter.setPen(rgbLite);
 	painter.drawPath(path);
 
-	painter.setPen(Qt::darkGray);
-	painter.setBrush(pal.midlight().color());
-	painter.drawRect(nodeRect(1));
+	painter.setBrush(pal.mid().color());
 	painter.setPen(bDark ? Qt::gray : Qt::darkGray);
+	painter.drawRect(nodeRect(1));
 	painter.setBrush(rgbLite);
 	painter.drawRect(nodeRect(2));
 	painter.drawRect(nodeRect(3));
