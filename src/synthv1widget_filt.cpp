@@ -224,22 +224,25 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 	}
 
 	const QPalette& pal = palette();
-	const bool bDark = (pal.window().color().value() < 0x7f);
-	const QColor& rgbLite = (isEnabled()
-		? (bDark ? Qt::darkYellow : Qt::yellow) : pal.mid().color());
-	const QColor& rgbDark = pal.window().color().darker(220);
+//	const bool bDark = (pal.window().color().value() < 0x7f);
+	const QColor& rgbLite = (isEnabled() ? Qt::yellow : pal.mid().color());
+	const QColor& rgbDark = pal.window().color().darker();
 
 	painter.fillRect(rect, rgbDark);
 
-//	painter.setPen(bDark ? Qt::gray : Qt::darkGray);
-	painter.setPen(rgbLite);
+	QColor rgbLite1(rgbLite);
+	QColor rgbDrop1(Qt::black);
+	rgbLite1.setAlpha(120);
+	rgbDrop1.setAlpha(80);
 
 	QLinearGradient grad(0, 0, w << 1, h << 1);
-	grad.setColorAt(0.0f, rgbLite);
-	grad.setColorAt(1.0f, Qt::black);
+	grad.setColorAt(0.0f, rgbLite1);
+	grad.setColorAt(1.0f, rgbDrop1);
 
 	painter.setRenderHint(QPainter::Antialiasing, true);
 
+//	painter.setPen(bDark ? Qt::gray : Qt::darkGray);
+	painter.setPen(rgbLite1);
 	painter.setBrush(grad);
 	painter.drawPath(path);
 

@@ -117,9 +117,8 @@ void synthv1widget_wave::paintEvent ( QPaintEvent *pPaintEvent )
 
 	const QPalette& pal = palette();
 	const bool bDark = (pal.window().color().value() < 0x7f);
-	const QColor& rgbLite = (isEnabled()
-		? (bDark ? Qt::darkYellow : Qt::yellow) : pal.mid().color());
-    const QColor& rgbDark = pal.window().color().darker(220);
+	const QColor& rgbLite = (isEnabled() ? Qt::yellow : pal.mid().color());
+	const QColor& rgbDark = pal.window().color().darker();
 
 	painter.fillRect(rect, rgbDark);
 
@@ -129,10 +128,15 @@ void synthv1widget_wave::paintEvent ( QPaintEvent *pPaintEvent )
 
 	painter.setRenderHint(QPainter::Antialiasing, true);
 
-	painter.setPen(QPen(rgbLite.darker(), 2));
+	QColor rgbLite1(rgbLite);
+	QColor rgbDrop1(Qt::black);
+	rgbLite1.setAlpha(120);
+	rgbDrop1.setAlpha(80);
+
+	painter.setPen(QPen(rgbDrop1, 2));
 	path.translate(+1, +1);
 	painter.drawPath(path);
-	painter.setPen(QPen(rgbLite, 2));
+	painter.setPen(QPen(rgbLite1, 2));
 	path.translate(-1, -1);
 	painter.drawPath(path);
 
