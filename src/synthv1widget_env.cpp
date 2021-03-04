@@ -155,7 +155,7 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 	painter.drawPath(path);
 
 	painter.setPen(bDark ? Qt::gray : Qt::darkGray);
-	painter.setBrush(pal.mid().color());
+	painter.setBrush(rgbDrop1.lighter());
 	painter.drawRect(nodeRect(1));
 	painter.setBrush(rgbLite1);
 	painter.drawRect(nodeRect(2));
@@ -313,22 +313,22 @@ void synthv1widget_env::updatePolygon (void)
 	const int h  = rect.height();
 	const int w  = rect.width();
 
-	const int w4 = (w - 12) >> 2;
+	const int w4 = (w - 10) >> 2;
 
-	const int x1 = int(m_fAttack  * float(w4)) + 6;
+	const int x1 = int(m_fAttack  * float(w4)) + 5;
 	const int x2 = int(m_fDecay   * float(w4)) + x1;
 	const int x3 = x2 + w4;
 	const int x4 = int(m_fRelease * float(w4)) + x3;
 
-	const int y3 = h - int(m_fSustain * float(h - 12)) - 6;
+	const int y3 = h - int(m_fSustain * float(h - 10)) - 5;
 
 	m_poly.putPoints(0, 7,
-		0,  h,
-		6,  h - 6,
-		x1, 6,
+		5,  h,
+		5,  h - 5,
+		x1, 5,
 		x2, y3,
 		x3, y3,
-		x4, h - 6,
+		x4, h - 5,
 		x4, h);
 
 	QFrame::update();
