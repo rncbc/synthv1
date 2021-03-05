@@ -23,6 +23,9 @@
 
 #include <QPainter>
 #include <QPainterPath>
+
+#include <QLinearGradient>
+
 #include <QMouseEvent>
 
 #include <cmath>
@@ -154,7 +157,7 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 
 	QColor rgbLite1(rgbLite);
 	QColor rgbDrop1(Qt::black);
-	rgbLite1.setAlpha(bDark ? 120 : 220);
+	rgbLite1.setAlpha(bDark ? 80 : 180);
 	rgbDrop1.setAlpha(80);
 
 	QLinearGradient grad(0, 0, w << 1, h << 1);
@@ -164,7 +167,7 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 	painter.setRenderHint(QPainter::Antialiasing, true);
 
 //	painter.setPen(bDark ? Qt::gray : Qt::darkGray);
-	painter.setPen(rgbLite1);
+	painter.setPen(QPen(rgbLite1, 2));
 	painter.setBrush(grad);
 	painter.drawPath(path);
 

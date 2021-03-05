@@ -25,6 +25,9 @@
 
 #include <QPainter>
 #include <QPainterPath>
+
+#include <QLinearGradient>
+
 #include <QMouseEvent>
 #include <QWheelEvent>
 
@@ -126,18 +129,28 @@ void synthv1widget_wave::paintEvent ( QPaintEvent *pPaintEvent )
 	painter.drawLine(w2, 0, w2, h);
 	painter.drawLine(0, h2, w, h2);
 
-	painter.setRenderHint(QPainter::Antialiasing, true);
-
 	QColor rgbLite1(rgbLite);
 	QColor rgbDrop1(Qt::black);
 	rgbLite1.setAlpha(bDark ? 120 : 220);
 	rgbDrop1.setAlpha(80);
 
-	painter.setPen(QPen(rgbDrop1, 2));
+	QLinearGradient grad(0, 0, w << 1, h << 1);
+	grad.setColorAt(0.0f, rgbLite1.darker(bDark ? 200 : 160));
+	grad.setColorAt(1.0f, rgbDrop1);
+
+	painter.setRenderHint(QPainter::Antialiasing, true);
+
 	path.translate(+1, +1);
+	painter.setPen(QPen(rgbDrop1, 2));
+	painter.setBrush(Qt::transparent);
 	painter.drawPath(path);
-	painter.setPen(QPen(rgbLite1, 2));
 	path.translate(-1, -1);
+	painter.setPen(QPen(rgbLite1, 2));
+	painter.drawPath(path);
+
+	path.lineTo(1, h2);
+	painter.setPen(Qt::transparent);
+	painter.setBrush(grad);
 	painter.drawPath(path);
 
 	painter.setRenderHint(QPainter::Antialiasing, false);
