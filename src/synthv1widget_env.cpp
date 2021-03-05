@@ -129,7 +129,21 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 	const int w = rect.width();
 
 	QPainterPath path;
-	path.addPolygon(m_poly);
+//	path.addPolygon(m_poly);
+	QPoint pt;
+	path.moveTo(m_poly.at(0));
+	path.lineTo(m_poly.at(Idle));
+	pt = m_poly.at(Idle); pt.setY(h >> 1);
+	path.cubicTo(m_poly.at(Idle), pt, m_poly.at(Attack));
+	pt = m_poly.at(Attack);
+	pt.setY((m_poly.at(Decay).y() >> 1) + 1);
+	path.cubicTo(m_poly.at(Attack), pt, m_poly.at(Decay));
+	path.lineTo(m_poly.at(Sustain));
+	pt = m_poly.at(Sustain);
+	pt.setY(pt.y() + ((h - pt.y()) >> 1) - 1);
+	path.cubicTo(m_poly.at(Sustain), pt, m_poly.at(Release));
+	path.lineTo(m_poly.at(End));
+	path.lineTo(m_poly.at(0));
 
 	const QPalette& pal = palette();
 	const bool bDark = (pal.window().color().value() < 0x7f);
@@ -156,12 +170,12 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 
 	painter.setPen(bDark ? Qt::gray : Qt::darkGray);
 	painter.setBrush(rgbDrop1.lighter());
-	painter.drawRect(nodeRect(1));
+	painter.drawRect(nodeRect(Idle));
 	painter.setBrush(rgbLite1);
-	painter.drawRect(nodeRect(2));
-	painter.drawRect(nodeRect(3));
-	painter.drawRect(nodeRect(4));
-	painter.drawRect(nodeRect(5));
+	painter.drawRect(nodeRect(Attack));
+	painter.drawRect(nodeRect(Decay));
+	painter.drawRect(nodeRect(Sustain));
+	painter.drawRect(nodeRect(Release));
 
 #ifdef CONFIG_DEBUG_0
 	painter.drawText(QFrame::rect(),
@@ -191,17 +205,14 @@ QRect synthv1widget_env::nodeRect ( int iNode ) const
 
 int synthv1widget_env::nodeIndex ( const QPoint& pos ) const
 {
-	if (nodeRect(5).contains(pos))
-		return 5; // Release
-
-	if (nodeRect(4).contains(pos))
-		return 4; // Sustain
-
-	if (nodeRect(3).contains(pos))
-		return 3; // Decay
-
-	if (nodeRect(2).contains(pos))
-		return 2; // Attack
+	if (nodeRect(Release).contains(pos))
+		return Release;
+	if (nodeRect(Sustain).contains(pos))
+		return Sustain;
+	if (nodeRect(Decay).contains(pos))
+		return Decay;
+	if (nodeRect(Attack).contains(pos))
+		return Attack;
 
 	return -1;
 }
@@ -220,19 +231,19 @@ void synthv1widget_env::dragNode ( const QPoint& pos )
 	if (dx || dy) {
 		int x, y;
 		switch (m_iDragNode) {
-		case 2: // Attack
+		case Attack:
 			x = int(attack() * float(w4));
 			setAttack(float(x + dx) / float(w4));
 			break;
-		case 3: // Decay/Sustain
+		case Decay:
 			x = int(decay() * float(w4));
 			setDecay(float(x + dx) / float(w4));
 			// Fall thru...
-		case 4: // Sustain
+		case Sustain:
 			y = int(sustain() * float(h - 12));
 			setSustain(float(y - dy) / float(h - 12));
 			break;
-		case 5: // Release
+		case Release:
 			x = int(release() * float(w4));
 			setRelease(float(x + dx) / float(w4));
 			break;
@@ -249,16 +260,16 @@ void synthv1widget_env::mousePressEvent ( QMouseEvent *pMouseEvent )
 	if (pMouseEvent->button() == Qt::LeftButton) {
 		const QPoint& pos = pMouseEvent->pos();
 		const int iDragNode = nodeIndex(pos);
-		if (iDragNode >= 0) {
+		if (iDragNode > Idle) {
 			switch (iDragNode) {
-			case 2: // Attack
-			case 5: // Release
+			case Attack:
+			case Release:
 				setCursor(Qt::SizeHorCursor);
 				break;
-			case 3: // Decay/Sustain
+			case Decay:
 				setCursor(Qt::SizeAllCursor);
 				break;
-			case 4: // Sustain
+			case Sustain:
 				setCursor(Qt::SizeVerCursor);
 				break;
 			default:
@@ -276,9 +287,9 @@ void synthv1widget_env::mousePressEvent ( QMouseEvent *pMouseEvent )
 void synthv1widget_env::mouseMoveEvent ( QMouseEvent *pMouseEvent )
 {
 	const QPoint& pos = pMouseEvent->pos();
-	if (m_iDragNode >= 0)
+	if (m_iDragNode > Idle)
 		dragNode(pos);
-	else if (nodeIndex(pos) >= 0)
+	else if (nodeIndex(pos) > Idle)
 		setCursor(Qt::PointingHandCursor);
 	else
 		unsetCursor();
@@ -289,7 +300,7 @@ void synthv1widget_env::mouseReleaseEvent ( QMouseEvent *pMouseEvent )
 {
 	QFrame::mouseReleaseEvent(pMouseEvent);
 
-	if (m_iDragNode >= 0) {
+	if (m_iDragNode > Idle) {
 		dragNode(pMouseEvent->pos());
 		m_iDragNode = -1;
 		unsetCursor();
@@ -324,11 +335,11 @@ void synthv1widget_env::updatePolygon (void)
 
 	m_poly.putPoints(0, 7,
 		5,  h,
-		5,  h - 5,
-		x1, 5,
-		x2, y3,
-		x3, y3,
-		x4, h - 5,
+		5,  h - 5, // Idle
+		x1, 5,     // Attack
+		x2, y3,    // Decay
+		x3, y3,    // Sustain
+		x4, h - 5, // Release
 		x4, h);
 
 	QFrame::update();
