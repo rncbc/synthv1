@@ -137,14 +137,14 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 	path.moveTo(m_poly.at(0));
 	path.lineTo(m_poly.at(Idle));
 	pt = m_poly.at(Idle); pt.setY(h >> 1);
-	path.cubicTo(m_poly.at(Idle), pt, m_poly.at(Attack));
+	path.quadTo(pt, m_poly.at(Attack));
 	pt = m_poly.at(Attack);
 	pt.setY((m_poly.at(Decay).y() >> 1) + 1);
-	path.cubicTo(m_poly.at(Attack), pt, m_poly.at(Decay));
+	path.quadTo(pt, m_poly.at(Decay));
 	path.lineTo(m_poly.at(Sustain));
 	pt = m_poly.at(Sustain);
 	pt.setY(pt.y() + ((h - pt.y()) >> 1) - 1);
-	path.cubicTo(m_poly.at(Sustain), pt, m_poly.at(Release));
+	path.quadTo(pt, m_poly.at(Release));
 	path.lineTo(m_poly.at(End));
 	path.lineTo(m_poly.at(0));
 
