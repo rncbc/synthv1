@@ -171,9 +171,10 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 	painter.setBrush(grad);
 	painter.drawPath(path);
 
-	painter.setPen(bDark ? Qt::gray : Qt::darkGray);
+	painter.setPen(rgbDrop1);
 	painter.setBrush(rgbDrop1.lighter());
 	painter.drawRect(nodeRect(Idle));
+	painter.setPen(rgbLite1.lighter());
 	painter.setBrush(rgbLite1);
 	painter.drawRect(nodeRect(Attack));
 	painter.drawRect(nodeRect(Decay));
