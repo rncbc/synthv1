@@ -6,7 +6,9 @@ ChangeLog
 
 GIT HEAD
 
-- Bumped version micro/dot number into the next develop cycle.
+- Slightly improved eye-candyness to all graphic widgets,
+  most especially on the EG widget handling, curved lines
+  and gradient fills. (EXPERIMENTAL)
 
 
 0.9.20  2021-02-10  A Winter'21 Release.
