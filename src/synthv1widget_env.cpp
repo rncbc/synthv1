@@ -163,7 +163,7 @@ void synthv1widget_env::paintEvent ( QPaintEvent *pPaintEvent )
 
 	QColor rgbLite1(rgbLite);
 	QColor rgbDrop1(Qt::black);
-	rgbLite1.setAlpha(bDark ? 80 : 180);
+	rgbLite1.setAlpha(bDark ? 80 : 120);
 	rgbDrop1.setAlpha(80);
 
 	QLinearGradient grad(0, 0, w << 1, h << 1);

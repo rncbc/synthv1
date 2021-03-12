@@ -131,7 +131,7 @@ void synthv1widget_wave::paintEvent ( QPaintEvent *pPaintEvent )
 
 	QColor rgbLite1(rgbLite);
 	QColor rgbDrop1(Qt::black);
-	rgbLite1.setAlpha(bDark ? 120 : 220);
+	rgbLite1.setAlpha(bDark ? 120 : 180);
 	rgbDrop1.setAlpha(80);
 
 	QLinearGradient grad(0, 0, w << 1, h << 1);
