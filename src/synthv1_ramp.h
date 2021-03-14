@@ -59,6 +59,8 @@ public:
 			m_value0[i] = m_value1[i];
 			m_value1[i] = evaluate(i);
 		}
+
+		m_frames = 0;
 	}
 
 	void process(uint32_t nframes)
@@ -112,7 +114,7 @@ class synthv1_ramp1 : public synthv1_ramp
 public:
 
 	synthv1_ramp1(uint16_t nvalues = 1)
-		: synthv1_ramp(nvalues), m_param1(0), m_param1_v(0.0f) {}
+		: synthv1_ramp(nvalues), m_param1(nullptr), m_param1_v(0.0f) {}
 
 	void reset(float *param1)
 	{
@@ -155,7 +157,7 @@ class synthv1_ramp2 : public synthv1_ramp1
 public:
 
 	synthv1_ramp2(uint16_t nvalues = 1)
-		: synthv1_ramp1(nvalues), m_param2(0), m_param2_v(0.0f) {}
+		: synthv1_ramp1(nvalues), m_param2(nullptr), m_param2_v(0.0f) {}
 
 	void reset(float *param1, float *param2)
 	{
@@ -201,7 +203,7 @@ class synthv1_ramp3 : public synthv1_ramp2
 public:
 
 	synthv1_ramp3(uint16_t nvalues = 1)
-		: synthv1_ramp2(nvalues), m_param3(0), m_param3_v(0.0f) {}
+		: synthv1_ramp2(nvalues), m_param3(nullptr), m_param3_v(0.0f) {}
 
 	void reset(float *param1, float *param2, float *param3)
 	{
@@ -249,7 +251,7 @@ class synthv1_ramp4 : public synthv1_ramp3
 public:
 
 	synthv1_ramp4(uint16_t nvalues = 1)
-		: synthv1_ramp3(nvalues), m_param4(0), m_param4_v(0.0f) {}
+		: synthv1_ramp3(nvalues), m_param4(nullptr), m_param4_v(0.0f) {}
 
 	void reset(float *param1, float *param2, float *param3, float *param4)
 	{

@@ -1718,7 +1718,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					pv->out1_panning = 0.0f;
 					pv->out1_pan.reset(&pv->out1_panning);
 					// volume
-					pv->out1_volume = 0.0f;
+					pv->out1_volume = 1.0f;
 					pv->out1_vol.reset(&pv->out1_volume);
 					// sustain
 					pv->sustain1 = false;
@@ -1799,7 +1799,7 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					pv->out2_panning = 0.0f;
 					pv->out2_pan.reset(&pv->out2_panning);
 					// volume
-					pv->out2_volume = 0.0f;
+					pv->out2_volume = 1.0f;
 					pv->out2_vol.reset(&pv->out2_volume);
 					// allocated
 					m_note2[key] = pv;
