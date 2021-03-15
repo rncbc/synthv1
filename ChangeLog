@@ -4,11 +4,13 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.21  2021-03-16  An End-of-Winter'21 Release.
 
+- Fixed an old lurker, causing slight differences to voice
+  on-sets, due to a wrong initial LFO Volume ramping value.
 - Slightly improved eye-candyness to all graphic widgets,
   most especially on the EG widget handling, curved lines
-  and gradient fills. (EXPERIMENTAL)
+  and gradient fills.
 
 
 0.9.20  2021-02-10  A Winter'21 Release.
