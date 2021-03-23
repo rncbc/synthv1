@@ -72,6 +72,4 @@ configuration process, this means that there may be an error in the source code,
 or in the build system, or something incompatible in 3rd party libraries.
 
 The CMake build system for synthv1 is experimental. It will take a while
-until it becomes stable and fully tested. You can help providing feedback, 
-please send a report containing your problems to the synthv1 development 
-mailing list, https://lists.sourceforge.net/mailman/listinfo/synthv1-devel
+until it becomes stable and fully tested.
