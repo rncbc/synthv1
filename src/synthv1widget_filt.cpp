@@ -44,7 +44,7 @@ inline float safe_value ( float x )
 // Constructor.
 synthv1widget_filt::synthv1widget_filt ( QWidget *pParent )
 	: QFrame(pParent),
-		m_fCutoff(0.0f), m_fReso(0.0f), m_fType(0.0f), m_fSlope(0.0f),
+		m_fCutoff(0.0f), m_fReso(0.0f), m_iType(LPF), m_iSlope(S12DB),
 		m_bDragging(false)
 {
 //	setMouseTracking(true);
@@ -94,29 +94,31 @@ float synthv1widget_filt::reso (void) const
 
 void synthv1widget_filt::setType ( float fType )
 {
-	if (::fabsf(m_fType - fType) > 0.001f) {
-		m_fType = fType;
+	const int iType = int(fType);
+	if (m_iType != iType) {
+		m_iType  = iType;
 		updatePath();
 	}
 }
 
 float synthv1widget_filt::type (void) const
 {
-	return m_fType;
+	return float(m_iType);
 }
 
 
 void synthv1widget_filt::setSlope ( float fSlope )
 {
-	if (::fabsf(m_fSlope - fSlope) > 0.001f) {
-		m_fSlope = fSlope;
+	const int iSlope = int(fSlope);
+	if (m_iSlope != iSlope) {
+		m_iSlope  = iSlope;
 		updatePath();
 	}
 }
 
 float synthv1widget_filt::slope (void) const
 {
-	return m_fSlope;
+	return float(m_iSlope);
 }
 
 
@@ -259,8 +261,7 @@ void synthv1widget_filt::updatePath (void)
 	const int w4 = w >> 2;
 	const int w8 = w >> 3;
 
-	const int iSlope = int(m_fSlope);
-	const int ws = w8 - (iSlope == 1 ? (w8 >> 1) : 0);
+	const int ws = w8 - (m_iSlope == S24DB ? (w8 >> 1) : 0);
 
 	int x = w8 + int(m_fCutoff * float(w - w4));
 	int y = h2 - int(m_fReso   * float(h + h4));
@@ -268,10 +269,10 @@ void synthv1widget_filt::updatePath (void)
 	QPolygon poly(6);
 	QPainterPath path;
 
-	const int iType = (iSlope == 3 ? 4 : int(m_fType));
+	const int iType = (m_iSlope == SFORMANT ? L2F : m_iType);
 	// Low, Notch
-	if (iType == 0 || iType == 3) {
-		if (iType == 3) x -= w8;
+	if (iType == LPF || iType == BRF) {
+		if (iType == BRF) x -= w8;
 		poly.putPoints(0, 6,
 			0, h2,
 			x - w8, h2,
@@ -283,10 +284,10 @@ void synthv1widget_filt::updatePath (void)
 		path.lineTo(poly.at(1));
 		path.cubicTo(poly.at(2), poly.at(3), poly.at(4));
 		path.lineTo(poly.at(5));
-		if (iType == 3) x += w8;
+		if (iType == BRF) x += w8;
 	}
 	// Band
-	if (iType == 1) {
+	if (iType == BPF) {
 		const int y2 = (y + h4) >> 1;
 		poly.putPoints(0, 6,
 			0, h,
@@ -301,8 +302,8 @@ void synthv1widget_filt::updatePath (void)
 		path.lineTo(poly.at(5));
 	}
 	// High, Notch
-	if (iType == 2 || iType == 3) {
-		if (iType == 3) { x += w8; y = h2; }
+	if (iType == HPF || iType == BRF) {
+		if (iType == BRF) { x += w8; y = h2; }
 		poly.putPoints(0, 6,
 			x - ws, h,
 			x, y,
@@ -314,10 +315,10 @@ void synthv1widget_filt::updatePath (void)
 		path.cubicTo(poly.at(1), poly.at(2), poly.at(3));
 		path.lineTo(poly.at(4));
 		path.lineTo(poly.at(5));
-		if (iType == 3) x -= w8;
+		if (iType == BRF) x -= w8;
 	}
 	// Formant
-	if (iType == 4) {
+	if (iType == L2F) {
 		const int x2 = (x - w4) >> 2;
 		const int y2 = (y - h4) >> 2;
 		poly.putPoints(0, 6,

@@ -42,9 +42,9 @@ public:
 
 	// Parameter getters.
 	float cutoff() const;
-	float reso() const;
-	float type() const;
-	float slope() const;
+	float reso()   const;
+	float type()   const;
+	float slope()  const;
 
 public slots:
 
@@ -64,6 +64,22 @@ protected:
 
 	// Draw canvas.
 	void paintEvent(QPaintEvent *);
+
+	// Filter types/slopes.
+	enum Types {
+		LPF = 0,
+		BPF = 1,
+		HPF = 2,
+		BRF = 3,
+		L2F = 4
+	};
+
+	enum Slopes {
+		S12DB    = 0,
+		S24DB    = 1,
+		SBIQUAD  = 2,
+		SFORMANT = 3
+	};
 
 	// Drag/move curve.
 	void dragCurve(const QPoint& pos);
@@ -85,8 +101,8 @@ private:
 	// Instance state.
 	float m_fCutoff;
 	float m_fReso;
-	float m_fType;
-	float m_fSlope;
+	int   m_iType;
+	int   m_iSlope;
 
 	// Drag state.
 	bool m_bDragging;
