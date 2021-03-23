@@ -23,6 +23,7 @@
 #define __synthv1widget_env_h
 
 #include <QFrame>
+#include <QPolygon>
 
 
 //----------------------------------------------------------------------------

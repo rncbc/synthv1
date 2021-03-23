@@ -22,7 +22,6 @@
 #include "synthv1widget_filt.h"
 
 #include <QPainter>
-#include <QPainterPath>
 
 #include <QLinearGradient>
 
@@ -67,7 +66,7 @@ void synthv1widget_filt::setCutoff ( float fCutoff )
 {
 	if (::fabsf(m_fCutoff - fCutoff) > 0.001f) {
 		m_fCutoff = safe_value(fCutoff);
-		update();
+		updatePath();
 		emit cutoffChanged(cutoff());
 	}
 }
@@ -82,7 +81,7 @@ void synthv1widget_filt::setReso ( float fReso )
 {
 	if (::fabsf(m_fReso - fReso) > 0.001f) {
 		m_fReso = safe_value(fReso);
-		update();
+		updatePath();
 		emit resoChanged(reso());
 	}
 }
@@ -97,7 +96,7 @@ void synthv1widget_filt::setType ( float fType )
 {
 	if (::fabsf(m_fType - fType) > 0.001f) {
 		m_fType = fType;
-		update();
+		updatePath();
 	}
 }
 
@@ -111,7 +110,7 @@ void synthv1widget_filt::setSlope ( float fSlope )
 {
 	if (::fabsf(m_fSlope - fSlope) > 0.001f) {
 		m_fSlope = fSlope;
-		update();
+		updatePath();
 	}
 }
 
@@ -126,6 +125,131 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 {
 	QPainter painter(this);
 
+	const QRect& rect = QWidget::rect();
+	const int h = rect.height();
+	const int w = rect.width();
+
+	const QPalette& pal = palette();
+	const bool bDark = (pal.window().color().value() < 0x7f);
+	const QColor& rgbLite = (isEnabled() ? Qt::yellow : pal.mid().color());
+	const QColor& rgbDark = pal.window().color().darker();
+
+	painter.fillRect(rect, rgbDark);
+
+	QColor rgbLite1(rgbLite);
+	QColor rgbDrop1(Qt::black);
+	rgbLite1.setAlpha(bDark ? 80 : 120);
+	rgbDrop1.setAlpha(80);
+
+	QLinearGradient grad(0, 0, w << 1, h << 1);
+	grad.setColorAt(0.0f, rgbLite1);
+	grad.setColorAt(1.0f, rgbDrop1);
+
+	painter.setRenderHint(QPainter::Antialiasing, true);
+
+//	painter.setPen(bDark ? Qt::gray : Qt::darkGray);
+	painter.setPen(QPen(rgbLite1, 2));
+	painter.setBrush(grad);
+	painter.drawPath(m_path);
+
+#ifdef CONFIG_DEBUG_0
+	painter.drawText(QFrame::rect(),
+		Qt::AlignTop|Qt::AlignHCenter,
+		tr("Cutoff(%1) Reso(%2)")
+		.arg(int(100.0f * cutoff()))
+		.arg(int(100.0f * reso())));
+#endif
+
+	painter.setRenderHint(QPainter::Antialiasing, false);
+
+	painter.end();
+
+	QFrame::paintEvent(pPaintEvent);
+}
+
+
+// Drag/move curve.
+void synthv1widget_filt::dragCurve ( const QPoint& pos )
+{
+	const int h  = height();
+	const int w  = width();
+
+	const int dx = (pos.x() - m_posDrag.x());
+	const int dy = (pos.y() - m_posDrag.y());
+
+	if (dx || dy) {
+		const int h2 = (h >> 1);
+		const int x = int(cutoff() * float(w));
+		const int y = int(reso() * float(h2));
+		setCutoff(float(x + dx) / float(w));
+		setReso(float(y - dy) / float(h2));
+		m_posDrag = pos;
+	}
+}
+
+
+// Mouse interaction.
+void synthv1widget_filt::mousePressEvent ( QMouseEvent *pMouseEvent )
+{
+	if (pMouseEvent->button() == Qt::LeftButton)
+		m_posDrag = pMouseEvent->pos();
+
+	QFrame::mousePressEvent(pMouseEvent);
+}
+
+
+void synthv1widget_filt::mouseMoveEvent ( QMouseEvent *pMouseEvent )
+{
+	const QPoint& pos = pMouseEvent->pos();
+	if (m_bDragging) {
+		dragCurve(pos);
+	} else { // if ((pos - m_posDrag).manhattanLength() > 4) {
+		setCursor(Qt::SizeAllCursor);
+		m_bDragging = true;
+	}
+}
+
+
+void synthv1widget_filt::mouseReleaseEvent ( QMouseEvent *pMouseEvent )
+{
+	QFrame::mouseReleaseEvent(pMouseEvent);
+
+	if (m_bDragging) {
+		dragCurve(pMouseEvent->pos());
+		m_bDragging = false;
+		unsetCursor();
+	}
+}
+
+
+void synthv1widget_filt::wheelEvent ( QWheelEvent *pWheelEvent )
+{
+	const int delta = (pWheelEvent->angleDelta().y() / 60);
+
+	if (pWheelEvent->modifiers() & (Qt::ShiftModifier | Qt::ControlModifier)) {
+		const int h2 = (height() >> 1);
+		const int y = int(reso() * float(h2));
+		setReso(float(y + delta) / float(h2));
+	} else {
+		const int w2 = (width() >> 1);
+		const int x = int(cutoff() * float(w2));
+		setCutoff(float(x + delta) / float(w2));
+	}
+}
+
+
+// Resize canvas.
+void synthv1widget_filt::resizeEvent ( QResizeEvent *pResizeEvent )
+{
+	QFrame::resizeEvent(pResizeEvent);
+
+	updatePath();
+}
+
+
+// Update the drawing polygon.
+void synthv1widget_filt::updatePath (void)
+{
 	const QRect& rect = QWidget::rect();
 	const int h  = rect.height();
 	const int w  = rect.width();
@@ -226,112 +350,10 @@ void synthv1widget_filt::paintEvent ( QPaintEvent *pPaintEvent )
 		path.lineTo(poly.at(5));
 	}
 
-	const QPalette& pal = palette();
-	const bool bDark = (pal.window().color().value() < 0x7f);
-	const QColor& rgbLite = (isEnabled() ? Qt::yellow : pal.mid().color());
-	const QColor& rgbDark = pal.window().color().darker();
+	// Commit path.
+	m_path = path;
 
-	painter.fillRect(rect, rgbDark);
-
-	QColor rgbLite1(rgbLite);
-	QColor rgbDrop1(Qt::black);
-	rgbLite1.setAlpha(bDark ? 80 : 120);
-	rgbDrop1.setAlpha(80);
-
-	QLinearGradient grad(0, 0, w << 1, h << 1);
-	grad.setColorAt(0.0f, rgbLite1);
-	grad.setColorAt(1.0f, rgbDrop1);
-
-	painter.setRenderHint(QPainter::Antialiasing, true);
-
-//	painter.setPen(bDark ? Qt::gray : Qt::darkGray);
-	painter.setPen(QPen(rgbLite1, 2));
-	painter.setBrush(grad);
-	painter.drawPath(path);
-
-#ifdef CONFIG_DEBUG_0
-	painter.drawText(QFrame::rect(),
-		Qt::AlignTop|Qt::AlignHCenter,
-		tr("Cutoff(%1) Reso(%2)")
-		.arg(int(100.0f * cutoff()))
-		.arg(int(100.0f * reso())));
-#endif
-
-	painter.setRenderHint(QPainter::Antialiasing, false);
-
-	painter.end();
-
-	QFrame::paintEvent(pPaintEvent);
-}
-
-
-// Drag/move curve.
-void synthv1widget_filt::dragCurve ( const QPoint& pos )
-{
-	const int h  = height();
-	const int w  = width();
-
-	const int dx = (pos.x() - m_posDrag.x());
-	const int dy = (pos.y() - m_posDrag.y());
-
-	if (dx || dy) {
-		const int h2 = (h >> 1);
-		const int x = int(cutoff() * float(w));
-		const int y = int(reso() * float(h2));
-		setCutoff(float(x + dx) / float(w));
-		setReso(float(y - dy) / float(h2));
-		m_posDrag = pos;
-	}
-}
-
-
-// Mouse interaction.
-void synthv1widget_filt::mousePressEvent ( QMouseEvent *pMouseEvent )
-{
-	if (pMouseEvent->button() == Qt::LeftButton)
-		m_posDrag = pMouseEvent->pos();
-
-	QFrame::mousePressEvent(pMouseEvent);
-}
-
-
-void synthv1widget_filt::mouseMoveEvent ( QMouseEvent *pMouseEvent )
-{
-	const QPoint& pos = pMouseEvent->pos();
-	if (m_bDragging) {
-		dragCurve(pos);
-	} else { // if ((pos - m_posDrag).manhattanLength() > 4) {
-		setCursor(Qt::SizeAllCursor);
-		m_bDragging = true;
-	}
-}
-
-
-void synthv1widget_filt::mouseReleaseEvent ( QMouseEvent *pMouseEvent )
-{
-	QFrame::mouseReleaseEvent(pMouseEvent);
-
-	if (m_bDragging) {
-		dragCurve(pMouseEvent->pos());
-		m_bDragging = false;
-		unsetCursor();
-	}
-}
-
-
-void synthv1widget_filt::wheelEvent ( QWheelEvent *pWheelEvent )
-{
-	const int delta = (pWheelEvent->angleDelta().y() / 60);
-
-	if (pWheelEvent->modifiers() & (Qt::ShiftModifier | Qt::ControlModifier)) {
-		const int h2 = (height() >> 1);
-		const int y = int(reso() * float(h2));
-		setReso(float(y + delta) / float(h2));
-	} else {
-		const int w2 = (width() >> 1);
-		const int x = int(cutoff() * float(w2));
-		setCutoff(float(x + delta) / float(w2));
-	}
+	QFrame::update();
 }
 
 

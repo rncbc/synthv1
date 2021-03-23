@@ -23,6 +23,7 @@
 #define __synthv1widget_filt_h
 
 #include <QFrame>
+#include <QPainterPath>
 
 
 //----------------------------------------------------------------------------
@@ -73,6 +74,12 @@ protected:
 	void mouseReleaseEvent(QMouseEvent *pMouseEvent);
 	void wheelEvent(QWheelEvent *pWheelEvent);
 
+	// Resize canvas.
+	void resizeEvent(QResizeEvent *);
+
+	// Update the drawing path.
+	void updatePath();
+
 private:
 
 	// Instance state.
@@ -84,6 +91,9 @@ private:
 	// Drag state.
 	bool m_bDragging;
 	QPoint m_posDrag;
+
+	// Drawable path.
+	QPainterPath m_path;
 };
 
 #endif	// __synthv1widget_filt_h
