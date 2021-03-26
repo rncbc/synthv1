@@ -30,6 +30,6 @@ before_script:
 
 script:
 - source /opt/qtbase5-static/*/bin/qtbase5-static-env.sh
-- ./configure
+- cmake
 - make
 - sudo make install

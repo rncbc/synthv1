@@ -93,12 +93,11 @@ Obsoletes:	%{name}-common <= %{version}
 
 
 %prep
-%setup
-[ -x ./autogen.sh ] && ./autogen.sh
+%setup -q
 
 %build
 source /opt/qtbase5-static/*/bin/qtbase5-static-env.sh
-%configure
+cmake -DCMAKE_INSTALL_PREFIX=%{_prefix}
 %__make %{?_smp_mflags}
 
 %install
