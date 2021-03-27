@@ -26,10 +26,9 @@ install:
 
 before_script:
 - git fetch --unshallow --tags -q
-- ./autogen.sh
 
 script:
 - source /opt/qtbase5-static/*/bin/qtbase5-static-env.sh
-- cmake
+- cmake .
 - make
 - sudo make install
