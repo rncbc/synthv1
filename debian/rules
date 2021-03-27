@@ -7,5 +7,7 @@ QTDIR ?= $(shell ls -1dr /opt/qtbase5-static/* | head -1)
 
 override_dh_auto_configure:
 	# Add here commands to configure the package.
-	cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_PREFIX_PATH=$(QTDIR)
+	cmake -DCMAKE_INSTALL_PREFIX=/usr  \
+	      -DCMAKE_INSTALL_LIBDIR=lib   \
+	      -DCMAKE_PREFIX_PATH=$(QTDIR) .
 	# --- end custom part for configure

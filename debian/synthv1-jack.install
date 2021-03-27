@@ -6,4 +6,4 @@ debian/tmp/usr/share/icons/hicolor/32x32/apps/synthv1.png
 debian/tmp/usr/share/icons/hicolor/32x32/mimetypes/application-x-synthv1*.png
 debian/tmp/usr/share/icons/hicolor/scalable/apps/synthv1.svg
 debian/tmp/usr/share/icons/hicolor/scalable/mimetypes/application-x-synthv1*.svg
-debian/tmp/usr/share/man/man1/synthv1*.1.gz
+debian/tmp/usr/share/man/man1/synthv1*.*
