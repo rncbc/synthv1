@@ -89,5 +89,4 @@
 #cmakedefine CONFIG_NSM @CONFIG_NSM@
 
 
-
 #endif /* CONFIG_H */
