@@ -142,6 +142,11 @@ endif ()
 set_target_properties (${PROJECT_NAME}    PROPERTIES CXX_STANDARD 17)
 set_target_properties (${PROJECT_NAME}_ui PROPERTIES CXX_STANDARD 17)
 
+if (QT_VERSION VERSION_GREATER_EQUAL 6.0.0)
+  target_compile_options (${PROJECT_NAME}    PRIVATE -fPIC)
+  target_compile_options (${PROJECT_NAME}_ui PRIVATE -fPIC)
+endif ()
+
 target_link_libraries (${PROJECT_NAME}    PUBLIC Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Xml)
 target_link_libraries (${PROJECT_NAME}_ui PUBLIC Qt${QT_VERSION_MAJOR}::Widgets ${PROJECT_NAME})
 
