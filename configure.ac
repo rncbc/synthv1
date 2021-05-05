@@ -322,12 +322,20 @@ if test "x$ac_qmake" = "xno"; then
 fi
 
 # Check for proper Qt install path.
-AC_CACHE_CHECK([for Qt install path], [ac_cv_qt_install_path], [
-   ac_cv_qt_install_path=$($ac_qmake -query QT_INSTALL_BINS)
+AC_CACHE_CHECK([for Qt install path (bin)], [ac_cv_qt_install_bins], [
+   ac_cv_qt_install_bins=$($ac_qmake -query QT_INSTALL_BINS)
 ])
-ac_qt_install_path=$ac_cv_qt_install_path
-if test -d $ac_qt_install_path; then
-   ac_path="$ac_qt_install_path:$ac_path"
+ac_qt_install_bins=$ac_cv_qt_install_bins
+if test -d $ac_qt_install_bins; then
+   ac_path="$ac_qt_install_bins:$ac_path"
+fi
+
+AC_CACHE_CHECK([for Qt install path (libexec)], [ac_cv_qt_install_libexecs], [
+   ac_cv_qt_install_libexecs=$($ac_qmake -query QT_INSTALL_LIBEXECS)
+])
+ac_qt_install_libexecs=$ac_cv_qt_install_libexecs
+if test -d $ac_qt_install_libexecs; then
+   ac_path="$ac_qt_install_libexecs:$ac_path"
 fi
 
 # Check it again, now with updated PATH, just in case...
