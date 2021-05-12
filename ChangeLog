@@ -4,9 +4,9 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.22  2021-05-13  A Spring'21 Release.
 
-- All packaging builds switching to CMake. (EXPERIMENTAL)
+- All packaging builds switching to CMake.
 
 
 0.9.21  2021-03-16  An End-of-Winter'21 Release.
