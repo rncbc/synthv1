@@ -62,6 +62,8 @@ set (CONFIG_LIBDIR  "${CONFIG_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 set (CONFIG_DATADIR "${CONFIG_PREFIX}/${CMAKE_INSTALL_DATADIR}")
 set (CONFIG_MANDIR  "${CONFIG_PREFIX}/${CMAKE_INSTALL_MANDIR}")
 
+# Windows install target path.
+set (CONFIG_WINDOWS_LV2_PATH "$ENV{SYSTEMDRIVE}/Program Files/Common Files/LV2")
 
 # Enable JACK standalone build.
 option (CONFIG_JACK "Enable JACK stand-alone build (default=yes)" 1)

@@ -170,6 +170,19 @@ if (CONFIG_LV2)
       ${PROJECT_NAME}.lv2/${PROJECT_NAME}.ttl
       ${PROJECT_NAME}.lv2/${PROJECT_NAME}_ui.ttl
       DESTINATION ${CONFIG_LV2DIR}/${PROJECT_NAME}.lv2)
+  elseif (WIN32)
+    if (NOT CONFIG_DEBUG)
+      add_custom_command(TARGET ${PROJECT_NAME}_lv2  POST_BUILD
+        COMMAND strip lib${PROJECT_NAME}_lv2.dll)
+    endif ()
+    set (CONFIG_LV2DIR ${CONFIG_WINDOWS_LV2_PATH})
+    install (FILES ${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}_lv2.dll
+      RENAME ${PROJECT_NAME}.dll
+      DESTINATION ${CONFIG_LV2DIR}/${PROJECT_NAME}.lv2)
+    install (FILES ${PROJECT_NAME}_windows.lv2/manifest.ttl
+      ${PROJECT_NAME}_windows.lv2/${PROJECT_NAME}.ttl
+      ${PROJECT_NAME}_windows.lv2/${PROJECT_NAME}_ui.ttl
+      DESTINATION ${CONFIG_LV2DIR}/${PROJECT_NAME}.lv2)
   endif ()
 endif ()
 

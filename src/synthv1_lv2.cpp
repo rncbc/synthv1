@@ -394,7 +394,11 @@ void synthv1_lv2::qapp_instantiate (void)
 	if (qApp == nullptr && g_qapp_instance == nullptr) {
 		static int s_argc = 1;
 		static const char *s_argv[] = { SYNTHV1_TITLE, nullptr };
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
+		::_putenv_s("QT_NO_GLIB", "1"); // Avoid glib event-loop...
+#else
 		::setenv("QT_NO_GLIB", "1", 1); // Avoid glib event-loop...
+#endif
 		g_qapp_instance = new QApplication(s_argc, (char **) s_argv);
 	}
 
