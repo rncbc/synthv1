@@ -245,6 +245,49 @@ static LV2UI_Handle synthv1_lv2ui_x11_instantiate (
 #endif	// CONFIG_LV2_UI_X11
 
 
+#ifdef CONFIG_LV2_UI_WINDOWS
+static LV2UI_Handle synthv1_lv2ui_windows_instantiate (
+	const LV2UI_Descriptor *, const char *, const char *,
+	LV2UI_Write_Function write_function,
+	LV2UI_Controller controller, LV2UI_Widget *widget,
+	const LV2_Feature *const *ui_features )
+{
+	WId winid, parent = 0;
+	LV2UI_Resize *resize = nullptr;
+	synthv1_lv2 *pSynth = nullptr;
+
+	for (int i = 0; ui_features[i]; ++i) {
+		if (::strcmp(ui_features[i]->URI, LV2_INSTANCE_ACCESS_URI) == 0)
+			pSynth = static_cast<synthv1_lv2 *> (ui_features[i]->data);
+		else
+		if (::strcmp(ui_features[i]->URI, LV2_UI__parent) == 0)
+			parent = (WId) ui_features[i]->data;
+		else
+		if (::strcmp(ui_features[i]->URI, LV2_UI__resize) == 0)
+			resize = (LV2UI_Resize *) ui_features[i]->data;
+	}
+
+	if (pSynth == nullptr)
+		return nullptr;
+	if (!parent)
+		return nullptr;
+
+	synthv1widget_lv2 *pWidget
+		= new synthv1widget_lv2(pSynth, controller, write_function);
+	if (resize && resize->handle) {
+		const QSize& hint = pWidget->sizeHint();
+		resize->ui_resize(resize->handle, UI_WINDOWS_RECOMMENDED_WIDTH, UI_WINDOWS_RECOMMENDED_HEIGHT);
+	}
+	winid = pWidget->winId();
+	pWidget->windowHandle()->setParent(QWindow::fromWinId(parent));
+	pWidget->show();
+	*widget = (LV2UI_Widget) winid;
+	return pWidget;
+}
+
+#endif	// CONFIG_LV2_UI_WINDOWS
+
+
 #ifdef CONFIG_LV2_UI_EXTERNAL
 
 struct synthv1_lv2ui_external_widget
@@ -369,6 +412,17 @@ static const LV2UI_Descriptor synthv1_lv2ui_x11_descriptor =
 };
 #endif	// CONFIG_LV2_UI_X11
 
+#ifdef CONFIG_LV2_UI_WINDOWS
+static const LV2UI_Descriptor synthv1_lv2ui_windows_descriptor =
+{
+	SYNTHV1_LV2UI_WINDOWS_URI,
+	synthv1_lv2ui_windows_instantiate,
+	synthv1_lv2ui_cleanup,
+	synthv1_lv2ui_port_event,
+	synthv1_lv2ui_extension_data
+};
+#endif	// CONFIG_LV2_UI_WINDOWS
+
 #ifdef CONFIG_LV2_UI_EXTERNAL
 static const LV2UI_Descriptor synthv1_lv2ui_external_descriptor =
 {
@@ -394,6 +448,11 @@ LV2_SYMBOL_EXPORT const LV2UI_Descriptor *lv2ui_descriptor ( uint32_t index )
 #ifdef CONFIG_LV2_UI_EXTERNAL
 	if (index == 2)
 		return &synthv1_lv2ui_external_descriptor;
+	else
+#endif
+#ifdef CONFIG_LV2_UI_WINDOWS
+	if (index == 3)
+		return &synthv1_lv2ui_windows_descriptor;
 	else
 #endif
 	return nullptr;
