@@ -29,9 +29,17 @@
 
 #define SYNTHV1_LV2UI_URI SYNTHV1_LV2_PREFIX "ui"
 
-#ifdef CONFIG_LV2_UI_X11
+#if defined(CONFIG_LV2_UI_X11) || defined(CONFIG_LV2_UI_WINDOWS)
 #include <QWindow>
+#endif
+
+#ifdef CONFIG_LV2_UI_X11
 #define SYNTHV1_LV2UI_X11_URI SYNTHV1_LV2_PREFIX "ui_x11"
+#endif
+
+#ifdef CONFIG_LV2_UI_WINDOWS
+#include <windows.h>
+#define SYNTHV1_LV2UI_WINDOWS_URI SYNTHV1_LV2_PREFIX "ui_windows"
 #endif
 
 #ifdef CONFIG_LV2_UI_EXTERNAL

@@ -64,6 +64,9 @@
 /* Define if LV2 X11 UI support is available. */
 #cmakedefine CONFIG_LV2_UI_X11 @CONFIG_LV2_UI_X11@
 
+/* Define if LV2 Windows UI support is available. */
+#cmakedefine CONFIG_LV2_UI_WINDOWS @CONFIG_LV2_UI_WINDOWS@
+
 /* Define if LV2 External UI extension is available. */
 #cmakedefine CONFIG_LV2_UI_EXTERNAL @CONFIG_LV2_UI_EXTERNAL@
 

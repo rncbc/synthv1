@@ -6,8 +6,8 @@
 	lv2:requiredFeature <http://lv2plug.in/ns/ext/instance-access> ;
 	lv2ui:binary <synthv1.dll> .
 
-<http://synthv1.sourceforge.net/lv2#ui_x11>
-	a lv2ui:X11UI ;
+<http://synthv1.sourceforge.net/lv2#ui_windows>
+	a lv2ui:WindowsUI ;
 	lv2:requiredFeature <http://lv2plug.in/ns/ext/instance-access> ;
 	lv2:optionalFeature lv2ui:resize, lv2ui:idleInterface, lv2ui:showInterface ;
 	lv2:extensionData lv2ui:resize, lv2ui:idleInterface, lv2ui:showInterface ;
