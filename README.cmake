@@ -70,6 +70,3 @@ component and run CMake again.
 If there is an error executing the build process, after running a flawless CMake
 configuration process, this means that there may be an error in the source code, 
 or in the build system, or something incompatible in 3rd party libraries.
-
-The CMake build system for synthv1 is experimental. It will take a while
-until it becomes stable and fully tested.

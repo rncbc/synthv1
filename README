@@ -64,16 +64,14 @@ Installation:
 
   - unpack tarball as usual; in the extracted source directory:
 
-    ./configure [--prefix=/usr/local]
-    make
+    cmake [-DCMAKE_INSTALL_PREFIX=/usr/local] -B build -S .
+    make -C build
 
   - optionally, as root:
 
-    make install
+    sudo make -C build install
 
-  - if checking out from git, prepare the configure script with:
-
-    ./autogen.sh
+  - see also the README.cmake file in the source distribution.
 
 Acknowledgements:
 
