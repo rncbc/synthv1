@@ -22,7 +22,7 @@ Linux and other systems at:
 How to use it?
 ==============
 
-1. You need CMake 3.10 or newer to build synthv1
+1. You need CMake 3.13 or newer to build synthv1
 
 2. Unpack the synthv1 sources somewhere, or checkout the repository, 
    and create a build directory. For instance, using a command line shell:
