@@ -4,6 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- All builds default to Qt6 (Qt >= 6.1) where available.
+- CMake is now the official build system.
+
+
 0.9.22  2021-05-13  A Spring'21 Release.
 
 - All packaging builds switching to CMake.

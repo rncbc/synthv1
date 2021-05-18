@@ -17,7 +17,7 @@
 
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 63
+%define release 63.1
 
 %define _prefix	@ac_prefix@
 
@@ -51,12 +51,11 @@ BuildRequires:	alsa-lib-devel
 #BuildRequires:	libqt5-qtsvg-devel, libqt5-qtwayland-devel
 BuildRequires:	alsa-devel
 %endif
-BuildRequires:	qtbase5-static
-BuildRequires:	qttools5-static
-BuildRequires:	qttranslations5-static
-BuildRequires:	qtwayland5-static
-BuildRequires:	qtsvg5-static
-BuildRequires:	qtsvg5-static
+BuildRequires:	qtbase6-static >= 6.1
+BuildRequires:	qttools6-static >= 6.1
+BuildRequires:	qttranslations6-static >= 6.1
+BuildRequires:	qtwayland6-static >= 6.1
+BuildRequires:	qtsvg6-static >= 6.1
 BuildRequires:	libjack-devel
 BuildRequires:	liblo-devel
 BuildRequires:	lv2-devel
@@ -96,7 +95,7 @@ Obsoletes:	%{name}-common <= %{version}
 %setup -q
 
 %build
-source /opt/qtbase5-static/*/bin/qtbase5-static-env.sh
+source /opt/qtbase6-static/*/bin/qtbase6-static-env.sh
 cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -Wno-dev -B build -S .
 %__make %{?_smp_mflags} -C build
 

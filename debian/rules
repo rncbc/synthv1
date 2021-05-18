@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 #
-QTDIR ?= $(shell ls -1dr /opt/qtbase5-static/* | head -1)
+QTDIR ?= $(shell ls -1dr /opt/qtbase6-static/* | head -1)
 
 %:
 	dh $@
