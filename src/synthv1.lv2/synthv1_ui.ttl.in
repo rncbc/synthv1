@@ -4,16 +4,16 @@
 <http://synthv1.sourceforge.net/lv2#ui>
 	a lv2ui:Qt5UI ;
 	lv2:requiredFeature <http://lv2plug.in/ns/ext/instance-access> ;
-	lv2ui:binary <synthv1.dll> .
+	lv2ui:binary <synthv1.@LIB_EXT@> .
 
-<http://synthv1.sourceforge.net/lv2#ui_windows>
-	a lv2ui:WindowsUI ;
+<http://synthv1.sourceforge.net/lv2#@UI_TYPE@>
+	a lv2ui:@UI_CLASS@ ;
 	lv2:requiredFeature <http://lv2plug.in/ns/ext/instance-access> ;
 	lv2:optionalFeature lv2ui:resize, lv2ui:idleInterface, lv2ui:showInterface ;
 	lv2:extensionData lv2ui:resize, lv2ui:idleInterface, lv2ui:showInterface ;
-	lv2ui:binary <synthv1.dll> .
+	lv2ui:binary <synthv1.@LIB_EXT@> .
 
 <http://synthv1.sourceforge.net/lv2#ui_external>
 	a <http://kxstudio.sf.net/ns/lv2ext/external-ui#Widget> ;
 	lv2:requiredFeature <http://lv2plug.in/ns/ext/instance-access> ;
-	lv2ui:binary <synthv1.dll> .
+	lv2ui:binary <synthv1.@LIB_EXT@> .
