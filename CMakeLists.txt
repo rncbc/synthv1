@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required (VERSION 3.13)
 
-project(synthv1
+project (synthv1
   VERSION 0.9.23
   DESCRIPTION "an old-school polyphonic synthesizer"
   LANGUAGES C CXX)
@@ -151,11 +151,6 @@ if (UNIX AND NOT APPLE)
   check_include_files ("fcntl.h;unistd.h;signal.h" HAVE_SIGNAL_H)
 endif ()
 
-# Add some debug flags.
-if (CONFIG_DEBUG)
-  add_compile_options (-g -fsanitize=address -fno-omit-frame-pointer)
-  link_libraries (asan)
-endif ()
 
 # Find package modules
 find_package (PkgConfig REQUIRED)

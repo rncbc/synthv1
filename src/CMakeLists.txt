@@ -1,14 +1,14 @@
-# project(synthv1)
+# project (synthv1)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set (CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
+set (CMAKE_AUTOUIC ON)
+set (CMAKE_AUTOMOC ON)
+set (CMAKE_AUTORCC ON)
 
 if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/config.h)
-    file(REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/config.h)
-endif()
+    file (REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/config.h)
+endif ()
 configure_file (cmake_config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 set (HEADERS
@@ -145,6 +145,12 @@ set_target_properties (${PROJECT_NAME}_ui PROPERTIES CXX_STANDARD 17)
 if (QT_VERSION VERSION_GREATER_EQUAL 6.0.0)
   target_compile_options (${PROJECT_NAME}    PRIVATE -fPIC)
   target_compile_options (${PROJECT_NAME}_ui PRIVATE -fPIC)
+endif ()
+
+# Add some debugger flags.
+if (CONFIG_DEBUG AND CONFIG_JACK)
+  target_compile_options (${PROJECT_NAME}_jack PRIVATE -g -fsanitize=address -fno-omit-frame-pointer)
+  target_link_libraries (${PROJECT_NAME}_jack PRIVATE asan)
 endif ()
 
 target_link_libraries (${PROJECT_NAME}    PUBLIC Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Xml)
