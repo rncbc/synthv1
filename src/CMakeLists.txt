@@ -182,6 +182,7 @@ if (CONFIG_LV2)
       ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_ui.ttl
       DESTINATION ${CONFIG_LV2DIR}/${PROJECT_NAME}.lv2)
   elseif (WIN32)
+    target_link_options (${PROJECT_NAME}_lv2 PRIVATE -static-libgcc -static-libstdc++)
     if (NOT CONFIG_DEBUG)
       add_custom_command(TARGET ${PROJECT_NAME}_lv2  POST_BUILD
         COMMAND strip lib${PROJECT_NAME}_lv2.dll)
