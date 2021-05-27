@@ -2,7 +2,7 @@ Source: synthv1
 Section: contrib/sound
 Priority: extra
 Maintainer: Rui Nuno Capela <rncbc@rncbc.org>
-Build-Depends: debhelper (>= 9), cmake, pkg-config,
+Build-Depends: debhelper (>= 10), cmake, pkg-config,
   qtbase6-static (>= 6.1), qttools6-static (>= 6.1),
   qtwayland6-static (>= 6.1), qtsvg6-static (>= 6.1), 
   qttranslations6-static (>= 6.1), 
