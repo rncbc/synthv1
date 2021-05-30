@@ -45,10 +45,12 @@ BuildRequires:	cmake
 %if %{defined fedora}
 #BuildRequires:	qt5-qtbase-devel >= 5.1, qt5-linguist
 #BuildRequires:	qt5-qtsvg-devel, qt5-qtwayland-devel
+BuildRequires:	jack-audio-connection-kit-devel
 BuildRequires:	alsa-lib-devel
 %else
 #BuildRequires:	libqt5-qtbase-devel >= 5.1, libqt5-linguist-devel
 #BuildRequires:	libqt5-qtsvg-devel, libqt5-qtwayland-devel
+BuildRequires:	libjack-devel
 BuildRequires:	alsa-devel
 %endif
 BuildRequires:	qtbase6-static >= 6.1
@@ -56,7 +58,6 @@ BuildRequires:	qttools6-static >= 6.1
 BuildRequires:	qttranslations6-static >= 6.1
 BuildRequires:	qtwayland6-static >= 6.1
 BuildRequires:	qtsvg6-static >= 6.1
-BuildRequires:	libjack-devel
 BuildRequires:	liblo-devel
 BuildRequires:	lv2-devel
 
