@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Have some tolerance for buffer-size changes. (EXPERIMENTAL)
 - All builds default to Qt6 (Qt >= 6.1) where available.
 - CMake is now the official build system.
 
