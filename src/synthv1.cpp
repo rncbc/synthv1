@@ -596,7 +596,7 @@ struct synthv1_glide
 	{
 		m_frames = frames;
 
-		if (m_frames > 0) {
+		if (m_frames > 0 && m_last > 0.0f) {
 			m_freq = m_last - freq;
 			m_step = m_freq / float(m_frames);
 		} else {
