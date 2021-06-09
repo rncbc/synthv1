@@ -31,7 +31,6 @@
 	lv2:requiredFeature lv2urid:map, lv2worker:schedule ;
 	lv2:optionalFeature lv2:hardRTCapable ;
 	lv2:extensionData lv2state:interface, lv2worker:interface ;
-	lv2ui:ui synthv1_lv2:ui_x11, synthv1_lv2:ui_external ;
 	lv2patch:writable synthv1_lv2:P201_TUNING_ENABLED,
 		synthv1_lv2:P202_TUNING_REF_PITCH,
 		synthv1_lv2:P203_TUNING_REF_NOTE,

@@ -1,7 +1,7 @@
 // synthv1widget_lv2.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -41,10 +41,10 @@
 #endif
 #endif
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-#define CONFIG_PLUGINSDIR CONFIG_LIBDIR "/qt4/plugins"
-#else
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #define CONFIG_PLUGINSDIR CONFIG_LIBDIR "/qt5/plugins"
+#else
+#define CONFIG_PLUGINSDIR CONFIG_LIBDIR "/qt6/plugins"
 #endif
 
 
