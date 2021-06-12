@@ -903,6 +903,7 @@ protected:
 	void updateEnvTimes_1();
 	void updateEnvTimes_2();
 
+	void allSoundOff();
 	void allControllersOff();
 	void allControllersOff_1();
 	void allControllersOff_2();
@@ -911,7 +912,8 @@ protected:
 	void allNotesOff_2();
 	void allSustainOff_1();
 	void allSustainOff_2();
-	void allSoundOff();
+	void allSustainOn_1();
+	void allSustainOn_2();
 
 	float get_bpm ( float bpm ) const
 		{ return (bpm > 0.0f ? bpm : m_bpm); }
@@ -1034,6 +1036,8 @@ synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
 	dco1_glide2(pImpl->dco1_last2),
 	dco2_glide1(pImpl->dco2_last1),
 	dco2_glide2(pImpl->dco2_last2),
+	out1_volume(1.0f), out2_volume(1.0f),
+	out1_panning(0.0f), out2_panning(0.0f),
 	sustain1(false), sustain2(false)
 {
 }
@@ -1816,9 +1820,10 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 			if (on1) {
 				pv = m_note1[key];
 				if (pv && pv->note1 >= 0) {
-					if (m_ctl1.sustain) {
+					if (m_ctl1.sustain)
 						pv->sustain1 = true;
-					} else {
+					else
+					if (!pv->sustain1) {
 						if (pv->dca1_env.stage != synthv1_env::Release) {
 							m_dca1.env.note_off(&pv->dca1_env);
 							m_dcf1.env.note_off(&pv->dcf1_env);
@@ -1844,9 +1849,10 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 			if (on2) {
 				pv = m_note2[key];
 				if (pv && pv->note2 >= 0) {
-					if (m_ctl2.sustain) {
+					if (m_ctl2.sustain)
 						pv->sustain2 = true;
-					} else {
+					else
+					if (!pv->sustain2) {
 						if (pv->dca2_env.stage != synthv1_env::Release) {
 							m_dca2.env.note_off(&pv->dca2_env);
 							m_dcf2.env.note_off(&pv->dcf2_env);
@@ -1934,6 +1940,21 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 					m_ctl2.sustain = bool(value >= 64);
 				}
 				break;
+			case 0x42:
+				// sustenuto pedal (cc#66)
+				if (on1) {
+					if (value <	64)
+						allSustainOff_1();
+					else
+						allSustainOn_1();
+				}
+				if (on2) {
+					if (value <	64)
+						allSustainOff_2();
+					else
+						allSustainOn_1();
+				}
+				break;
 			case 0x78:
 				// all sound off (cc#120)
 				allSoundOff();
@@ -1965,6 +1986,28 @@ void synthv1_impl::process_midi ( uint8_t *data, uint32_t size )
 
 	// asynchronous event notification...
 	m_midi_in.schedule_event();
+}
+
+
+// all sound off
+
+void synthv1_impl::allSoundOff (void)
+{
+	m_chorus.setSampleRate(m_srate);
+	m_chorus.reset();
+
+	for (uint16_t k = 0; k < m_nchannels; ++k) {
+		m_phaser[k].setSampleRate(m_srate);
+		m_delay[k].setSampleRate(m_srate);
+		m_comp[k].setSampleRate(m_srate);
+		m_flanger[k].reset();
+		m_phaser[k].reset();
+		m_delay[k].reset();
+		m_comp[k].reset();
+	}
+
+	m_reverb.setSampleRate(m_srate);
+	m_reverb.reset();
 }
 
 
@@ -2090,25 +2133,27 @@ void synthv1_impl::allSustainOff_2 (void)
 }
 
 
-// all sound off
+// sustain all notes on (sustenuto)
 
-void synthv1_impl::allSoundOff (void)
+void synthv1_impl::allSustainOn_1 (void)
 {
-	m_chorus.setSampleRate(m_srate);
-	m_chorus.reset();
-
-	for (uint16_t k = 0; k < m_nchannels; ++k) {
-		m_phaser[k].setSampleRate(m_srate);
-		m_delay[k].setSampleRate(m_srate);
-		m_comp[k].setSampleRate(m_srate);
-		m_flanger[k].reset();
-		m_phaser[k].reset();
-		m_delay[k].reset();
-		m_comp[k].reset();
+	synthv1_voice *pv = m_play_list.next();
+	while (pv) {
+		if (pv->note1 >= 0 && !pv->sustain1)
+			pv->sustain1 = true;
+		pv = pv->next();
 	}
+}
 
-	m_reverb.setSampleRate(m_srate);
-	m_reverb.reset();
+
+void synthv1_impl::allSustainOn_2 (void)
+{
+	synthv1_voice *pv = m_play_list.next();
+	while (pv) {
+		if (pv->note2 >= 0 && !pv->sustain2)
+			pv->sustain2 = true;
+		pv = pv->next();
+	}
 }
 
 

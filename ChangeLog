@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- Sustenuto pedal controller (MIDI CC#66) is now implemented.
+  (EXPERIMENTAL)
 - Have some tolerance for buffer-size changes. (EXPERIMENTAL)
 - All builds default to Qt6 (Qt >= 6.1) where available.
 - CMake is now the official build system.
