@@ -159,7 +159,7 @@ endif ()
 
 
 # Find package modules
-find_package (PkgConfig REQUIRED)
+include (FindPkgConfig)
 
 # Check for JACK libraries.
 if (CONFIG_JACK)
