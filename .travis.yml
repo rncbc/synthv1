@@ -28,7 +28,7 @@ before_script:
 - git fetch --unshallow --tags -q
 
 script:
-- source /opt/qtbase6-static/*/bin/qtbase6-static-env.sh
+- source /opt/qt6.1-static/bin/qt6.1-static-env.sh
 - cmake .
 - make
 - sudo make install
