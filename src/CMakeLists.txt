@@ -190,13 +190,13 @@ if (CONFIG_LV2)
     install (FILES ${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}_lv2.dll
       RENAME ${PROJECT_NAME}.dll
       DESTINATION ${CONFIG_LV2DIR}/${PROJECT_NAME}.lv2)
-	install (FILES ${CMAKE_CURRENT_BINARY_DIR}/manifest-win32.ttl
+	install (FILES ${PROJECT_NAME}.lv2/manifest-win32.ttl
       RENAME manifest.dll
       DESTINATION ${CONFIG_LV2DIR}/${PROJECT_NAME}.lv2)
-	install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.ttl
+	install (FILES ${PROJECT_NAME}.lv2/${PROJECT_NAME}.ttl
       DESTINATION ${CONFIG_LV2DIR}/${PROJECT_NAME}.lv2)
-	install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_ui-win32.ttl
-      RENAME ${PROJECT_NAME}_ui.dll
+	install (FILES ${PROJECT_NAME}.lv2/${PROJECT_NAME}_ui-win32.ttl
+      RENAME ${PROJECT_NAME}_ui.ttl
       DESTINATION ${CONFIG_LV2DIR}/${PROJECT_NAME}.lv2)
   endif ()
 endif ()
