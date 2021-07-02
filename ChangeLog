@@ -6,7 +6,10 @@ ChangeLog
 
 GIT HEAD
 
-- Add support for LV2 UI Windows (by AnClark). (EXPERIMENTAL)
+- Fixed some ages old Glide/portamento potential crash bug
+  (reported by AnClark GH#17, thanks). (EXPERIMENTAL)
+- Add support for LV2 UI Windows platform (by AnClark, GH#14).
+  (EXPERIMENTAL)
 - Sustenuto pedal controller (MIDI CC#66) is now implemented.
   (EXPERIMENTAL)
 - Have some tolerance for buffer-size changes. (EXPERIMENTAL)
