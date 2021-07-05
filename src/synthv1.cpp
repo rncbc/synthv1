@@ -590,18 +590,21 @@ struct synthv1_key
 
 struct synthv1_glide
 {
-	synthv1_glide(float& freq) : m_freq(freq) { reset(); }
+	synthv1_glide(float& last) : m_last(last) { reset(); }
 
 	void reset( uint32_t frames = 0, float freq = 0.0f )
 	{
 		m_frames = frames;
 
 		if (m_frames > 0) {
-			m_step = (m_freq - freq) / float(m_frames);
+			m_freq = m_last;
+			m_step = (m_last - freq) / float(m_frames);
 		} else {
 			m_freq = freq;
 			m_step = 0.0f;
 		}
+
+		m_last = freq;
 	}
 
 	float tick()
@@ -610,6 +613,7 @@ struct synthv1_glide
 			m_freq -= m_step;
 			--m_frames;
 		}
+
 		return m_freq;
 	}
 
@@ -617,9 +621,10 @@ private:
 
 	uint32_t m_frames;
 
-	float m_step;
+	float  m_step;
+	float  m_freq;
 
-	float& m_freq;
+	float& m_last;
 };
 
 
@@ -2502,19 +2507,20 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				const float dco21 = pv->dco2_sample1 * pv->dco2_bal.value(j, 0);
 				const float dco22 = pv->dco2_sample2 * pv->dco2_bal.value(j, 1);
 
+				const float dco1_fmod
+					= (m_ctl1.pitchbend + modwheel1 * lfo1);
+				const float dco2_fmod
+					= (m_ctl2.pitchbend + modwheel2 * lfo2);
+
 				pv->dco1_sample1 = pv->dco11.sample(pv->dco1_freq1
-					* (m_ctl1.pitchbend + modwheel1 * lfo1)
-					+ pv->dco1_glide1.tick());
+					* dco1_fmod + pv->dco1_glide1.tick());
 				pv->dco1_sample2 = pv->dco12.sample(pv->dco1_freq2
-					* (m_ctl1.pitchbend + modwheel1 * lfo1)
-					+ pv->dco1_glide2.tick());
+					* dco1_fmod + pv->dco1_glide2.tick());
 
 				pv->dco2_sample1 = pv->dco21.sample(pv->dco2_freq1
-					* (m_ctl2.pitchbend + modwheel2 * lfo2)
-					+ pv->dco2_glide1.tick());
+					* dco2_fmod + pv->dco2_glide1.tick());
 				pv->dco2_sample2 = pv->dco22.sample(pv->dco2_freq2
-					* (m_ctl2.pitchbend + modwheel2 * lfo2)
-					+ pv->dco2_glide2.tick());
+					* dco2_fmod	+ pv->dco2_glide2.tick());
 
 				if (lfo1_enabled) {
 					pv->lfo1_sample = pv->lfo1.sample(lfo1_freq
