@@ -4,15 +4,13 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.23  2021-07-07  An Early-Summer'21 Release.
 
 - Fixed some ages old Glide/portamento potential crash bug
-  (reported by AnClark GH#17, thanks). (EXPERIMENTAL)
-- Add support for LV2 UI Windows platform (by AnClark, GH#14).
-  (EXPERIMENTAL)
+  (reported by AnClark).
+- Add support for LV2 UI Windows platform (by AnClark).
 - Sustenuto pedal controller (MIDI CC#66) is now implemented.
-  (EXPERIMENTAL)
-- Have some tolerance for buffer-size changes. (EXPERIMENTAL)
+- Have some tolerance for buffer-size changes.
 - All builds default to Qt6 (Qt >= 6.1) where available.
 - CMake is now the official build system.
 
