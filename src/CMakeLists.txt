@@ -191,7 +191,7 @@ if (CONFIG_LV2)
       RENAME ${PROJECT_NAME}.dll
       DESTINATION ${CONFIG_LV2DIR}/${PROJECT_NAME}.lv2)
     install (FILES ${PROJECT_NAME}.lv2/manifest-win32.ttl
-      RENAME manifest.dll
+      RENAME manifest.ttl
       DESTINATION ${CONFIG_LV2DIR}/${PROJECT_NAME}.lv2)
     install (FILES ${PROJECT_NAME}.lv2/${PROJECT_NAME}.ttl
       DESTINATION ${CONFIG_LV2DIR}/${PROJECT_NAME}.lv2)
