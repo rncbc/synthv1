@@ -45,7 +45,11 @@ synthv1widget_keybd::synthv1widget_keybd ( QWidget *pParent )
 	: QWidget(pParent)
 {
 	const QFont& font = QWidget::font();
+#if QT_VERSION < QT_VERSION_CHECK(6, 2, 0)
 	QWidget::setFont(QFont(font.family(), font.pointSize() - 3));
+#else
+	QWidget::setFont(QFont(QStringList() << font.family(), font.pointSize() - 3));
+#endif
 	QWidget::setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 	QWidget::setMinimumSize(QSize(440, 22));
 	QWidget::setMouseTracking(true);

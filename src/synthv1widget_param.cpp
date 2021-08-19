@@ -137,7 +137,11 @@ unsigned int synthv1widget_param_style::g_iRefCount = 0;
 synthv1widget_param::synthv1widget_param ( QWidget *pParent ) : QWidget(pParent)
 {
 	const QFont& font = QWidget::font();
+#if QT_VERSION < QT_VERSION_CHECK(6, 2, 0)
 	const QFont font2(font.family(), font.pointSize() - 2);
+#else
+	const QFont font2(QStringList() << font.family(), font.pointSize() - 2);
+#endif
 	QWidget::setFont(font2);
 
 	m_fValue = 0.0f;
@@ -808,7 +812,11 @@ QString synthv1widget_radio::valueText (void) const
 void synthv1widget_radio::insertItems ( int iIndex, const QStringList& items )
 {
 	const QFont& font = synthv1widget_param::font();
-	const QFont font1(font.family(), font.pointSize() - 1);
+#if QT_VERSION < QT_VERSION_CHECK(6, 2, 0)
+	const QFont font1(font.family(), font.pointSize() - 2);
+#else
+	const QFont font1(QStringList() << font.family(), font.pointSize() - 1);
+#endif
 
 	QGridLayout *pGridLayout
 		= static_cast<QGridLayout *> (synthv1widget_param::layout());

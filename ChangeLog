@@ -4,6 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Fixed deprecate warnings in preparation for Qt >= 6.2.
+
+
 0.9.23  2021-07-07  An Early-Summer'21 Release.
 
 - Fixed some ages old Glide/portamento potential crash bug
