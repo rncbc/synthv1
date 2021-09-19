@@ -20,6 +20,7 @@ before_install:
 - sudo apt-get update -qq
 
 install:
+- sudo apt-get remove  -qq cmake cmake-data
 - sudo apt-get install -qq cmake
 - sudo apt-get install -qq qtbase6-static qttools6-static
 - sudo apt-get install -qq qtwayland6-static qtsvg6-static
