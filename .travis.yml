@@ -15,10 +15,12 @@ branches:
   - master
 
 before_install:
+- sudo add-apt-repository --yes ppa:rncbc/libs-focal
 - sudo add-apt-repository --yes ppa:rncbc/qt6.2-static-focal
 - sudo apt-get update -qq
 
 install:
+- sudo apt-get install -qq cmake
 - sudo apt-get install -qq qtbase6-static qttools6-static
 - sudo apt-get install -qq qtwayland6-static qtsvg6-static
 - sudo apt-get install -qq qttranslations6-static
