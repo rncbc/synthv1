@@ -15,7 +15,7 @@ branches:
   - master
 
 before_install:
-- sudo add-apt-repository --yes ppa:rncbc/qt6.1-static-focal
+- sudo add-apt-repository --yes ppa:rncbc/qt6.2-static-focal
 - sudo apt-get update -qq
 
 install:
@@ -28,7 +28,7 @@ before_script:
 - git fetch --unshallow --tags -q
 
 script:
-- source /opt/qt6.1-static/bin/qt6.1-static-env.sh
+- source /opt/qt6.2-static/bin/qt6.2-static-env.sh
 - cmake .
 - make
 - sudo make install

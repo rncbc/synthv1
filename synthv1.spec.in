@@ -21,6 +21,8 @@
 
 %define _prefix	@ac_prefix@
 
+%define qt_path	/opt/qt6.2-static
+
 %if %{defined fedora}
 %define debug_package %{nil}
 %endif
@@ -96,8 +98,9 @@ Obsoletes:	%{name}-common <= %{version}
 %setup -q
 
 %build
-source /opt/qt6.1-static/bin/qt6.1-static-env.sh
-cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -Wno-dev -B build -S .
+cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} \
+      -DCMAKE_PREFIX_PATH=%{qt_path} \
+      -Wno-dev -B build -S .
 %__make %{?_smp_mflags} -C build
 
 %install
