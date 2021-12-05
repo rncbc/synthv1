@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Dropped autotools (autoconf, automake, etc.) build system.
 - Fixed deprecate warnings in preparation for Qt >= 6.2.
 
 
