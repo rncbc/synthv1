@@ -115,7 +115,7 @@ cmake --install build
 
 %files -n %{name}-jack
 %defattr(-,root,root)
-%doc AUTHORS COPYING ChangeLog README TODO
+%doc README LICENSE ChangeLog
 #dir %{_datadir}/applications
 %dir %{_datadir}/metainfo
 #dir %{_datadir}/mime
