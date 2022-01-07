@@ -132,8 +132,8 @@ cmake --install build
 #dir %{_datadir}/man/fr
 #dir %{_datadir}/man/fr/man1
 %{_bindir}/%{name}_jack
-%{_datadir}/metainfo/%{name}.appdata.xml
-%{_datadir}/applications/%{name}.desktop
+%{_datadir}/metainfo/org.rncbc.%{name}.xml
+%{_datadir}/applications/org.rncbc.%{name}.desktop
 %{_datadir}/mime/packages/%{name}.xml
 %{_datadir}/icons/hicolor/32x32/apps/%{name}.png
 %{_datadir}/icons/hicolor/32x32/mimetypes/application-x-%{name}*.png
