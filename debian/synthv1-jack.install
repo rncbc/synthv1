@@ -1,6 +1,6 @@
 debian/tmp/usr/bin/synthv1_jack
-debian/tmp/usr/share/metainfo/synthv1.appdata.xml
-debian/tmp/usr/share/applications/synthv1.desktop
+debian/tmp/usr/share/metainfo/org.rncbc.synthv1.xml
+debian/tmp/usr/share/applications/org.rncbc.synthv1.desktop
 debian/tmp/usr/share/mime/packages/synthv1.xml
 debian/tmp/usr/share/icons/hicolor/32x32/apps/synthv1.png
 debian/tmp/usr/share/icons/hicolor/32x32/mimetypes/application-x-synthv1*.png
