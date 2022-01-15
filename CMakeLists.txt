@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.15)
 
 project (synthv1
-  VERSION 0.9.24
+  VERSION 0.9.25
   DESCRIPTION "an old-school polyphonic synthesizer"
   LANGUAGES C CXX)
 
