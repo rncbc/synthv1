@@ -1,7 +1,7 @@
 // synthv1_nsm.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2022, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -127,6 +127,7 @@ private:
 	lo_server  m_server;
 #endif
 	bool       m_active;
+	bool       m_dirty;
 	QString    m_manager;
 	QString    m_capabilities;
 	QString    m_path_name;

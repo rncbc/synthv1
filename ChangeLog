@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Avoid issuing NSM dirty messages as much as possible.
 - Prepping bump to next v0.9.25...
 
 
