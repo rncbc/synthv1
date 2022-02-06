@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- Migrated command line parsing to QCommandLineParser/Option
+  (Qt >= 5.2) (EXPERIMENTAL)
 - Avoid issuing NSM dirty messages as much as possible.
 - Prepping bump to next v0.9.25...
 

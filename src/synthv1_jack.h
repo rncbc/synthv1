@@ -1,7 +1,7 @@
 // synthv1_jack.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2022, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -171,6 +171,9 @@ protected:
 
 	// Argument parser method.
 	bool parse_args();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 2, 0)
+	void show_error(const QString& msg);
+#endif
 
 	// Startup method.
 	bool setup();
