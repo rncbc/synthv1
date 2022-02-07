@@ -148,9 +148,10 @@ if (QT_VERSION VERSION_GREATER_EQUAL 6.0.0)
 endif ()
 
 # Add some debugger flags.
-if (CONFIG_DEBUG AND CONFIG_JACK AND UNIX AND NOT APPLE)
-  target_compile_options (${PROJECT_NAME}_jack PRIVATE -g -fsanitize=address -fno-omit-frame-pointer)
-  target_link_libraries (${PROJECT_NAME}_jack PRIVATE asan)
+if (CONFIG_DEBUG AND UNIX AND NOT APPLE)
+  set (CONFIG_DEBUG_OPTIONS -g -fsanitize=address -fno-omit-frame-pointer)
+  target_compile_options (${PROJECT_NAME} PRIVATE ${CONFIG_DEBUG_OPTIONS})
+  target_link_options (${PROJECT_NAME} PRIVATE ${CONFIG_DEBUG_OPTIONS})
 endif ()
 
 target_link_libraries (${PROJECT_NAME}    PUBLIC Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Xml)
