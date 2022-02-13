@@ -1,7 +1,7 @@
 // synthv1_lv2.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2022, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -166,7 +166,7 @@ synthv1_lv2::synthv1_lv2 (
 			host_options = (const LV2_Options_Option *) host_feature->data;
 	}
 
-	uint32_t buffer_size = 512; // maybe some safe default?
+	uint32_t buffer_size = 1024; // maybe some safe default?
 
 	for (int i = 0; host_options && host_options[i].key; ++i) {
 		const LV2_Options_Option *host_option = &host_options[i];

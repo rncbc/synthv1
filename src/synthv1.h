@@ -1,7 +1,7 @@
 // synthv1.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2022, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ class synthv1
 {
 public:
 
-	synthv1(uint16_t nchannels = 2, float srate = 44100.0f);
+	synthv1(uint16_t nchannels = 2, float srate = 44100.0f, uint32_t nsize = 1024);
 
 	virtual ~synthv1();
 

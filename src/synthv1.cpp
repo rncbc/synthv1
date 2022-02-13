@@ -1,7 +1,7 @@
 // synthv1.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2022, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -830,7 +830,7 @@ class synthv1_impl
 {
 public:
 
-	synthv1_impl(synthv1 *pSynth, uint16_t nchannels, float srate);
+	synthv1_impl(synthv1 *pSynth, uint16_t nchannels, float srate, uint32_t nsize);
 
 	~synthv1_impl();
 
@@ -1047,7 +1047,7 @@ synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
 // engine constructor
 
 synthv1_impl::synthv1_impl (
-	synthv1 *pSynth, uint16_t nchannels, float srate )
+	synthv1 *pSynth, uint16_t nchannels, float srate, uint32_t nsize )
 	: m_controls(pSynth), m_programs(pSynth), m_midi_in(pSynth),
 		m_bpm(180.0f), m_nvoices(0), m_running(false)
 {
@@ -1099,6 +1099,9 @@ synthv1_impl::synthv1_impl (
 
 	// set default sample rate
 	setSampleRate(srate);
+
+	// set default buffer size
+	setBufferSize(nsize);
 
 	// reset all voices
 	allControllersOff();
@@ -2780,9 +2783,9 @@ bool synthv1_impl::running ( bool on )
 // synthv1 - decl.
 //
 
-synthv1::synthv1 ( uint16_t nchannels, float srate )
+synthv1::synthv1 ( uint16_t nchannels, float srate, uint32_t nsize )
 {
-	m_pImpl = new synthv1_impl(this, nchannels, srate);
+	m_pImpl = new synthv1_impl(this, nchannels, srate, nsize);
 }
 
 
