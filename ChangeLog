@@ -9,7 +9,6 @@ GIT HEAD
 - Migrated command line parsing to QCommandLineParser/Option
   (Qt >= 5.2) (EXPERIMENTAL)
 - Avoid issuing NSM dirty messages as much as possible.
-- Prepping bump to next v0.9.25...
 
 
 0.9.24  2022-01-09  A Winter'22 Release.
