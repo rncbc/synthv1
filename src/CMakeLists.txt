@@ -239,9 +239,9 @@ if (CONFIG_JACK)
       DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
     install (FILES mimetypes/org.rncbc.${PROJECT_NAME}.xml
       DESTINATION ${CMAKE_INSTALL_DATADIR}/mime/packages)
-    install (FILES mimetypes/application-x-${PROJECT_NAME}-preset.png
+    install (FILES mimetypes/org.rncbc.${PROJECT_NAME}.application-x-${PROJECT_NAME}-preset.png
       DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/32x32/mimetypes)
-    install (FILES mimetypes/application-x-${PROJECT_NAME}-preset.svg
+    install (FILES mimetypes/org.rncbc.${PROJECT_NAME}.application-x-${PROJECT_NAME}-preset.svg
       DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/mimetypes)
   endif ()
 endif ()
