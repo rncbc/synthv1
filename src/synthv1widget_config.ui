@@ -3,7 +3,7 @@
  <author>rncbc aka Rui Nuno Capela</author>
  <comment>synthv1 - an old-school polyphonic synthesizer
 
-  Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+  Copyright (C) 2012-2022, rncbc aka Rui Nuno Capela. All rights reserved.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@
    <string>Configure</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="synthv1.qrc">:/images/synthv1.png</iconset>
+   <iconset resource="synthv1.qrc">:/images/synthv1.svg</iconset>
   </property>
   <layout class="QVBoxLayout">
    <item>
