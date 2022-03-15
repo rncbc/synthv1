@@ -303,10 +303,10 @@ endif ()
 add_subdirectory (src)
 
 
-configure_file (synthv1.spec.in synthv1.spec IMMEDIATE @ONLY)
+if (UNIX AND NOT APPLE)
+  configure_file (${PROJECT_NAME}.spec.in ${PROJECT_NAME}.spec IMMEDIATE @ONLY)
+endif ()
 
-install (FILES synthv1.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
-install (FILES synthv1.fr.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/fr/man1 RENAME synthv1.1)
 
 # Configuration status
 macro (SHOW_OPTION text value)
