@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Added missing file code to desktop exec entry (standalone only).
 - Main application icon is now presented in scalable format (SVG).
 - Migrated command line parsing to QCommandLineParser/Option
   (Qt >= 5.2) (EXPERIMENTAL)
