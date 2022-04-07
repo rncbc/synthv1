@@ -4,12 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.25  2022-04-07  A Spring'22 Release.
 
 - Added missing file code to desktop exec entry (standalone only).
 - Main application icon is now presented in scalable format (SVG).
 - Migrated command line parsing to QCommandLineParser/Option
-  (Qt >= 5.2) (EXPERIMENTAL)
+  (Qt >= 5.2)
 - Avoid issuing NSM dirty messages as much as possible.
 
 
