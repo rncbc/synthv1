@@ -100,7 +100,7 @@ Obsoletes:	%{name}-common <= %{version}
 %setup -q
 
 %build
-source /opt/qt6.2-static/bin/qt6.2-static-env.sh
+source /opt/qt6.3-static/bin/qt6.3-static-env.sh
 CXX=%{CXX} \
 cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -Wno-dev -B build
 cmake --build build %{?_smp_mflags}
