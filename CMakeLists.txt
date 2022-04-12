@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.15)
 
 project (synthv1
-  VERSION 0.9.25
+  VERSION 0.9.26
   DESCRIPTION "an old-school polyphonic synthesizer"
   LANGUAGES C CXX)
 
@@ -141,7 +141,7 @@ else ()
   find_package (QT QUIET NAMES Qt5)
 endif ()
 
-find_package (Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Xml)
+find_package (Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Xml Svg)
 
 #find_package (Qt${QT_VERSION_MAJOR}LinguistTools)
 
