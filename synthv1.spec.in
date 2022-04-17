@@ -25,6 +25,12 @@
 %define debug_package %{nil}
 %endif
 
+%if 0%{?fedora_version} >= 34 || 0%{?suse_version} > 1500
+%define qt_major_version  6
+%else
+%define qt_major_version  5
+%endif
+
 Summary:	An old-school polyphonic subtractive synthesizer
 Name:		%{name}
 Version:	%{version}
@@ -57,11 +63,27 @@ BuildRequires:	alsa-lib-devel
 BuildRequires:	libjack-devel
 BuildRequires:	alsa-devel
 %endif
+%if 0%{qt_major_version} == 6
 BuildRequires:	qtbase6-static >= 6.1
-BuildRequires:	qttools6-static >= 6.1
-BuildRequires:	qttranslations6-static >= 6.1
-BuildRequires:	qtwayland6-static >= 6.1
-BuildRequires:	qtsvg6-static >= 6.1
+BuildRequires:	qttools6-static
+BuildRequires:	qttranslations6-static
+BuildRequires:	qtwayland6-static
+BuildRequires:	qtsvg6-static
+%else
+%if %{defined fedora}
+BuildRequires:	qt5-qtbase-devel >= 5.1
+BuildRequires:	qt5-qttools-devel
+BuildRequires:	qt5-qtwayland-devel
+BuildRequires:	qt5-qtsvg-devel
+BuildRequires:	qt5-linguist
+%else
+BuildRequires:	libqt5-qtbase-devel >= 5.1
+BuildRequires:	libqt5-qttools-devel
+BuildRequires:	libqt5-qtwayland-devel
+BuildRequires:	libqt5-qtsvg-devel
+BuildRequires:	libqt5-linguist-devel
+%endif
+%endif
 BuildRequires:	liblo-devel
 BuildRequires:	lv2-devel
 
