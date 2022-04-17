@@ -124,7 +124,7 @@ Obsoletes:	%{name}-common <= %{version}
 %build
 %if 0%{qt_major_version} == 6
 source /opt/qt6.3-static/bin/qt6.3-static-env.sh
-#endif
+%endif
 CXX=%{CXX} \
 cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -Wno-dev -B build
 cmake --build build %{?_smp_mflags}
