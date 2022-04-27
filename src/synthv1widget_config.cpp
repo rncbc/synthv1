@@ -59,6 +59,9 @@ synthv1widget_config::synthv1widget_config (
 {
 	// Setup UI struct...
 	m_ui.setupUi(this);
+#if QT_VERSION < QT_VERSION_CHECK(6, 1, 0)
+	QDialog::setWindowIcon(QIcon(":/images/synthv1.png"));
+#endif
 
 	// Note names.
 	QStringList notes;
