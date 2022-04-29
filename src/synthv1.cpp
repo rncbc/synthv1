@@ -1037,8 +1037,8 @@ synthv1_voice::synthv1_voice ( synthv1_impl *pImpl ) :
 	dco1_glide2(pImpl->dco1_last2),
 	dco2_glide1(pImpl->dco2_last1),
 	dco2_glide2(pImpl->dco2_last2),
-	out1_volume(1.0f), out2_volume(1.0f),
 	out1_panning(0.0f), out2_panning(0.0f),
+	out1_volume(1.0f), out2_volume(1.0f),
 	sustain1(false), sustain2(false)
 {
 }
