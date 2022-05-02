@@ -12,7 +12,9 @@ Standards-Version: 3.9.7
 
 Package: synthv1-jack
 Architecture: any
-Depends: libjack0 | libjack-jackd2-0, ${misc:Depends}, ${shlibs:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends},
+  qt6-qpa-plugins | libqt5opengl5,
+  libjack0 | libjack-jackd2-0
 Replaces: synthv1-common (<= ${source:Version}), synthv1 (<= ${source:Version})
 Description: An old-school polyphonic subtractive synthesizer - JACK standalone
   An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
@@ -22,7 +24,8 @@ Description: An old-school polyphonic subtractive synthesizer - JACK standalone
 
 Package: synthv1-lv2
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends},
+  qt6-qpa-plugins | libqt5opengl5
 Replaces: synthv1-common (<= ${source:Version})
 Description: An old-school polyphonic subtractive synthesizer - LV2 plugin
   An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
