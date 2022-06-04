@@ -4,6 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Corrected an incredible mistake introduced in the last year's
+  Glide/portamento protential crash fix. (EXPERIMENTAL)
+
+
 0.9.25  2022-04-07  A Spring'22 Release.
 
 - Added missing file code to desktop exec entry (standalone only).
