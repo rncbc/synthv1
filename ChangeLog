@@ -8,6 +8,7 @@ GIT HEAD
 
 - Corrected an incredible mistake introduced in the last year's
   Glide/portamento protential crash fix. (EXPERIMENTAL)
+- Added Qt::Svg module as required at build time.
 
 
 0.9.25  2022-04-07  A Spring'22 Release.
