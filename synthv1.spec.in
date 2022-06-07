@@ -17,7 +17,7 @@
 
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 66.1
+%define release 67.1
 
 %define _prefix	@ac_prefix@
 
@@ -177,6 +177,8 @@ cmake --install build
 
 
 %changelog
+* Tue Jun  7 2022 Rui Nuno Capela <rncbc@rncbc.org> 0.9.26
+- An End-of-Spring'22 Release.
 * Thu Apr  7 2022 Rui Nuno Capela <rncbc@rncbc.org> 0.9.25
 - A Spring'22 Release.
 * Sun Jan  9 2022 Rui Nuno Capela <rncbc@rncbc.org> 0.9.24
