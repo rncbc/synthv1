@@ -67,19 +67,16 @@ BuildRequires:	alsa-devel
 BuildRequires:	qtbase6-static >= 6.1
 BuildRequires:	qttools6-static
 BuildRequires:	qttranslations6-static
-BuildRequires:	qtwayland6-static
 BuildRequires:	qtsvg6-static
 %else
 %if %{defined fedora}
 BuildRequires:	qt5-qtbase-devel >= 5.1
 BuildRequires:	qt5-qttools-devel
-BuildRequires:	qt5-qtwayland-devel
 BuildRequires:	qt5-qtsvg-devel
 BuildRequires:	qt5-linguist
 %else
 BuildRequires:	libqt5-qtbase-devel >= 5.1
 BuildRequires:	libqt5-qttools-devel
-BuildRequires:	libqt5-qtwayland-devel
 BuildRequires:	libqt5-qtsvg-devel
 BuildRequires:	libqt5-linguist-devel
 %endif
