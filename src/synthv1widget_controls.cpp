@@ -101,7 +101,7 @@ const synthv1widget_controls::Names& synthv1widget_controls::controllerNames (vo
 		{ 45, QT_TR_NOOP("Effect Control 2 (fine)") },
 		{ 64, QT_TR_NOOP("Hold Pedal (on/off)") },
 		{ 65, QT_TR_NOOP("Portamento (on/off)") },
-		{ 66, QT_TR_NOOP("Sustenuto Pedal (on/off)") },
+		{ 66, QT_TR_NOOP("Sostenuto Pedal (on/off)") },
 		{ 67, QT_TR_NOOP("Soft Pedal (on/off)") },
 		{ 68, QT_TR_NOOP("Legato Pedal (on/off)") },
 		{ 69, QT_TR_NOOP("Hold 2 Pedal (on/off)") },
@@ -120,7 +120,7 @@ const synthv1widget_controls::Names& synthv1widget_controls::controllerNames (vo
 		{ 82, QT_TR_NOOP("General Purpose Button 3 (on/off)") },
 		{ 83, QT_TR_NOOP("General Purpose Button 4 (on/off)") },
 		{ 91, QT_TR_NOOP("Effects Level") },
-		{ 92, QT_TR_NOOP("Tremulo Level") },
+		{ 92, QT_TR_NOOP("Tremolo Level") },
 		{ 93, QT_TR_NOOP("Chorus Level") },
 		{ 94, QT_TR_NOOP("Celeste Level") },
 		{ 95, QT_TR_NOOP("Phaser Level") },
@@ -182,7 +182,7 @@ const synthv1widget_controls::Names& synthv1widget_controls::rpnNames (void)
 	if (s_rpnNames.isEmpty()) {
 		// Pre-load RPN-names hash table...
 		for (int i = 0; s_rpns[i].name; ++i) {
-			s_rpnNames.insert(s_rpns[i].param,
+			s_rpnNames.insert(s_rpns[i].param,Trem
 				QObject::tr(s_rpns[i].name, "rpnName"));
 		}
 	}
