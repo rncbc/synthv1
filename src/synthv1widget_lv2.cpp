@@ -1,7 +1,7 @@
 // synthv1widget_lv2.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2022, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -62,19 +62,20 @@ synthv1widget_lv2::synthv1widget_lv2 ( synthv1_lv2 *pSynth,
 		// Special style paths...
 		if (QDir(CONFIG_PLUGINSDIR).exists())
 			pApp->addLibraryPath(CONFIG_PLUGINSDIR);
-		// Custom color/style themes...
-		synthv1_config *pConfig = synthv1_config::getInstance();
-		if (pConfig) {
-			if (!pConfig->sCustomColorTheme.isEmpty()) {
-				QPalette pal;
-				if (synthv1widget_palette::namedPalette(
-						pConfig, pConfig->sCustomColorTheme, pal))
-					pApp->setPalette(pal);
-			}
-			if (!pConfig->sCustomStyleTheme.isEmpty()) {
-				pApp->setStyle(
-					QStyleFactory::create(pConfig->sCustomStyleTheme));
-			}
+	}
+
+	// Custom color/style themes...
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig) {
+		if (!pConfig->sCustomColorTheme.isEmpty()) {
+			QPalette pal;
+			if (synthv1widget_palette::namedPalette(
+					pConfig, pConfig->sCustomColorTheme, pal))
+				synthv1widget::setPalette(pal);
+		}
+		if (!pConfig->sCustomStyleTheme.isEmpty()) {
+			synthv1widget::setStyle(
+				QStyleFactory::create(pConfig->sCustomStyleTheme));
 		}
 	}
 

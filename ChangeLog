@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Custom color/style themes applies only to main widget only.
 - Fixed typos and updated some old MIDI GM2 Controller names.
 
 

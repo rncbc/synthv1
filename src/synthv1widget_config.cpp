@@ -24,6 +24,8 @@
 
 #include "synthv1widget_palette.h"
 
+#include "synthv1widget.h"
+
 #include "synthv1_ui.h"
 
 #include "synthv1_controls.h"
@@ -753,26 +755,29 @@ void synthv1widget_config::accept (void)
 			pConfig->sCustomStyleTheme.clear();
 		pConfig->fRandomizePercent = float(m_ui.RandomizePercentSpinBox->value());
 		int iNeedRestart = 0;
-		if (pConfig->sCustomStyleTheme != sOldCustomStyleTheme) {
-			if (pConfig->sCustomStyleTheme.isEmpty()) {
-				++iNeedRestart;
-			} else {
-				QApplication::setStyle(
-					QStyleFactory::create(pConfig->sCustomStyleTheme));
+		QWidget *pParentWidget = parentWidget();
+		if (pParentWidget) {
+			if (pConfig->sCustomStyleTheme != sOldCustomStyleTheme) {
+				if (pConfig->sCustomStyleTheme.isEmpty()) {
+					++iNeedRestart;
+				} else {
+					pParentWidget->setStyle(
+						QStyleFactory::create(pConfig->sCustomStyleTheme));
+				}
 			}
- 		}
- 		if (pConfig->sCustomColorTheme != sOldCustomColorTheme) {
-			if (pConfig->sCustomColorTheme.isEmpty()) {
-				++iNeedRestart;
-			} else {
-				QPalette pal;
-				if (synthv1widget_palette::namedPalette(
-						pConfig, pConfig->sCustomColorTheme, pal))
-					QApplication::setPalette(pal);
+			if (pConfig->sCustomColorTheme != sOldCustomColorTheme) {
+				if (pConfig->sCustomColorTheme.isEmpty()) {
+					++iNeedRestart;
+				} else {
+					QPalette pal;
+					if (synthv1widget_palette::namedPalette(
+							pConfig, pConfig->sCustomColorTheme, pal))
+						pParentWidget->setPalette(pal);
+				}
 			}
- 		}
+		}
 		// Show restart message if needed...
- 		if (iNeedRestart > 0) {
+		if (iNeedRestart > 0) {
 			QMessageBox::information(this,
 				tr("Information"),
 				tr("Some settings may be only effective\n"
