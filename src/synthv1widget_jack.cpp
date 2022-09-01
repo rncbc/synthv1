@@ -1,7 +1,7 @@
 // synthv1widget_jack.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2022, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -76,10 +76,10 @@ synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 			QPalette pal;
 			if (synthv1widget_palette::namedPalette(
 					pConfig, pConfig->sCustomColorTheme, pal))
-				QApplication::setPalette(pal);
+				synthv1widget::setPalette(pal);
 		}
 		if (!pConfig->sCustomStyleTheme.isEmpty()) {
-			QApplication::setStyle(
+			synthv1widget::setStyle(
 				QStyleFactory::create(pConfig->sCustomStyleTheme));
 		}
 	}
