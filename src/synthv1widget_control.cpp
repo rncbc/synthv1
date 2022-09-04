@@ -1,7 +1,7 @@
 // synthv1widget_control.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2022, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -203,10 +203,19 @@ synthv1::ParamIndex synthv1widget_control::controlIndex (void) const
 
 
 // Pseudo-destructor.
+void synthv1widget_control::cleanup (void)
+{
+	// Aint't dirty no more...
+	m_iDirtyCount = 0;
+
+	// Pseudo-singleton reference cleanup.
+	g_pInstance = nullptr;
+}
+
+
 void synthv1widget_control::closeEvent ( QCloseEvent *pCloseEvent )
 {
-	// Pseudo-singleton reference setup.
-	g_pInstance = nullptr;
+	cleanup();
 
 	// Sure acceptance and probable destruction (cf. WA_DeleteOnClose).
 	QDialog::closeEvent(pCloseEvent);
@@ -294,12 +303,10 @@ void synthv1widget_control::reset (void)
 	if (pConfig)
 		pConfig->saveControls(m_pControls);
 
-	// Aint't dirty no more...
-	m_iDirtyCount = 0;
+	cleanup();
 
 	// Bail out...
 	QDialog::accept();
-	QDialog::close();
 }
 
 
@@ -364,12 +371,10 @@ void synthv1widget_control::accept (void)
 	if (pConfig)
 		pConfig->saveControls(m_pControls);
 
-	// Aint't dirty no more...
-	m_iDirtyCount = 0;
+	cleanup();
 
 	// Just go with dialog acceptance...
 	QDialog::accept();
-	QDialog::close();
 }
 
 
@@ -398,9 +403,10 @@ void synthv1widget_control::reject (void)
 		}
 	}
 
+	cleanup();
+
 	// Just go with dialog rejection...
 	QDialog::reject();
-	QDialog::close();
 }
 
 
