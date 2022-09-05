@@ -99,7 +99,7 @@ option (CONFIG_LV2_PROGRAMS "Enable LV2 plug-in Programs support (default=yes)" 
 
 option (CONFIG_LV2_PATCH "Enable LV2 plug-in Patch support (default=yes)" 1)
 
-option (CONFIG_LV2_PORT_EVENT "Enable LV2 plug-in Port-event support (EXPERIMENTAL) (default=yes)" 1)
+option (CONFIG_LV2_PORT_EVENT "Enable LV2 plug-in Port-event support (default=yes)" 1)
 
 
 # Enable liblo availability.
@@ -336,7 +336,7 @@ show_option ("  LV2 plug-in UI Show interface support  . . . . . ." CONFIG_LV2_U
 show_option ("  LV2 plug-in UI Resize interface support  . . . . ." CONFIG_LV2_UI_RESIZE)
 show_option ("  LV2 plug-in Programs support . . . . . . . . . . ." CONFIG_LV2_PROGRAMS)
 show_option ("  LV2 plug-in Patch support  . . . . . . . . . . . ." CONFIG_LV2_PATCH)
-show_option ("  LV2 plug-in Port-event support (EXPERIMENTAL)  . ." CONFIG_LV2_PORT_EVENT)
+show_option ("  LV2 plug-in Port-event support . . . . . . . . . ." CONFIG_LV2_PORT_EVENT)
 show_option ("  OSC service support (liblo)  . . . . . . . . . . ." CONFIG_LIBLO)
 show_option ("  Non Session Management (NSM) support . . . . . . ." CONFIG_NSM)
 message   ("\n  Install prefix . . . . . . . . . . . . . . . . . .: ${CONFIG_PREFIX}\n")

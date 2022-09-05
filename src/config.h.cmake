@@ -85,7 +85,7 @@
 /* Define if LV2 Patch is supported. */
 #cmakedefine CONFIG_LV2_PATCH @CONFIG_LV2_PATCH@
 
-/* Define if LV2 Port-event is supported. (EXPERIMENTAL) */
+/* Define if LV2 Port-event is supported. */
 #cmakedefine CONFIG_LV2_PORT_EVENT @CONFIG_LV2_PORT_EVENT@
 
 /* Define if NSM support is available. */
