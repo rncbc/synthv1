@@ -64,7 +64,7 @@ BuildRequires:	libjack-devel
 BuildRequires:	alsa-devel
 %endif
 %if 0%{qt_major_version} == 6
-BuildRequires:	qtbase6-static >= 6.3
+BuildRequires:	qtbase6-static >= 6.1
 BuildRequires:	qttools6-static
 BuildRequires:	qttranslations6-static
 BuildRequires:	qtsvg6-static
