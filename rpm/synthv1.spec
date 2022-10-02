@@ -15,8 +15,8 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-%define name    @PACKAGE_TARNAME@
-%define version @PACKAGE_VERSION@
+%define name    synthv1
+%define version 0.9.26
 %define release 67.1
 
 %define _prefix	@ac_prefix@
