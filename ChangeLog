@@ -4,6 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Bumping into the next develop cycle/season...
+
+
 0.9.27  2022-10-04  An Early-Autumn'22 Release.
 
 - Fixed MIDI Controller... modeless dialog (de)instantiation.
