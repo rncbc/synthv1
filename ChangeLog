@@ -6,7 +6,8 @@ ChangeLog
 
 GIT HEAD
 
-- Bumping into the next develop cycle/season...
+- Although being deprecated to use, JACK Session support hopefuly
+  fixed once again. (EXPERIMENTAL)
 
 
 0.9.27  2022-10-04  An Early-Autumn'22 Release.
