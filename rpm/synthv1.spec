@@ -55,7 +55,7 @@ BuildRequires:	gcc8-c++ >= 8
 %define CXX		/usr/bin/g++-8
 %endif
 
-BuildRequires:	cmake >= 3.19
+BuildRequires:	cmake >= 3.15
 %if %{defined fedora}
 BuildRequires:	jack-audio-connection-kit-devel
 BuildRequires:	alsa-lib-devel
