@@ -56,30 +56,24 @@ BuildRequires:	gcc8-c++ >= 8
 %endif
 
 BuildRequires:	cmake >= 3.15
-%if %{defined fedora}
-BuildRequires:	jack-audio-connection-kit-devel
-BuildRequires:	alsa-lib-devel
-%else
-BuildRequires:	libjack-devel
-BuildRequires:	alsa-devel
-%endif
 %if 0%{qt_major_version} == 6
 BuildRequires:	qtbase6-static >= 6.1
 BuildRequires:	qttools6-static
 BuildRequires:	qttranslations6-static
 BuildRequires:	qtsvg6-static
 %else
-%if %{defined fedora}
-BuildRequires:	qt5-qtbase-devel >= 5.1
-BuildRequires:	qt5-qttools-devel
-BuildRequires:	qt5-qtsvg-devel
-BuildRequires:	qt5-linguist
-%else
-BuildRequires:	libqt5-qtbase-devel >= 5.1
-BuildRequires:	libqt5-qttools-devel
-BuildRequires:	libqt5-qtsvg-devel
-BuildRequires:	libqt5-linguist-devel
+BuildRequires:	pkgconfig(Qt5Core)
+BuildRequires:	pkgconfig(Qt5Gui)
+BuildRequires:	pkgconfig(Qt5Widgets)
+BuildRequires:	pkgconfig(Qt5Svg)
+BuildRequires:	pkgconfig(Qt5Xml)
 %endif
+%if %{defined fedora}
+BuildRequires:	jack-audio-connection-kit-devel
+BuildRequires:	alsa-lib-devel
+%else
+BuildRequires:	libjack-devel
+BuildRequires:	alsa-devel
 %endif
 BuildRequires:	liblo-devel
 BuildRequires:	lv2-devel
