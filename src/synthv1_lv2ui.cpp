@@ -456,16 +456,14 @@ LV2_SYMBOL_EXPORT const LV2UI_Descriptor *lv2ui_descriptor ( uint32_t index )
 	if (index == 1)
 		return &synthv1_lv2ui_x11_descriptor;
 	else
+#elif defined(CONFIG_LV2_UI_WINDOWS)
+	if (index == 1)
+		return &synthv1_lv2ui_windows_descriptor;
+	else
 #endif
 #ifdef CONFIG_LV2_UI_EXTERNAL
 	if (index == 2)
 		return &synthv1_lv2ui_external_descriptor;
-	else
-#endif
-#ifdef CONFIG_LV2_UI_WINDOWS
-	if (index == 3)
-		return &synthv1_lv2ui_windows_descriptor;
-	else
 #endif
 	return nullptr;
 }
