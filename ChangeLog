@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- Always restrict LV2 UI resize to designated minimum and maximum,
+  if any, widget sizes. (EXPERIMENTAL)
 - Although being deprecated to use, JACK Session support hopefuly
   fixed once again. (EXPERIMENTAL)
 
