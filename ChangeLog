@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- Mitigate NSM sending lots of dirty messages on SIGTERM signal
+  (EXPERIMENTAL) (drumkv1 GH issue #41 revisited).
 - Always restrict LV2 UI resize to designated minimum and maximum,
   if any, widget sizes. (EXPERIMENTAL)
 - Although being deprecated to use, JACK Session support hopefuly
