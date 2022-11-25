@@ -164,18 +164,6 @@ int synthv1_lv2ui_resize ( LV2UI_Handle ui, int width, int height )
 {
 	synthv1widget_lv2 *pWidget = static_cast<synthv1widget_lv2 *> (ui);
 	if (pWidget) {
-		const QSize& min_size = pWidget->minimumSize();
-		const QSize& max_size = pWidget->maximumSize();
-		if (width < min_size.width())
-			width = min_size.width();
-		else
-		if (width > max_size.width())
-			width = max_size.width();
-		if (height < min_size.width())
-			height = min_size.width();
-		else
-		if (height > max_size.width())
-			height = max_size.width();
 		pWidget->resize(width, height);
 		return 0;
 	} else {
