@@ -4,12 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.28  2022-12-29  An End-of-Year'22 Release.
 
-- Mitigate NSM sending lots of dirty messages on SIGTERM signal
-  (EXPERIMENTAL) (drumkv1 GH issue #41 revisited).
+- Mitigate NSM sending lots of dirty messages on SIGTERM signal.
 - Although being deprecated to use, JACK Session support hopefuly
-  fixed once again. (EXPERIMENTAL)
+  fixed once again.
 
 
 0.9.27  2022-10-04  An Early-Autumn'22 Release.
