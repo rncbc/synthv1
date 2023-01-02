@@ -4,6 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Bumping copyright headers to the brand new year.
+
+
 0.9.28  2022-12-29  An End-of-Year'22 Release.
 
 - Mitigate NSM sending lots of dirty messages on SIGTERM signal.

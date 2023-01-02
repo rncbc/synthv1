@@ -1,7 +1,7 @@
 #
 # spec file for package synthv1
 #
-# Copyright (C) 2012-2022, rncbc aka Rui Nuno Capela. All rights reserved.
+# Copyright (C) 2012-2023, rncbc aka Rui Nuno Capela. All rights reserved.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -46,27 +46,31 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	coreutils
 BuildRequires:	pkgconfig
 BuildRequires:	glibc-devel
-
-%if %{defined fedora} || 0%{?suse_version} > 1500
-BuildRequires:	gcc-c++ >= 8
-%define CXX		/usr/bin/g++
-%else
-BuildRequires:	gcc8-c++ >= 8
-%define CXX		/usr/bin/g++-8
-%endif
-
 BuildRequires:	cmake >= 3.15
+%if 0%{?sle_version} >= 150200 && 0%{?is_opensuse}
+BuildRequires:	gcc10 >= 10
+BuildRequires:	gcc10-c++ >= 10
+%define _GCC	/usr/bin/gcc-10
+%define _GXX	/usr/bin/g++-10
+%else
+BuildRequires:	gcc >= 10
+BuildRequires:	gcc-c++ >= 10
+%define _GCC	/usr/bin/gcc
+%define _GXX	/usr/bin/g++
+%endif
 %if 0%{qt_major_version} == 6
 BuildRequires:	qtbase6-static >= 6.1
 BuildRequires:	qttools6-static
 BuildRequires:	qttranslations6-static
 BuildRequires:	qtsvg6-static
+BuildRequires:	qtwayland6-static
 %else
 BuildRequires:	pkgconfig(Qt5Core)
 BuildRequires:	pkgconfig(Qt5Gui)
 BuildRequires:	pkgconfig(Qt5Widgets)
-BuildRequires:	pkgconfig(Qt5Svg)
 BuildRequires:	pkgconfig(Qt5Xml)
+BuildRequires:	pkgconfig(Qt5Svg)
+BuildRequires:	pkgconfig(Qt5Wayland)
 %endif
 %if %{defined fedora}
 BuildRequires:	jack-audio-connection-kit-devel
@@ -116,7 +120,7 @@ Obsoletes:	%{name}-common <= %{version}
 %if 0%{qt_major_version} == 6
 source /opt/qt6.4-static/bin/qt6.4-static-env.sh
 %endif
-CXX=%{CXX} \
+CXX=%{_GXX} CC=%{_GCC} \
 cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -Wno-dev -B build
 cmake --build build %{?_smp_mflags}
 
