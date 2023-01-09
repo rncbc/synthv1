@@ -70,7 +70,6 @@ BuildRequires:	pkgconfig(Qt5Gui)
 BuildRequires:	pkgconfig(Qt5Widgets)
 BuildRequires:	pkgconfig(Qt5Xml)
 BuildRequires:	pkgconfig(Qt5Svg)
-BuildRequires:	pkgconfig(Qt5Wayland)
 %endif
 %if %{defined fedora}
 BuildRequires:	jack-audio-connection-kit-devel
