@@ -1,7 +1,7 @@
 // synthv1_nsm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2022, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2023, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -381,7 +381,9 @@ void synthv1_nsm::nsm_announce_error (
 
 	emit active(false);
 
-	qWarning("NSM: Failed to register with server: %s.", mesg);
+#ifdef CONFIG_DEBUG
+	qDebug("synthv1_nsm::nsm_announce_error: %s.", mesg);
+#endif
 }
 
 
@@ -398,7 +400,9 @@ void synthv1_nsm::nsm_announce_reply (
 
 	emit active(true);
 
-	qWarning("NSM: Successfully registered with server: %s.", mesg);
+#ifdef CONFIG_DEBUG
+	qDebug("synthv1_nsm::nsm_announce_reply: %s.", mesg);
+#endif
 }
 
 

@@ -4,6 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- NSM announcement reply/error messages now relegated to debug
+  builds only (stderr). (EXPERIMENTAL)
+
+
 0.9.29  2023-01-25  A Winter'23 Release.
 
 - Bumping copyright headers to the brand new year.
