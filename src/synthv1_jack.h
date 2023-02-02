@@ -1,7 +1,7 @@
 // synthv1_jack.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2022, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2023, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -165,6 +165,7 @@ protected slots:
 	void handle_sigterm();
 #endif
 
+	void watchdog_slot();
 	void shutdown_slot();
 
 protected:
@@ -177,6 +178,8 @@ protected:
 
 	// Startup method.
 	bool setup();
+
+	void watchdog_start();
 
 private:
 
