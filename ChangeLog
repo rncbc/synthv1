@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- NSM open and save operation failures are now replied with an
+  error status (was always OK before). (EXPERIMENTAL)
 - JACK client watchdog introduced for automatic reactivation and
   resilience (standalone only). (EXPERIMENTAL)
 - NSM announcement reply/error messages now relegated to debug
