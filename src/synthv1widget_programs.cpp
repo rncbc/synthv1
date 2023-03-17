@@ -1,7 +1,7 @@
 // synthv1widget_programs.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2023, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -99,7 +99,7 @@ QWidget *synthv1widget_programs::ItemDelegate::createEditor ( QWidget *pParent,
 	{
 		if (index.parent().isValid()) {
 			QComboBox *pComboBox = new QComboBox(pParent);
-			pComboBox->setEditable(true);
+			pComboBox->setEditable(false);
 			synthv1_config *pConfig = synthv1_config::getInstance();
 			if (pConfig)
 				pComboBox->addItems(pConfig->presetList());
@@ -151,7 +151,11 @@ void synthv1widget_programs::ItemDelegate::setEditorData (
 		//	= index.model()->data(index, Qt::DisplayRole).toString();
 		if (index.parent().isValid()) {
 			QComboBox *pComboBox = qobject_cast<QComboBox *> (pEditor);
-			if (pComboBox) pComboBox->setEditText(sText);
+			if (pComboBox) {
+				const int iIndex = pComboBox->findText(sText);
+				if (iIndex >= 0)
+					pComboBox->setCurrentIndex(iIndex);
+			}
 		} else {
 			QLineEdit *pLineEdit = qobject_cast<QLineEdit *> (pEditor);
 			if (pLineEdit) pLineEdit->setText(sText);
@@ -442,9 +446,17 @@ QTreeWidgetItem *synthv1widget_programs::newProgramItem (void)
 			return nullptr;
 	}
 
+	QString sProgram = tr("Program %1.%2").arg(iBankData).arg(iProgData);
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig) {
+		const QStringList& presets
+			= pConfig->presetList();
+		if (iProgData < presets.count())
+			sProgram = presets.at(iProgData);
+	}
+
 	pProgItem = new QTreeWidgetItem(QStringList()
-		<< QString::number(iProgData) + " ="
-		<< tr("Program %1.%2").arg(iBankData).arg(iProgData));
+		<< QString::number(iProgData) + " =" << sProgram);
 	pProgItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable);
 	pProgItem->setData(0, Qt::TextAlignmentRole, int(Qt::AlignRight | Qt::AlignVCenter));
 	pProgItem->setData(0, Qt::UserRole, iProgData);

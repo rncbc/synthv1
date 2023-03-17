@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- Restrict to existing named presets when adding new or editing
+  existing programs (cf. Configure... > Programs). (EXPERIMENTAL)
 - NSM open and save operation failures are now replied with an
   error status (was always OK before). (EXPERIMENTAL)
 - JACK client watchdog introduced for automatic reactivation and
