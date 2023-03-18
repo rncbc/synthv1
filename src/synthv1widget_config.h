@@ -30,6 +30,7 @@
 // forward decls.
 namespace Ui { class synthv1widget_config; }
 
+class synthv1widget;
 class synthv1_ui;
 
 class QComboBox;
@@ -46,7 +47,7 @@ class synthv1widget_config : public QDialog
 public:
 
 	// ctor.
-	synthv1widget_config(synthv1_ui *pSynthUi, QWidget *pParent = nullptr);
+	synthv1widget_config(synthv1widget *pParent, synthv1_ui *pSynthUi);
 
 	// dtor.
 	~synthv1widget_config();

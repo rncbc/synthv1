@@ -1501,10 +1501,8 @@ void synthv1widget::midiInLedTimeout (void)
 void synthv1widget::helpConfigure (void)
 {
 	synthv1_ui *pSynthUi = ui_instance();
-	if (pSynthUi == nullptr)
-		return;
-
-	synthv1widget_config(pSynthUi, this).exec();
+	if (pSynthUi)
+		synthv1widget_config(this, pSynthUi).exec();
 }
 
 

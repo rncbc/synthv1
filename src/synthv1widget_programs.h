@@ -39,7 +39,7 @@ class synthv1widget_programs : public QTreeWidget
 public:
 
 	// ctor.
-	synthv1widget_programs(QWidget *pParent = 0);
+	synthv1widget_programs(QWidget *pParent = nullptr);
 	// dtor.
 	~synthv1widget_programs();
 
@@ -47,7 +47,7 @@ public:
 	void loadPrograms(synthv1_programs *pPrograms);
 	void savePrograms(synthv1_programs *pPrograms);
 
-	void selectProgram(synthv1_programs *pPrograms);
+	QString currentProgramName() const;
 
 public slots:
 
