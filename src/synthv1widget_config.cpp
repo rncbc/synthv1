@@ -81,6 +81,9 @@ synthv1widget_config::synthv1widget_config (
 	m_iDirtyPrograms = 0;
 	m_iDirtyOptions  = 0;
 
+	// Whether presets exist...
+	m_bPresets = false;
+
 	// Setup options...
 	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig && m_pSynthUi) {
@@ -103,9 +106,10 @@ synthv1widget_config::synthv1widget_config (
 		// Load programs database...
 		synthv1_programs *pPrograms = m_pSynthUi->programs();
 		if (pPrograms) {
+			m_bPresets = !pConfig->presetList().isEmpty();
 			m_ui.ProgramsTreeWidget->loadPrograms(pPrograms);
-			m_ui.ProgramsEnabledCheckBox->setEnabled(bPlugin);
-			m_ui.ProgramsPreviewCheckBox->setEnabled(!bPlugin);
+			m_ui.ProgramsEnabledCheckBox->setEnabled(bPlugin && m_bPresets);
+			m_ui.ProgramsPreviewCheckBox->setEnabled(!bPlugin && m_bPresets);
 			m_ui.ProgramsEnabledCheckBox->setChecked(pPrograms->enabled());
 		}
 		// Initialize conveniency options...
@@ -643,7 +647,7 @@ void synthv1widget_config::stabilize (void)
 	m_ui.ControlsDeleteToolButton->setEnabled(bEnabled);
 
 	pItem = m_ui.ProgramsTreeWidget->currentItem();
-	bEnabled = (m_pSynthUi && m_pSynthUi->programs() != nullptr);
+	bEnabled = (m_pSynthUi && m_pSynthUi->programs() != nullptr && m_bPresets);
 	m_ui.ProgramsPreviewCheckBox->setEnabled(
 		bEnabled && m_ui.ProgramsEnabledCheckBox->isChecked());
 	m_ui.ProgramsAddBankToolButton->setEnabled(bEnabled);
