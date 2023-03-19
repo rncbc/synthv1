@@ -108,6 +108,9 @@ protected:
 	bool setComboBoxCurrentItem(QComboBox *pComboBox, const QFileInfo& info);
 	QString comboBoxCurrentItem(QComboBox *pComboBox);
 
+	// Programs/preset preview stuff...
+	void loadPreset(const QString& sPreset);
+
 	// stabilizer.
 	void stabilize();
 
@@ -126,8 +129,11 @@ private:
 	int m_iDirtyPrograms;
 	int m_iDirtyOptions;
 
-	// Whether presets exist...
-	bool m_bPresets;
+	// Programs/preset related stuff...
+	bool    m_bPresets;
+
+	int		m_iLoadPreset;
+	QString m_sSavePreset;
 };
 
 
