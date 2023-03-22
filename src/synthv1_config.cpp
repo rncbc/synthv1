@@ -1,7 +1,7 @@
 // synthv1_config.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2022, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2023, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -81,6 +81,8 @@ void synthv1_config::setPresetFile (
 	QSettings::beginGroup(presetGroup());
 	QSettings::setValue(sPreset, sPresetFile);
 	QSettings::endGroup();
+
+	m_presetList.clear();
 }
 
 
@@ -92,21 +94,25 @@ void synthv1_config::removePreset ( const QString& sPreset )
 		QFile(sPresetFile).remove();
 	QSettings::remove(sPreset);
 	QSettings::endGroup();
+
+	m_presetList.clear();
 }
 
 
-QStringList synthv1_config::presetList (void)
+const QStringList& synthv1_config::presetList (void)
 {
-	QStringList list;
-	QSettings::beginGroup(presetGroup());
-	QStringListIterator iter(QSettings::childKeys());
-	while (iter.hasNext()) {
-		const QString& sPreset = iter.next();
-		if (QFileInfo(QSettings::value(sPreset).toString()).exists())
-			list.append(sPreset);
+	if (m_presetList.isEmpty()) {
+		QSettings::beginGroup(presetGroup());
+		QStringListIterator iter(QSettings::childKeys());
+		while (iter.hasNext()) {
+			const QString& sPreset = iter.next();
+			if (QFileInfo(QSettings::value(sPreset).toString()).exists())
+				m_presetList.append(sPreset);
+		}
+		QSettings::endGroup();
 	}
-	QSettings::endGroup();
-	return list;
+
+	return m_presetList;
 }
 
 
