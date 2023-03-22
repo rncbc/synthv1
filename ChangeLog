@@ -4,17 +4,17 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.30  2023-03-24  An Early-Spring'23 Release.
 
 - Restrict to existing named presets when adding new or editing
   programs; load and restore presets directly when previewing
-  programs (cf. Configure... > Programs). (EXPERIMENTAL)
+  programs (cf. Configure... > Programs).
 - NSM open and save operation failures are now replied with an
-  error status (was always OK before). (EXPERIMENTAL)
+  error status (was always OK before).
 - JACK client watchdog introduced for automatic reactivation and
-  resilience (standalone only). (EXPERIMENTAL)
+  resilience (standalone only).
 - NSM announcement reply/error messages now relegated to debug
-  builds only. (EXPERIMENTAL)
+  builds only.
 
 
 0.9.29  2023-01-25  A Winter'23 Release.
