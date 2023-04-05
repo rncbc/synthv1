@@ -63,7 +63,9 @@ BuildRequires:	qtbase6-static >= 6.1
 BuildRequires:	qttools6-static
 BuildRequires:	qttranslations6-static
 BuildRequires:	qtsvg6-static
+%if 0%{?sle_version} != 150200
 BuildRequires:	qtwayland6-static
+%endif
 %else
 BuildRequires:	pkgconfig(Qt5Core)
 BuildRequires:	pkgconfig(Qt5Gui)
@@ -117,7 +119,7 @@ Obsoletes:	%{name}-common <= %{version}
 
 %build
 %if 0%{qt_major_version} == 6
-source /opt/qt6.4-static/bin/qt6.4-static-env.sh
+source /opt/qt6.5-static/bin/qt6.5-static-env.sh
 %endif
 CXX=%{_GXX} CC=%{_GCC} \
 cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -Wno-dev -B build
