@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- Make sure the XCB interface is in use when instantiating the
+  LV2 plugin on non-Qt hosts, allowing LV2 X11 UI embedding to
+  work and show up properly. (EXPERIMENTAL)
 - Prepping into the next development cycle (with Qt >= 6.5).
 
 

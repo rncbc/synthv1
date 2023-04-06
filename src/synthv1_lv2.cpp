@@ -1,7 +1,7 @@
 // synthv1_lv2.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2022, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2023, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -398,6 +398,14 @@ void synthv1_lv2::qapp_instantiate (void)
 		::_putenv_s("QT_NO_GLIB", "1"); // Avoid glib event-loop...
 	#else
 		::setenv("QT_NO_GLIB", "1", 1); // Avoid glib event-loop...
+	#endif
+	#if defined(Q_OS_LINUX) && !defined(CONFIG_WAYLAND)
+		::setenv("QT_QPA_PLATFORM", "xcb", 0);
+	#endif
+	#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+	#if QT_VERSION <  QT_VERSION_CHECK(6, 0, 0)
+		QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+	#endif
 	#endif
 		g_qapp_instance = new QApplication(s_argc, (char **) s_argv);
 	}
