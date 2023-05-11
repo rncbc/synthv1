@@ -25,7 +25,7 @@
 %define debug_package %{nil}
 %endif
 
-%if 0%{?fedora_version} >= 34 || 0%{?suse_version} > 1500 || ( 0%{?sle_version} == 150200 && 0%{?is_opensuse} )
+%if 0%{?fedora_version} >= 34 || 0%{?suse_version} > 1500 || ( 0%{?sle_version} >= 150200 && 0%{?is_opensuse} )
 %define qt_major_version  6
 %else
 %define qt_major_version  5
