@@ -63,9 +63,7 @@ BuildRequires:	qtbase6-static >= 6.1
 BuildRequires:	qttools6-static
 BuildRequires:	qttranslations6-static
 BuildRequires:	qtsvg6-static
-%if 0%{?sle_version} != 150200
-BuildRequires:	qtwayland6-static
-%endif
+#BuildRequires:	qtwayland6-static
 %else
 BuildRequires:	pkgconfig(Qt5Core)
 BuildRequires:	pkgconfig(Qt5Gui)
