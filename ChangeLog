@@ -4,11 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.31  2023-06-06  A Spring'23 Release.
 
 - Make sure the XCB interface is in use when instantiating the
   LV2 plugin on non-Qt hosts, allowing LV2 X11 UI embedding to
-  work and show up properly. (EXPERIMENTAL)
+  work and show up properly.
 - Prepping into the next development cycle (with Qt >= 6.5).
 
 
