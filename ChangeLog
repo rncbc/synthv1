@@ -4,6 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Preppings to next development cycle (Qt >= 6.6)
+
+
 0.9.31  2023-06-06  A Spring'23 Release.
 
 - Make sure the XCB interface is in use when instantiating the
