@@ -85,8 +85,10 @@ References:
  [2] ALSA, Advanced Linux Sound Architecture
      https://www.alsa-project.org/
 
- [3] Non Session Management (NSM)
+ [3] Non Session Management (NSM) (legacy)
      http://non.tuxfamily.org/nsm/
+     New Session Manager (NSM)
+     https://new-session-manager.jackaudio.org/
 
  [4] LV2, Audio Plugin Standard, the extensible successor of LADSPA
      http://lv2plug.in/
