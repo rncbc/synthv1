@@ -59,10 +59,10 @@ BuildRequires:	gcc-c++ >= 10
 %define _GXX	/usr/bin/g++
 %endif
 %if 0%{qt_major_version} == 6
-BuildRequires:	qtbase6.5-static >= 6.1
-BuildRequires:	qttools6.5-static
-BuildRequires:	qttranslations6.5-static
-BuildRequires:	qtsvg6.5-static
+BuildRequires:	qtbase6.6-static >= 6.1
+BuildRequires:	qttools6.6-static
+BuildRequires:	qttranslations6.6-static
+BuildRequires:	qtsvg6.6-static
 #BuildRequires:	qtwayland6-static
 %else
 BuildRequires:	pkgconfig(Qt5Core)
