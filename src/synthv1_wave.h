@@ -1,7 +1,7 @@
 // synthv1_wave.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2023, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -226,10 +226,11 @@ protected:
 	void reset_interp(uint16_t itab);
 
 	// Hal Chamberlain's pseudo-random linear congruential method.
-	uint32_t pseudo_srand ()
-		{ return (m_srand = (m_srand * 196314165) + 907633515); }
 	float pseudo_randf ()
-		{ return pseudo_srand() / float(0x8000U << 16) - 1.0f; }
+	{
+		m_srand = (m_srand * 196314165) + 907633515;
+		return m_srand / float(INT32_MAX) - 1.0f;
+	}
 
 private:
 

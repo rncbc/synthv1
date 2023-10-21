@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Minor optimization to denormal avoidance on some fx's.
 - Bumping into next development cycle (Qt >= 6.6)
 
 

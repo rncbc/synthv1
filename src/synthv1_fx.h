@@ -1,7 +1,7 @@
 // synthv1_fx.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2023, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -33,6 +33,15 @@
 // -- borrowed, stirred and refactored from Highlife --
 //    Copyright (C) 2007 arguru, discodsp.com
 //
+
+// Hal Chamberlain's pseudo-random linear congruential method.
+static inline float synthv1_fx_randf ()
+{
+	static uint32_t s_srand = 0x9631; // magic!
+	s_srand = (s_srand * 196314165) + 907633515;
+	return s_srand / float(INT32_MAX) - 1.0f;
+}
+
 
 //-------------------------------------------------------------------------
 // synthv1_fx_filter - RBJ biquad filter implementation.
@@ -260,7 +269,7 @@ public:
 		// process buffers
 		for (uint32_t i = 0; i < nframes; ++i) {
 			// anti-denormalizer noise
-			const float ad = 1E-14f * float(::rand());
+			const float ad = 1E-14f * synthv1_fx_randf();
 			// process
 			const float lo = m_lo.output(m_mi.output(m_hi.output(*in + ad)));
 			// compute peak
@@ -576,7 +585,7 @@ public:
 		const float delay_max = 2.0f * 4400.0f / m_srate;
 		const float lfo_inc   = 2.0f * M_PI * rate / m_srate;
 		// anti-denormal noise
-		const float adenormal = 1E-14f * float(::rand());
+		const float adenormal = 1E-14f * synthv1_fx_randf();
 		// sweep...
 		for (uint32_t i = 0; i < nframes; ++i) {
 			// calculate and update phaser lfo
