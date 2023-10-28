@@ -63,13 +63,12 @@ BuildRequires:	qtbase6.6-static >= 6.6
 BuildRequires:	qttools6.6-static
 BuildRequires:	qttranslations6.6-static
 BuildRequires:	qtsvg6.6-static
-#BuildRequires:	qtwayland6-static
 %else
 BuildRequires:	pkgconfig(Qt5Core)
 BuildRequires:	pkgconfig(Qt5Gui)
 BuildRequires:	pkgconfig(Qt5Widgets)
-BuildRequires:	pkgconfig(Qt5Xml)
 BuildRequires:	pkgconfig(Qt5Svg)
+BuildRequires:	pkgconfig(Qt5Xml)
 %endif
 %if %{defined fedora}
 BuildRequires:	jack-audio-connection-kit-devel
