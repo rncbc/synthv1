@@ -882,7 +882,7 @@ bool synthv1_jack_application::parse_args (void)
 		m_sClientName = sVal;
 	}
 
-	foreach(const QString& sArg, parser.positionalArguments()) {
+	for (const QString& sArg : parser.positionalArguments()) {
 		m_presets.append(sArg);
 	}
 
