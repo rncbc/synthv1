@@ -596,7 +596,7 @@ void synthv1widget_config::tuningKeyMapFileClicked (void)
 		sTitle, pConfig->sTuningKeyMapDir, sFilter, nullptr, options);
 #else
 	QFileDialog fileDialog(pParentWidget,
-		sTitle, sTuningScaleFile, sFilter);
+		sTitle, sTuningKeyMapFile, sFilter);
 	fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
 	fileDialog.setFileMode(QFileDialog::ExistingFiles);
 	fileDialog.setDefaultSuffix(sExt);
