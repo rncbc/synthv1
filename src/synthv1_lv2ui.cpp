@@ -22,7 +22,12 @@
 #include "synthv1_lv2ui.h"
 #include "synthv1_lv2.h"
 
+#if __has_include (<lv2/core/lv2.h>)
+// new versions of LV2 use different location for headers
+#include "lv2/instance-access/instance-access.h"
+#else
 #include "lv2/lv2plug.in/ns/ext/instance-access/instance-access.h"
+#endif
 
 #include <synthv1widget_lv2.h>
 

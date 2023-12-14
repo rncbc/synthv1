@@ -24,7 +24,12 @@
 
 #include "synthv1_ui.h"
 
+#if __has_include (<lv2/core/lv2.h>)
+// new versions of LV2 use different location for headers
+#include "lv2/ui/ui.h"
+#else
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
+#endif
 
 
 #define SYNTHV1_LV2UI_URI SYNTHV1_LV2_PREFIX "ui"

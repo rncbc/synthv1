@@ -26,6 +26,21 @@
 #include "synthv1_programs.h"
 #include "synthv1_controls.h"
 
+#if __has_include (<lv2/core/lv2.h>)
+// new versions of LV2 use different location for headers
+#include "lv2/midi/midi.h"
+#include "lv2/time/time.h"
+#include "lv2/atom/util.h"
+
+#include "lv2/state/state.h"
+
+#include "lv2/options/options.h"
+#include "lv2/buf-size/buf-size.h"
+
+#ifdef CONFIG_LV2_PATCH
+#include "lv2/patch/patch.h"
+#endif
+#else
 #include "lv2/lv2plug.in/ns/ext/midi/midi.h"
 #include "lv2/lv2plug.in/ns/ext/time/time.h"
 #include "lv2/lv2plug.in/ns/ext/atom/util.h"
@@ -37,6 +52,7 @@
 
 #ifdef CONFIG_LV2_PATCH
 #include "lv2/lv2plug.in/ns/ext/patch/patch.h"
+#endif
 #endif
 
 #ifndef CONFIG_LV2_ATOM_FORGE_OBJECT
