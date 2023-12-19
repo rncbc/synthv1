@@ -16,8 +16,8 @@
 #
 
 %define name    synthv1
-%define version 0.9.32
-%define release 73.1
+%define version 0.9.33
+%define release 74.1
 
 %define _prefix	/usr
 
@@ -171,6 +171,8 @@ cmake --install build
 
 
 %changelog
+* Wed Dec 20 2023 Rui Nuno Capela <rncbc@rncbc.org> 0.9.33
+- An End-of-Autumn'23 Release.
 * Tue Sep 12 2023 Rui Nuno Capela <rncbc@rncbc.org> 0.9.32
 - An End-of-Summer'23 Release.
 * Tue Jun  6 2023 Rui Nuno Capela <rncbc@rncbc.org> 0.9.31
