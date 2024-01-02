@@ -1,7 +1,7 @@
 // synthv1_param.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -379,7 +379,7 @@ bool synthv1_param::savePreset (
 	QDomDocument doc(SYNTHV1_TITLE);
 	QDomElement ePreset = doc.createElement("preset");
 	ePreset.setAttribute("name", fi.completeBaseName());
-	ePreset.setAttribute("version", CONFIG_BUILD_VERSION);
+	ePreset.setAttribute("version", PROJECT_VERSION);
 
 	QDomElement eParams = doc.createElement("params");
 	for (uint32_t i = 0; i < synthv1::NUM_PARAMS; ++i) {
