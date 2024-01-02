@@ -42,7 +42,7 @@ synthv1_config *synthv1_config::getInstance (void)
 
 // Constructor.
 synthv1_config::synthv1_config (void)
-	: QSettings(SYNTHV1_DOMAIN, SYNTHV1_TITLE)
+	: QSettings(PROJECT_DOMAIN, PROJECT_NAME)
 {
 	g_pSettings = this;
 

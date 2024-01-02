@@ -1,7 +1,7 @@
 // synthv1widget_preset.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -233,7 +233,7 @@ void synthv1widget_preset::openPreset (void)
 
 	QStringList files;
 
-	const QString  sExt(SYNTHV1_TITLE);
+	const QString  sExt(PROJECT_NAME);
 	const QString& sTitle  = tr("Open Preset");
 	const QString& sFilter = tr("Preset files (*.%1)").arg(sExt);
 
@@ -299,7 +299,7 @@ void synthv1widget_preset::savePreset ( const QString& sPreset )
 	if (pConfig == nullptr)
 		return;
 
-	const QString sExt(SYNTHV1_TITLE);
+	const QString sExt(PROJECT_NAME);
 	QFileInfo fi(QDir(pConfig->sPresetDir), sPreset + '.' + sExt);
 	QString sFilename = fi.absoluteFilePath();
 	if (!fi.exists()) {

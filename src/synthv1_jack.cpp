@@ -1,7 +1,7 @@
 // synthv1_jack.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2023, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -602,7 +602,7 @@ void synthv1_jack::sessionEvent ( void *pvSessionArg )
 		= QString::fromUtf8(pJackSessionEvent->session_dir);
 	const QString sSessionName
 		= QFileInfo(QFileInfo(sSessionDir).canonicalPath()).completeBaseName();
-	const QString sSessionFile = sSessionName + '.' + SYNTHV1_TITLE;
+	const QString sSessionFile = sSessionName + '.' + PROJECT_NAME;
 
 	QStringList args;
 	args << QCoreApplication::applicationFilePath();
@@ -727,7 +727,7 @@ static void synthv1_sigterm_handler ( int /*signo*/ )
 // Constructor.
 synthv1_jack_application::synthv1_jack_application ( int& argc, char **argv )
 	: QObject(nullptr), m_pApp(nullptr), m_bGui(true),
-		m_sClientName(SYNTHV1_TITLE), m_pSynth(nullptr), m_pWidget(nullptr)
+		m_sClientName(PROJECT_NAME), m_pSynth(nullptr), m_pWidget(nullptr)
 	  #ifdef CONFIG_NSM
 		, m_pNsmClient(nullptr)
 	  #endif
@@ -753,11 +753,11 @@ synthv1_jack_application::synthv1_jack_application ( int& argc, char **argv )
 	#endif
 		QApplication *pApp = new QApplication(argc, argv);
 	#if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
-		pApp->setApplicationDisplayName(SYNTHV1_TITLE);
-		//	SYNTHV1_TITLE " - " + QObject::tr(SYNTHV1_SUBTITLE));
+		pApp->setApplicationDisplayName(PROJECT_NAME);
+		//	PROJECT_NAME " - " + QObject::tr(PROJECT_DESCRIPTION));
 	#if QT_VERSION >= QT_VERSION_CHECK(5, 7, 0)
 		pApp->setDesktopFileName(
-			QString("org.rncbc.%1").arg(PACKAGE_TARNAME));
+			QString("org.rncbc.%1").arg(PROJECT_NAME));
 	#endif
 	#endif
 		m_pApp = pApp;
@@ -766,8 +766,8 @@ synthv1_jack_application::synthv1_jack_application ( int& argc, char **argv )
 	}
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
-	m_pApp->setApplicationName(SYNTHV1_TITLE);
-	QString sVersion(CONFIG_BUILD_VERSION);
+	m_pApp->setApplicationName(PROJECT_NAME);
+	QString sVersion(PROJECT_VERSION);
 	sVersion += '\n';
 	sVersion += QString("Qt: %1").arg(qVersion());
 #if defined(QT_STATIC)
@@ -855,17 +855,17 @@ bool synthv1_jack_application::parse_args (void)
 
 	QCommandLineParser parser;
 	parser.setApplicationDescription(
-		SYNTHV1_TITLE " - " + QObject::tr(SYNTHV1_SUBTITLE));
+		PROJECT_NAME " - " + QObject::tr(PROJECT_DESCRIPTION));
 
 	parser.addOption({{"g", "no-gui"},
 		QObject::tr("Disable the graphical user interface (GUI)")});
 	parser.addOption({{"n", "client-name"},
 		QObject::tr("Set the JACK client name (default: %1)")
-			.arg(SYNTHV1_TITLE), "label"});
+			.arg(PROJECT_NAME), "label"});
 	parser.addHelpOption();
 	parser.addVersionOption();
 	parser.addPositionalArgument("preset-file",
-		QObject::tr("Load preset file (.%1)").arg(SYNTHV1_TITLE),
+		QObject::tr("Load preset file (.%1)").arg(PROJECT_NAME),
 		QObject::tr("[preset-file]"));
 	parser.process(args);
 
@@ -921,12 +921,12 @@ bool synthv1_jack_application::parse_args (void)
 			const QString sEot = "\n\t";
 			const QString sEol = "\n\n";
 			out << QObject::tr("Usage: %1 [options]").arg(args.at(0)) + sEol;
-			out << SYNTHV1_TITLE " - " << QObject::tr(SYNTHV1_SUBTITLE) + sEol;
+			out << PROJECT_NAME " - " << QObject::tr(PROJECT_DESCRIPTION) + sEol;
 			out << QObject::tr("Options:") + sEol;
 			out << "  -g, --no-gui" + sEot +
 				QObject::tr("Disable the graphical user interface (GUI)") + sEol;
 			out << "  -n, --client-name=[label]" + sEot +
-				QObject::tr("Set the JACK client name (default: %1)").arg(SYNTHV1_TITLE) + sEol;
+				QObject::tr("Set the JACK client name (default: %1)").arg(PROJECT_NAME) + sEol;
 			out << "  -h, --help" + sEot +
 				QObject::tr("Show help about command line options.") + sEol;
 			out << "  -v, --version" + sEot +
@@ -941,8 +941,8 @@ bool synthv1_jack_application::parse_args (void)
 		#endif
 			out << '\n';
 			out << QString("%1: %2\n")
-				.arg(SYNTHV1_TITLE)
-				.arg(CONFIG_BUILD_VERSION);
+				.arg(PROJECT_NAME)
+				.arg(PROJECT_VERSION);
 			return false;
 		}
 		else {
@@ -1013,7 +1013,7 @@ bool synthv1_jack_application::setup (void)
 		QString caps(":switch:dirty:");
 		if (m_bGui)
 			caps += "optional-gui:";
-		m_pNsmClient->announce(SYNTHV1_TITLE, caps.toLocal8Bit().constData());
+		m_pNsmClient->announce(PROJECT_NAME, caps.toLocal8Bit().constData());
 		if (m_pWidget)
 			m_pWidget->setNsmClient(m_pNsmClient);
 	}
@@ -1069,9 +1069,9 @@ void synthv1_jack_application::openSession (void)
 
 	bool bOpen = false;
 
-	QFileInfo fi(path_name, "session." SYNTHV1_TITLE);
+	QFileInfo fi(path_name, "session." PROJECT_NAME);
 	if (!fi.exists())
-		fi.setFile(path_name, display_name + '.' + SYNTHV1_TITLE);
+		fi.setFile(path_name, display_name + '.' + PROJECT_NAME);
 	if (fi.exists()) {
 		const QString& sFilename = fi.absoluteFilePath();
 		if (m_pWidget) {
@@ -1108,8 +1108,8 @@ void synthv1_jack_application::saveSession (void)
 //	const QString& client_name = m_pNsmClient->client_name();
 	const QString& path_name = m_pNsmClient->path_name();
 //	const QString& display_name = m_pNsmClient->display_name();
-//	const QFileInfo fi(path_name, display_name + '.' + SYNTHV1_TITLE);
-	const QFileInfo fi(path_name, "session." SYNTHV1_TITLE);
+//	const QFileInfo fi(path_name, display_name + '.' + PROJECT_NAME);
+	const QFileInfo fi(path_name, "session." PROJECT_NAME);
 
 	const bool bSave
 		= synthv1_param::savePreset(m_pSynth, fi.absoluteFilePath(), true);

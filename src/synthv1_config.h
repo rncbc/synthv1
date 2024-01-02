@@ -24,13 +24,13 @@
 
 #include "config.h"
 
-#define SYNTHV1_TITLE       PROJECT_NAME
+#ifndef PROJECT_COPYRIGHT
+#define PROJECT_COPYRIGHT   "Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved."
+#endif
 
-#define SYNTHV1_SUBTITLE    PROJECT_DESCRIPTION
-#define SYNTHV1_WEBSITE     PROJECT_HOMEPAGE_URL
-
-#define SYNTHV1_COPYRIGHT   "Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved."
-#define SYNTHV1_DOMAIN      "rncbc.org"
+#ifndef PROJECT_DOMAIN
+#define PROJECT_DOMAIN      "rncbc.org"
+#endif
 
 
 //-------------------------------------------------------------------------

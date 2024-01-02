@@ -1,7 +1,7 @@
 // synthv1_lv2.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2023, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -393,7 +393,7 @@ void synthv1_lv2::qapp_instantiate (void)
 {
 	if (qApp == nullptr && g_qapp_instance == nullptr) {
 		static int s_argc = 1;
-		static const char *s_argv[] = { SYNTHV1_TITLE, nullptr };
+		static const char *s_argv[] = { PROJECT_NAME, nullptr };
 	#if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
 		::_putenv_s("QT_NO_GLIB", "1"); // Avoid glib event-loop...
 	#else
@@ -462,7 +462,7 @@ static LV2_State_Status synthv1_lv2_state_save ( LV2_Handle instance,
 	flags |= (LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
 #endif
 
-	QDomDocument doc(SYNTHV1_TITLE);
+	QDomDocument doc(PROJECT_NAME);
 	QDomElement eState = doc.createElement("state");
 
 	QDomElement eTuning = doc.createElement("tuning");
@@ -516,7 +516,7 @@ static LV2_State_Status synthv1_lv2_state_restore ( LV2_Handle instance,
 	if (value == nullptr)
 		return LV2_STATE_ERR_UNKNOWN;
 
-	QDomDocument doc(SYNTHV1_TITLE);
+	QDomDocument doc(PROJECT_NAME);
 	if (doc.setContent(QByteArray(value, size))) {
 		QDomElement eState = doc.documentElement();
 		if (eState.tagName() == "state") {

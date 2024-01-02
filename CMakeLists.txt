@@ -298,8 +298,7 @@ macro (SHOW_OPTION text value)
   endif ()
 endmacro ()
 
-
-message   ("\n  ${PACKAGE_NAME} ${PACKAGE_VERSION} (Qt ${QT_VERSION})")
+message   ("\n  ${PROJECT_NAME} ${PROJECT_VERSION} (Qt ${QT_VERSION})")
 message   ("\n  Build target . . . . . . . . . . . . . . . . . . .: ${CONFIG_BUILD_TYPE}\n")
 show_option ("  JACK stand-alone build . . . . . . . . . . . . . ." CONFIG_JACK)
 show_option ("  JACK session support . . . . . . . . . . . . . . ." CONFIG_JACK_SESSION)
