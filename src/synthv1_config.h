@@ -24,14 +24,6 @@
 
 #include "config.h"
 
-#ifndef PROJECT_COPYRIGHT
-#define PROJECT_COPYRIGHT   "Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved."
-#endif
-
-#ifndef PROJECT_DOMAIN
-#define PROJECT_DOMAIN      "rncbc.org"
-#endif
-
 
 //-------------------------------------------------------------------------
 // synthv1_config - Prototype settings class (singleton).
