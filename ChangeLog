@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- LV2 plugin Control Input Port-change request extension feature
+  support added. (EXPERIMENTAL)
 - Updated copyright headers into the New Year (2024).
 
 

@@ -86,6 +86,9 @@
 /* Define if LV2 Port-event is supported. */
 #cmakedefine CONFIG_LV2_PORT_EVENT @CONFIG_LV2_PORT_EVENT@
 
+/* Define if LV2 Port-change request is supported. */
+#cmakedefine CONFIG_LV2_PORT_CHANGE_REQUEST @CONFIG_LV2_PORT_CHANGE_REQUEST@
+
 /* Define if NSM support is available. */
 #cmakedefine CONFIG_NSM @CONFIG_NSM@
 
