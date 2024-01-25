@@ -4,10 +4,10 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.34  2024-01-26  A Winter'24 Release.
 
 - LV2 plugin Control Input Port-change request extension feature
-  support added. (EXPERIMENTAL)
+  support added.
 - Updated copyright headers into the New Year (2024).
 
 
