@@ -26,7 +26,7 @@
 #include "synthv1_programs.h"
 #include "synthv1_controls.h"
 
-#ifdef CONFIG_OLD_HEADERS
+#ifdef CONFIG_LV2_OLD_HEADERS
 #include "lv2/lv2plug.in/ns/ext/midi/midi.h"
 #include "lv2/lv2plug.in/ns/ext/time/time.h"
 #include "lv2/lv2plug.in/ns/ext/atom/util.h"
