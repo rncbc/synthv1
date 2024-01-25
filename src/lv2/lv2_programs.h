@@ -23,11 +23,11 @@
 #ifndef LV2_PROGRAMS_H
 #define LV2_PROGRAMS_H
 
-#include "lv2.h"
-
 #ifdef CONFIG_LV2_OLD_HEADERS
+#include "lv2.h"
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
 #else
+#include "lv2/core/lv2.h"
 #include "lv2//ui/ui.h"
 #endif
 
