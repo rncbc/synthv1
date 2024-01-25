@@ -53,6 +53,9 @@
 /* Define if LV2 plug-in build is enabled. */
 #cmakedefine CONFIG_LV2 @CONFIG_LV2@
 
+/* Define if LV2 old headers are enabled. */
+#cmakedefine CONFIG_LV2_OLD_HEADERS @CONFIG_LV2_OLD_HEADERS@
+
 /* Define if lv2_atom_forge_object is available. */
 #cmakedefine CONFIG_LV2_ATOM_FORGE_OBJECT @CONFIG_LV2_ATOM_FORGE_OBJECT@
 

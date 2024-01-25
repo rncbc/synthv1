@@ -1,7 +1,7 @@
 // synthv1_lv2ui.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -24,8 +24,11 @@
 
 #include "synthv1_ui.h"
 
+#ifdef CONFIG_LV2_OLD_HEADERS
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
-
+#else
+#include "lv2/ui/ui.h"
+#endif
 
 #define SYNTHV1_LV2UI_URI SYNTHV1_LV2_PREFIX "ui"
 
