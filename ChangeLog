@@ -4,6 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Fixed the build checks on whether to use old or newer style of
+  LV2 include headers. (EXPERIMENTAL)
+
+
 0.9.34  2024-01-26  A Winter'24 Release.
 
 - Added build checks on whether to use old or newer style of LV2
