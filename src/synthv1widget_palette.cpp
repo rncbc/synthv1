@@ -234,9 +234,10 @@ QSettings *synthv1widget_palette::settings (void) const
 
 void synthv1widget_palette::nameComboChanged ( const QString& name )
 {
-	if (m_dirtyCount > 0 || m_ui.nameCombo->findText(name) < 0) {
+	if (m_dirtyCount > 0 && m_ui.nameCombo->findText(name) < 0) {
 		updateDialogButtons();
 	} else {
+		resetButtonClicked();
 		setPaletteName(name);
 		++m_dirtyTotal;
 	}
@@ -405,7 +406,7 @@ void synthv1widget_palette::exportButtonClicked (void)
 	const QFileInfo fi(filename);
 	const QString& name = fi.baseName();
 	if (saveNamedPaletteConf(name, filename, m_palette)) {
-		addNamedPaletteConf(name, filename);
+	//	addNamedPaletteConf(name, filename);
 		setDefaultDir(fi.absolutePath());
 	}
 }
