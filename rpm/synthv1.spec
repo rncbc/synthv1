@@ -149,6 +149,7 @@ cmake --install build
 #dir %{_datadir}/man/man1
 #dir %{_datadir}/man/fr
 #dir %{_datadir}/man/fr/man1
+%dir %{_datadir}/%{name}/palette
 %{_bindir}/%{name}_jack
 %{_datadir}/metainfo/org.rncbc.%{name}.metainfo.xml
 %{_datadir}/applications/org.rncbc.%{name}.desktop
@@ -159,6 +160,7 @@ cmake --install build
 %{_datadir}/icons/hicolor/scalable/mimetypes/org.rncbc.%{name}.application-x-%{name}*.svg
 %{_datadir}/man/man1/%{name}.1.gz
 %{_datadir}/man/fr/man1/%{name}.1.gz
+%{_datadir}/%{name}/palette/*.conf
 
 %files -n %{name}-lv2
 %defattr(-,root,root)
