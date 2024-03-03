@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- Custom color themes are now file based (*.conf); legacy still
+  preserved ntl. (EXPERIMENTAL)
 - Fixed the build checks on whether to use old or newer style of
   LV2 include headers. (EXPERIMENTAL)
 
