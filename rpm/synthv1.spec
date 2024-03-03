@@ -149,6 +149,7 @@ cmake --install build
 #dir %{_datadir}/man/man1
 #dir %{_datadir}/man/fr
 #dir %{_datadir}/man/fr/man1
+%dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/palette
 %{_bindir}/%{name}_jack
 %{_datadir}/metainfo/org.rncbc.%{name}.metainfo.xml
