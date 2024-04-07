@@ -4,12 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+0.9.90  2024-04-11  A Spring'24 Release Candidate.
 
 - Custom color themes are now file based (*.conf); legacy still
-  preserved ntl. (EXPERIMENTAL)
+  preserved ntl.
 - Fixed the build checks on whether to use old or newer style of
-  LV2 include headers. (EXPERIMENTAL)
+  LV2 include headers.
 
 
 0.9.34  2024-01-26  A Winter'24 Release.
