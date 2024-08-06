@@ -358,7 +358,7 @@ show_option ("  LV2 plug-in UI Resize interface support  . . . . ." CONFIG_LV2_U
 show_option ("  LV2 plug-in Programs support . . . . . . . . . . ." CONFIG_LV2_PROGRAMS)
 show_option ("  LV2 plug-in Patch support  . . . . . . . . . . . ." CONFIG_LV2_PATCH)
 show_option ("  LV2 plug-in Port-event support . . . . . . . . . ." CONFIG_LV2_PORT_EVENT)
-show_option ("  LV2 plug-in Port-change request (EXPERIMENTAL) . ." CONFIG_LV2_PORT_CHANGE_REQUEST)
+show_option ("  LV2 plug-in Port-change request  . . . . . . . . ." CONFIG_LV2_PORT_CHANGE_REQUEST)
 show_option ("  OSC service support (liblo)  . . . . . . . . . . ." CONFIG_LIBLO)
 show_option ("  Non/New Session Management (NSM) support . . . . ." CONFIG_NSM)
 message   ("\n  Install prefix . . . . . . . . . . . . . . . . . .: ${CONFIG_PREFIX}\n")
