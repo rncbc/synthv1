@@ -588,8 +588,10 @@ struct synthv1_key
 
 // glide (portamento)
 
-struct synthv1_glide
+class synthv1_glide
 {
+public:
+
 	synthv1_glide(float& last) : m_last(last) { reset(); }
 
 	void reset( uint32_t frames = 0, float freq = 0.0f )
