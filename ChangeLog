@@ -4,7 +4,7 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+1.1.0  2024-08-28  A Mid-Summer'24 Release.
 
 - LV2 Plug-in Control Input Port-Change Request extension is not
   tagged experimental anymore.
