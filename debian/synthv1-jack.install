@@ -7,3 +7,4 @@ debian/tmp/usr/share/icons/hicolor/32x32/mimetypes/org.rncbc.synthv1.application
 debian/tmp/usr/share/icons/hicolor/scalable/apps/org.rncbc.synthv1.svg
 debian/tmp/usr/share/icons/hicolor/scalable/mimetypes/org.rncbc.synthv1.application-x-synthv1*.svg
 debian/tmp/usr/share/man/man1/synthv1*.*
+debian/tmp/usr/share/padthv1/palette/*.conf
