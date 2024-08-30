@@ -4,6 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- NSM: prevent loading any preset(s) given on command line.
+
+
 1.1.0  2024-08-28  A Mid-Summer'24 Release.
 
 - LV2 Plug-in Control Input Port-Change Request extension is not
