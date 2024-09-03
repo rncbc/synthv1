@@ -1068,9 +1068,9 @@ void synthv1_jack_application::openSession (void)
 
 	bool bOpen = false;
 
-	QFileInfo fi(path_name, "session." PROJECT_NAME);
+	QFileInfo fi(path_name, display_name + '.' + PROJECT_NAME);
 	if (!fi.exists())
-		fi.setFile(path_name, display_name + '.' + PROJECT_NAME);
+		fi.setFile(path_name, "session." PROJECT_NAME);
 	if (fi.exists()) {
 		const QString& sFilename = fi.absoluteFilePath();
 		if (m_pWidget) {
@@ -1107,8 +1107,7 @@ void synthv1_jack_application::saveSession (void)
 //	const QString& client_name = m_pNsmClient->client_name();
 	const QString& path_name = m_pNsmClient->path_name();
 	const QString& display_name = m_pNsmClient->display_name();
-	const QFileInfo fi(path_name, display_name + '.' + PROJECT_NAME);
-//	const QFileInfo fi(path_name, "session." PROJECT_NAME);
+	QFileInfo fi(path_name, display_name + '.' + PROJECT_NAME);
 
 	const bool bSave
 		= synthv1_param::savePreset(m_pSynth, fi.absoluteFilePath(), true);
@@ -1117,6 +1116,11 @@ void synthv1_jack_application::saveSession (void)
 		? synthv1_nsm::ERR_OK
 		: synthv1_nsm::ERR_GENERAL);
 	m_pNsmClient->dirty(false);
+
+	fi.setFile(path_name, "session." PROJECT_NAME);
+	if (fi.exists())
+		QFile::remove(fi.absoluteFilePath());
+
 }
 
 
