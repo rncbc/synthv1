@@ -1,7 +1,7 @@
 // synthv1_sched.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -83,6 +83,10 @@ public:
 		// instance variables.
 		synthv1 *m_pSynth;
 	};
+
+	// process/clear pending schedules, immediately. (static)
+	static void sync_pending();
+	static void sync_reset();
 
 private:
 

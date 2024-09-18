@@ -37,6 +37,9 @@ class QDomDocument;
 
 namespace synthv1_param
 {
+	// Preset initialization method.
+	bool newPreset(synthv1 *pSynth);
+
 	// Preset serialization methods.
 	bool loadPreset(synthv1 *pSynth,
 		const QString& sFilename);

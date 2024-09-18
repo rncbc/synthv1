@@ -1,7 +1,7 @@
 // synthv1_ui.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -43,6 +43,12 @@ synthv1 *synthv1_ui::instance (void) const
 bool synthv1_ui::isPlugin (void) const
 {
 	return m_bPlugin;
+}
+
+
+bool synthv1_ui::newPreset (void)
+{
+	return synthv1_param::newPreset(m_pSynth);
 }
 
 

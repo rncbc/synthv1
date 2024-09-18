@@ -22,6 +22,8 @@
 #include "synthv1_param.h"
 #include "synthv1_config.h"
 
+#include "synthv1_sched.h"
+
 #include <QHash>
 
 #include <QDomDocument>
@@ -270,6 +272,27 @@ bool synthv1_param::paramFloat ( synthv1::ParamIndex index )
 }
 
 
+// Preset initialization method.
+bool synthv1_param::newPreset ( synthv1 *pSynth )
+{
+	if (pSynth == nullptr)
+		return false;
+
+	const bool running = pSynth->running(false);
+
+	synthv1_sched::sync_reset();
+
+	pSynth->stabilize();
+	pSynth->reset();
+
+	synthv1_sched::sync_pending();
+
+	pSynth->running(running);
+
+	return true;
+}
+
+
 // Preset serialization methods.
 bool synthv1_param::loadPreset (
 	synthv1 *pSynth, const QString& sFilename )
@@ -296,6 +319,8 @@ bool synthv1_param::loadPreset (
 		return false;
 
 	const bool running = pSynth->running(false);
+
+	synthv1_sched::sync_reset();
 
 	pSynth->setTuningEnabled(false);
 	pSynth->reset();
@@ -356,6 +381,9 @@ bool synthv1_param::loadPreset (
 
 	pSynth->stabilize();
 	pSynth->reset();
+
+	synthv1_sched::sync_pending();
+
 	pSynth->running(running);
 
 	QDir::setCurrent(currentDir.absolutePath());
