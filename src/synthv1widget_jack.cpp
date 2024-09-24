@@ -108,7 +108,7 @@ synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 				synthv1widget::setPalette(pal);
 		}
 		if (!pConfig->sCustomStyleTheme.isEmpty()) {
-			synthv1widget::setStyle(
+			QApplication::setStyle(
 				QStyleFactory::create(pConfig->sCustomStyleTheme));
 		}
 	}

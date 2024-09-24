@@ -1,7 +1,7 @@
 // synthv1widget_config.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2023, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -96,6 +96,8 @@ synthv1widget_config::synthv1widget_config (
 		m_ui.KnobEditModeComboBox->setCurrentIndex(pConfig->iKnobEditMode);
 		m_ui.RandomizePercentSpinBox->setValue(pConfig->fRandomizePercent);
 		// Custom display options (only for no-plugin forms)...
+		m_ui.CustomStyleThemeTextLabel->setEnabled(!bPlugin);
+		m_ui.CustomStyleThemeComboBox->setEnabled(!bPlugin);
 		resetCustomColorThemes(pConfig->sCustomColorTheme);
 		resetCustomStyleThemes(pConfig->sCustomStyleTheme);
 		// Load controllers database...
@@ -736,7 +738,7 @@ void synthv1widget_config::accept (void)
 		}
 	}
 
-	if (m_iDirtyOptions > 0 && pConfig) {
+	if (m_iDirtyOptions > 0 && pConfig && m_pSynthUi) {
 		// Save options...
 		pConfig->bProgramsPreview = m_ui.ProgramsPreviewCheckBox->isChecked();
 		pConfig->bUseNativeDialogs = m_ui.UseNativeDialogsCheckBox->isChecked();
@@ -747,28 +749,30 @@ void synthv1widget_config::accept (void)
 		pConfig->iKnobEditMode = m_ui.KnobEditModeComboBox->currentIndex();
 		synthv1widget_edit::setEditMode(
 			synthv1widget_edit::EditMode(pConfig->iKnobEditMode));
-		const QString sOldCustomColorTheme = pConfig->sCustomColorTheme;
-		if (m_ui.CustomColorThemeComboBox->currentIndex() > 0)
-			pConfig->sCustomColorTheme = m_ui.CustomColorThemeComboBox->currentText();
-		else
-			pConfig->sCustomColorTheme.clear();
-		const QString sOldCustomStyleTheme = pConfig->sCustomStyleTheme;
-		if (m_ui.CustomStyleThemeComboBox->currentIndex() > 0)
-			pConfig->sCustomStyleTheme = m_ui.CustomStyleThemeComboBox->currentText();
-		else
-			pConfig->sCustomStyleTheme.clear();
 		pConfig->fRandomizePercent = float(m_ui.RandomizePercentSpinBox->value());
 		int iNeedRestart = 0;
-		QWidget *pParentWidget = parentWidget();
-		if (pParentWidget) {
+		if (!m_pSynthUi->isPlugin()) {
+			const QString sOldCustomStyleTheme = pConfig->sCustomStyleTheme;
+			if (m_ui.CustomStyleThemeComboBox->currentIndex() > 0)
+				pConfig->sCustomStyleTheme = m_ui.CustomStyleThemeComboBox->currentText();
+			else
+				pConfig->sCustomStyleTheme.clear();
 			if (pConfig->sCustomStyleTheme != sOldCustomStyleTheme) {
 				if (pConfig->sCustomStyleTheme.isEmpty()) {
 					++iNeedRestart;
 				} else {
-					pParentWidget->setStyle(
+					QApplication::setStyle(
 						QStyleFactory::create(pConfig->sCustomStyleTheme));
 				}
 			}
+		}
+		QWidget *pParentWidget = parentWidget();
+		if (pParentWidget) {
+			const QString sOldCustomColorTheme = pConfig->sCustomColorTheme;
+			if (m_ui.CustomColorThemeComboBox->currentIndex() > 0)
+				pConfig->sCustomColorTheme = m_ui.CustomColorThemeComboBox->currentText();
+			else
+				pConfig->sCustomColorTheme.clear();
 			if (pConfig->sCustomColorTheme != sOldCustomColorTheme) {
 				if (pConfig->sCustomColorTheme.isEmpty()) {
 					++iNeedRestart;
@@ -898,7 +902,8 @@ void synthv1widget_config::resetCustomStyleThemes (
 		QStyleFactory::keys());
 
 	int iCustomStyleTheme = 0;
-	if (!sCustomStyleTheme.isEmpty()) {
+	if (!sCustomStyleTheme.isEmpty()
+		&& m_pSynthUi && !m_pSynthUi->isPlugin()) {
 		iCustomStyleTheme = m_ui.CustomStyleThemeComboBox->findText(
 			sCustomStyleTheme);
 		if (iCustomStyleTheme < 0)
