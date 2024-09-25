@@ -73,6 +73,9 @@ public:
 	// Dirty close prompt,
 	bool queryClose();
 
+	// Update visual configuration.
+	void updateConfig();
+
 public slots:
 
 	// Preset file I/O.

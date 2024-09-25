@@ -743,13 +743,11 @@ void synthv1widget_config::accept (void)
 		pConfig->bProgramsPreview = m_ui.ProgramsPreviewCheckBox->isChecked();
 		pConfig->bUseNativeDialogs = m_ui.UseNativeDialogsCheckBox->isChecked();
 		pConfig->bDontUseNativeDialogs = !pConfig->bUseNativeDialogs;
-		pConfig->iKnobDialMode = m_ui.KnobDialModeComboBox->currentIndex();
-		synthv1widget_dial::setDialMode(
-			synthv1widget_dial::DialMode(pConfig->iKnobDialMode));
-		pConfig->iKnobEditMode = m_ui.KnobEditModeComboBox->currentIndex();
-		synthv1widget_edit::setEditMode(
-			synthv1widget_edit::EditMode(pConfig->iKnobEditMode));
 		pConfig->fRandomizePercent = float(m_ui.RandomizePercentSpinBox->value());
+		const int iOldKnobDialMode = pConfig->iKnobDialMode;
+		const int iOldKnobEditMode = pConfig->iKnobEditMode;
+		pConfig->iKnobDialMode = m_ui.KnobDialModeComboBox->currentIndex();
+		pConfig->iKnobEditMode = m_ui.KnobEditModeComboBox->currentIndex();
 		int iNeedRestart = 0;
 		if (!m_pSynthUi->isPlugin()) {
 			const QString sOldCustomStyleTheme = pConfig->sCustomStyleTheme;
@@ -766,7 +764,8 @@ void synthv1widget_config::accept (void)
 				}
 			}
 		}
-		QWidget *pParentWidget = parentWidget();
+		synthv1widget *pParentWidget
+			= qobject_cast<synthv1widget *> (parentWidget());
 		if (pParentWidget) {
 			const QString sOldCustomColorTheme = pConfig->sCustomColorTheme;
 			if (m_ui.CustomColorThemeComboBox->currentIndex() > 0)
@@ -782,6 +781,10 @@ void synthv1widget_config::accept (void)
 							pConfig, pConfig->sCustomColorTheme, pal))
 						pParentWidget->setPalette(pal);
 				}
+			}
+			if (pConfig->iKnobDialMode != iOldKnobDialMode ||
+				pConfig->iKnobEditMode != iOldKnobEditMode) {
+				pParentWidget->updateConfig();
 			}
 		}
 		// Show restart message if needed...

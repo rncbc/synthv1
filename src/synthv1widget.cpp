@@ -834,13 +834,7 @@ synthv1widget::synthv1widget ( QWidget *pParent )
 		SLOT(helpAboutQt()));
 
 	// General knob/dial  behavior init...
-	synthv1_config *pConfig = synthv1_config::getInstance();
-	if (pConfig) {
-		synthv1widget_dial::setDialMode(
-			synthv1widget_dial::DialMode(pConfig->iKnobDialMode));
-		synthv1widget_edit::setEditMode(
-			synthv1widget_edit::EditMode(pConfig->iKnobEditMode));
-	}
+	updateConfig();
 
 	// Epilog.
 	// QWidget::adjustSize();
@@ -1388,6 +1382,19 @@ bool synthv1widget::savePreset ( const QString& sFilename )
 bool synthv1widget::queryClose (void)
 {
 	return m_ui.Preset->queryPreset();
+}
+
+
+// Update visual configuration.
+void synthv1widget::updateConfig (void)
+{
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig) {
+		synthv1widget_dial::setDialMode(
+			synthv1widget_dial::DialMode(pConfig->iKnobDialMode));
+		synthv1widget_edit::setEditMode(
+			synthv1widget_edit::EditMode(pConfig->iKnobEditMode));
+	}
 }
 
 
