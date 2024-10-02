@@ -17,8 +17,8 @@
 
 Summary:	An old-school polyphonic subtractive synthesizer
 Name:		synthv1
-Version:	1.1.1
-Release:	3.1
+Version:	1.1.2
+Release:	4.1
 License:	GPL-2.0-or-later
 Group:		Productivity/Multimedia/Sound/Midi
 Source: 	%{name}-%{version}.tar.gz
@@ -157,155 +157,11 @@ cmake --install build
 
 
 %changelog
+* Wed Oct  2 2024 Rui Nuno Capela <rncbc@rncbc.org> 1.1.2
+- An Early-Fall'24 Release.
 * Fri Sep 20 2024 Rui Nuno Capela <rncbc@rncbc.org> 1.1.1
 - An End-of-Summer'24 Release.
 * Wed Aug 28 2024 Rui Nuno Capela <rncbc@rncbc.org> 1.1.0
 - A Mid-Summer'24 Release.
 * Thu Jun 20 2024 Rui Nuno Capela <rncbc@rncbc.org> 1.0.0
 - An Unthinkable Release.
-* Thu May  2 2024 Rui Nuno Capela <rncbc@rncbc.org> 0.9.91
-- A Spring'24 Release Candidate 2.
-* Thu Apr 11 2024 Rui Nuno Capela <rncbc@rncbc.org> 0.9.90
-- A Spring'24 Release Candidate.
-* Fri Jan 26 2024 Rui Nuno Capela <rncbc@rncbc.org> 0.9.34
-- A Winter'24 Release.
-* Wed Dec 20 2023 Rui Nuno Capela <rncbc@rncbc.org> 0.9.33
-- An End-of-Autumn'23 Release.
-* Tue Sep 12 2023 Rui Nuno Capela <rncbc@rncbc.org> 0.9.32
-- An End-of-Summer'23 Release.
-* Tue Jun  6 2023 Rui Nuno Capela <rncbc@rncbc.org> 0.9.31
-- A Spring'23 Release.
-* Fri Mar 24 2023 Rui Nuno Capela <rncbc@rncbc.org> 0.9.30
-- An Early-Spring'23 Release.
-* Wed Jan 25 2023 Rui Nuno Capela <rncbc@rncbc.org> 0.9.29
-- A Winter'23 Release.
-* Thu Dec 29 2022 Rui Nuno Capela <rncbc@rncbc.org> 0.9.28
-- An End-of-Year'22 Release.
-* Tue Oct  4 2022 Rui Nuno Capela <rncbc@rncbc.org> 0.9.27
-- An Early-Autumn'22 Release.
-* Tue Jun  7 2022 Rui Nuno Capela <rncbc@rncbc.org> 0.9.26
-- An End-of-Spring'22 Release.
-* Thu Apr  7 2022 Rui Nuno Capela <rncbc@rncbc.org> 0.9.25
-- A Spring'22 Release.
-* Sun Jan  9 2022 Rui Nuno Capela <rncbc@rncbc.org> 0.9.24
-- A Winter'22 Release.
-* Wed Jul  7 2021 Rui Nuno Capela <rncbc@rncbc.org> 0.9.23
-- An Early-Summer'21 Release.
-* Thu May 13 2021 Rui Nuno Capela <rncbc@rncbc.org> 0.9.22
-- A Spring'21 Release.
-* Tue Mar 16 2021 Rui Nuno Capela <rncbc@rncbc.org> 0.9.21
-- An End-of-Winter'21 Release.
-* Wed Feb 10 2021 Rui Nuno Capela <rncbc@rncbc.org> 0.9.20
-- A Winter'21 Release.
-* Sat Dec 19 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.9.19
-- A Winter'20 Release.
-* Tue Oct 27 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.9.18
-- A Fall'20 Release.
-* Tue Sep  8 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.9.17
-- A Late Summer'20 Release.
-* Thu Aug  6 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.9.16
-- A Summer'20 Release.
-* Mon Jun 22 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.9.15
-- An Early-Summer'20 Release.
-* Tue May  5 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.9.14
-- A Mid-Spring'20 Release.
-* Thu Mar 26 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.9.13
-- A Spring'20 Release.
-* Thu Dec 26 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.9.12
-- The Winter'19 Release.
-* Thu Oct 31 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.9.11
-- A Halloween'19 Release.
-* Thu Oct  3 2019 Rui Nuno Capela <rncbc@rncbc.org>
-- [xstatic] Prepared for qtbase5-static build.
-* Tue Sep 24 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.9.10
-- An Early-Fall'19 release.
-* Thu Jul 18 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.9.9
-- A Summer'19 release.
-* Thu Jun  6 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.9.8
-- A Spring'19 release.
-* Sun Apr 14 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.9.7
-- A Spring-Break'19 release.
-* Mon Mar 18 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.9.6
-- Pre-LAC2019 release frenzy.
-* Mon Mar  4 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.9.5
-- The End of Winter'19 release.
-* Wed Dec 12 2018 Rui Nuno Capela <rncbc@rncbc.org> 0.9.4
-- A Late Autumn'18 release.
-* Mon Oct 22 2018 Rui Nuno Capela <rncbc@rncbc.org> 0.9.3
-- An Autumn'18 release.
-* Tue Jul 24 2018 Rui Nuno Capela <rncbc@rncbc.org> 0.9.2
-- A Summer'18 release.
-* Tue Jun 26 2018 Rui Nuno Capela <rncbc@rncbc.org> 0.9.1
-- An Early Summer'18 release.
-* Wed Mar  7 2018 Rui Nuno Capela <rncbc@rncbc.org> 0.9.0
-- The End of Winter'18 release.
-* Sun Oct 29 2017 Rui Nuno Capela <rncbc@rncbc.org> 0.8.5
-- An Autumn'17 release.
-* Tue Aug 22 2017 Rui Nuno Capela <rncbc@rncbc.org> 0.8.4
-- A Late-Summer'17 release.
-* Wed Jun 21 2017 Rui Nuno Capela <rncbc@rncbc.org> 0.8.3
-- A Summer'17 release.
-* Tue May  2 2017 Rui Nuno Capela <rncbc@rncbc.org> 0.8.2
-- Pre-LAC2017 release frenzy.
-* Tue Mar 21 2017 Rui Nuno Capela <rncbc@rncbc.org> 0.8.1
-- A Spring'17 release.
-* Thu Nov 17 2016 Rui Nuno Capela <rncbc@rncbc.org> 0.8.0
-- A Fall'16 release.
-* Mon Sep 19 2016 Rui Nuno Capela <rncbc@rncbc.org> 0.7.6
-- The eleventh official beta.
-* Thu Jun 16 2016 Rui Nuno Capela <rncbc@rncbc.org> 0.7.5
-- The tenth official beta.
-* Wed Mar  2 2016 Rui Nuno Capela <rncbc@rncbc.org> 0.7.4
-- The ninth-bis official beta.
-* Mon Feb 22 2016 Rui Nuno Capela <rncbc@rncbc.org> 0.7.3
-- The ninth official beta.
-* Fri Dec  4 2015 Rui Nuno Capela <rncbc@rncbc.org> 0.7.2
-- The eighth official beta.
-* Mon Aug 24 2015 Rui Nuno Capela <rncbc@rncbc.org> 0.7.1
-- A seventh-bis official beta.
-* Fri Jul 24 2015 Rui Nuno Capela <rncbc@rncbc.org> 0.7.0
-- A seventh official beta.
-* Sat May  9 2015 Rui Nuno Capela <rncbc@rncbc.org> 0.6.3
-- A sixth official beta.
-* Thu Apr 30 2015 Rui Nuno Capela <rncbc@rncbc.org> 0.6.2
-- A fifth official beta.
-* Mon Mar  9 2015 Rui Nuno Capela <rncbc@rncbc.org> 0.6.1
-- A fourth official beta.
-* Fri Jan 23 2015 Rui Nuno Capela <rncbc@rncbc.org> 0.6.0
-- A third official beta.
-* Fri Sep 12 2014 Rui Nuno Capela <rncbc@rncbc.org> 0.5.1
-- One second official beta.
-* Mon Jun 30 2014 Rui Nuno Capela <rncbc@rncbc.org> 0.5.0
-- Officially beta now.
-* Tue Apr 29 2014 Rui Nuno Capela <rncbc@rncbc.org> 0.4.2
-- A pre-LAC frenzy beta.
-* Mon Apr  7 2014 Rui Nuno Capela <rncbc@rncbc.org> 0.4.1
-- A proto-beta bis.
-* Thu Mar  6 2014 Rui Nuno Capela <rncbc@rncbc.org> 0.4.0
-- A proto-beta party.
-* Tue Dec 31 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.6
-- A fifth of a Jubilee release.
-* Mon Sep 30 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.5
-- Fall greetings release.
-* Tue Jul 16 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.4
-- Brand new icon ready.
-* Fri May 31 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.3
-- Late spring blossoming.
-* Fri Mar  1 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.2
-- One third bug-fix release.
-* Fri Feb  8 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.3.1
-- One second bug-fix release.
-* Fri Dec 21 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.3.0
-- Third coming release.
-* Thu Nov 22 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.2.0
-- Second public release.
-* Mon Sep 24 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.1.1
-- One first bug-fix release.
-* Mon Sep 10 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.1.0
-- First true official release.
-* Mon Aug 27 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.0.9
-- Post-vacation relax: improved polyphony, preset salvage.
-* Sun Jul 15 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.0.8
-- Proto-Icon, Desktop file and Help About menus added.
-* Sun Jul  8 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.0.7
-- Created initial synthv1.spec

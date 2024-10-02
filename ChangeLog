@@ -4,7 +4,7 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+1.1.2  2024-10-02  An Early-Fall'24 Release.
 
 - Configure: disable widget style option on LV2 plug-ins only,
   for which it wasn't working on the JACK stand-alones either.
