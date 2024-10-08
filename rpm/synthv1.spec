@@ -47,10 +47,10 @@ BuildRequires:	gcc-c++ >= 10
 %define _GXX	/usr/bin/g++
 %endif
 %if 0%{qt_major_version} == 6
-BuildRequires:	qtbase6.7-static >= 6.7
-BuildRequires:	qttools6.7-static
-BuildRequires:	qttranslations6.7-static
-BuildRequires:	qtsvg6.7-static
+BuildRequires:	qtbase6.8-static >= 6.8
+BuildRequires:	qttools6.8-static
+BuildRequires:	qttranslations6.8-static
+BuildRequires:	qtsvg6.8-static
 %else
 BuildRequires:	pkgconfig(Qt5Core)
 BuildRequires:	pkgconfig(Qt5Gui)
@@ -104,7 +104,7 @@ Obsoletes:	%{name}-common <= %{version}
 
 %build
 %if 0%{qt_major_version} == 6
-source /opt/qt6.7-static/bin/qt6.7-static-env.sh
+source /opt/qt6.8-static/bin/qt6.8-static-env.sh
 %endif
 CXX=%{_GXX} CC=%{_GCC} \
 cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -Wno-dev -B build
