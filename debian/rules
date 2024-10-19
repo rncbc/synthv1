@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 #
-QTDIR ?= /opt/qt6.7-static
+QTDIR ?= /opt/qt6.8-static
 
 %:
 	dh $@
