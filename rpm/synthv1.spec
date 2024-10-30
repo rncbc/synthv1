@@ -31,6 +31,10 @@ URL:		http://synthv1.sourceforge.net
 %define qt_major_version  5
 %endif
 
+%if %{defined fedora}
+%global debug_package %{nil}
+%endif
+
 BuildRequires:	coreutils
 BuildRequires:	pkgconfig
 BuildRequires:	glibc-devel
