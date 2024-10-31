@@ -4,7 +4,7 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+1.1.3  2024-10-31  A Halloween'24 Release.
 
 - Prepping up next development cycle (Qt >= 6.8)
 
