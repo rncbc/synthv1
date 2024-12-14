@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.15)
 
 project (synthv1
-  VERSION 1.1.3
+  VERSION 1.2.0
   DESCRIPTION "an old-school polyphonic synthesizer"
   HOMEPAGE_URL "https://synthv1.sourceforge.io"
   LANGUAGES C CXX)
