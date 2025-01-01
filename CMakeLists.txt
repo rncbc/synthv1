@@ -6,7 +6,7 @@ project (synthv1
   HOMEPAGE_URL "https://synthv1.sourceforge.io"
   LANGUAGES C CXX)
 
-set (PROJECT_COPYRIGHT "Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved.")
+set (PROJECT_COPYRIGHT "Copyright (C) 2012-2025, rncbc aka Rui Nuno Capela. All rights reserved.")
 set (PROJECT_DOMAIN    "rncbc.org")
 
 execute_process (
