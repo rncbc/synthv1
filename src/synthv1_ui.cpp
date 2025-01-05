@@ -1,7 +1,7 @@
 // synthv1_ui.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2025, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -95,6 +95,12 @@ void synthv1_ui::reset (void)
 void synthv1_ui::updatePreset ( bool bDirty )
 {
 	m_pSynth->updatePreset(bDirty);
+}
+
+
+void synthv1_ui::updateParam ( synthv1::ParamIndex index )
+{
+	m_pSynth->updateParam(index);
 }
 
 
