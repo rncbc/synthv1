@@ -1,7 +1,7 @@
 #
 # spec file for package synthv1
 #
-# Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved.
+# Copyright (C) 2012-2025, rncbc aka Rui Nuno Capela. All rights reserved.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -17,8 +17,8 @@
 
 Summary:	An old-school polyphonic subtractive synthesizer
 Name:		synthv1
-Version:	1.2.0
-Release:	6.1
+Version:	1.3.0
+Release:	7.1
 License:	GPL-2.0-or-later
 Group:		Productivity/Multimedia/Sound/Midi
 Source: 	%{name}-%{version}.tar.gz
@@ -161,6 +161,8 @@ cmake --install build
 
 
 %changelog
+* Thu Jan 16 2025 Rui Nuno Capela <rncbc@rncbc.org> 1.3.0
+- A New-Year'25 Release.
 * Sun Dec 15 2024 Rui Nuno Capela <rncbc@rncbc.org> 1.2.0
 - An End-of-Year'24 Release.
 * Thu Oct 31 2024 Rui Nuno Capela <rncbc@rncbc.org> 1.1.3
