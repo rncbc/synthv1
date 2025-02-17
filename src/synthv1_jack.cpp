@@ -767,13 +767,7 @@ synthv1_jack_application::synthv1_jack_application ( int& argc, char **argv )
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
 	m_pApp->setApplicationName(PROJECT_NAME);
-	QString sVersion(PROJECT_VERSION);
-	sVersion += '\n';
-	sVersion += QString("Qt: %1").arg(qVersion());
-#if defined(QT_STATIC)
-	sVersion += "-static";
-#endif
-	m_pApp->setApplicationVersion(sVersion);
+	m_pApp->setApplicationVersion(PROJECT_VERSION);
 #endif
 	
 #ifdef HAVE_SIGNAL_H
@@ -862,13 +856,36 @@ bool synthv1_jack_application::parse_args (void)
 	parser.addOption({{"n", "client-name"},
 		QObject::tr("Set the JACK client name (default: %1)")
 			.arg(PROJECT_NAME), "label"});
-	parser.addHelpOption();
-	parser.addVersionOption();
+	const QCommandLineOption& helpOption = parser.addHelpOption();
+	const QCommandLineOption& versionOption = parser.addVersionOption();
 	parser.addPositionalArgument("preset-file",
 		QObject::tr("Load preset file (.%1)").arg(PROJECT_NAME),
 		QObject::tr("[preset-file]"));
-	parser.process(args);
 
+	if (!parser.parse(args)) {
+		show_error(parser.errorText());
+		return false;
+	}
+
+	if (parser.isSet(helpOption)) {
+		show_error(parser.helpText());
+		return false;
+	}
+
+	if (parser.isSet(versionOption)) {
+		QString sVersion = QString("%1 %2\n")
+			.arg(PROJECT_NAME)
+			.arg(QCoreApplication::applicationVersion());
+		sVersion += QString("Qt: %1").arg(qVersion());
+	#if defined(QT_STATIC)
+		sVersion += "-static";
+	#endif
+		sVersion += '\n';
+		show_error(sVersion);
+		return false;
+	}
+
+ 
 	if (parser.isSet("no-gui")) {
 		// Ignored: parsed on startup...
 	}
@@ -935,14 +952,14 @@ bool synthv1_jack_application::parse_args (void)
 		}
 		else
 		if (sArg == "-v" || sArg == "-V" || sArg == "--version") {
+			out << QString("%1: %2\n")
+				.arg(PROJECT_NAME)
+				.arg(PROJECT_VERSION);
 			out << QString("Qt: %1").arg(qVersion());
 		#if defined(QT_STATIC)
 			out << "-static";
 		#endif
 			out << '\n';
-			out << QString("%1: %2\n")
-				.arg(PROJECT_NAME)
-				.arg(PROJECT_VERSION);
 			return false;
 		}
 		else {
