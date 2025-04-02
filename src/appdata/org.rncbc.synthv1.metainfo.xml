@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2012-2024 Rui Nuno Capela <rncbc@rncbc.org> -->
+<!-- Copyright 2012-2025 Rui Nuno Capela <rncbc@rncbc.org> -->
 <component type="desktop">
  <id>org.rncbc.synthv1</id>
  <metadata_license>FSFAP</metadata_license>
@@ -40,6 +40,7 @@
  <developer_name>rncbc aka. Rui Nuno Capela</developer_name>
  <update_contact>rncbc@rncbc.org</update_contact>
  <releases>
+  <release version="1.3.1" date="2025-04-03" urgency="low" />
   <release version="1.3.0" date="2025-01-16" urgency="low" />
   <release version="1.2.0" date="2024-12-15" urgency="low" />
   <release version="1.1.0" date="2024-08-28" urgency="low" />
