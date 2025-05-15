@@ -1,7 +1,7 @@
 // synthv1widget_keybd.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2025, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -54,8 +54,11 @@ synthv1widget_keybd::synthv1widget_keybd ( QWidget *pParent )
 	QWidget::setMinimumSize(QSize(440, 22));
 	QWidget::setMouseTracking(true);
 
-	for (int n = 0; n < NUM_NOTES; ++n)
-		m_notes[n].on = false;
+	for (int n = 0; n < NUM_NOTES; ++n) {
+		Note& note = m_notes[n];
+		note.enabled = false;
+		note.on = false;
+	}
 
 	m_dragCursor = DragNone;
 
@@ -87,11 +90,35 @@ void synthv1widget_keybd::setNoteRange ( bool bNoteRange )
 
 	QWidget::update();
 }
-
-
+ 
+ 
 bool synthv1widget_keybd::isNoteRange (void) const
 {
 	return m_bNoteRange;
+}
+ 
+ 
+// Note enabled predicate.
+void synthv1widget_keybd::setNoteEnabled ( int iNote, bool bEnabled )
+{
+	if (iNote >= MIN_NOTE && MAX_NOTE >= iNote)
+		m_notes[iNote].enabled = bEnabled;
+}
+
+
+bool synthv1widget_keybd::isNoteEnabled ( int iNote ) const
+{
+	if (iNote >= MIN_NOTE && MAX_NOTE >= iNote)
+		return m_notes[iNote].enabled;
+	else
+		return false;
+}
+
+
+void synthv1widget_keybd::setAllNotesEnabled ( bool bEnabled )
+{
+	for (int n = 0; n < NUM_NOTES; ++n)
+		setNoteEnabled(n, bEnabled);
 }
 
 
@@ -424,13 +451,12 @@ void synthv1widget_keybd::updatePixmap (void)
 			const int x1 = int(wk * float(nk + 1) - float(w2 >> 1));
 			painter.drawRect(x1, 0, w2, h3);
 		}
+		m_notes[n].path = notePath(n, (n == m_iNoteKey
+			&& m_iNoteKey >= MIN_NOTE && MAX_NOTE >= m_iNoteKey));
 	}
 
 	m_iNoteLowX  = noteRect(m_iNoteLow).left();
 	m_iNoteHighX = noteRect(m_iNoteHigh).right();
-
-	if (m_iNoteKey >= MIN_NOTE && MAX_NOTE >= m_iNoteKey)
-		m_notes[m_iNoteKey].path = notePath(m_iNoteKey, true);
 }
 
 
@@ -444,21 +470,23 @@ void synthv1widget_keybd::paintEvent ( QPaintEvent *pPaintEvent )
 	painter.drawPixmap(rect, m_pixmap, rect);
 
 	const QPalette& pal = QWidget::palette();
-	QColor rgbOver;
+	QColor rgbGray = pal.mid().color();
+	rgbGray.setAlpha(120);
 
 	// Are we enabled still?
 	if (!QWidget::isEnabled()) {
-		rgbOver = pal.mid().color();
-		rgbOver.setAlpha(120);
-		painter.fillRect(rect, rgbOver);
+		painter.fillRect(rect, rgbGray);
 		return;
 	}
 
 	// Are we sticking in some note?
-	rgbOver = pal.highlight().color().darker(120);
+	QColor rgbOver = pal.highlight().color().darker(120);
 	rgbOver.setAlpha(180);
 	for (int n = 0; n < NUM_NOTES; ++n) {
 		Note& note = m_notes[n];
+		if (!note.enabled)
+			painter.fillPath(note.path, rgbGray);
+		else
 		if (note.on)
 			painter.fillPath(note.path, rgbOver);
 	}

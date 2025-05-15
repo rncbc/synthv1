@@ -1,7 +1,7 @@
 // synthv1widget_keybd.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2025, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -42,6 +42,12 @@ public:
 	// Note range predicate.
 	void setNoteRange(bool bNoteRange);
 	bool isNoteRange() const;
+
+	// Note enabled predicates.
+	void setNoteEnabled(int iNote, bool bEnabled);
+	bool isNoteEnabled(int iNote) const;
+
+	void setAllNotesEnabled(bool bEnabled);
 
 	// Default note-on velocity.
 	void setVelocity(int iVelocity);
@@ -145,6 +151,7 @@ protected:
 	// Current notes being keyed on.
 	struct Note
 	{
+		bool         enabled;
 		bool         on;
 		QPainterPath path;
 

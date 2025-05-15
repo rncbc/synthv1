@@ -775,6 +775,7 @@ synthv1widget::synthv1widget ( QWidget *pParent )
 	setParamKnob(synthv1::DYN1_LIMITER,  m_ui.Dyn1LimiterKnob);
 
 	// Make status-bar keyboard range active.
+	m_ui.StatusBar->keybd()->setAllNotesEnabled(true);
 	m_ui.StatusBar->keybd()->setNoteRange(true);
 
 	// Preset management
