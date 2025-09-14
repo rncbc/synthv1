@@ -877,6 +877,12 @@ bool synthv1_jack_application::parse_args (void)
 	#if defined(QT_STATIC)
 		sVersion += "-static";
 	#endif
+	#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
+		sVersion += ' ';
+		sVersion += '(';
+		sVersion += QApplication::platformName();
+		sVersion += ')';
+	#endif
 		sVersion += '\n';
 		show_error(sVersion);
 		return false;
