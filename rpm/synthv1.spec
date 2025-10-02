@@ -25,12 +25,6 @@ Source: 	%{name}-%{version}.tar.gz
 URL:		http://synthv1.sourceforge.net
 #Packager:	rncbc.org
 
-%if 0%{?fedora_version} >= 34 || 0%{?suse_version} > 1500 || ( 0%{?sle_version} >= 150200 && 0%{?is_opensuse} )
-%define qt_major_version  6
-%else
-%define qt_major_version  5
-%endif
-
 %if %{defined fedora}
 %global debug_package %{nil}
 %endif
@@ -50,17 +44,17 @@ BuildRequires:	gcc-c++ >= 10
 %define _GCC	/usr/bin/gcc
 %define _GXX	/usr/bin/g++
 %endif
-%if 0%{qt_major_version} == 6
+
+%if 0%{?sle_version} == 150200 && 0%{?is_opensuse}
 BuildRequires:	qtbase6.9-static >= 6.9
 BuildRequires:	qttools6.9-static
 BuildRequires:	qttranslations6.9-static
 BuildRequires:	qtsvg6.9-static
 %else
-BuildRequires:	pkgconfig(Qt5Core)
-BuildRequires:	pkgconfig(Qt5Gui)
-BuildRequires:	pkgconfig(Qt5Widgets)
-BuildRequires:	pkgconfig(Qt5Svg)
-BuildRequires:	pkgconfig(Qt5Xml)
+BuildRequires:	qtbase6.9-static >= 6.9
+BuildRequires:	qttools6.9-static
+BuildRequires:	qttranslations6.9-static
+BuildRequires:	qtsvg6.9-static
 %endif
 %if %{defined fedora}
 BuildRequires:	jack-audio-connection-kit-devel
@@ -107,7 +101,9 @@ Obsoletes:	%{name}-common <= %{version}
 %setup -q
 
 %build
-%if 0%{qt_major_version} == 6
+%if 0%{?sle_version} == 150200 && 0%{?is_opensuse}
+source /opt/qt6.9-static/bin/qt6.9-static-env.sh
+%else
 source /opt/qt6.9-static/bin/qt6.9-static-env.sh
 %endif
 CXX=%{_GXX} CC=%{_GCC} \
