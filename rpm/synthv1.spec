@@ -51,10 +51,10 @@ BuildRequires:	qttools6.9-static
 BuildRequires:	qttranslations6.9-static
 BuildRequires:	qtsvg6.9-static
 %else
-BuildRequires:	qtbase6.9-static >= 6.9
-BuildRequires:	qttools6.9-static
-BuildRequires:	qttranslations6.9-static
-BuildRequires:	qtsvg6.9-static
+BuildRequires:	qtbase6.10-static >= 6.10
+BuildRequires:	qttools6.10-static
+BuildRequires:	qttranslations6.10-static
+BuildRequires:	qtsvg6.10-static
 %endif
 %if %{defined fedora}
 BuildRequires:	jack-audio-connection-kit-devel
@@ -104,7 +104,7 @@ Obsoletes:	%{name}-common <= %{version}
 %if 0%{?sle_version} == 150200 && 0%{?is_opensuse}
 source /opt/qt6.9-static/bin/qt6.9-static-env.sh
 %else
-source /opt/qt6.9-static/bin/qt6.9-static-env.sh
+source /opt/qt6.10-static/bin/qt6.10-static-env.sh
 %endif
 CXX=%{_GXX} CC=%{_GCC} \
 cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -Wno-dev -B build
