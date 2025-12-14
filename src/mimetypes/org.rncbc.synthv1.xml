@@ -4,5 +4,6 @@
     <sub-class-of type="text/xml"/>
     <comment>synthv1 preset</comment>
     <glob pattern="*.synthv1"/>
+    <icon name="org.rncbc.synthv1.application-x-synthv1-preset"/>
   </mime-type>
 </mime-info>

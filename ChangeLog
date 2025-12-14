@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Fixed 'mime-info' file to the correct MIME-type icon names.
 - Get rid of CONFIG_WAYLAND build config option; add underlying
   platform name (eg. xcb, wayland) to Qt version string.
 
