@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- DejaVuSans TTF font is now firmly embedded to improve on the
+  self-containment status (ie. freetype2 static linking).
 - Fixed 'mime-info' file to the correct MIME-type icon names.
 - Get rid of CONFIG_WAYLAND build config option; add underlying
   platform name (eg. xcb, wayland) to Qt version string.

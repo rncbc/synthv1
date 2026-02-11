@@ -15,5 +15,6 @@
 		<file>images/fileOpen.png</file>
 		<file>images/synthv1_preset.png</file>
 		<file>images/synthv1_control.png</file>
+		<file>fonts/DejaVuSans.ttf</file>
 	</qresource>
 </RCC>
