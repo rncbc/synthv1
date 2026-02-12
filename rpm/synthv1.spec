@@ -17,8 +17,8 @@
 
 Summary:	An old-school polyphonic subtractive synthesizer
 Name:		synthv1
-Version:	1.3.2
-Release:	9.1
+Version:	1.4.0
+Release:	10.1
 License:	GPL-2.0-or-later
 Group:		Productivity/Multimedia/Sound/Midi
 Source: 	%{name}-%{version}.tar.gz
@@ -157,6 +157,8 @@ cmake --install build
 
 
 %changelog
+* Thu Feb 12 2025 Rui Nuno Capela <rncbc@rncbc.org> 1.4.0
+- A Mid-Winter'26 Release.
 * Tue May 20 2025 Rui Nuno Capela <rncbc@rncbc.org> 1.3.2
 - A Mid-Spring'25 Release.
 * Thu Apr  3 2025 Rui Nuno Capela <rncbc@rncbc.org> 1.3.1
