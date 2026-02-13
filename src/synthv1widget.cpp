@@ -59,7 +59,13 @@ synthv1widget::synthv1widget ( QWidget *pParent )
 {
 	Q_INIT_RESOURCE(synthv1);
 
-	QFontDatabase::addApplicationFont(":/fonts/DejaVuSans.ttf");
+	QFontDatabase::removeAllApplicationFonts();
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
+	::_putenv_s("QT_QPA_FONTDIR", ".");
+#else
+	::setenv("QT_QPA_FONTDIR", ".", 1);
+#endif
+	QFontDatabase::addApplicationFont(":/fonts/DejaVuSansCondensed.ttf");
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 	// HACK: Dark themes grayed/disabled color group fix...

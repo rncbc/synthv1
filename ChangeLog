@@ -4,6 +4,11 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- DejaVuSansCondensed.ttf is now the officially bundled font.
+
+
 1.4.0  2026-02-12  A Mid-Winter'26 Release.
 
 - DejaVuSans TTF font is now firmly embedded to improve on the
