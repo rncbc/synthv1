@@ -16,9 +16,9 @@
 #
 
 Summary:	An old-school polyphonic subtractive synthesizer
+Name:		synthv1
 Version:	1.4.1
 Release:	12.1
-Release:	11.1
 License:	GPL-2.0-or-later
 Group:		Productivity/Multimedia/Sound/Midi
 Source: 	%{name}-%{version}.tar.gz
