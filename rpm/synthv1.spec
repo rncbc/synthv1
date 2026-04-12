@@ -25,9 +25,7 @@ Source: 	%{name}-%{version}.tar.gz
 URL:		http://synthv1.sourceforge.net
 #Packager:	rncbc.org
 
-%if %{defined fedora}
 %global debug_package %{nil}
-%endif
 
 BuildRequires:	coreutils
 BuildRequires:	pkgconfig
