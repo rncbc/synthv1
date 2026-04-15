@@ -1,7 +1,7 @@
 // synthv1_jack.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2025, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2026, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -848,12 +848,17 @@ bool synthv1_jack_application::parse_args (void)
 	parser.setApplicationDescription(
 		PROJECT_NAME " - " + QObject::tr(PROJECT_DESCRIPTION));
 
-	parser.addOption({{"g", "no-gui"},
+	const QString s_no_gui      = "no-gui";
+	const QString s_client_name = "client-name";
+	const QString s_help        = "help";
+
+	parser.addOption({{"g", s_no_gui},
 		QObject::tr("Disable the graphical user interface (GUI)")});
-	parser.addOption({{"n", "client-name"},
+	parser.addOption({{"n", s_client_name},
 		QObject::tr("Set the JACK client name (default: %1)")
 			.arg(PROJECT_NAME), "label"});
-	const QCommandLineOption& helpOption = parser.addHelpOption();
+	parser.addOption({{"h", s_help},
+		QObject::tr("Displays help on command-line options.")});
 	const QCommandLineOption& versionOption = parser.addVersionOption();
 	parser.addPositionalArgument("preset-file",
 		QObject::tr("Load preset file (.%1)").arg(PROJECT_NAME),
@@ -864,7 +869,7 @@ bool synthv1_jack_application::parse_args (void)
 		return false;
 	}
 
-	if (parser.isSet(helpOption)) {
+	if (parser.isSet(s_help)) {
 		show_error(parser.helpText());
 		return false;
 	}
@@ -887,14 +892,13 @@ bool synthv1_jack_application::parse_args (void)
 		show_error(sVersion);
 		return false;
 	}
-
  
-	if (parser.isSet("no-gui")) {
+	if (parser.isSet(s_no_gui)) {
 		// Ignored: parsed on startup...
 	}
 
-	if (parser.isSet("client-name")) {
-		const QString& sVal = parser.value("client-name");
+	if (parser.isSet(s_client_name)) {
+		const QString& sVal = parser.value(s_client_name);
 		if (sVal.isEmpty()) {
 			show_error(QObject::tr("Option -n requires an argument (label)."));
 			return false;
