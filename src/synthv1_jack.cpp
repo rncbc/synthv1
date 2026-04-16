@@ -857,7 +857,7 @@ bool synthv1_jack_application::parse_args (void)
 	parser.addOption({{"n", s_client_name},
 		QObject::tr("Set the JACK client name (default: %1)")
 			.arg(PROJECT_NAME), "label"});
-	parser.addOption({{"h", s_help},
+	parser.addOption({{"?", s_help},
 		QObject::tr("Displays help on command-line options.")});
 	const QCommandLineOption& versionOption = parser.addVersionOption();
 	parser.addPositionalArgument("preset-file",
@@ -941,7 +941,7 @@ bool synthv1_jack_application::parse_args (void)
 				++i;
 		}
 		else
-		if (sArg == "-h" || sArg == "--help") {
+		if (sArg == "-?" || sArg == "--help") {
 			const QString sEot = "\n\t";
 			const QString sEol = "\n\n";
 			out << QObject::tr("Usage: %1 [options]").arg(args.at(0)) + sEol;
@@ -949,16 +949,16 @@ bool synthv1_jack_application::parse_args (void)
 			out << QObject::tr("Options:") + sEol;
 			out << "  -g, --no-gui" + sEot +
 				QObject::tr("Disable the graphical user interface (GUI)") + sEol;
-			out << "  -n, --client-name=[label]" + sEot +
+			out << "  -n, --client-name <label>" + sEot +
 				QObject::tr("Set the JACK client name (default: %1)").arg(PROJECT_NAME) + sEol;
-			out << "  -h, --help" + sEot +
+			out << "  -?, --help" + sEot +
 				QObject::tr("Show help about command line options.") + sEol;
 			out << "  -v, --version" + sEot +
 				QObject::tr("Show version information.") + sEol;
 			return false;
 		}
 		else
-		if (sArg == "-v" || sArg == "-V" || sArg == "--version") {
+		if (sArg == "-v" || sArg == "--version") {
 			out << QString("%1: %2\n")
 				.arg(PROJECT_NAME)
 				.arg(PROJECT_VERSION);
