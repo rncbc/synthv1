@@ -481,7 +481,7 @@ void synthv1_param::loadTuning (
 				= eChild.text();
 			const QByteArray aKeyMapFile
 				= synthv1_param::loadFilename(sKeyMapFile).toUtf8();
-			pSynth->setTuningScaleFile(aKeyMapFile.constData());
+			pSynth->setTuningKeyMapFile(aKeyMapFile.constData());
 		}
 	}
 

@@ -1433,7 +1433,7 @@ synthv1_port *synthv1_impl::paramPort ( synthv1::ParamIndex index )
 	case synthv1::DCO2_SHAPE2:    pParamPort = &m_dco2.shape2;      break;
 	case synthv1::DCO2_WIDTH2:    pParamPort = &m_dco2.width2;      break;
 	case synthv1::DCO2_BANDL2:    pParamPort = &m_dco2.bandl2;      break;
-	case synthv1::DCO2_SYNC2:     pParamPort = &m_dco1.sync2;       break;
+	case synthv1::DCO2_SYNC2:     pParamPort = &m_dco2.sync2;       break;
 	case synthv1::DCO2_BALANCE:   pParamPort = &m_dco2.balance;     break;
 	case synthv1::DCO2_DETUNE:    pParamPort = &m_dco2.detune;      break;
 	case synthv1::DCO2_PHASE:     pParamPort = &m_dco2.phase;       break;
