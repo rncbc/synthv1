@@ -196,7 +196,7 @@ void synthv1_sched_thread::run_process (void)
 			sched->sync_process();
 			m_items[r] = nullptr;
 		}
-		++r &= m_nmask;
+		r = (r + 1) & m_nmask;
 	}
 	m_iread = r;
 }
@@ -285,7 +285,7 @@ void synthv1_sched::sync_process (void)
 		process(sid);
 		sync_notify(m_pSynth, m_stype, sid);
 		m_items[r] = 0;
-		++r &= m_nmask;
+		r = (r + 1) & m_nmask;
 	}
 	m_iread = r;
 
