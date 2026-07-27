@@ -247,9 +247,10 @@ bool synthv1_tuning::loadScaleFile ( const QString& scaleFile )
 	while (!fs.atEnd()) {
 		const QString& line
 			= fs.readLine().simplified();
-		// Skip all-whitespace and comment lines
-		if (line.isEmpty())
+		// Skip all-whitespace lines after description...
+		if (line.isEmpty() && !scaleDesc.isEmpty())
 			continue;
+		// Skip comment lines
 		if (line.at(0) == '!')
 			continue;
 		if (scaleDesc.isEmpty())
