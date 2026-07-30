@@ -1,7 +1,7 @@
 // synthv1widget_palette.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2026, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -160,6 +160,8 @@ synthv1widget_palette::synthv1widget_palette ( QWidget *parent, const QPalette& 
 synthv1widget_palette::~synthv1widget_palette (void)
 {
 	setSettings(nullptr);
+
+	delete p_ui;
 }
 
 
