@@ -1,7 +1,7 @@
 // synthv1widget_config.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2026, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -69,6 +69,11 @@ protected slots:
 	void programsEditItem();
 	void programsDeleteItem();
 
+	void presetsAddBankItem();
+	void presetsAddItem();
+	void presetsRenameItem();
+	void presetsRemoveItem();
+
 	// janitorial slots.
 	void controlsCurrentChanged();
 	void controlsContextMenuRequested(const QPoint&);
@@ -76,6 +81,10 @@ protected slots:
 	void programsCurrentChanged();
 	void programsActivated();
 	void programsContextMenuRequested(const QPoint&);
+
+	void presetsCurrentChanged();
+	void presetsActivated();
+	void presetsContextMenuRequested(const QPoint&);
 
 	void controlsEnabled(bool);
 	void programsEnabled(bool);
@@ -88,6 +97,7 @@ protected slots:
 	void tuningChanged();
 	void controlsChanged();
 	void programsChanged();
+	void presetsChanged();
 	void optionsChanged();
 
 	// dialog slots.
@@ -127,6 +137,7 @@ private:
 	int m_iDirtyTuning;
 	int m_iDirtyControls;
 	int m_iDirtyPrograms;
+	int m_iDirtyPresets;
 	int m_iDirtyOptions;
 
 	// Programs/preset related stuff...

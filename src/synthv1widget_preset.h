@@ -1,7 +1,7 @@
 // synthv1widget_preset.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2026, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -22,15 +22,22 @@
 #ifndef __synthv1widget_preset_h
 #define __synthv1widget_preset_h
 
+#include "synthv1widget_presets.h"
+
 #include <QWidget>
 
+
 // Forward declarations.
+class synthv1_presets;
+
 class QToolButton;
 class QComboBox;
 
+class QTreeWidgetItem;
+
 
 //-------------------------------------------------------------------------
-// synthv1widget_preset - Custom combo/edit-box widget.
+// synthv1widget_preset - Custom preset-box widget.
 
 class synthv1widget_preset : public QWidget
 {
@@ -39,7 +46,7 @@ class synthv1widget_preset : public QWidget
 public:
 
 	// Constructor.
-	synthv1widget_preset(QWidget *pParent = 0);
+	synthv1widget_preset(QWidget *pParent = nullptr);
 
 	void setPreset(const QString& sPreset);
 	QString preset() const;
@@ -47,8 +54,12 @@ public:
 	void setDirtyPreset(bool bDirtyPreset);
 	bool isDirtyPreset() const;
 
+	void initPreset();
+
 	void clearPreset();
 	bool queryPreset();
+
+	void reloadPresets(synthv1_presets *pPresets = nullptr);
 
 signals:
 
@@ -59,10 +70,9 @@ signals:
 
 	void resetPresetFile();
 
-public slots:
+	void presetActivated(const QString&);
 
-	void initPreset();
-	void stabilizePreset();
+	void refreshPresets();
 
 protected slots:
 
@@ -78,17 +88,27 @@ protected:
 	void loadPreset(const QString&);
 	void savePreset(const QString&);
 
-	void refreshPreset();
+	void setPresetItem(const QString& sPreset);
+	QTreeWidgetItem *presetItem(const QString& sPreset) const;
+
+	void setBankItem(const QString& sBank, int iPreset = 0);
+	QTreeWidgetItem *bankItem(const QString& sBank) const;
+
+	void stabilizePreset();
 
 private:
 
 	// Widget members.
 	QToolButton *m_pNewButton;
 	QToolButton *m_pOpenButton;
-	QComboBox   *m_pComboBox;
+
+	synthv1widget_presets::ComboBox *m_pComboBox;
+
 	QToolButton *m_pSaveButton;
 	QToolButton *m_pDeleteButton;
 	QToolButton *m_pResetButton;
+
+	synthv1widget_presets *m_pPresetsView;
 
 	int m_iInitPreset;
 	int m_iDirtyPreset;

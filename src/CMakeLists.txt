@@ -26,6 +26,7 @@ set (HEADERS
   synthv1_tuning.h
   synthv1_programs.h
   synthv1_controls.h
+  synthv1_presets.h
 )
 
 set (SOURCES
@@ -38,6 +39,7 @@ set (SOURCES
   synthv1_tuning.cpp
   synthv1_programs.cpp
   synthv1_controls.cpp
+  synthv1_presets.cpp
 )
 
 
@@ -49,8 +51,9 @@ set (HEADERS_UI
   synthv1widget_wave.h
   synthv1widget_param.h
   synthv1widget_keybd.h
-  synthv1widget_preset.h
   synthv1widget_status.h
+  synthv1widget_preset.h
+  synthv1widget_presets.h
   synthv1widget_programs.h
   synthv1widget_controls.h
   synthv1widget_control.h
@@ -66,8 +69,9 @@ set (SOURCES_UI
   synthv1widget_wave.cpp
   synthv1widget_param.cpp
   synthv1widget_keybd.cpp
-  synthv1widget_preset.cpp
   synthv1widget_status.cpp
+  synthv1widget_preset.cpp
+  synthv1widget_presets.cpp
   synthv1widget_programs.cpp
   synthv1widget_controls.cpp
   synthv1widget_control.cpp

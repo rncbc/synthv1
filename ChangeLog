@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Improved Bank/Preset management widgets. (EXPERIMENTAL)
 - Fixed wrong keymap-file setter on tuning loader.
 - Added file-types property to LV2 plug-in Path parameters.
 

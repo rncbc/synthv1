@@ -3,7 +3,7 @@
  <author>rncbc aka Rui Nuno Capela</author>
  <comment>synthv1 - an old-school polyphonic synthesizer
 
-  Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved.
+  Copyright (C) 2012-2026, rncbc aka Rui Nuno Capela. All rights reserved.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -270,6 +270,156 @@
           </size>
          </property>
         </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="PresetsTab">
+      <attribute name="title">
+       <string>&amp;Presets</string>
+      </attribute>
+      <attribute name="toolTip">
+       <string>Programs</string>
+      </attribute>
+      <layout class="QVBoxLayout">
+       <item>
+        <layout class="QHBoxLayout">
+         <item>
+          <widget class="QToolButton" name="PresetsAddBankToolButton">
+           <property name="toolTip">
+            <string>Add bank</string>
+           </property>
+           <property name="text">
+            <string>Add &amp;Bank</string>
+           </property>
+           <property name="icon">
+            <iconset resource="synthv1.qrc">:/images/presetBank.png</iconset>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="PresetsAddItemToolButton">
+           <property name="toolTip">
+            <string>Add preset</string>
+           </property>
+           <property name="text">
+            <string>&amp;Add Preset</string>
+           </property>
+           <property name="icon">
+            <iconset resource="synthv1.qrc">:/images/synthv1_preset.png</iconset>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QToolButton" name="PresetsRenameToolButton">
+           <property name="toolTip">
+            <string>Rename bank/preset</string>
+           </property>
+           <property name="text">
+            <string>&amp;Rename</string>
+           </property>
+           <property name="icon">
+            <iconset resource="synthv1.qrc">:/images/presetEdit.png</iconset>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QToolButton" name="PresetsRemoveToolButton">
+           <property name="toolTip">
+            <string>Remove bank/preset</string>
+           </property>
+           <property name="text">
+            <string>Re&amp;move</string>
+           </property>
+           <property name="icon">
+            <iconset resource="synthv1.qrc">:/images/presetDelete.png</iconset>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="synthv1widget_presets" name="PresetsTreeWidget">
+         <property name="toolTip">
+          <string>Presets</string>
+         </property>
+         <property name="uniformRowHeights">
+          <bool>true</bool>
+         </property>
+         <property name="allColumnsShowFocus">
+          <bool>true</bool>
+         </property>
+         <property name="headerHidden">
+          <bool>true</bool>
+         </property>
+         <property name="columnCount">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout">
+         <item>
+          <spacer>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="PresetsPreviewCheckBox">
+           <property name="toolTip">
+            <string>Whether to preview the current selected preset</string>
+           </property>
+           <property name="text">
+            <string>&amp;Preview current preset</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -883,6 +1033,11 @@
    <extends>QTreeWidget</extends>
    <header>synthv1widget_programs.h</header>
   </customwidget>
+  <customwidget>
+   <class>synthv1widget_presets</class>
+   <extends>QTreeWidget</extends>
+   <header>synthv1widget_presets.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>UseNativeDialogsCheckBox</tabstop>
@@ -891,6 +1046,12 @@
   <tabstop>CustomColorThemeComboBox</tabstop>
   <tabstop>CustomColorThemeToolButton</tabstop>
   <tabstop>CustomStyleThemeComboBox</tabstop>
+  <tabstop>PresetsAddBankToolButton</tabstop>
+  <tabstop>PresetsAddItemToolButton</tabstop>
+  <tabstop>PresetsRenameToolButton</tabstop>
+  <tabstop>PresetsRemoveToolButton</tabstop>
+  <tabstop>PresetsTreeWidget</tabstop>
+  <tabstop>PresetsPreviewCheckBox</tabstop>
   <tabstop>ProgramsAddBankToolButton</tabstop>
   <tabstop>ProgramsAddItemToolButton</tabstop>
   <tabstop>ProgramsEditToolButton</tabstop>
