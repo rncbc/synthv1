@@ -76,6 +76,10 @@ public:
 	// Update visual configuration.
 	void updateConfig();
 
+	// Presets reload.
+	void loadPresets();
+	void savePresets();
+
 public slots:
 
 	// Preset file I/O.

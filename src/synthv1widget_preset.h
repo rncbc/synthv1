@@ -59,7 +59,8 @@ public:
 	void clearPreset();
 	bool queryPreset();
 
-	void reloadPresets(synthv1_presets *pPresets = nullptr);
+	void loadPresets();
+	void savePresets();
 
 signals:
 
@@ -71,8 +72,6 @@ signals:
 	void resetPresetFile();
 
 	void presetActivated(const QString&);
-
-	void refreshPresets();
 
 protected slots:
 

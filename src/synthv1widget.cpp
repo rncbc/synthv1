@@ -860,6 +860,8 @@ synthv1widget::synthv1widget ( QWidget *pParent )
 // Destructor.
 synthv1widget::~synthv1widget (void)
 {
+	savePresets();
+
 	if (m_sched_notifier)
 		delete m_sched_notifier;
 
@@ -1410,6 +1412,18 @@ void synthv1widget::updateConfig (void)
 }
 
 
+// Update/reload presets.
+void synthv1widget::loadPresets (void)
+{
+	m_ui.Preset->loadPresets();
+}
+
+void synthv1widget::savePresets (void)
+{
+	m_ui.Preset->savePresets();
+}
+
+
 // Preset status updater.
 void synthv1widget::updateLoadPreset ( const QString& sPreset )
 {
@@ -1523,6 +1537,8 @@ void synthv1widget::midiInLedTimeout (void)
 // Menu actions.
 void synthv1widget::helpConfigure (void)
 {
+	savePresets();
+
 	synthv1_ui *pSynthUi = ui_instance();
 	if (pSynthUi)
 		synthv1widget_config(this, pSynthUi).exec();

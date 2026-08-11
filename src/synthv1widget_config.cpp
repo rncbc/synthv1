@@ -821,6 +821,7 @@ void synthv1widget_config::stabilize (void)
 		|| m_iDirtyControls > 0
 		|| m_iDirtyPrograms > 0
 		|| m_iDirtyPresets  > 0
+		|| m_ui.PresetsTreeWidget->isDirtyPresets()
 		|| m_iDirtyOptions  > 0
 		|| m_iLoadPreset    > 0);
 	m_ui.DialogButtonBox->button(QDialogButtonBox::Ok)->setEnabled(bValid);
@@ -830,9 +831,19 @@ void synthv1widget_config::stabilize (void)
 // dialog slots.
 void synthv1widget_config::accept (void)
 {
-	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (m_pSynthUi == nullptr)
+		return;
 
-	if (m_iDirtyTuning > 0 && pConfig && m_pSynthUi) {
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig == nullptr)
+		return;
+
+	synthv1widget *pParentWidget
+		= qobject_cast<synthv1widget *> (parentWidget());
+	if (pParentWidget == nullptr)
+		return;
+
+	if (m_iDirtyTuning > 0) {
 		// Micro-tonal tuning settings...
 		if (m_ui.TuningTabBar->currentIndex() == 0) {
 			// Global (default) scope...
@@ -862,7 +873,7 @@ void synthv1widget_config::accept (void)
 		m_iDirtyTuning = 0;
 	}
 
-	if (m_iDirtyControls > 0 && pConfig && m_pSynthUi) {
+	if (m_iDirtyControls > 0) {
 		// Save controls...
 		synthv1_controls *pControls = m_pSynthUi->controls();
 		if (pControls) {
@@ -873,7 +884,7 @@ void synthv1widget_config::accept (void)
 		}
 	}
 
-	if (m_iDirtyPrograms > 0 && pConfig && m_pSynthUi) {
+	if (m_iDirtyPrograms > 0) {
 		// Save programs...
 		synthv1_programs *pPrograms = m_pSynthUi->programs();
 		if (pPrograms) {
@@ -884,17 +895,20 @@ void synthv1widget_config::accept (void)
 		}
 	}
 
-	if (m_iDirtyPresets > 0 && pConfig) {
+	if (m_iDirtyPresets > 0 || m_ui.PresetsTreeWidget->isDirtyPresets()) {
 		// Save presets...
 		synthv1_presets *pPresets = &(pConfig->presets);
 		if (pPresets) {
 			m_ui.PresetsTreeWidget->savePresets(pPresets);
+			m_ui.PresetsTreeWidget->setDirtyPresets(false);
+			// Update main preset selector.
+			pParentWidget->loadPresets();
 			// Reset dirty flag.
 			m_iDirtyPresets = 0;
 		}
 	}
 
-	if (m_iDirtyOptions > 0 && pConfig && m_pSynthUi) {
+	if (m_iDirtyOptions > 0) {
 		// Save options...
 		pConfig->bProgramsPreview = m_ui.ProgramsPreviewCheckBox->isChecked();
 		pConfig->bUseNativeDialogs = m_ui.UseNativeDialogsCheckBox->isChecked();
@@ -920,28 +934,24 @@ void synthv1widget_config::accept (void)
 				}
 			}
 		}
-		synthv1widget *pParentWidget
-			= qobject_cast<synthv1widget *> (parentWidget());
-		if (pParentWidget) {
-			const QString sOldCustomColorTheme = pConfig->sCustomColorTheme;
-			if (m_ui.CustomColorThemeComboBox->currentIndex() > 0)
-				pConfig->sCustomColorTheme = m_ui.CustomColorThemeComboBox->currentText();
-			else
-				pConfig->sCustomColorTheme.clear();
-			if (pConfig->sCustomColorTheme != sOldCustomColorTheme) {
-				if (pConfig->sCustomColorTheme.isEmpty()) {
-					++iNeedRestart;
-				} else {
-					QPalette pal;
-					if (synthv1widget_palette::namedPalette(
-							pConfig, pConfig->sCustomColorTheme, pal))
-						pParentWidget->setPalette(pal);
-				}
+		const QString sOldCustomColorTheme = pConfig->sCustomColorTheme;
+		if (m_ui.CustomColorThemeComboBox->currentIndex() > 0)
+			pConfig->sCustomColorTheme = m_ui.CustomColorThemeComboBox->currentText();
+		else
+			pConfig->sCustomColorTheme.clear();
+		if (pConfig->sCustomColorTheme != sOldCustomColorTheme) {
+			if (pConfig->sCustomColorTheme.isEmpty()) {
+				++iNeedRestart;
+			} else {
+				QPalette pal;
+				if (synthv1widget_palette::namedPalette(
+						pConfig, pConfig->sCustomColorTheme, pal))
+					pParentWidget->setPalette(pal);
 			}
-			if (pConfig->iKnobDialMode != iOldKnobDialMode ||
-				pConfig->iKnobEditMode != iOldKnobEditMode) {
-				pParentWidget->updateConfig();
-			}
+		}
+		if (pConfig->iKnobDialMode != iOldKnobDialMode ||
+			pConfig->iKnobEditMode != iOldKnobEditMode) {
+			pParentWidget->updateConfig();
 		}
 		// Show restart message if needed...
 		if (iNeedRestart > 0) {
@@ -968,6 +978,7 @@ void synthv1widget_config::reject (void)
 		m_iDirtyControls > 0 ||
 		m_iDirtyPrograms > 0 ||
 		m_iDirtyPresets  > 0 ||
+		m_ui.PresetsTreeWidget->isDirtyPresets() ||
 		m_iDirtyOptions  > 0 ||
 		m_iLoadPreset    > 0) {
 		QMessageBox::StandardButtons buttons

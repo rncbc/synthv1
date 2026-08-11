@@ -109,9 +109,7 @@ synthv1widget_preset::synthv1widget_preset ( QWidget *pParent )
 		SIGNAL(clicked()),
 		SLOT(resetPreset()));
 
-	synthv1_config *pConfig = synthv1_config::getInstance();
-	if (pConfig)
-		reloadPresets(&(pConfig->presets));
+	loadPresets();
 
 	stabilizePreset();
 }
@@ -216,7 +214,6 @@ void synthv1widget_preset::loadPreset ( const QString& sPreset )
 		++m_iInitPreset;
 		pConfig->sPreset = sPreset;
 		setPreset(sPreset);
-		reloadPresets();
 	}
 
 	stabilizePreset();
@@ -233,7 +230,6 @@ void synthv1widget_preset::newPreset (void)
 		emit newPresetFile();
 		pConfig->sPreset.clear();
 		clearPreset();
-		reloadPresets();
 	}
 
 	stabilizePreset();
@@ -279,8 +275,7 @@ void synthv1widget_preset::openPreset (void)
 				setPreset(sPreset);
 			}
 		}
-		reloadPresets(&(pConfig->presets));
-		emit refreshPresets();
+		loadPresets();
 	}
 
 	stabilizePreset();
@@ -289,7 +284,7 @@ void synthv1widget_preset::openPreset (void)
 
 void synthv1widget_preset::savePreset (void)
 {
-	savePreset(m_pComboBox->currentText());
+	savePreset(m_pComboBox->currentPreset());
 }
 
 void synthv1widget_preset::savePreset ( const QString& sPreset )
@@ -319,8 +314,7 @@ void synthv1widget_preset::savePreset ( const QString& sPreset )
 			pConfig->sPreset = sPreset;
 			pConfig->sPresetDir = QFileInfo(sPresetFile).absolutePath();
 		}
-		reloadPresets(&(pConfig->presets));
-		emit refreshPresets();
+		loadPresets();
 	}
 
 	stabilizePreset();
@@ -330,7 +324,7 @@ void synthv1widget_preset::savePreset ( const QString& sPreset )
 void synthv1widget_preset::deletePreset (void)
 {
 	const QString& sPreset
-		= m_pComboBox->currentText();
+		= m_pComboBox->currentPreset();
 	if (sPreset.isEmpty())
 		return;
 
@@ -353,8 +347,8 @@ void synthv1widget_preset::deletePreset (void)
 	pConfig->sPreset.clear();
 
 	clearPreset();
-	reloadPresets(&(pConfig->presets));
-	emit refreshPresets();
+	loadPresets();
+
 	stabilizePreset();
 }
 
@@ -362,7 +356,7 @@ void synthv1widget_preset::deletePreset (void)
 void synthv1widget_preset::resetPreset (void)
 {
 	const QString& sPreset
-		= m_pComboBox->currentText();
+		= m_pComboBox->currentPreset();
 	const bool bLoadPreset
 		= (!sPreset.isEmpty() && presetItem(sPreset) != nullptr);
 
@@ -380,7 +374,7 @@ void synthv1widget_preset::resetPreset (void)
 
 
 // Widget refreshner-loader.
-void synthv1widget_preset::reloadPresets ( synthv1_presets *pPresets )
+void synthv1widget_preset::loadPresets (void)
 {
 	const bool bBlockSignals
 		= m_pComboBox->blockSignals(true);
@@ -388,14 +382,28 @@ void synthv1widget_preset::reloadPresets ( synthv1_presets *pPresets )
 	const QString sOldPreset
 		= m_pComboBox->currentPreset();
 
-	if (pPresets)
-		m_pPresetsView->loadPresets(pPresets);
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig)
+		m_pPresetsView->loadPresets(&(pConfig->presets));
 
 	setPresetItem(sOldPreset);
 
 	m_iDirtyPreset = 0;
 
 	m_pComboBox->blockSignals(bBlockSignals);
+}
+
+
+void synthv1widget_preset::savePresets (void)
+{
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig == nullptr)
+		return;
+
+	if (m_pPresetsView->isDirtyPresets()) {
+		m_pPresetsView->savePresets(&(pConfig->presets));
+		m_pPresetsView->setDirtyPresets(false);
+	}
 }
 
 
@@ -410,14 +418,13 @@ void synthv1widget_preset::initPreset (void)
 }
 
 
-// Dirty flag accessors.
+// Dirty flag accessor.
 void synthv1widget_preset::setDirtyPreset ( bool bDirtyPreset )
 {
-	if (bDirtyPreset) {
+	if (bDirtyPreset)
 		++m_iDirtyPreset;
-	} else {
+	else
 		m_iDirtyPreset = 0;
-	}
 
 	stabilizePreset();
 }
@@ -431,7 +438,7 @@ bool synthv1widget_preset::isDirtyPreset (void) const
 
 void synthv1widget_preset::stabilizePreset (void)
 {
-	const QString& sPreset = m_pComboBox->currentText();
+	const QString& sPreset = m_pComboBox->currentPreset();
 
 	const bool bEnabled = (!sPreset.isEmpty());
 	const bool bExists  = (presetItem(sPreset) != nullptr);
