@@ -258,10 +258,12 @@ synthv1widget_presets::~synthv1widget_presets (void)
 // utilities.
 void synthv1widget_presets::loadPresets ( synthv1_presets *pPresets )
 {
+	const bool bRootIsDecorated
+		= QTreeWidget::rootIsDecorated();
+
 	QTreeWidget::clear();
 
 	QList<QTreeWidgetItem *> items;
-	QTreeWidgetItem *pCurrentItem = nullptr;
 
 	QStringListIterator preset_iter(pPresets->preset_list());
 	while (preset_iter.hasNext()) {
@@ -275,10 +277,6 @@ void synthv1widget_presets::loadPresets ( synthv1_presets *pPresets )
 		pPresetItem->setIcon(0, QIcon(":/images/synthv1_preset.png"));
 		pPresetItem->setText(0, pPreset->name());
 		pPresetItem->setData(0, Qt::UserRole, pPreset->file());
-		if (pPresets->current_bank() == nullptr &&
-			pPreset == pPresets->current_preset()) {
-			pCurrentItem = pPresetItem;
-		}
 		items.append(pPresetItem);
 	}
 
@@ -290,14 +288,20 @@ void synthv1widget_presets::loadPresets ( synthv1_presets *pPresets )
 		if (pBank == nullptr)
 			continue;
 		QTreeWidgetItem *pBankItem = new QTreeWidgetItem(this, BankItem);
-		pBankItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
-		pBankItem->setIcon(0, QIcon(":/images/presetBank.png"));
+		if (bRootIsDecorated) {
+			pBankItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+			pBankItem->setIcon(0, QIcon(":/images/presetBankOpen.png"));
+		} else {
+			pBankItem->setFlags(Qt::NoItemFlags);
+		}
 		pBankItem->setText(0, pBank->name());
 		pBankItem->setData(0, Qt::UserRole, iBankData++);
 		QStringListIterator bank_preset_iter(pBank->preset_list());
 		while (bank_preset_iter.hasNext()) {
 			const QString& sPreset = bank_preset_iter.next();
-			QTreeWidgetItem *pPresetItem = new QTreeWidgetItem(pBankItem, PresetItem);
+			QTreeWidgetItem *pPresetItem = bRootIsDecorated
+				? new QTreeWidgetItem(pBankItem, PresetItem)
+				: new QTreeWidgetItem(this, PresetItem);
 			pPresetItem->setFlags(
 				Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable);
 			pPresetItem->setIcon(0, QIcon(":/images/synthv1_preset.png"));
@@ -307,10 +311,6 @@ void synthv1widget_presets::loadPresets ( synthv1_presets *pPresets )
 			if (pPreset)
 				sPresetFile = pPreset->file();
 			pPresetItem->setData(0, Qt::UserRole, sPresetFile);
-			if (pPresets->current_bank() == pBank &&
-				pPreset && pPresets->current_preset() == pPreset) {
-				pCurrentItem = pPresetItem;
-			}
 		}
 		items.append(pBankItem);
 	}
@@ -318,14 +318,15 @@ void synthv1widget_presets::loadPresets ( synthv1_presets *pPresets )
 	QTreeWidget::addTopLevelItems(items);
 	QTreeWidget::expandAll();
 
-	QTreeWidget::setCurrentItem(pCurrentItem);
-
 	setDirtyPresets(false);
 }
 
 
 void synthv1widget_presets::savePresets ( synthv1_presets *pPresets )
 {
+	const bool bRootIsDecorated
+		= QTreeWidget::rootIsDecorated();
+
 	pPresets->clear_banks();
 	pPresets->clear_presets();
 
@@ -338,18 +339,20 @@ void synthv1widget_presets::savePresets ( synthv1_presets *pPresets )
 				= pBankItem->text(0).simplified();
 		//	const int iBankData = pBankItem->data(0, Qt::UserRole).toInt();
 			synthv1_presets::Bank *pBank = pPresets->add_bank(sBank);
-			const int iChildCount = pBankItem->childCount();
-			for (int iChild = 0 ; iChild < iChildCount; ++iChild) {
-				QTreeWidgetItem *pPresetItem = pBankItem->child(iChild);
-				const QString& sPreset
-					= pPresetItem->text(0).simplified();
-				pBank->add_preset(sPreset);
-				synthv1_presets::Preset *pPreset
-					= pPresets->add_preset(sPreset);
-				if (pPreset) {
-					const QString& sPresetFile
-						= pPresetItem->data(0, Qt::UserRole).toString();
-					pPreset->set_file(sPresetFile);
+			if (bRootIsDecorated) {
+				const int iChildCount = pBankItem->childCount();
+				for (int iChild = 0 ; iChild < iChildCount; ++iChild) {
+					QTreeWidgetItem *pPresetItem = pBankItem->child(iChild);
+					const QString& sPreset
+						= pPresetItem->text(0).simplified();
+					pBank->add_preset(sPreset);
+					synthv1_presets::Preset *pPreset
+						= pPresets->add_preset(sPreset);
+					if (pPreset) {
+						const QString& sPresetFile
+							= pPresetItem->data(0, Qt::UserRole).toString();
+						pPreset->set_file(sPresetFile);
+					}
 				}
 			}
 		}
@@ -365,71 +368,6 @@ void synthv1widget_presets::savePresets ( synthv1_presets *pPresets )
 					= pPresetItem->data(0, Qt::UserRole).toString();
 				pPreset->set_file(sPresetFile);
 			}
-		}
-	}
-}
-
-
-void synthv1widget_presets::loadPresetsCurrent ( synthv1_presets *pPresets )
-{
-	QString sBank;
-	synthv1_presets::Bank *pBank
-		= pPresets->current_bank();
-	if (pBank)
-		sBank = pBank->name();
-
-	QString sPreset;
-	synthv1_presets::Preset *pPreset
-		= pPresets->current_preset();
-	if (pPreset)
-		sPreset = pPreset->name();
-
-	const int iItemCount = QTreeWidget::topLevelItemCount();
-	for (int iItem = 0 ; iItem < iItemCount; ++iItem) {
-		QTreeWidgetItem *pItem = QTreeWidget::topLevelItem(iItem);
-		if (isBankItem(pItem) && !sBank.isEmpty()) {
-			QTreeWidgetItem *pBankItem = pItem;
-			if (sBank == pBankItem->text(0)) {
-				if (sPreset.isEmpty()) {
-					QTreeWidget::setCurrentItem(pBankItem);
-				} else {
-					const int iChildCount = pBankItem->childCount();
-					for (int iChild = 0 ; iChild < iChildCount; ++iChild) {
-						QTreeWidgetItem *pPresetItem = pBankItem->child(iChild);
-						if (sPreset == pPresetItem->text(0)) {
-							QTreeWidget::setCurrentItem(pPresetItem);
-							break;
-						}
-					}
-				}
-				break;
-			}
-		}
-		else
-		if (isPresetItem(pItem) && !sPreset.isEmpty()) {
-			QTreeWidgetItem *pPresetItem = pItem;
-			if (sPreset == pPresetItem->text(0)) {
-				QTreeWidget::setCurrentItem(pPresetItem);
-				break;
-			}
-		}
-	}
-}
-
-
-void synthv1widget_presets::savePresetsCurrent ( synthv1_presets *pPresets )
-{
-	const QList<QTreeWidgetItem *>& selected_items
-		= QTreeWidget::selectedItems();
-	if (!selected_items.isEmpty()) {
-		QTreeWidgetItem *pPresetItem = selected_items.first();
-		QTreeWidgetItem *pBankItem = pPresetItem->parent();
-		if (pBankItem) {
-			pPresets->set_current_bank(pBankItem->text(0));
-			pPresets->set_current_preset(pPresetItem->text(0));
-		} else {
-			pPresets->set_current_bank(QString()); // force nullptr!
-			pPresets->set_current_preset(pPresetItem->text(0));
 		}
 	}
 }
@@ -713,13 +651,13 @@ void synthv1widget_presets::itemChangedSlot ( QTreeWidgetItem *pItem, int )
 
 void synthv1widget_presets::itemExpandedSlot ( QTreeWidgetItem *pItem )
 {
-	if (isBankItem(pItem))
+	if (QTreeWidget::rootIsDecorated() && isBankItem(pItem))
 		pItem->setIcon(0, QIcon(":/images/presetBankOpen.png"));
 }
 
 void synthv1widget_presets::itemCollapsedSlot ( QTreeWidgetItem *pItem )
 {
-	if (isBankItem(pItem))
+	if (QTreeWidget::rootIsDecorated() && isBankItem(pItem))
 		pItem->setIcon(0, QIcon(":/images/presetBank.png"));
 }
 
@@ -818,7 +756,8 @@ void synthv1widget_presets::mousePressEvent ( QMouseEvent *pMouseEvent )
 {
 	dragLeaveEvent(nullptr);
 
-	if (pMouseEvent->button() == Qt::LeftButton) {
+	if (QTreeWidget::rootIsDecorated()
+		&& pMouseEvent->button() == Qt::LeftButton) {
 		m_posDrag = pMouseEvent->pos();
 		m_pDragItem = QTreeWidget::itemAt(m_posDrag);
 	}

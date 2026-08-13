@@ -28,7 +28,6 @@
 
 // ctor.
 synthv1_presets::synthv1_presets (void)
-	: m_current_bank(nullptr), m_current_preset(nullptr)
 {
 }
 
@@ -101,8 +100,6 @@ synthv1_presets::Bank *synthv1_presets::add_bank (
 void synthv1_presets::remove_bank ( const QString& bank_name )
 {
 	Bank *bank = find_bank(bank_name);
-	if (bank && m_current_bank == bank)
-		m_current_bank = nullptr;
 	if (bank && m_banks.remove(bank_name))
 		delete bank;
 
@@ -112,8 +109,6 @@ void synthv1_presets::remove_bank ( const QString& bank_name )
 
 void synthv1_presets::clear_banks (void)
 {
-	m_current_bank = nullptr;
-
 	qDeleteAll(m_banks);
 	m_banks.clear();
 
@@ -140,8 +135,6 @@ synthv1_presets::Preset *synthv1_presets::add_preset (
 			m_preset_list.append(preset_name);
 	}
 
-	set_current_preset(preset_name);
-
 	return preset;
 }
 
@@ -149,8 +142,6 @@ synthv1_presets::Preset *synthv1_presets::add_preset (
 void synthv1_presets::remove_preset ( const QString& preset_name )
 {
 	Preset *preset = m_presets.value(preset_name, nullptr);
-	if (preset && m_current_preset == preset)
-		m_current_preset = nullptr;
 	if (preset && m_presets.remove(preset_name))
 		delete preset;
 
@@ -168,21 +159,6 @@ void synthv1_presets::clear_presets (void)
 	m_presets.clear();
 
 	m_preset_list.clear();
-
-	m_current_preset = nullptr;
-}
-
-
-// current bank/preset managers
-void synthv1_presets::set_current_bank ( const QString& bank_name )
-{
-	m_current_bank = find_bank(bank_name);
-}
-
-
-void synthv1_presets::set_current_preset ( const QString& preset_name )
-{
-	m_current_preset = find_preset(preset_name);
 }
 
 

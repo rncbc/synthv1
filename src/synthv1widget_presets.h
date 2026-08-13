@@ -52,9 +52,6 @@ public:
 	void loadPresets(synthv1_presets *pPresets);
 	void savePresets(synthv1_presets *pPresets);
 
-	void loadPresetsCurrent(synthv1_presets *pPresets);
-	void savePresetsCurrent(synthv1_presets *pPresets);
-
 	QString currentPreset() const;
 
 	void setPresetItem(const QString& sPreset);

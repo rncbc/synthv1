@@ -125,15 +125,6 @@ public:
 	void remove_preset(const QString& preset_name);
 	void clear_presets();
 
-	// current bank/preset managers
-	void set_current_bank(const QString& bank_name);
-	void set_current_preset(const QString& preset_name);
-
-	Bank *current_bank() const
-		{ return m_current_bank; }
-	Preset *current_preset() const
-		{ return m_current_preset; }
-
 private:
 
 	Banks       m_banks;
@@ -141,9 +132,6 @@ private:
 
 	Presets     m_presets;
 	QStringList m_preset_list;
-
-	Bank   *m_current_bank;
-	Preset *m_current_preset;
 };
 
 
