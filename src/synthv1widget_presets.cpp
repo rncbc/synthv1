@@ -447,12 +447,13 @@ void synthv1widget_presets::addPresetItem (void)
 QTreeWidgetItem *synthv1widget_presets::newBankItem (void)
 {
 	int iBank = 0;
+	int iItem = 0;
 	const int iItemCount = QTreeWidget::topLevelItemCount();
-	for (int iItem = 0; iItem < iItemCount; ++iItem) {
+	for ( ; iItem < iItemCount; ++iItem) {
 		QTreeWidgetItem *pItem = QTreeWidget::topLevelItem(iItem);
 		if (isBankItem(pItem)) {
 			const int iBankData
-				= pItem->data(0, Qt::UserRole).toInt();
+				= pItem->data(0, Qt::UserRole).toInt() + 1;
 			if (iBank < iBankData)
 				iBank = iBankData;
 		}
@@ -461,11 +462,28 @@ QTreeWidgetItem *synthv1widget_presets::newBankItem (void)
 	const QString& sBank
 		= bankRenum(tr("Bank %1").arg(iBank + 1));
 
+	QTreeWidgetItem *pItem = QTreeWidget::currentItem();
+	if (pItem->parent())
+		pItem = pItem->parent();
+	iItem = QTreeWidget::indexOfTopLevelItem(pItem);
+	if (!isBankItem(pItem)) {
+		for (++iItem; iItem < iItemCount; ++iItem) {
+			pItem = QTreeWidget::topLevelItem(iItem);
+			if (isBankItem(pItem)) {
+				--iItem;
+				break;
+			}
+		}
+	}
+
 	QTreeWidgetItem *pBankItem = new QTreeWidgetItem(QStringList() << sBank, BankItem);
 	pBankItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 	pBankItem->setIcon(0, QIcon(":/images/presetBank.png"));
 	pBankItem->setData(0, Qt::UserRole, iBank + 1);
-	QTreeWidget::addTopLevelItem(pBankItem);
+	if (iItem >= 0)
+		QTreeWidget::insertTopLevelItem(iItem + 1, pBankItem);
+	else
+		QTreeWidget::addTopLevelItem(pBankItem);
 
 	setDirtyPresets(true);
 

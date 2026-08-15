@@ -41,10 +41,15 @@ synthv1_presets::~synthv1_presets (void)
 
 
 // bank/preset managers
-void synthv1_presets::Bank::add_preset ( const QString& preset_name )
+void synthv1_presets::Bank::add_preset (
+	const QString& preset_name, int after_index )
 {
-	if (!m_preset_list.contains(preset_name))
-		m_preset_list.append(preset_name);
+	if (!m_preset_list.contains(preset_name)) {
+		if (after_index >= 0)
+			m_preset_list.insert(after_index + 1, preset_name);
+		else
+			m_preset_list.append(preset_name);
+	}
 }
 
 
@@ -125,14 +130,29 @@ synthv1_presets::Preset *synthv1_presets::find_preset (
 
 
 synthv1_presets::Preset *synthv1_presets::add_preset (
-	const QString& preset_name )
+	const QString& preset_name, const QString& after_preset )
 {
 	Preset *preset = find_preset(preset_name);
 	if (preset == nullptr) {
 		preset = new Preset(preset_name);
 		m_presets.insert(preset_name, preset);
-		if (!find_preset_bank(preset_name))
-			m_preset_list.append(preset_name);
+		if (after_preset.isEmpty()) {
+			if (!find_preset_bank(preset_name))
+				m_preset_list.append(preset_name);
+		} else {
+			int after_index;
+			Bank *bank = find_preset_bank(after_preset);
+			if (bank) {
+				after_index = bank->preset_list().indexOf(after_preset);
+				bank->add_preset(preset_name, after_index);
+			} else {
+				after_index = m_preset_list.indexOf(after_preset);
+				if (after_index >= 0)
+					m_preset_list.insert(after_index + 1, preset_name);
+				else
+					m_preset_list.append(preset_name);
+			}
+		}
 	}
 
 	return preset;

@@ -59,7 +59,7 @@ public:
 			{ return m_preset_list; }
 
 		// preset managers
-		void add_preset(const QString& preset_name);
+		void add_preset(const QString& preset_name, int after_index = -1);
 		void remove_preset(const QString& preset_name);
 		void clear_presets();
 
@@ -121,7 +121,8 @@ public:
 
 	// preset managers
 	Preset *find_preset(const QString& preset_name) const;
-	Preset *add_preset(const QString& preset_name);
+	Preset *add_preset(const QString& preset_name,
+		const QString& after_preset = QString());
 	void remove_preset(const QString& preset_name);
 	void clear_presets();
 
