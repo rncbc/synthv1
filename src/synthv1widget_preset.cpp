@@ -254,6 +254,7 @@ void synthv1widget_preset::openPreset (void)
 		return;
 
 	int iPreset = 0;
+	QString sAfterPreset = m_pComboBox->currentPreset();
 	QStringListIterator iter(files);
 	while (iter.hasNext()) {
 		const QString& sPresetFile = iter.next();
@@ -261,8 +262,6 @@ void synthv1widget_preset::openPreset (void)
 		const QString& sPreset
 			= m_pPresetsView->presetRenum(fi.completeBaseName());
 		pConfig->setPresetFile(sPreset, sPresetFile);
-		const QString& sAfterPreset
-			= m_pComboBox->currentPreset();
 		synthv1_presets::Preset *pPreset
 			= pConfig->presets.add_preset(sPreset, sAfterPreset);
 		if (pPreset) {
@@ -273,6 +272,7 @@ void synthv1widget_preset::openPreset (void)
 				pConfig->sPreset = sPreset;
 				pConfig->sPresetDir = fi.absolutePath();
 			}
+			sAfterPreset = sPreset;
 		}
 	}
 

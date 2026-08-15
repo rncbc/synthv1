@@ -453,7 +453,7 @@ QTreeWidgetItem *synthv1widget_presets::newBankItem (void)
 		QTreeWidgetItem *pItem = QTreeWidget::topLevelItem(iItem);
 		if (isBankItem(pItem)) {
 			const int iBankData
-				= pItem->data(0, Qt::UserRole).toInt() + 1;
+				= pItem->data(0, Qt::UserRole).toInt();
 			if (iBank < iBankData)
 				iBank = iBankData;
 		}
@@ -462,16 +462,19 @@ QTreeWidgetItem *synthv1widget_presets::newBankItem (void)
 	const QString& sBank
 		= bankRenum(tr("Bank %1").arg(iBank + 1));
 
+	iItem = -1;
 	QTreeWidgetItem *pItem = QTreeWidget::currentItem();
-	if (pItem->parent())
+	if (pItem && pItem->parent())
 		pItem = pItem->parent();
-	iItem = QTreeWidget::indexOfTopLevelItem(pItem);
-	if (!isBankItem(pItem)) {
-		for (++iItem; iItem < iItemCount; ++iItem) {
-			pItem = QTreeWidget::topLevelItem(iItem);
-			if (isBankItem(pItem)) {
-				--iItem;
-				break;
+	if (pItem) {
+		iItem = QTreeWidget::indexOfTopLevelItem(pItem);
+		if (!isBankItem(pItem)) {
+			for (++iItem; iItem < iItemCount; ++iItem) {
+				pItem = QTreeWidget::topLevelItem(iItem);
+				if (isBankItem(pItem)) {
+					--iItem;
+					break;
+				}
 			}
 		}
 	}
