@@ -59,6 +59,8 @@ public:
 	void clearPreset();
 	bool queryPreset();
 
+	void reloadPresets();
+
 	void loadPresets();
 	void savePresets();
 
@@ -86,12 +88,6 @@ protected:
 
 	void loadPreset(const QString&);
 	void savePreset(const QString&);
-
-	void setPresetItem(const QString& sPreset);
-	QTreeWidgetItem *presetItem(const QString& sPreset) const;
-
-	void setBankItem(const QString& sBank, int iPreset = 0);
-	QTreeWidgetItem *bankItem(const QString& sBank) const;
 
 	void stabilizePreset();
 

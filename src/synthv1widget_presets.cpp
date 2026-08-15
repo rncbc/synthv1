@@ -166,7 +166,7 @@ void synthv1widget_presets::ItemDelegate::setEditorData (
 		//	= index.model()->data(index, Qt::DisplayRole).toString();
 		QLineEdit *pLineEdit = qobject_cast<QLineEdit *> (pEditor);
 		if (pLineEdit)
-			pLineEdit->setText(sText);
+			pLineEdit->setText(sText.simplified());
 		break;
 	}
 
@@ -189,7 +189,7 @@ void synthv1widget_presets::ItemDelegate::setModelData ( QWidget *pEditor,
 	{
 		QLineEdit *pLineEdit = qobject_cast<QLineEdit *> (pEditor);
 		if (pLineEdit) {
-			QString sText = pLineEdit->text();
+			QString sText = pLineEdit->text().simplified();
 			if (!sText.isEmpty()) {
 				QTreeWidgetItem *pItem = nullptr;
 				synthv1widget_presets *pWidget
@@ -717,8 +717,8 @@ void synthv1widget_presets::setPresetItem ( const QString& sPreset )
 		QTreeWidgetItem *pBankItem = pPresetItem->parent();
 		if (pBankItem && !pBankItem->isExpanded())
 			pBankItem->setExpanded(true);
-		QTreeWidget::setCurrentItem(pPresetItem);
 	}
+	QTreeWidget::setCurrentItem(pPresetItem);
 }
 
 QTreeWidgetItem *synthv1widget_presets::presetItem ( const QString& sPreset ) const
@@ -1142,6 +1142,8 @@ synthv1widget_presets *synthv1widget_presets::ComboBox::presetsView (void) const
 void synthv1widget_presets::ComboBox::setCurrentPreset ( const QString& sPreset )
 {
 	m_pPresetsView->setPresetItem(sPreset);
+
+	QComboBox::setEditText(sPreset);
 
 	resetCurrentPreset();
 }
