@@ -65,6 +65,11 @@ QString synthv1_config::presetsGroup (void) const
 	return "/Presets";
 }
 
+QString synthv1_config::presetsListKey (void) const
+{
+	return "/PresetList";
+}
+
 
 QString synthv1_config::presetFile ( const QString& sPreset )
 {
@@ -339,9 +344,13 @@ void synthv1_config::load (void)
 
 	// Presets database.
 	presets.clear_banks();
+
+	QStringList bank_list;
+	QSettings::beginGroup(presetsBankListKey());
+	bank_list = QSettings::value(presetsBankListKey()).toStringList();
+	QSettings::endGroup();
+
 	QSettings::beginGroup(presetsBanksGroup());
-	const QStringList& bank_list
-		= QSettings::value(presetsBankListKey()).toStringList();
 	QStringListIterator bank_iter(bank_list);
 	while (bank_iter.hasNext()) {
 		const QString& sBank = bank_iter.next();
@@ -357,8 +366,21 @@ void synthv1_config::load (void)
 	QSettings::endGroup();
 
 	presets.clear_presets();
+
+	QStringList preset_list;
+	QSettings::beginGroup(presetsListKey());
+	preset_list = QSettings::value(presetsListKey()).toStringList();
+	QSettings::endGroup();
+
 	QSettings::beginGroup(presetsGroup());
-	const QStringList& preset_list = QSettings::childKeys();
+	const QStringList& preset_keys
+		= QSettings::childKeys();
+	QStringListIterator preset_key(preset_keys);
+	while (preset_key.hasNext()) {
+		const QString& sPresetKey = preset_key.next();
+		if (!preset_list.contains(sPresetKey))
+			preset_list.append(sPresetKey);
+	}
 	QStringListIterator preset_iter(preset_list);
 	while (preset_iter.hasNext()) {
 		const QString& sPreset = preset_iter.next();
@@ -414,13 +436,17 @@ void synthv1_config::save (void)
 	QSettings::endGroup();
 
 	// Presets database.
+	const QStringList& bank_list = presets.bank_list();
+	QSettings::beginGroup(presetsBankListKey());
+	QSettings::setValue(presetsBankListKey(), bank_list);
+	QSettings::endGroup();
+
 	QSettings::beginGroup(presetsBanksGroup());
-	const QStringList& bank_keys = QSettings::childKeys();
+	const QStringList& bank_keys
+		= QSettings::childKeys();
 	QStringListIterator bank_key(bank_keys);
 	while (bank_key.hasNext())
 		QSettings::remove(bank_key.next());
-	const QStringList& bank_list = presets.bank_list();
-	QSettings::setValue(presetsBankListKey(), bank_list);
 	QStringListIterator bank_iter(bank_list);
 	while (bank_iter.hasNext()) {
 		const QString& sBank = bank_iter.next();
@@ -438,8 +464,14 @@ void synthv1_config::save (void)
 	}
 	QSettings::endGroup();
 
+	const QStringList& preset_list = presets.preset_list();
+	QSettings::beginGroup(presetsListKey());
+	QSettings::setValue(presetsListKey(), preset_list);
+	QSettings::endGroup();
+
 	QSettings::beginGroup(presetsGroup());
-	const QStringList& preset_keys = QSettings::childKeys();
+	const QStringList& preset_keys
+		= QSettings::childKeys();
 	QStringListIterator preset_key(preset_keys);
 	while (preset_key.hasNext())
 		QSettings::remove(preset_key.next());

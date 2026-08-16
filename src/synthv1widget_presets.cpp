@@ -446,48 +446,37 @@ void synthv1widget_presets::addPresetItem (void)
 // factory methods.
 QTreeWidgetItem *synthv1widget_presets::newBankItem (void)
 {
-	int iBank = 0;
-	int iItem = 0;
-	const int iItemCount = QTreeWidget::topLevelItemCount();
+	QTreeWidgetItem *pBankItem;
 
-	for ( ; iItem < iItemCount; ++iItem) {
-		QTreeWidgetItem *pItem = QTreeWidget::topLevelItem(iItem);
-		if (isBankItem(pItem)) {
-			const int iBankData
-				= pItem->data(0, Qt::UserRole).toInt();
-			if (iBank < iBankData)
-				iBank = iBankData;
-		}
-	}
+ 	int iBank = 0;
+ 	int iItem = 0;
 
-	const QString& sBank
-		= bankRenum(tr("Bank %1").arg(iBank + 1));
+	const int iItemCount
+		= QTreeWidget::topLevelItemCount();
+ 	for ( ; iItem < iItemCount; ++iItem) {
+		pBankItem = QTreeWidget::topLevelItem(iItem);
+		if (isBankItem(pBankItem))
+			++iBank;
+ 	}
 
-	iItem = -1;
-	QTreeWidgetItem *pItem = QTreeWidget::currentItem();
-	if (pItem && pItem->parent())
-		pItem = pItem->parent();
-	if (pItem) {
-		iItem = QTreeWidget::indexOfTopLevelItem(pItem);
-		if (!isBankItem(pItem)) {
-			for (++iItem; iItem < iItemCount; ++iItem) {
-				pItem = QTreeWidget::topLevelItem(iItem);
-				if (isBankItem(pItem)) {
-					--iItem;
-					break;
-				}
-			}
-		}
-	}
+ 	const QString& sBank
+ 		= bankRenum(tr("Bank %1").arg(iBank + 1));
 
-	QTreeWidgetItem *pBankItem = new QTreeWidgetItem(QStringList() << sBank, BankItem);
-	pBankItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
-	pBankItem->setIcon(0, QIcon(":/images/presetBank.png"));
-	pBankItem->setData(0, Qt::UserRole, iBank + 1);
+ 	iItem = -1;
+	pBankItem = QTreeWidget::currentItem();
+	if (pBankItem && pBankItem->parent())
+		pBankItem = pBankItem->parent();
+	if (pBankItem && isBankItem(pBankItem))
+		iItem = QTreeWidget::indexOfTopLevelItem(pBankItem);
+
+	pBankItem = new QTreeWidgetItem(QStringList() << sBank, BankItem);
+ 	pBankItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+ 	pBankItem->setIcon(0, QIcon(":/images/presetBank.png"));
+ 	pBankItem->setData(0, Qt::UserRole, iBank + 1);
 	if (iItem >= 0 && iItem < iItemCount)
-		QTreeWidget::insertTopLevelItem(iItem + 1, pBankItem);
-	else
-		QTreeWidget::addTopLevelItem(pBankItem);
+ 		QTreeWidget::insertTopLevelItem(iItem + 1, pBankItem);
+ 	else
+ 		QTreeWidget::addTopLevelItem(pBankItem);
 
 	setDirtyPresets(true);
 
