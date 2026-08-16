@@ -137,8 +137,10 @@ synthv1_presets::Preset *synthv1_presets::add_preset (
 		preset = new Preset(preset_name);
 		m_presets.insert(preset_name, preset);
 		if (after_preset.isEmpty()) {
-			if (!find_preset_bank(preset_name))
+			if (!find_preset_bank(preset_name)
+				&& !m_preset_list.contains(preset_name)) {
 				m_preset_list.append(preset_name);
+			}
 		} else {
 			int after_index;
 			Bank *bank = find_preset_bank(after_preset);

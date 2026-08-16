@@ -449,6 +449,7 @@ QTreeWidgetItem *synthv1widget_presets::newBankItem (void)
 	int iBank = 0;
 	int iItem = 0;
 	const int iItemCount = QTreeWidget::topLevelItemCount();
+
 	for ( ; iItem < iItemCount; ++iItem) {
 		QTreeWidgetItem *pItem = QTreeWidget::topLevelItem(iItem);
 		if (isBankItem(pItem)) {
@@ -483,7 +484,7 @@ QTreeWidgetItem *synthv1widget_presets::newBankItem (void)
 	pBankItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 	pBankItem->setIcon(0, QIcon(":/images/presetBank.png"));
 	pBankItem->setData(0, Qt::UserRole, iBank + 1);
-	if (iItem >= 0)
+	if (iItem >= 0 && iItem < iItemCount)
 		QTreeWidget::insertTopLevelItem(iItem + 1, pBankItem);
 	else
 		QTreeWidget::addTopLevelItem(pBankItem);
