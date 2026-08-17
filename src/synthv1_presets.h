@@ -22,8 +22,8 @@
 #ifndef __synthv1_presets_h
 #define __synthv1_presets_h
 
-#include <QMap>
 #include <QString>
+#include <QHash>
 
 
 //-------------------------------------------------------------------------
@@ -69,7 +69,7 @@ public:
 		QStringList m_preset_list;
 	};
 
-	typedef QMap<QString, Bank *> Banks;
+	typedef QHash<QString, Bank *> Banks;
 
 	const Banks& banks() const
 		{ return m_banks; }
@@ -101,7 +101,7 @@ public:
 		QString m_file;
 	};
 
-	typedef QMap<QString, Preset *> Presets;
+	typedef QHash<QString, Preset *> Presets;
 
 	const Presets& presets() const
 		{ return m_presets; }
