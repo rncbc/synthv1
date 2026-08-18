@@ -157,6 +157,25 @@ void synthv1_config::loadPresets (void)
 		}
 	}
 	QSettings::endGroup();
+
+	// cleanup database from dangling banks/presets...
+	//
+	bank_iter.toFront();
+	while (bank_iter.hasNext()) {
+		const QString& sBank = bank_iter.next();
+		synthv1_presets::Bank *pBank = presets.find_bank(sBank);
+		if (pBank == nullptr) {
+			presets.remove_bank(sBank);
+		} else {
+			const QStringList& preset_list = pBank->preset_list();
+			QStringListIterator preset_iter(preset_list);
+			while (preset_iter.hasNext()) {
+				const QString& sPreset = preset_iter.next();
+				if (presets.find_preset(sPreset) == nullptr)
+					pBank->remove_preset(sPreset);
+			}
+		}
+	}
 }
 
 

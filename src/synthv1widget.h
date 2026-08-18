@@ -83,8 +83,8 @@ public:
 public slots:
 
 	// Preset file I/O.
-	bool loadPreset(const QString& sFilename);
-	bool savePreset(const QString& sFilename);
+	bool loadPreset(const QString& sPreset, const QString& sPresetFile);
+	bool savePreset(const QString& sPreset, const QString& sPresetFile);
 
 	// Direct note-on/off slot.
 	void directNoteOn(int iNote, int iVelocity);

@@ -68,8 +68,8 @@ signals:
 
 	void newPresetFile();
 
-	void loadPresetFile(const QString&);
-	void savePresetFile(const QString&);
+	void loadPresetFile(const QString&, const QString&);
+	void savePresetFile(const QString&, const QString&);
 
 	void resetPresetFile();
 

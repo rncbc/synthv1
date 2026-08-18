@@ -1187,7 +1187,7 @@ void synthv1widget_config::loadPreset ( const QString& sPreset )
 
 	synthv1widget *pParentWidget
 		= qobject_cast<synthv1widget *> (parentWidget());
-	if (pParentWidget && pParentWidget->loadPreset(sPresetFile)) {
+	if (pParentWidget && pParentWidget->loadPreset(sPreset, sPresetFile)) {
 		if (++m_iLoadPreset == 1)
 			m_sSavePreset = pConfig->sPreset;
 		pConfig->sPreset = sPreset;
