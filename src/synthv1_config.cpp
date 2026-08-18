@@ -150,8 +150,11 @@ void synthv1_config::loadPresets (void)
 		const QString& sPresetFile
 			= QSettings::value(sPreset).toString();
 		if (!sPresetFile.isEmpty()
-			&& QFileInfo::exists(sPresetFile))
+			&& QFileInfo::exists(sPresetFile)) {
 			pPreset->set_file(sPresetFile);
+		} else {
+			presets.remove_preset(sPreset);
+		}
 	}
 	QSettings::endGroup();
 }
@@ -211,6 +214,8 @@ void synthv1_config::savePresets (void)
 		if (!sPresetFile.isEmpty()
 			&& QFileInfo::exists(sPresetFile)) {
 			QSettings::setValue(sPreset, sPresetFile);
+		} else {
+			presets.remove_preset(sPreset);
 		}
 	}
 	QSettings::endGroup();

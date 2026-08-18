@@ -55,7 +55,10 @@ void synthv1_presets::Bank::add_preset (
 
 void synthv1_presets::Bank::remove_preset ( const QString& preset_name )
 {
-	m_preset_list.removeAll(preset_name);
+	const int preset_index
+		= m_preset_list.indexOf(preset_name);
+	if (preset_index >= 0)
+		m_preset_list.removeAt(preset_index);
 }
 
 
@@ -108,7 +111,10 @@ void synthv1_presets::remove_bank ( const QString& bank_name )
 	if (bank && m_banks.remove(bank_name))
 		delete bank;
 
-	m_bank_list.removeAll(bank_name);
+	const int bank_index
+		= m_bank_list.indexOf(bank_name);
+	if (bank_index >= 0)
+		m_bank_list.removeAt(bank_index);
 }
 
 
@@ -168,10 +174,14 @@ void synthv1_presets::remove_preset ( const QString& preset_name )
 		delete preset;
 
 	Bank *bank = find_preset_bank(preset_name);
-	if (bank)
+	if (bank) {
 		bank->remove_preset(preset_name);
-	else
-		m_preset_list.removeAll(preset_name);
+	} else {
+		const int preset_index
+			= m_preset_list.indexOf(preset_name);
+		if (preset_index >= 0)
+			m_preset_list.removeAt(preset_index);
+	}
 }
 
 
