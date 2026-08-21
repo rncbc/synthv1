@@ -74,6 +74,9 @@ protected slots:
 	void presetsRenameItem();
 	void presetsRemoveItem();
 
+	void presetsImportItems();
+	void presetsExportItems();
+
 	// janitorial slots.
 	void controlsCurrentChanged();
 	void controlsContextMenuRequested(const QPoint&);

@@ -194,6 +194,13 @@ synthv1widget_config::synthv1widget_config (
 		SIGNAL(clicked()),
 		SLOT(presetsRemoveItem()));
 
+	QObject::connect(m_ui.PresetsImportToolButton,
+		SIGNAL(clicked()),
+		SLOT(presetsImportItems()));
+	QObject::connect(m_ui.PresetsExportToolButton,
+		SIGNAL(clicked()),
+		SLOT(presetsExportItems()));
+
 	QObject::connect(m_ui.PresetsTreeWidget,
 		SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
 		SLOT(presetsCurrentChanged()));
@@ -469,6 +476,104 @@ void synthv1widget_config::presetsRemoveItem (void)
 		delete pItem;
 
 	presetsChanged();
+}
+
+
+void synthv1widget_config::presetsImportItems (void)
+{
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig == nullptr)
+		return;
+
+	QString sFilename;
+
+	const QString  sExt(PROJECT_NAME ".conf");
+	const QString& sTitle = tr("Import Bank/Presets");
+
+	QStringList filters;
+	filters.append(tr("Bank/Preset files (*.%1)").arg(sExt));
+	filters.append(tr("All files (*.*)"));
+	const QString& sFilter = filters.join(";;");
+
+	QWidget *pParentWidget = nullptr;
+	QFileDialog::Options options;
+	if (pConfig->bDontUseNativeDialogs) {
+		options |= QFileDialog::DontUseNativeDialog;
+		pParentWidget = QWidget::window();
+	}
+#if 1//QT_VERSION < QT_VERSION_CHECK(4, 4, 0)
+	sFilename = QFileDialog::getOpenFileName(pParentWidget,
+		sTitle, pConfig->sPresetDir, sFilter, nullptr, options);
+#else
+	QFileDialog fileDialog(pParentWidget,
+		sTitle, pConfig->sPresetDir, sFilter);
+	fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
+	fileDialog.setFileMode(QFileDialog::ExistingFiles);
+	fileDialog.setDefaultSuffix(pConfig->sPresetExt);
+	QList<QUrl> urls(fileDialog.sidebarUrls());
+	urls.append(QUrl::fromLocalFile(pConfig->sPresetDir));
+	fileDialog.setSidebarUrls(urls);
+	fileDialog.setOptions(options);
+	if (fileDialog.exec())
+		sFilename = fileDialog.selectedFiles().first();
+#endif
+
+	if (!sFilename.isEmpty()) {
+		synthv1_presets presets;
+		synthv1_config::importPresets(sFilename, &presets);
+		m_ui.PresetsTreeWidget->loadPresets(&presets);
+	}
+
+	stabilize();
+}
+
+
+void synthv1widget_config::presetsExportItems (void)
+{
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig == nullptr)
+		return;
+
+	QString sFilename;
+
+	const QString  sExt(PROJECT_NAME ".conf");
+	const QString& sTitle = tr("Export Bank/Presets");
+
+	QStringList filters;
+	filters.append(tr("Bank/Preset files (*.%1)").arg(sExt));
+	filters.append(tr("All files (*.*)"));
+	const QString& sFilter = filters.join(";;");
+
+	QWidget *pParentWidget = nullptr;
+	QFileDialog::Options options;
+	if (pConfig->bDontUseNativeDialogs) {
+		options |= QFileDialog::DontUseNativeDialog;
+		pParentWidget = QWidget::window();
+	}
+#if 1//QT_VERSION < QT_VERSION_CHECK(4, 4, 0)
+	sFilename = QFileDialog::getSaveFileName(pParentWidget,
+		sTitle, pConfig->sPresetDir, sFilter, nullptr, options);
+#else
+	QFileDialog fileDialog(pParentWidget,
+		sTitle, pConfig->sPresetDir, sFilter);
+	fileDialog.setAcceptMode(QFileDialog::AcceptSave);
+	fileDialog.setFileMode(QFileDialog::AnyFiles);
+	fileDialog.setDefaultSuffix(pConfig->sPresetExt);
+	QList<QUrl> urls(fileDialog.sidebarUrls());
+	urls.append(QUrl::fromLocalFile(pConfig->sPresetDir));
+	fileDialog.setSidebarUrls(urls);
+	fileDialog.setOptions(options);
+	if (fileDialog.exec())
+		sFilename = fileDialog.selectedFiles().first();
+#endif
+
+	if (!sFilename.isEmpty()) {
+		synthv1_presets presets;
+		m_ui.PresetsTreeWidget->savePresets(&presets);
+		synthv1_config::exportPresets(sFilename, &presets);
+	}
+
+	stabilize();
 }
 
 

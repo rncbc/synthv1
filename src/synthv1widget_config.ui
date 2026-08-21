@@ -397,6 +397,26 @@
        <item>
         <layout class="QHBoxLayout">
          <item>
+          <widget class="QToolButton" name="PresetsImportToolButton">
+           <property name="toolTip">
+            <string>Import banks/presets</string>
+           </property>
+           <property name="text">
+            <string>&amp;Import...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="PresetsExportToolButton">
+           <property name="toolTip">
+            <string>Export banks/presets</string>
+           </property>
+           <property name="text">
+            <string>E&amp;xport...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <spacer>
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -1051,6 +1071,8 @@
   <tabstop>PresetsRenameToolButton</tabstop>
   <tabstop>PresetsRemoveToolButton</tabstop>
   <tabstop>PresetsTreeWidget</tabstop>
+  <tabstop>PresetsImportToolButton</tabstop>
+  <tabstop>PresetsExportToolButton</tabstop>
   <tabstop>PresetsPreviewCheckBox</tabstop>
   <tabstop>ProgramsAddBankToolButton</tabstop>
   <tabstop>ProgramsAddItemToolButton</tabstop>
