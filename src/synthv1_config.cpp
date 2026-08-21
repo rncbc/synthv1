@@ -60,12 +60,12 @@ synthv1_config::~synthv1_config (void)
 
 
 // Preset utility methods.
-QString synthv1_config::presetsGroup (void) const
+QString synthv1_config::presetsGroup (void)
 {
 	return "/Presets";
 }
 
-QString synthv1_config::presetsListKey (void) const
+QString synthv1_config::presetsListKey (void)
 {
 	return "/PresetList";
 }
@@ -101,40 +101,46 @@ void synthv1_config::removePreset ( const QString& sPreset )
 
 
 // Presets utility methods.
-void synthv1_config::loadPresets (void)
+void synthv1_config::importPresets (
+	const QString& sFilename, synthv1_presets *pPresets )
 {
-	presets.clear_banks();
+	QSettings settings(sFilename, QSettings::IniFormat);
 
+	loadPresets(&settings, pPresets);
+}
+
+
+void synthv1_config::loadPresets (
+	QSettings *pSettings, synthv1_presets *pPresets )
+{
 	QStringList bank_list;
-	QSettings::beginGroup(presetsBankListKey());
-	bank_list = QSettings::value(presetsBankListKey()).toStringList();
-	QSettings::endGroup();
+	pSettings->beginGroup(presetsBankListKey());
+	bank_list = pSettings->value(presetsBankListKey()).toStringList();
+	pSettings->endGroup();
 
-	QSettings::beginGroup(presetsBanksGroup());
+	pSettings->beginGroup(presetsBanksGroup());
 	QStringListIterator bank_iter(bank_list);
 	while (bank_iter.hasNext()) {
 		const QString& sBank = bank_iter.next();
-		synthv1_presets::Bank *pBank = presets.add_bank(sBank);
+		synthv1_presets::Bank *pBank = pPresets->add_bank(sBank);
 		const QStringList& preset_list
-			= QSettings::value(sBank).toStringList();
+			= pSettings->value(sBank).toStringList();
 		QStringListIterator preset_iter(preset_list);
 		while (preset_iter.hasNext()) {
 			const QString& sPreset = preset_iter.next();
 			pBank->add_preset(sPreset);
 		}
 	}
-	QSettings::endGroup();
-
-	presets.clear_presets();
+	pSettings->endGroup();
 
 	QStringList preset_list;
-	QSettings::beginGroup(presetsListKey());
-	preset_list = QSettings::value(presetsListKey()).toStringList();
-	QSettings::endGroup();
+	pSettings->beginGroup(presetsListKey());
+	preset_list = pSettings->value(presetsListKey()).toStringList();
+	pSettings->endGroup();
 
-	QSettings::beginGroup(presetsGroup());
+	pSettings->beginGroup(presetsGroup());
 	const QStringList& preset_keys
-		= QSettings::childKeys();
+		= pSettings->childKeys();
 	QStringListIterator preset_key(preset_keys);
 	while (preset_key.hasNext()) {
 		const QString& sPresetKey = preset_key.next();
@@ -144,34 +150,34 @@ void synthv1_config::loadPresets (void)
 	QStringListIterator preset_iter(preset_list);
 	while (preset_iter.hasNext()) {
 		const QString& sPreset = preset_iter.next();
-		synthv1_presets::Preset *pPreset = presets.find_preset(sPreset);
+		synthv1_presets::Preset *pPreset = pPresets->find_preset(sPreset);
 		if (pPreset == nullptr)
-			pPreset = presets.add_preset(sPreset);
+			pPreset = pPresets->add_preset(sPreset);
 		const QString& sPresetFile
-			= QSettings::value(sPreset).toString();
+			= pSettings->value(sPreset).toString();
 		if (!sPresetFile.isEmpty()
 			&& QFileInfo::exists(sPresetFile)) {
 			pPreset->set_file(sPresetFile);
 		} else {
-			presets.remove_preset(sPreset);
+			pPresets->remove_preset(sPreset);
 		}
 	}
-	QSettings::endGroup();
+	pSettings->endGroup();
 
 	// cleanup database from dangling banks/presets...
 	//
 	bank_iter.toFront();
 	while (bank_iter.hasNext()) {
 		const QString& sBank = bank_iter.next();
-		synthv1_presets::Bank *pBank = presets.find_bank(sBank);
+		synthv1_presets::Bank *pBank = pPresets->find_bank(sBank);
 		if (pBank == nullptr) {
-			presets.remove_bank(sBank);
+			pPresets->remove_bank(sBank);
 		} else {
 			const QStringList& preset_list = pBank->preset_list();
 			QStringListIterator preset_iter(preset_list);
 			while (preset_iter.hasNext()) {
 				const QString& sPreset = preset_iter.next();
-				if (presets.find_preset(sPreset) == nullptr)
+				if (pPresets->find_preset(sPreset) == nullptr)
 					pBank->remove_preset(sPreset);
 			}
 		}
@@ -179,23 +185,42 @@ void synthv1_config::loadPresets (void)
 }
 
 
-void synthv1_config::savePresets (void)
+void synthv1_config::loadPresets (void)
 {
-	const QStringList& bank_list = presets.bank_list();
-	QSettings::beginGroup(presetsBankListKey());
-	QSettings::setValue(presetsBankListKey(), bank_list);
-	QSettings::endGroup();
+	presets.clear_banks();
+	presets.clear_presets();
 
-	QSettings::beginGroup(presetsBanksGroup());
+	loadPresets(this, &presets);
+}
+
+
+void synthv1_config::exportPresets (
+	const QString& sFilename, synthv1_presets *pPresets )
+{
+	QSettings settings(sFilename, QSettings::IniFormat);
+
+	savePresets(&settings, pPresets);
+}
+
+
+void synthv1_config::savePresets (
+	QSettings *pSettings, synthv1_presets *pPresets )
+{
+	const QStringList& bank_list = pPresets->bank_list();
+	pSettings->beginGroup(presetsBankListKey());
+	pSettings->setValue(presetsBankListKey(), bank_list);
+	pSettings->endGroup();
+
+	pSettings->beginGroup(presetsBanksGroup());
 	const QStringList& bank_keys
-		= QSettings::childKeys();
+		= pSettings->childKeys();
 	QStringListIterator bank_key(bank_keys);
 	while (bank_key.hasNext())
-		QSettings::remove(bank_key.next());
+		pSettings->remove(bank_key.next());
 	QStringListIterator bank_iter(bank_list);
 	while (bank_iter.hasNext()) {
 		const QString& sBank = bank_iter.next();
-		synthv1_presets::Bank *pBank = presets.find_bank(sBank);
+		synthv1_presets::Bank *pBank = pPresets->find_bank(sBank);
 		if (pBank == nullptr)
 			continue;
 		QStringList preset_list;
@@ -205,23 +230,23 @@ void synthv1_config::savePresets (void)
 				= bank_preset_iter.next();
 			preset_list.append(sPreset);
 		}
-		QSettings::setValue(sBank, preset_list);
+		pSettings->setValue(sBank, preset_list);
 	}
-	QSettings::endGroup();
+	pSettings->endGroup();
 
-	const QStringList& preset_list = presets.preset_list();
-	QSettings::beginGroup(presetsListKey());
-	QSettings::setValue(presetsListKey(), preset_list);
-	QSettings::endGroup();
+	const QStringList& preset_list = pPresets->preset_list();
+	pSettings->beginGroup(presetsListKey());
+	pSettings->setValue(presetsListKey(), preset_list);
+	pSettings->endGroup();
 
-	QSettings::beginGroup(presetsGroup());
+	pSettings->beginGroup(presetsGroup());
 	const QStringList& preset_keys
-		= QSettings::childKeys();
+		= pSettings->childKeys();
 	QStringListIterator preset_key(preset_keys);
 	while (preset_key.hasNext())
-		QSettings::remove(preset_key.next());
+		pSettings->remove(preset_key.next());
 	const synthv1_presets::Presets& presets_map
-		= presets.presets();
+		= pPresets->presets();
 	synthv1_presets::Presets::ConstIterator presets_iter
 		= presets_map.constBegin();
 	const synthv1_presets::Presets::ConstIterator& presets_end
@@ -232,35 +257,41 @@ void synthv1_config::savePresets (void)
 		const QString& sPresetFile = pPreset->file();
 		if (!sPresetFile.isEmpty()
 			&& QFileInfo::exists(sPresetFile)) {
-			QSettings::setValue(sPreset, sPresetFile);
+			pSettings->setValue(sPreset, sPresetFile);
 		} else {
-			presets.remove_preset(sPreset);
+			pPresets->remove_preset(sPreset);
 		}
 	}
-	QSettings::endGroup();
-	QSettings::sync();
+	pSettings->endGroup();
+	pSettings->sync();
+}
+
+
+void synthv1_config::savePresets (void)
+{
+	savePresets(this, &presets);
 }
 
 
 // Presets utility methods.
-QString synthv1_config::presetsBanksGroup (void) const
+QString synthv1_config::presetsBanksGroup (void)
 {
 	return "/Banks";
 }
 
-QString synthv1_config::presetsBankListKey (void) const
+QString synthv1_config::presetsBankListKey (void)
 {
 	return "/BankList";
 }
 
 
 // Programs utility methods.
-QString synthv1_config::programsGroup (void) const
+QString synthv1_config::programsGroup (void)
 {
 	return "/Programs";
 }
 
-QString synthv1_config::bankPrefix (void) const
+QString synthv1_config::bankPrefix (void)
 {
 	return "/Bank_";
 }
@@ -357,12 +388,12 @@ void synthv1_config::clearPrograms (void)
 
 
 // Programs utility methods.
-QString synthv1_config::controlsGroup (void) const
+QString synthv1_config::controlsGroup (void)
 {
 	return "/Controllers";
 }
 
-QString synthv1_config::controlPrefix (void) const
+QString synthv1_config::controlPrefix (void)
 {
 	return "/Control";
 }
