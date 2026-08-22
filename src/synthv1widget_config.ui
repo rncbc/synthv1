@@ -404,6 +404,12 @@
            <property name="text">
             <string>&amp;Import...</string>
            </property>
+           <property name="icon">
+            <iconset resource="qpreset1.qrc">:/images/presetImport.png</iconset>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
           </widget>
          </item>
          <item>
@@ -413,6 +419,12 @@
            </property>
            <property name="text">
             <string>E&amp;xport...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="qpreset1.qrc">:/images/presetExport.png</iconset>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
            </property>
           </widget>
          </item>
