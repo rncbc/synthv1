@@ -612,6 +612,35 @@
           </spacer>
          </item>
          <item>
+          <widget class="QToolButton" name="ProgramsAddPresetsToolButton">
+           <property name="toolTip">
+            <string>Add programs from bank/presets</string>
+           </property>
+           <property name="text">
+            <string>Add &amp;Presets</string>
+           </property>
+           <property name="icon">
+            <iconset resource="qpreset1.qrc">:/images/presetImport.png</iconset>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <widget class="QCheckBox" name="ProgramsPreviewCheckBox">
            <property name="toolTip">
             <string>Whether to preview the current selected program</string>
@@ -1092,6 +1121,7 @@
   <tabstop>ProgramsDeleteToolButton</tabstop>
   <tabstop>ProgramsTreeWidget</tabstop>
   <tabstop>ProgramsEnabledCheckBox</tabstop>
+  <tabstop>ProgramsAddPresetsToolButton</tabstop>
   <tabstop>ProgramsPreviewCheckBox</tabstop>
   <tabstop>ControlsAddItemToolButton</tabstop>
   <tabstop>ControlsEditToolButton</tabstop>

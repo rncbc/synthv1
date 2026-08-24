@@ -372,6 +372,105 @@ void synthv1widget_programs::addProgramItem (void)
 }
 
 
+void synthv1widget_programs::addPresetItems ( synthv1_presets *pPresets )
+{
+
+	QStringList preset_list = pPresets->preset_list();
+	QStringListIterator bank_iter(pPresets->bank_list());
+	while (bank_iter.hasNext()) {
+		const QString& sBank = bank_iter.next();
+		synthv1_presets::Bank *pBank = pPresets->find_bank(sBank);
+		if (pBank)
+			preset_list.append(pBank->preset_list());
+	}
+
+	// Skip presets already mapped to programs...
+	int iBankData = 0;
+	QTreeWidgetItem *pBank0Item = nullptr;
+	const int iBankCount = QTreeWidget::topLevelItemCount();
+	for (int iBank = 0; iBank < iBankCount; ++iBank) {
+		QTreeWidgetItem *pBankItem = QTreeWidget::topLevelItem(iBank);
+		const int iData = pBankItem->data(0, Qt::UserRole).toInt();
+		if (iData == 0)
+			pBank0Item = pBankItem;
+		if (iBankData < iData)
+			iBankData = iData;
+		if (iBankData >= 16383)
+			return;
+		const int iProgCount = pBankItem->childCount();
+		for (int iProg = 0; iProg < iProgCount; ++iProg) {
+			QTreeWidgetItem *pProgItem = pBankItem->child(iProg);
+			preset_list.removeAll(pProgItem->text(1));
+		}
+	}
+
+	if (preset_list.isEmpty())
+		return;
+
+	QStringListIterator preset_iter(preset_list);
+	while (preset_iter.hasNext()) {
+		const QString& sPreset = preset_iter.next();
+		synthv1_presets::Bank *pBank = pPresets->find_preset_bank(sPreset);
+		QTreeWidgetItem *pBankItem = nullptr;
+		if (pBank) {
+			const QString& sBank = pBank->name();
+			const QList<QTreeWidgetItem *>& items
+				= QTreeWidget::findItems(
+					sBank, Qt::MatchExactly|Qt::MatchRecursive, 1);
+			QListIterator<QTreeWidgetItem *> iter(items);
+			while (iter.hasNext()) {
+				QTreeWidgetItem *pItem = iter.next();
+				if (pItem->parent() == nullptr) {
+					pBankItem = pItem;
+					break;
+				}
+			}
+			if (pBankItem == nullptr) {
+				pBankItem = new QTreeWidgetItem(QStringList()
+					<< QString::number(++iBankData) << sBank);
+				pBankItem->setIcon(0, QIcon(":/images/presetBank.png"));
+				pBankItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+				pBankItem->setData(0, Qt::UserRole, iBankData);
+				QTreeWidget::addTopLevelItem(pBankItem);
+			}
+		}
+		else
+		// Check for default bank...
+		if (pBank0Item == nullptr) {
+			pBank0Item = new QTreeWidgetItem(QStringList()
+				<< QString::number(0) << tr("Bank 0"));
+			pBank0Item->setIcon(0, QIcon(":/images/presetBank.png"));
+			pBank0Item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+			pBank0Item->setData(0, Qt::UserRole, 0);
+			QTreeWidget::insertTopLevelItem(0, pBank0Item);
+		}
+		if (pBankItem == nullptr)
+			pBankItem = pBank0Item;
+		// Add program...
+		int iProgData = 0;
+		const int iProgCount = pBankItem->childCount();
+		for (int iProg = 0; iProg < iProgCount; ++iProg) {
+			QTreeWidgetItem *pProgItem = pBankItem->child(iProg);
+			const int iData = pProgItem->data(0, Qt::UserRole).toInt();
+			if (iProgData < iData)
+				iProgData = iData;
+		}
+		if (iProgCount > 0)
+			++iProgData;
+		if (iProgData >= 128)
+			continue;
+		QTreeWidgetItem *pProgItem = new QTreeWidgetItem(QStringList()
+			<< QString::number(iProgData) + " =" << sPreset);
+		pProgItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable);
+		pProgItem->setData(0, Qt::TextAlignmentRole, int(Qt::AlignRight | Qt::AlignVCenter));
+		pProgItem->setData(0, Qt::UserRole, iProgData);
+		pProgItem->setIcon(1, QIcon(":/images/synthv1_preset.png"));
+		pBankItem->addChild(pProgItem);
+		pBankItem->setExpanded(true);
+	}
+}
+
+
 // factory methods.
 QTreeWidgetItem *synthv1widget_programs::newBankItem (void)
 {

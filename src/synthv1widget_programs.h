@@ -27,6 +27,7 @@
 
 // forward decls.
 class synthv1_programs;
+class synthv1_presets;
 
 
 //----------------------------------------------------------------------------
@@ -54,6 +55,8 @@ public slots:
 	// slots.
 	void addBankItem();
 	void addProgramItem();
+
+	void addPresetItems(synthv1_presets *pPresets);
 
 protected slots:
 

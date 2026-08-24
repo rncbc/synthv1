@@ -69,6 +69,8 @@ protected slots:
 	void programsEditItem();
 	void programsDeleteItem();
 
+	void programsAddPresetItems();
+
 	void presetsAddBankItem();
 	void presetsAddItem();
 	void presetsRenameItem();
