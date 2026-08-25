@@ -181,7 +181,7 @@ void synthv1_programs::process_program (
 	m_prog = (m_bank ? m_bank->find_prog(prog_id) : nullptr);
 
 	if (m_prog) {
-		synthv1_param::loadPreset(pSynth, m_prog->name());
+		synthv1_param::loadPresetName(pSynth, m_prog->name());
 		pSynth->updateParams();
 	}
 }

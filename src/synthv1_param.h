@@ -42,9 +42,13 @@ namespace synthv1_param
 
 	// Preset serialization methods.
 	bool loadPreset(synthv1 *pSynth,
-		const QString& sFilename);
+		const QString& sPresetFile);
+	bool loadPresetEx(synthv1 *pSynth,
+		const QString& sPresetFile);
+	bool loadPresetName(synthv1 *pSynth,
+		const QString& sPreset);
 	bool savePreset(synthv1 *pSynth,
-		const QString& sFilename,
+		const QString& sPresetFile,
 		bool bSymLink = false);
 
 	// Tuning serialization methods.

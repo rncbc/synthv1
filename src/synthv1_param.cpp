@@ -278,16 +278,15 @@ bool synthv1_param::newPreset ( synthv1 *pSynth )
 	if (pSynth == nullptr)
 		return false;
 
-	const bool running = pSynth->running(false);
-
+	const bool bRunning
+		= pSynth->running(false);
 	synthv1_sched::sync_reset();
 
 	pSynth->stabilize();
 	pSynth->reset();
 
 	synthv1_sched::sync_pending();
-
-	pSynth->running(running);
+	pSynth->running(bRunning);
 
 	return true;
 }
@@ -295,32 +294,31 @@ bool synthv1_param::newPreset ( synthv1 *pSynth )
 
 // Preset serialization methods.
 bool synthv1_param::loadPreset (
-	synthv1 *pSynth, const QString& sFilename )
+	synthv1 *pSynth, const QString& sPresetFile )
+{
+	const bool bRunning
+		= pSynth->running(false);
+	synthv1_sched::sync_reset();
+
+	const bool bLoaded
+		= loadPresetEx(pSynth, sPresetFile);
+
+	synthv1_sched::sync_pending();
+	pSynth->running(bRunning);
+
+	return bLoaded;
+}
+
+
+bool synthv1_param::loadPresetEx (
+	synthv1 *pSynth, const QString& sPresetFile )
 {
 	if (pSynth == nullptr)
 		return false;
 
-	QFileInfo fi(sFilename);
-	if (!fi.exists()) {
-		synthv1_config *pConfig = synthv1_config::getInstance();
-		if (pConfig) {
-			const QString& sPresetFile
-				= pConfig->presetFile(sFilename);
-			if (sPresetFile.isEmpty())
-				return false;
-			fi.setFile(sPresetFile);
-			if (!fi.exists())
-				return false;
-		}
-	}
-
-	QFile file(fi.filePath());
+	QFile file(sPresetFile);
 	if (!file.open(QIODevice::ReadOnly))
 		return false;
-
-	const bool running = pSynth->running(false);
-
-	synthv1_sched::sync_reset();
 
 	pSynth->setTuningEnabled(false);
 	pSynth->reset();
@@ -333,6 +331,7 @@ bool synthv1_param::loadPreset (
 		}
 	}
 
+	const QFileInfo fi(sPresetFile);
 	const QDir currentDir(QDir::current());
 	QDir::setCurrent(fi.absolutePath());
 
@@ -382,25 +381,51 @@ bool synthv1_param::loadPreset (
 	pSynth->stabilize();
 	pSynth->reset();
 
-	synthv1_sched::sync_pending();
-
-	pSynth->running(running);
-
 	QDir::setCurrent(currentDir.absolutePath());
 
 	return true;
 }
 
 
+bool synthv1_param::loadPresetName (
+	synthv1 *pSynth, const QString& sPreset )
+{
+	if (pSynth == nullptr)
+		return false;
+
+	if (sPreset.isEmpty())
+		return false;
+
+	synthv1_config *pConfig = synthv1_config::getInstance();
+	if (pConfig == nullptr)
+		return false;
+
+	const QString& sPresetFile
+		= pConfig->presetFile(sPreset);
+	if (sPresetFile.isEmpty())
+		return false;
+	if (!QFileInfo::exists(sPresetFile))
+		return false;
+
+	const bool bRunning
+		= pSynth->running(false);
+	const bool bLoaded
+		= loadPresetEx(pSynth, sPresetFile);
+	pSynth->running(bRunning);
+
+	return bLoaded;
+}
+
+
 bool synthv1_param::savePreset (
-	synthv1 *pSynth, const QString& sFilename, bool bSymLink )
+	synthv1 *pSynth, const QString& sPresetFile, bool bSymLink )
 {
 	if (pSynth == nullptr)
 		return false;
 
 	pSynth->stabilize();
 
-	const QFileInfo fi(sFilename);
+	const QFileInfo fi(sPresetFile);
 	const QDir currentDir(QDir::current());
 	QDir::setCurrent(fi.absolutePath());
 

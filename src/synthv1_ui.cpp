@@ -1,7 +1,7 @@
 // synthv1_ui.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2025, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2026, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -52,14 +52,14 @@ bool synthv1_ui::newPreset (void)
 }
 
 
-bool synthv1_ui::loadPreset ( const QString& sFilename )
+bool synthv1_ui::loadPreset ( const QString& sPresetFile )
 {
-	return synthv1_param::loadPreset(m_pSynth, sFilename);
+	return synthv1_param::loadPreset(m_pSynth, sPresetFile);
 }
 
-bool synthv1_ui::savePreset ( const QString& sFilename )
+bool synthv1_ui::savePreset ( const QString& sPresetFile )
 {
-	return synthv1_param::savePreset(m_pSynth, sFilename);
+	return synthv1_param::savePreset(m_pSynth, sPresetFile);
 }
 
 
