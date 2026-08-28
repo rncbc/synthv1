@@ -27,6 +27,16 @@
 #include <QFileInfo>
 #include <QDir>
 
+#include <QCoreApplication>
+
+#ifndef CONFIG_BINDIR
+#define CONFIG_BINDIR	CONFIG_PREFIX "/bin"
+#endif
+
+#ifndef CONFIG_DATADIR
+#define CONFIG_DATADIR	CONFIG_PREFIX "/share"
+#endif
+
 
 //-------------------------------------------------------------------------
 // synthv1_config - Prototype settings structure (pseudo-singleton).
@@ -203,6 +213,38 @@ void synthv1_config::loadPresets (void)
 	presets.clear_presets();
 
 	loadPresets(this, &presets);
+
+	// Factory presets loading (tentative)...
+	//
+	QSettings::beginGroup(presetsConfGroup());
+	QStringList confs = QSettings::value(presetsConfListKey()).toStringList();
+	if (confs.isEmpty() || presets.isEmpty()) {
+		const QChar sep = QDir::separator();
+		QString sPresetsPath = QCoreApplication::applicationDirPath();
+		sPresetsPath.remove(CONFIG_BINDIR);
+		sPresetsPath.append(CONFIG_DATADIR);
+		sPresetsPath.append(sep);
+		sPresetsPath.append(PROJECT_NAME);
+		sPresetsPath.append(sep);
+		sPresetsPath.append("preset");
+		QDir dir(sPresetsPath);
+		if (dir.exists() && dir.isReadable()) {
+			QSettings::remove(presetsConfListKey());
+			const QStringList filter("*." PROJECT_NAME ".conf");
+			QStringListIterator iter(dir.entryList(filter, QDir::Files));
+			while (iter.hasNext()) {
+				const QFileInfo fi(sPresetsPath, iter.next());
+				const QString& sFilename = fi.absoluteFilePath();
+				if (!confs.contains(sFilename)) {
+					synthv1_config::importPresets(sFilename, &presets);
+					confs.append(sFilename);
+				}
+			}
+			if (!confs.isEmpty())
+				QSettings::setValue(presetsConfListKey(), confs);
+		}
+	}
+	QSettings::endGroup();
 }
 
 
@@ -304,6 +346,18 @@ QString synthv1_config::presetsBanksGroup (void)
 QString synthv1_config::presetsBankListKey (void)
 {
 	return "/BankList";
+}
+
+
+// Preset conf.factory group path.
+QString synthv1_config::presetsConfGroup (void)
+{
+	return "/PresetsConf";
+}
+
+QString synthv1_config::presetsConfListKey (void)
+{
+	return "/ConfList";
 }
 
 

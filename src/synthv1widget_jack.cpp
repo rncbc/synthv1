@@ -42,7 +42,7 @@
 #endif
 
 #ifndef CONFIG_DATADIR
-#define CONFIG_DATADIR	CONFIG_PREFIX "/shared"
+#define CONFIG_DATADIR	CONFIG_PREFIX "/share"
 #endif
 
 #ifndef CONFIG_LIBDIR
