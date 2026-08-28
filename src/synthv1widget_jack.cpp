@@ -1,7 +1,7 @@
 // synthv1widget_jack.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2025, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2026, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -39,6 +39,10 @@
 
 #ifndef CONFIG_BINDIR
 #define CONFIG_BINDIR	CONFIG_PREFIX "/bin"
+#endif
+
+#ifndef CONFIG_DATADIR
+#define CONFIG_DATADIR	CONFIG_PREFIX "/shared"
 #endif
 
 #ifndef CONFIG_LIBDIR
