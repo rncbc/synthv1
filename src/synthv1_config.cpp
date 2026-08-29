@@ -37,6 +37,22 @@
 #define CONFIG_DATADIR	CONFIG_PREFIX "/share"
 #endif
 
+// Local static consts.
+static const char *PresetsGroup       = "/Presets";
+static const char *PresetsListKey     = "/PresetList";
+
+static const char *PresetsBanksGroup  = "/Banks";
+static const char *PresetsBankListKey = "/BankList";
+
+static const char *PresetsConfGroup   = "/PresetsConf";
+static const char *PresetsConfListKey = "/ConfList";
+
+static const char *ProgramsGroup      = "/Programs";
+static const char *BankPrefix         = "/Bank_";
+
+static const char *ControlsGroup      = "/Controllers";
+static const char *ControlPrefix      = "/Control";
+
 
 //-------------------------------------------------------------------------
 // synthv1_config - Prototype settings structure (pseudo-singleton).
@@ -71,20 +87,9 @@ synthv1_config::~synthv1_config (void)
 
 
 // Preset utility methods.
-QString synthv1_config::presetsGroup (void)
-{
-	return "/Presets";
-}
-
-QString synthv1_config::presetsListKey (void)
-{
-	return "/PresetList";
-}
-
-
 QString synthv1_config::presetFile ( const QString& sPreset )
 {
-	QSettings::beginGroup(presetsGroup());
+	QSettings::beginGroup(PresetsGroup);
 	const QString sPresetFile(QSettings::value(sPreset).toString());
 	QSettings::endGroup();
 	return sPresetFile;
@@ -94,7 +99,7 @@ QString synthv1_config::presetFile ( const QString& sPreset )
 void synthv1_config::setPresetFile (
 	const QString& sPreset, const QString& sPresetFile )
 {
-	QSettings::beginGroup(presetsGroup());
+	QSettings::beginGroup(PresetsGroup);
 	QSettings::setValue(sPreset, sPresetFile);
 	QSettings::endGroup();
 }
@@ -102,7 +107,7 @@ void synthv1_config::setPresetFile (
 
 void synthv1_config::removePreset ( const QString& sPreset )
 {
-	QSettings::beginGroup(presetsGroup());
+	QSettings::beginGroup(PresetsGroup);
 	const QString& sPresetFile = QSettings::value(sPreset).toString();
 	if (QFileInfo::exists(sPresetFile))
 		QFile(sPresetFile).remove();
@@ -136,11 +141,11 @@ void synthv1_config::loadPresets ( QSettings *pSettings,
 	synthv1_presets *pPresets,	const MapPath& mapPath )
 {
 	QStringList bank_list;
-	pSettings->beginGroup(presetsBankListKey());
-	bank_list = pSettings->value(presetsBankListKey()).toStringList();
+	pSettings->beginGroup(PresetsBankListKey);
+	bank_list = pSettings->value(PresetsBankListKey).toStringList();
 	pSettings->endGroup();
 
-	pSettings->beginGroup(presetsBanksGroup());
+	pSettings->beginGroup(PresetsBanksGroup);
 	QStringListIterator bank_iter(bank_list);
 	while (bank_iter.hasNext()) {
 		const QString& sBank = bank_iter.next();
@@ -156,11 +161,11 @@ void synthv1_config::loadPresets ( QSettings *pSettings,
 	pSettings->endGroup();
 
 	QStringList preset_list;
-	pSettings->beginGroup(presetsListKey());
-	preset_list = pSettings->value(presetsListKey()).toStringList();
+	pSettings->beginGroup(PresetsListKey);
+	preset_list = pSettings->value(PresetsListKey).toStringList();
 	pSettings->endGroup();
 
-	pSettings->beginGroup(presetsGroup());
+	pSettings->beginGroup(PresetsGroup);
 	const QStringList& preset_keys
 		= pSettings->childKeys();
 	QStringListIterator preset_key(preset_keys);
@@ -214,10 +219,11 @@ void synthv1_config::loadPresets (void)
 
 	loadPresets(this, &presets);
 
-	// Factory presets loading (tentative)...
+	// Factory presets(.conf) loading (tentative)...
 	//
-	QSettings::beginGroup(presetsConfGroup());
-	QStringList confs = QSettings::value(presetsConfListKey()).toStringList();
+	int nconfs = 0;
+	QSettings::beginGroup(PresetsConfGroup);
+	QStringList confs = QSettings::value(PresetsConfListKey).toStringList();
 	if (confs.isEmpty() || presets.isEmpty()) {
 		const QChar sep = QDir::separator();
 		QString sPresetsPath = QCoreApplication::applicationDirPath();
@@ -229,7 +235,7 @@ void synthv1_config::loadPresets (void)
 		sPresetsPath.append("preset");
 		QDir dir(sPresetsPath);
 		if (dir.exists() && dir.isReadable()) {
-			QSettings::remove(presetsConfListKey());
+			QSettings::remove(PresetsConfListKey);
 			const QStringList filter("*." PROJECT_NAME ".conf");
 			QStringListIterator iter(dir.entryList(filter, QDir::Files));
 			while (iter.hasNext()) {
@@ -238,13 +244,17 @@ void synthv1_config::loadPresets (void)
 				if (!confs.contains(sFilename)) {
 					synthv1_config::importPresets(sFilename, &presets);
 					confs.append(sFilename);
+					++nconfs;
 				}
 			}
-			if (!confs.isEmpty())
-				QSettings::setValue(presetsConfListKey(), confs);
+			if (nconfs > 0)
+				QSettings::setValue(PresetsConfListKey, confs);
 		}
 	}
 	QSettings::endGroup();
+
+	if (nconfs > 0)
+		savePresets();
 }
 
 
@@ -272,11 +282,11 @@ void synthv1_config::savePresets (
 	QSettings *pSettings, synthv1_presets *pPresets, const MapPath& mapPath )
 {
 	const QStringList& bank_list = pPresets->bank_list();
-	pSettings->beginGroup(presetsBankListKey());
-	pSettings->setValue(presetsBankListKey(), bank_list);
+	pSettings->beginGroup(PresetsBankListKey);
+	pSettings->setValue(PresetsBankListKey, bank_list);
 	pSettings->endGroup();
 
-	pSettings->beginGroup(presetsBanksGroup());
+	pSettings->beginGroup(PresetsBanksGroup);
 	const QStringList& bank_keys
 		= pSettings->childKeys();
 	QStringListIterator bank_key(bank_keys);
@@ -300,11 +310,11 @@ void synthv1_config::savePresets (
 	pSettings->endGroup();
 
 	const QStringList& preset_list = pPresets->preset_list();
-	pSettings->beginGroup(presetsListKey());
-	pSettings->setValue(presetsListKey(), preset_list);
+	pSettings->beginGroup(PresetsListKey);
+	pSettings->setValue(PresetsListKey, preset_list);
 	pSettings->endGroup();
 
-	pSettings->beginGroup(presetsGroup());
+	pSettings->beginGroup(PresetsGroup);
 	const QStringList& preset_keys
 		= pSettings->childKeys();
 	QStringListIterator preset_key(preset_keys);
@@ -337,47 +347,12 @@ void synthv1_config::savePresets (void)
 }
 
 
-// Presets utility methods.
-QString synthv1_config::presetsBanksGroup (void)
-{
-	return "/Banks";
-}
-
-QString synthv1_config::presetsBankListKey (void)
-{
-	return "/BankList";
-}
-
-
-// Preset conf.factory group path.
-QString synthv1_config::presetsConfGroup (void)
-{
-	return "/PresetsConf";
-}
-
-QString synthv1_config::presetsConfListKey (void)
-{
-	return "/ConfList";
-}
-
-
 // Programs utility methods.
-QString synthv1_config::programsGroup (void)
-{
-	return "/Programs";
-}
-
-QString synthv1_config::bankPrefix (void)
-{
-	return "/Bank_";
-}
-
-
 void synthv1_config::loadPrograms ( synthv1_programs *pPrograms )
 {
 	pPrograms->clear_banks();
 
-	QSettings::beginGroup(programsGroup());
+	QSettings::beginGroup(ProgramsGroup);
 
 	const QStringList& bank_keys = QSettings::childKeys();
 	QStringListIterator bank_iter(bank_keys);
@@ -387,7 +362,7 @@ void synthv1_config::loadPrograms ( synthv1_programs *pPrograms )
 		const QString& bank_name
 			= QSettings::value(bank_key).toString();
 		synthv1_programs::Bank *pBank = pPrograms->add_bank(bank_id, bank_name);
-		QSettings::beginGroup(bankPrefix() + bank_key);
+		QSettings::beginGroup(BankPrefix + bank_key);
 		const QStringList& prog_keys = QSettings::childKeys();
 		QStringListIterator prog_iter(prog_keys);
 		while (prog_iter.hasNext()) {
@@ -412,7 +387,7 @@ void synthv1_config::savePrograms ( synthv1_programs *pPrograms )
 
 	clearPrograms();
 
-	QSettings::beginGroup(programsGroup());
+	QSettings::beginGroup(ProgramsGroup);
 
 	const synthv1_programs::Banks& banks = pPrograms->banks();
 	synthv1_programs::Banks::ConstIterator bank_iter = banks.constBegin();
@@ -422,7 +397,7 @@ void synthv1_config::savePrograms ( synthv1_programs *pPrograms )
 		const QString& bank_key = QString::number(pBank->id());
 		const QString& bank_name = pBank->name();
 		QSettings::setValue(bank_key, bank_name);
-		QSettings::beginGroup(bankPrefix() + bank_key);
+		QSettings::beginGroup(BankPrefix + bank_key);
 		const synthv1_programs::Progs& progs = pBank->progs();
 		synthv1_programs::Progs::ConstIterator prog_iter = progs.constBegin();
 		const synthv1_programs::Progs::ConstIterator& prog_end = progs.constEnd();
@@ -442,13 +417,13 @@ void synthv1_config::savePrograms ( synthv1_programs *pPrograms )
 
 void synthv1_config::clearPrograms (void)
 {
-	QSettings::beginGroup(programsGroup());
+	QSettings::beginGroup(ProgramsGroup);
 
 	const QStringList& bank_keys = QSettings::childKeys();
 	QStringListIterator bank_iter(bank_keys);
 	while (bank_iter.hasNext()) {
 		const QString& bank_key = bank_iter.next();
-		QSettings::beginGroup(bankPrefix() + bank_key);
+		QSettings::beginGroup(BankPrefix + bank_key);
 		const QStringList& prog_keys = QSettings::childKeys();
 		QStringListIterator prog_iter(prog_keys);
 		while (prog_iter.hasNext()) {
@@ -463,30 +438,19 @@ void synthv1_config::clearPrograms (void)
 }
 
 
-// Programs utility methods.
-QString synthv1_config::controlsGroup (void)
-{
-	return "/Controllers";
-}
-
-QString synthv1_config::controlPrefix (void)
-{
-	return "/Control";
-}
-
-
+// Controllers utility methods.
 void synthv1_config::loadControls ( synthv1_controls *pControls )
 {
 	pControls->clear();
 
-	QSettings::beginGroup(controlsGroup());
+	QSettings::beginGroup(ControlsGroup);
 
 	const QStringList& keys = QSettings::childKeys();
 	QStringListIterator iter(keys);
 	while (iter.hasNext()) {
 		const QString& sKey = '/' + iter.next();
 		const QStringList& clist = sKey.split('_');
-		if (clist.at(0) == controlPrefix()) {
+		if (clist.at(0) == ControlPrefix) {
 			const unsigned short channel
 				= clist.at(1).toInt();
 			const synthv1_controls::Type ctype
@@ -516,14 +480,14 @@ void synthv1_config::saveControls ( synthv1_controls *pControls )
 
 	clearControls();
 
-	QSettings::beginGroup(controlsGroup());
+	QSettings::beginGroup(ControlsGroup);
 
 	const synthv1_controls::Map& map = pControls->map();
 	synthv1_controls::Map::ConstIterator iter = map.constBegin();
 	const synthv1_controls::Map::ConstIterator& iter_end = map.constEnd();
 	for ( ; iter != iter_end; ++iter) {
 		const synthv1_controls::Key& key = iter.key();
-		QString sKey = controlPrefix();
+		QString sKey = ControlPrefix;
 		sKey += '_' + QString::number(key.channel());
 		sKey += '_' + synthv1_controls::textFromType(key.type());
 		sKey += '_' + QString::number(key.param);
@@ -541,7 +505,7 @@ void synthv1_config::saveControls ( synthv1_controls *pControls )
 
 void synthv1_config::clearControls (void)
 {
-	QSettings::beginGroup(controlsGroup());
+	QSettings::beginGroup(ControlsGroup);
 
 	const QStringList& keys = QSettings::childKeys();
 	QStringListIterator iter(keys);

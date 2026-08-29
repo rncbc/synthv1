@@ -536,9 +536,15 @@ void synthv1widget_config::presetsImportItems (void)
 	if (sFilename.isEmpty())
 		return;
 
+	const QString& sPreset
+		= m_ui.PresetsTreeWidget->currentPreset();
+
 	synthv1_presets presets;
+	m_ui.PresetsTreeWidget->savePresets(&presets);
 	synthv1_config::importPresets(sFilename, &presets);
 	m_ui.PresetsTreeWidget->loadPresets(&presets);
+
+	m_ui.PresetsTreeWidget->setPresetItem(sPreset);
 
 	stabilize();
 }

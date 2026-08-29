@@ -1,7 +1,7 @@
 // synthv1widget_controls.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2023, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2026, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 #include "synthv1_controls.h"
 #include "synthv1_config.h"
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QHeaderView>
 #include <QSpinBox>
 #include <QLineEdit>
@@ -34,18 +34,19 @@
 //----------------------------------------------------------------------------
 // synthv1widget_controls::ItemDelegate -- Custom (tree) list item delegate.
 
-class synthv1widget_controls::ItemDelegate : public QItemDelegate
+class synthv1widget_controls::ItemDelegate : public QStyledItemDelegate
 {
 public:
 
 	// ctor.
 	ItemDelegate(QObject *pParent = nullptr);
 
-	// QItemDelegate interface...
+	// painting
 	QSize sizeHint(
 		const QStyleOptionViewItem& option,
 		const QModelIndex& index) const;
 
+	// editing
 	QWidget *createEditor(QWidget *pParent,
 		const QStyleOptionViewItem& option,
 		const QModelIndex& index) const;
@@ -451,20 +452,23 @@ QString controlParamName (
 
 // ctor.
 synthv1widget_controls::ItemDelegate::ItemDelegate ( QObject *pParent )
-	: QItemDelegate(pParent)
+	: QStyledItemDelegate(pParent)
 {
 }
 
 
-// QItemDelegate interface...
+// painting
+//
 QSize synthv1widget_controls::ItemDelegate::sizeHint (
 	const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
 	const int x = (index.column() == 1 ? 32 : 4); // Type is special.
-	return QItemDelegate::sizeHint(option, index) + QSize(x, 4);
+	return QStyledItemDelegate::sizeHint(option, index) + QSize(x, 4);
 }
 
 
+// editing
+//
 QWidget *synthv1widget_controls::ItemDelegate::createEditor ( QWidget *pParent,
 	const QStyleOptionViewItem& /*option*/, const QModelIndex& index ) const
 {

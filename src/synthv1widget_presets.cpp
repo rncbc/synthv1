@@ -97,14 +97,21 @@ void synthv1widget_presets::ItemDelegate::paint ( QPainter *pPainter,
 
 	synthv1widget_presets *pWidget
 		= qobject_cast<synthv1widget_presets *>(parent());
-	if (pWidget && !pWidget->rootIsDecorated()) {
+	if (pWidget) {
+		const bool bRootIsDecorated = pWidget->rootIsDecorated();
 		QTreeWidgetItem *pItem = pWidget->itemFromIndex(index);
 		if (pItem && pWidget->isBankItem(pItem)) {
-			opt.state |= QStyle::State_Enabled;
+			if (!bRootIsDecorated)
+				opt.state |= QStyle::State_Enabled;
 			opt.font.setWeight(QFont::Bold);
-		} else {
-			opt.decorationAlignment = Qt::AlignRight|Qt::AlignVCenter;
+			if (pWidget->currentItem() == pItem) {
+				opt.palette.setColor(QPalette::Text,
+					opt.palette.color(QPalette::HighlightedText));
+			}
 		}
+		else
+		if (!bRootIsDecorated)
+			opt.decorationAlignment = Qt::AlignRight|Qt::AlignVCenter;
 	}
 
 	QStyledItemDelegate::paint(pPainter, opt, index);
