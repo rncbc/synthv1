@@ -128,7 +128,7 @@ void synthv1_config::importPresets (
 			: dir(QFileInfo(sFilename).absolutePath()) {}
 
 		QString operator()(const QString& sPath) const override
-			{ return dir.absoluteFilePath(sPath); }
+			{ return QFileInfo(dir.filePath(sPath)).canonicalFilePath(); }
 
 		QDir dir;
 	};
@@ -283,7 +283,10 @@ void synthv1_config::savePresets (
 {
 	const QStringList& bank_list = pPresets->bank_list();
 	pSettings->beginGroup(PresetsBankListKey);
-	pSettings->setValue(PresetsBankListKey, bank_list);
+	if (bank_list.isEmpty())
+		pSettings->remove(PresetsBankListKey);
+	else
+		pSettings->setValue(PresetsBankListKey, bank_list);
 	pSettings->endGroup();
 
 	pSettings->beginGroup(PresetsBanksGroup);
@@ -305,13 +308,19 @@ void synthv1_config::savePresets (
 				= bank_preset_iter.next();
 			preset_list.append(sPreset);
 		}
-		pSettings->setValue(sBank, preset_list);
+		if (preset_list.isEmpty())
+			pSettings->remove(sBank);
+		else
+			pSettings->setValue(sBank, preset_list);
 	}
 	pSettings->endGroup();
 
 	const QStringList& preset_list = pPresets->preset_list();
 	pSettings->beginGroup(PresetsListKey);
-	pSettings->setValue(PresetsListKey, preset_list);
+	if (preset_list.isEmpty())
+		pSettings->remove(PresetsListKey);
+	else
+		pSettings->setValue(PresetsListKey, preset_list);
 	pSettings->endGroup();
 
 	pSettings->beginGroup(PresetsGroup);
