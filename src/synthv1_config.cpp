@@ -219,41 +219,7 @@ void synthv1_config::loadPresets (void)
 
 	loadPresets(this, &presets);
 
-	// Factory presets(.conf) loading (tentative)...
-	//
-	int nconfs = 0;
-	QSettings::beginGroup(PresetsConfGroup);
-	QStringList confs = QSettings::value(PresetsConfListKey).toStringList();
-	if (confs.isEmpty() || presets.isEmpty()) {
-		const QChar sep = QDir::separator();
-		QString sPresetsPath = QCoreApplication::applicationDirPath();
-		sPresetsPath.remove(CONFIG_BINDIR);
-		sPresetsPath.append(CONFIG_DATADIR);
-		sPresetsPath.append(sep);
-		sPresetsPath.append(PROJECT_NAME);
-		sPresetsPath.append(sep);
-		sPresetsPath.append("preset");
-		QDir dir(sPresetsPath);
-		if (dir.exists() && dir.isReadable()) {
-			QSettings::remove(PresetsConfListKey);
-			const QStringList filter("*." PROJECT_NAME ".conf");
-			QStringListIterator iter(dir.entryList(filter, QDir::Files));
-			while (iter.hasNext()) {
-				const QFileInfo fi(sPresetsPath, iter.next());
-				const QString& sFilename = fi.absoluteFilePath();
-				if (!confs.contains(sFilename)) {
-					synthv1_config::importPresets(sFilename, &presets);
-					confs.append(sFilename);
-					++nconfs;
-				}
-			}
-			if (nconfs > 0)
-				QSettings::setValue(PresetsConfListKey, confs);
-		}
-	}
-	QSettings::endGroup();
-
-	if (nconfs > 0)
+	if (loadPresetsConf(this, &presets) > 0)
 		savePresets();
 }
 
@@ -353,6 +319,67 @@ void synthv1_config::savePresets (
 void synthv1_config::savePresets (void)
 {
 	savePresets(this, &presets);
+}
+
+
+// Factory presets(.conf) loading...
+//
+int synthv1_config::loadPresetsConf (
+	QSettings *pSettings, synthv1_presets *pPresets )
+{
+	int nconfs = 0;
+
+	pSettings->beginGroup(PresetsConfGroup);
+	QStringList confs = pSettings->value(PresetsConfListKey).toStringList();
+	if (confs.isEmpty() || pPresets->isEmpty()) {
+		const QChar sep = QDir::separator();
+		QString sPresetsPath = QCoreApplication::applicationDirPath();
+		sPresetsPath.remove(CONFIG_BINDIR);
+		sPresetsPath.append(CONFIG_DATADIR);
+		sPresetsPath.append(sep);
+		sPresetsPath.append(PROJECT_NAME);
+		sPresetsPath.append(sep);
+		sPresetsPath.append("preset");
+		QDir dir(sPresetsPath);
+		if (dir.exists() && dir.isReadable()) {
+			pSettings->remove(PresetsConfListKey);
+			nconfs += loadPresetsConfDir(pPresets, dir, confs);
+			if (nconfs > 0)
+				pSettings->setValue(PresetsConfListKey, confs);
+		}
+	}
+	pSettings->endGroup();
+
+	return nconfs;
+}
+
+
+int synthv1_config::loadPresetsConfDir (
+	synthv1_presets *pPresets, const QDir& dir, QStringList& confs )
+{
+	int nconfs = 0;
+
+	const QDir::Filters filters
+		= QDir::AllDirs | QDir::NoDotAndDotDot;
+	QStringListIterator dir_iter(dir.entryList(filters));
+	while (dir_iter.hasNext()) {
+		nconfs += loadPresetsConfDir(pPresets,
+			QDir(QFileInfo(dir, dir_iter.next()).filePath()), confs);
+	}
+
+	const QStringList filter("*." PROJECT_NAME ".conf");
+	QStringListIterator iter(dir.entryList(filter, QDir::Files));
+	while (iter.hasNext()) {
+		const QFileInfo fi(dir, iter.next());
+		const QString& sFilename = fi.absoluteFilePath();
+		if (!confs.contains(sFilename)) {
+			synthv1_config::importPresets(sFilename, pPresets);
+			confs.append(sFilename);
+			++nconfs;
+		}
+	}
+
+	return nconfs;
 }
 
 

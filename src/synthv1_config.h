@@ -26,11 +26,6 @@
 
 #include "synthv1_presets.h"
 
-
-//-------------------------------------------------------------------------
-// synthv1_config - Prototype settings class (singleton).
-//
-
 #include <QSettings>
 #include <QStringList>
 
@@ -38,6 +33,12 @@
 class synthv1_programs;
 class synthv1_controls;
 
+class QDir;
+
+
+//-------------------------------------------------------------------------
+// synthv1_config - Prototype settings class (singleton).
+//
 
 class synthv1_config : public QSettings
 {
@@ -129,6 +130,13 @@ protected:
 		QSettings *pSettings,
 		synthv1_presets *pPresets,
 		const MapPath& mapPath = MapPath());
+
+	static int loadPresetsConf(
+		QSettings *pSettings,
+		synthv1_presets *pPresets);
+	static int loadPresetsConfDir(
+		synthv1_presets *pPresets,
+		const QDir& dir, QStringList& confs);
 
 	void clearPrograms();
 	void clearControls();
