@@ -7,8 +7,8 @@ ChangeLog
 GIT HEAD
 
 - Fixed an old freezer bug that manifested whenever a MIDI
-  Program Change is issued. (EXPERIMENTAL)
-- Improved Bank/Preset management widgets. (EXPERIMENTAL)
+  Program Change is issued.
+- Vastly improved Bank/Preset management widgets.
 - Fixed wrong keymap-file setter on tuning loader.
 - Added file-types property to LV2 plug-in Path parameters.
 
