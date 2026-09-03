@@ -89,6 +89,20 @@ Obsoletes:	%{name}-common <= %{version}
   This package provides the LV2 plugin (http://synthv1.sourceforge.net/lv2)
 
 
+%package -n %{name}-preset
+Summary:	An old-school polyphonic subtractive synthesizer - Presets
+License:	CC0-1.0
+BuildArch:	noarch
+
+%description -n %{name}-preset
+  An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
+  with stereo fx.
+
+  This package provides the factory/community presets from
+    https://github.com//rncbc/synthv1-preset
+  
+
+
 %prep
 %setup -q
 
@@ -142,6 +156,10 @@ cmake --install build
 %{_libdir}/lv2/%{name}.lv2/%{name}.ttl
 %{_libdir}/lv2/%{name}.lv2/%{name}.so
 %{_libdir}/lv2/%{name}.lv2/%{name}_ui.ttl
+
+%files -n %{name}-preset
+%dir %{_datadir}/%{name}/preset
+%{_datadir}/%{name}/preset/*
 
 
 %changelog

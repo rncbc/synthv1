@@ -29,3 +29,14 @@ Description: An old-school polyphonic subtractive synthesizer - LV2 plugin
   with stereo fx.
   .
   This package provides the LV2 plugin (http://synthv1.sourceforge.net/lv2)
+
+Package: synthv1-preset
+Architecture: all
+Depends: synthv1-jack | synthv1-lv2
+Description: An old-school polyphonic subtractive synthesizer - LV2 plugin
+  An old-school all-digital 4-oscillator subtractive polyphonic synthesizer
+  with stereo fx.
+  .
+  This package provides the factory/community presets from
+    https://github.com//rncbc/synthv1-preset
+  
