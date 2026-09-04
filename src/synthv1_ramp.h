@@ -1,7 +1,7 @@
 // synthv1_ramp.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2021, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2026, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -238,54 +238,6 @@ protected:
 
 	float *m_param3;
 	float  m_param3_v;
-};
-
-
-
-
-//-------------------------------------------------------------------------
-// synthv1_ramp4 (4 port tracking)
-
-class synthv1_ramp4 : public synthv1_ramp3
-{
-public:
-
-	synthv1_ramp4(uint16_t nvalues = 1)
-		: synthv1_ramp3(nvalues), m_param4(nullptr), m_param4_v(0.0f) {}
-
-	void reset(float *param1, float *param2, float *param3, float *param4)
-	{
-		m_param4 = param4;
-		m_param4_v = 0.0f;
-
-		synthv1_ramp3::reset(param1, param2, param3);
-	}
-
-protected:
-
-	virtual bool probe() const
-	{
-		return synthv1_ramp3::probe()
-			|| (m_param4 && ::fabsf(*m_param4 - m_param4_v) > 0.001f);
-	}
-
-	virtual float evaluate(uint16_t i)
-	{
-		update();
-
-		return synthv1_ramp3::evaluate(i) * m_param4_v;
-	}
-
-	void update()
-	{
-		synthv1_ramp3::update();
-
-		if (m_param4)
-			m_param4_v = *m_param4;
-	}
-
-	float *m_param4;
-	float  m_param4_v;
 };
 
 

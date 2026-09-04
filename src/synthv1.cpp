@@ -1,7 +1,7 @@
 // synthv1.cpp
 //
 /****************************************************************************
-   Copyright (C) 2012-2024, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2026, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -988,7 +988,7 @@ private:
 
 	synthv1_ramp1 m_wid1, m_wid2;
 	synthv1_bal2  m_pan1, m_pan2;
-	synthv1_ramp3 m_vol1, m_vol2;
+	synthv1_ramp2 m_vol1, m_vol2;
 
 	float  **m_sfxs;
 	uint32_t m_nsize;
@@ -1328,7 +1328,6 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DCA1_VOLUME:
 		m_vol1.reset(
 			m_out1.volume.value_ptr(),
-			m_dca1.volume.value_ptr(),
 			&m_ctl1.volume);
 		break;
 	case synthv1::OUT1_WIDTH:
@@ -1344,7 +1343,6 @@ void synthv1_impl::setParamPort ( synthv1::ParamIndex index, float *pfParam )
 	case synthv1::DCA2_VOLUME:
 		m_vol2.reset(
 			m_out2.volume.value_ptr(),
-			m_dca2.volume.value_ptr(),
 			&m_ctl2.volume);
 		break;
 	case synthv1::OUT2_WIDTH:
@@ -2312,7 +2310,6 @@ void synthv1_impl::reset (void)
 {
 	m_vol1.reset(
 		m_out1.volume.value_ptr(),
-		m_dca1.volume.value_ptr(),
 		&m_ctl1.volume);
 	m_pan1.reset(
 		m_out1.panning.value_ptr(),
@@ -2322,7 +2319,6 @@ void synthv1_impl::reset (void)
 
 	m_vol2.reset(
 		m_out2.volume.value_ptr(),
-		m_dca2.volume.value_ptr(),
 		&m_ctl2.volume);
 	m_pan2.reset(
 		m_out2.panning.value_ptr(),
@@ -2612,6 +2608,7 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				const float mid1 = 0.5f * (mod11 + mod12);
 				const float sid1 = 0.5f * (mod11 - mod12);
 				const float vol1 = vel1 * m_vol1.value(j)
+					* m_dca1.volume.value()
 					* pv->dca1_env.tick()
 					* pv->out1_vol.value(j);
 
@@ -2619,6 +2616,7 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 				const float mid2 = 0.5f * (mod21 + mod22);
 				const float sid2 = 0.5f * (mod21 - mod22);
 				const float vol2 = vel2 * m_vol2.value(j)
+					* m_dca2.volume.value()
 					* pv->dca2_env.tick()
 					* pv->out2_vol.value(j);
 
