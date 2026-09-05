@@ -6,6 +6,11 @@ ChangeLog
 
 GIT HEAD
 
+- Introduce the factory/community preset install package.
+
+
+1.4.3  2026-09-01  A Late-Summer'26 Release.
+
 - Fixed an old freezer bug that manifested whenever a MIDI
   Program Change is issued.
 - Vastly improved Bank/Preset management widgets.
