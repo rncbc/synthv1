@@ -33,10 +33,6 @@
 
 #include <QStyleFactory>
 
-#ifndef CONFIG_BINDIR
-#define CONFIG_BINDIR	CONFIG_PREFIX "/bin"
-#endif
-
 #ifndef CONFIG_DATADIR
 #define CONFIG_DATADIR	CONFIG_PREFIX "/share"
 #endif
@@ -68,10 +64,7 @@ synthv1widget_lv2::synthv1widget_lv2 ( synthv1_lv2 *pSynth,
 	QApplication *pApp = synthv1_lv2::qapp_instance();
 	if (pApp) {
 		// Special style paths...
-		QString sPluginsPath = pApp->applicationDirPath();
-		sPluginsPath.remove(CONFIG_BINDIR);
-		sPluginsPath.append(CONFIG_PLUGINSDIR);
-		if (QDir(sPluginsPath).exists())
+		if (QDir(CONFIG_PLUGINSDIR).exists())
 			pApp->addLibraryPath(CONFIG_PLUGINSDIR);
 	}
 
@@ -79,8 +72,7 @@ synthv1widget_lv2::synthv1widget_lv2 ( synthv1_lv2 *pSynth,
 	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig) {
 		const QChar sep = QDir::separator();
-		QString sPalettePath = QApplication::applicationDirPath();
-		sPalettePath.remove(CONFIG_BINDIR);
+		QString sPalettePath;
 		sPalettePath.append(CONFIG_DATADIR);
 		sPalettePath.append(sep);
 		sPalettePath.append(PROJECT_NAME);

@@ -37,10 +37,6 @@
 
 #include <QStyleFactory>
 
-#ifndef CONFIG_BINDIR
-#define CONFIG_BINDIR	CONFIG_PREFIX "/bin"
-#endif
-
 #ifndef CONFIG_DATADIR
 #define CONFIG_DATADIR	CONFIG_PREFIX "/share"
 #endif
@@ -74,18 +70,14 @@ synthv1widget_jack::synthv1widget_jack ( synthv1_jack *pSynth )
 	#endif
 {
 	// Special style paths...
-	QString sPluginsPath = QApplication::applicationDirPath();
-	sPluginsPath.remove(CONFIG_BINDIR);
-	sPluginsPath.append(CONFIG_PLUGINSDIR);
-	if (QDir(sPluginsPath).exists())
-		QApplication::addLibraryPath(sPluginsPath);
+	if (QDir(CONFIG_PLUGINSDIR).exists())
+		QApplication::addLibraryPath(CONFIG_PLUGINSDIR);
 
 	// Custom color/style themes...
 	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig) {
 		const QChar sep = QDir::separator();
-		QString sPalettePath = QApplication::applicationDirPath();
-		sPalettePath.remove(CONFIG_BINDIR);
+		QString sPalettePath;
 		sPalettePath.append(CONFIG_DATADIR);
 		sPalettePath.append(sep);
 		sPalettePath.append(PROJECT_NAME);

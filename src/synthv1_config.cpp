@@ -27,12 +27,6 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include <QCoreApplication>
-
-#ifndef CONFIG_BINDIR
-#define CONFIG_BINDIR	CONFIG_PREFIX "/bin"
-#endif
-
 #ifndef CONFIG_DATADIR
 #define CONFIG_DATADIR	CONFIG_PREFIX "/share"
 #endif
@@ -333,8 +327,7 @@ int synthv1_config::loadPresetsConf (
 	QStringList confs = pSettings->value(PresetsConfListKey).toStringList();
 	if (confs.isEmpty() || pPresets->isEmpty()) {
 		const QChar sep = QDir::separator();
-		QString sPresetsPath = QCoreApplication::applicationDirPath();
-		sPresetsPath.remove(CONFIG_BINDIR);
+		QString sPresetsPath;
 		sPresetsPath.append(CONFIG_DATADIR);
 		sPresetsPath.append(sep);
 		sPresetsPath.append(PROJECT_NAME);
