@@ -287,9 +287,6 @@
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
-            </property>
             <property name="sizeHint">
              <size>
               <width>8</width>
@@ -433,14 +430,14 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0" colspan="12">
+       <item row="1" column="0" colspan="13">
         <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeHint">
           <size>
-           <width>8</width>
+           <width>20</width>
            <height>0</height>
           </size>
          </property>
@@ -832,20 +829,7 @@
          </layout>
         </widget>
        </item>
-       <item row="4" column="0" colspan="12">
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint">
-          <size>
-           <width>8</width>
-           <height>0</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="5" column="0" colspan="5">
+       <item row="4" column="0" colspan="5">
         <widget class="QGroupBox" name="Dca1GroupBox">
          <property name="title">
           <string>DCA1</string>
@@ -911,7 +895,7 @@
          </layout>
         </widget>
        </item>
-       <item row="5" column="5" colspan="5">
+       <item row="4" column="5" colspan="5">
         <widget class="QGroupBox" name="Def1GroupBox">
          <property name="title">
           <string>DEF1</string>
@@ -980,7 +964,7 @@
          </layout>
         </widget>
        </item>
-       <item row="5" column="10" colspan="3">
+       <item row="4" column="10" colspan="3">
         <widget class="QGroupBox" name="Out1GroupBox">
          <property name="title">
           <string>OUT1</string>
@@ -1357,7 +1341,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0" colspan="12">
+       <item row="1" column="0" colspan="13">
         <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -1756,20 +1740,7 @@
          </layout>
         </widget>
        </item>
-       <item row="4" column="0" colspan="12">
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint">
-          <size>
-           <width>8</width>
-           <height>0</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="5" column="0" colspan="5">
+       <item row="4" column="0" colspan="5">
         <widget class="QGroupBox" name="Dca2GroupBox">
          <property name="title">
           <string>DCA2</string>
@@ -1835,7 +1806,7 @@
          </layout>
         </widget>
        </item>
-       <item row="5" column="5" colspan="5">
+       <item row="4" column="5" colspan="5">
         <widget class="QGroupBox" name="Def2GroupBox">
          <property name="title">
           <string>DEF2</string>
@@ -1904,7 +1875,7 @@
          </layout>
         </widget>
        </item>
-       <item row="5" column="10" colspan="3">
+       <item row="4" column="10" colspan="3">
         <widget class="QGroupBox" name="Out2GroupBox">
          <property name="title">
           <string>OUT2</string>
