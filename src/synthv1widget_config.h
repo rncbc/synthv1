@@ -35,6 +35,7 @@ class synthv1_ui;
 
 class QComboBox;
 class QFileInfo;
+class QStyle;
 
 
 //----------------------------------------------------------------------------
@@ -58,8 +59,6 @@ public:
 protected slots:
 
 	// command slots.
-	void editCustomColorThemes();
-
 	void controlsAddItem();
 	void controlsEditItem();
 	void controlsDeleteItem();
@@ -99,11 +98,17 @@ protected slots:
 	void tuningScaleFileClicked();
 	void tuningKeyMapFileClicked();
 
+	void customChanged();
 	void tuningChanged();
 	void controlsChanged();
 	void programsChanged();
 	void presetsChanged();
 	void optionsChanged();
+
+	void editCustomColorThemes();
+
+	void customColorThemeChanged(int iCustomColorIndex);
+	void customStyleThemeChanged(int iCustomStyleIndex);
 
 	// dialog slots.
 	void accept();
@@ -138,7 +143,11 @@ private:
 	// Instance reference.
 	synthv1_ui *m_pSynthUi;
 
-	// Dialog dirty flag.
+	// Custom style theme.
+	QStyle *m_pStyle;
+
+	// Dialog dirty flags.
+	int m_iDirtyCustom;
 	int m_iDirtyTuning;
 	int m_iDirtyControls;
 	int m_iDirtyPrograms;

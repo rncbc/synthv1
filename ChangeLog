@@ -7,6 +7,8 @@ ChangeLog
 GIT HEAD
 
 - Introduce the factory/community preset install package.
+- Color theme (with palette editor) and (widget) Style theme
+  options moved to Help/Configure.../Custom tab (with preview).
 
 
 1.4.3  2026-09-01  A Late-Summer'26 Release.
