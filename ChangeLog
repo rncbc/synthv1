@@ -6,7 +6,7 @@ ChangeLog
 
 GIT HEAD
 
-- Introduce factory/community presets install package.
+- Introducing factory/community presets install package.
 - Color theme (with palette editor) and (widget) Style theme
   options moved to Help/Configure.../Custom tab (with preview).
 
