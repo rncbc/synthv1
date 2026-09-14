@@ -38,5 +38,5 @@ Description: An old-school polyphonic subtractive synthesizer - LV2 plugin
   with stereo fx.
   .
   This package provides the factory/community presets from
-    https://github.com//rncbc/synthv1-preset
+    https://github.com/rncbc/synthv1-preset
   
