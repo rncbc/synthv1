@@ -1,23 +1,5 @@
-synthv1 (1.4.3-14.1) unstable; urgency=low
+synthv1 (1.5.0-15.1) unstable; urgency=low
 
-  * A Late-Summer'26 Release.
+  * An End-of-Summer'26 Release.
 
- -- Rui Nuno Capela <rncbc@rncbc.org>  Tue,  1 Sep 2026 18:00:00 +0100
-
-synthv1 (1.4.2-13.1) unstable; urgency=low
-
-  * A Spring'26 Release.
-
- -- Rui Nuno Capela <rncbc@rncbc.org>  Thu, 30 Apr 2026 20:00:00 +0100
-
-synthv1 (1.4.1-12.1) unstable; urgency=low
-
-  * An Early-Spring'26 Release.
-
- -- Rui Nuno Capela <rncbc@rncbc.org>  Wed, 18 Mar 2026 18:00:00 +0000
-
-synthv1 (1.4.0-11.1) unstable; urgency=low
-
-  * A Mid-Winter'26 Release.
-
- -- Rui Nuno Capela <rncbc@rncbc.org>  Thu, 12 Feb 2026 18:00:00 +0000
+ -- Rui Nuno Capela <rncbc@rncbc.org>  Tue, 15 Sep 2026 18:00:00 +0100
