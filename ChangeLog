@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Avoid recalling not-user-writable preset directories.
 - Replace the Random(ize) warning dialog with a percentage
   input dialog. (EXPERIMENTAL)
 
