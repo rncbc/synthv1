@@ -4,6 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Replace the Random(ize) warning dialog with a percentage
+  input dialog. (EXPERIMENTAL)
+
+
 1.5.0  2026-09-15  An End-of-Summer'26 Release.
 
 - Introducing factory/community presets install package.

@@ -39,6 +39,8 @@
 #include <QDir>
 #include <QTimer>
 
+#include <QInputDialog>
+
 #include <QShowEvent>
 #include <QHideEvent>
 
@@ -1165,6 +1167,7 @@ void synthv1widget::randomParams (void)
 	if (pConfig)
 		p = 0.01f * pConfig->fRandomizePercent;
 
+#if 0// Old passive prompt...
 	if (QMessageBox::warning(this,
 		tr("Warning"),
 		tr("About to randomize current parameter values:\n\n"
@@ -1172,6 +1175,19 @@ void synthv1widget::randomParams (void)
 		"Are you sure?").arg(100.0f * p),
 		QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel)
 		return;
+#else
+	bool bOk = false;
+	const double randomizePercent
+		= QInputDialog::getDouble(this,
+			tr("Randomize"),
+			tr("Randomize current parameter values\n"
+				"within a specified percentage deviation.\n\n"
+				"Randomize factor ± (%):"),
+			double(100.0f * p), 0.0, 100.0, 1, &bOk);
+	if (!bOk)
+		return;
+	p = 0.01f * float(randomizePercent);
+#endif
 
 	std::default_random_engine re(::time(nullptr));
 
