@@ -3,8 +3,8 @@ Section: sound
 Priority: optional
 Maintainer: Rui Nuno Capela <rncbc@rncbc.org>
 Build-Depends: debhelper (>= 11), cmake, pkg-config,
-  qtbase6.11-static (>= 6.11), qttools6.11-static (>= 6.11),
-  qtsvg6.11-static (>= 6.11), qttranslations6.11-static (>= 6.11),
+  qtbase6.12-static (>= 6.12), qttools6.12-static,
+  qtsvg6.12-static, qttranslations6.12-static,
   libjack-dev | libjack-jackd2-dev, libasound2-dev,
   lv2-dev, liblo-dev
 Standards-Version: 4.6.2
