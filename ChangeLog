@@ -4,12 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
-GIT HEAD
+1.5.1  2026-10-29  An Autumn'26 Release.
 
 - Cosmetic fix to parameter dial/knob modified value colors.
 - Avoid recalling not-user-writable preset directories.
 - Replace the Random(ize) warning dialog with a percentage
-  input dialog. (EXPERIMENTAL)
+  input dialog.
 
 
 1.5.0  2026-09-15  An End-of-Summer'26 Release.
