@@ -4,6 +4,12 @@ synthv1 - an old-school polyphonic synthesizer
 ChangeLog
 
 
+GIT HEAD
+
+- Fixed a crash on plug-in instance cleanup, racing the shared worker/schedule thread.
+
+
+
 1.5.1  2026-10-29  An Autumn'26 Release.
 
 - Cosmetic fix to parameter dial/knob modified value colors.
