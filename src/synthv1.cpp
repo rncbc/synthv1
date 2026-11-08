@@ -2791,6 +2791,9 @@ synthv1::synthv1 ( uint16_t nchannels, float srate, uint32_t nsize )
 
 synthv1::~synthv1 (void)
 {
+	// no scheduled run may reach a half-destroyed instance.
+	synthv1_sched::sync_cancel(this);
+
 	delete m_pImpl;
 }
 
