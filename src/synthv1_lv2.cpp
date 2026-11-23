@@ -410,10 +410,9 @@ unsigned int  synthv1_lv2::g_qapp_refcount = 0;
 void synthv1_lv2::qapp_instantiate (void)
 {
 	if (qApp == nullptr && g_qapp_instance == nullptr) {
-		static int s_argc;
+		static int s_argc = 0;
 		static const char *s_argv[4];
-		s_argc = 1;
-		s_argv[0] = PROJECT_NAME;
+		s_argv[s_argc++] = PROJECT_NAME;
 	#if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
 		::_putenv_s("QT_NO_GLIB", "1"); // Avoid glib event-loop...
 	#else
