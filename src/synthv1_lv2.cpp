@@ -410,14 +410,20 @@ unsigned int  synthv1_lv2::g_qapp_refcount = 0;
 void synthv1_lv2::qapp_instantiate (void)
 {
 	if (qApp == nullptr && g_qapp_instance == nullptr) {
-		static int s_argc = 1;
-		static const char *s_argv[] = { PROJECT_NAME, nullptr };
+		static int s_argc;
+		static const char *s_argv[4];
+		s_argc = 1;
+		s_argv[0] = PROJECT_NAME;
 	#if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
 		::_putenv_s("QT_NO_GLIB", "1"); // Avoid glib event-loop...
 	#else
-		::setenv("QT_NO_GLIB", "1", 1); // Avoid glib event-loop...
-		::setenv("QT_QPA_PLATFORM", "xcb", 0);	// Avoid wayland...
+		::setenv("QT_NO_THREADED_GLIB", "1", 0);
+		if (::getenv("QT_QPA_PLATFORM") == nullptr) {
+			s_argv[s_argc++] = "-platform";
+			s_argv[s_argc++] = "xcb";
+		}
 	#endif
+		s_argv[s_argc] = nullptr;
 	#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
 	#if QT_VERSION <  QT_VERSION_CHECK(6, 0, 0)
 		QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
