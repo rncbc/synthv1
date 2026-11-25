@@ -195,7 +195,7 @@ struct ParamInfo {
 	{ "REV1_DAMP",     PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // Reverb Damp
 	{ "REV1_FEEDB",    PARAM_FLOAT,   0.5f,   0.0f,   1.0f }, // Reverb Feedback
 	{ "REV1_WIDTH",    PARAM_FLOAT,   0.0f,  -1.0f,   1.0f }, // Reverb Width
-	{ "DYN1_COMPRESS", PARAM_BOOL,    0.0f,   0.0f,   1.0f }, // Dynamic Compressor
+	{ "DYN1_COMPRESS", PARAM_INT,     0.0f,   0.0f, 128.0f }, // Dynamic Compressor/EQ (0=off, 1=legacy, 2+=custom slot index)
 	{ "DYN1_LIMITER",  PARAM_BOOL,    1.0f,   0.0f,   1.0f }, // Dynamic Limiter
 
 	{ "KEY1_LOW",      PARAM_INT,     0.0f,   0.0f, 127.0f }, // Keyboard Low

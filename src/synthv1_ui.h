@@ -80,6 +80,11 @@ public:
 
 	void resetTuning();
 
+	void setCompressEQPreset(int index);
+	int compressEQPreset() const;
+
+	void resetCompressEQPreset();
+
 	// MIDI note/octave name helper.
 	static QString noteName(int note);
 

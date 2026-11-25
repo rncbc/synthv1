@@ -183,6 +183,23 @@ void synthv1_ui::resetTuning (void)
 }
 
 
+void synthv1_ui::setCompressEQPreset ( int index )
+{
+	m_pSynth->setCompressEQPreset(index);
+}
+
+int synthv1_ui::compressEQPreset (void) const
+{
+	return m_pSynth->compressEQPreset();
+}
+
+
+void synthv1_ui::resetCompressEQPreset (void)
+{
+	m_pSynth->resetCompressEQPreset();
+}
+
+
 // MIDI note/octave name helper (static).
 QString synthv1_ui::noteName ( int note )
 {

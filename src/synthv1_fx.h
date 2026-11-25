@@ -1,7 +1,7 @@
 // synthv1_fx.h
 //
 /****************************************************************************
-   Copyright (C) 2012-2023, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2012-2026, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -226,6 +226,11 @@ private:
 
 //-------------------------------------------------------------------------
 // synthv1_fx_comp - DiscoDSP's "rock da disco" compressor/eq.
+//
+// Band types are fixed by position:
+//   m_lo = LoShelf  (low band)
+//   m_mi = Peak     (mid band)
+//   m_hi = HiShelf  (high band)
 
 class synthv1_fx_comp
 {
@@ -248,18 +253,37 @@ public:
 	float sampleRate() const
 		{ return m_srate; }
 
-	void reset()
+	// Legacy mode: fixed bass boost + compressor dynamics.
+	// Also the default state after reset().
+	void reset_legacy()
 	{
 		m_peak = 0.0f;
 
-		m_attack  = ::expf(-1000.0f / (m_srate * 3.6f));
-		m_release = ::expf(-1000.0f / (m_srate * 150.0f));
+		// rock-da-house compressor/eq.
+		reset_attack(3.6f);
+		reset_release(150.0f);
 
-		// rock-da-house eq.
-		m_lo.reset(synthv1_fx_filter::Peak,      100.0f, 1.0f, 6.0f);
-		m_mi.reset(synthv1_fx_filter::LoShelf,  1000.0f, 1.0f, 3.0f);
-		m_hi.reset(synthv1_fx_filter::HiShelf, 10000.0f, 1.0f, 4.0f);
+		reset_low_band(  1000.0f, 1.0f, 3.0f);
+		reset_mid_band(   100.0f, 1.0f, 6.0f);
+		reset_high_band(10000.0f, 1.0f, 4.0f);
 	}
+
+	void reset()
+		{ reset_legacy(); }
+
+	// Custom mode: compressor attack/release (in msecs)..
+	void reset_attack(float attack)
+		{ m_attack = ::expf(-1000.0f / (m_srate * attack)); }
+	void reset_release(float release)
+		{ m_release = ::expf(-1000.0f / (m_srate * release)); }
+
+	// Custom mode: user-defined per-band freq/q/gain.
+	void reset_low_band(float freq, float q, float gain) // low (LoShelf)
+		{ m_lo.reset(synthv1_fx_filter::LoShelf, freq, q, gain); }
+	void reset_mid_band(float freq, float q, float gain) // mid (Peak)
+		{ m_mi.reset(synthv1_fx_filter::Peak, freq, q, gain); }
+	void reset_high_band(float freq, float q, float gain) // high (HiShelf)
+		{ m_hi.reset(synthv1_fx_filter::HiShelf, freq, q, gain); }
 
 	void process(float *in, uint32_t nframes)
 	{
@@ -271,9 +295,9 @@ public:
 			// anti-denormalizer noise
 			const float ad = 1E-14f * synthv1_fx_randf();
 			// process
-			const float lo = m_lo.output(m_mi.output(m_hi.output(*in + ad)));
+			const float mi = m_mi.output(m_lo.output(m_hi.output(*in + ad)));
 			// compute peak
-			const float peak = ::fabsf(lo);
+			const float peak = ::fabsf(mi);
 			// compute gain
 			float gain = 1.0f;
 			if (peak > threshold)
@@ -287,7 +311,7 @@ public:
 				m_peak += (1.0f - m_release) * gain;
 			}
 			// output
-			*in++ = lo * m_peak * post_gain;
+			*in++ = mi * m_peak * post_gain;
 		}
 	}
 
@@ -296,6 +320,7 @@ private:
 	float m_srate;
 
 	float m_peak;
+
 	float m_attack;
 	float m_release;
 

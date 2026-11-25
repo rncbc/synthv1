@@ -259,6 +259,11 @@ public:
 
 	virtual void updateTuning() = 0;
 
+	void setCompressEQPreset(int index);
+	int compressEQPreset() const;
+
+	void resetCompressEQPreset();
+
 private:
 
 	synthv1_impl *m_pImpl;

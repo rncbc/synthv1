@@ -569,6 +569,8 @@ struct synthv1_dyn
 {
 	synthv1_port compress;
 	synthv1_port limiter;
+
+	int compress0;
 };
 
 
@@ -874,6 +876,11 @@ public:
 
 	void resetTuning();
 
+	void setCompressEQPreset(int index);
+	int compressEQPreset() const;
+
+	void resetCompressEQPreset();
+
 	void process_midi(uint8_t *data, uint32_t size);
 	void process(float **ins, float **outs, uint32_t nframes);
 
@@ -1072,6 +1079,9 @@ synthv1_impl::synthv1_impl (
 
 	for (int note = 0; note < MAX_NOTES; ++note)
 		m_note1[note] = m_note2[note] = nullptr;
+
+	// compress/eq. index (default)
+	m_dyn.compress0 = 0;
 
 	// local buffers none yet
 	m_sfxs = nullptr;
@@ -2007,8 +2017,10 @@ void synthv1_impl::allSoundOff (void)
 		m_flanger[k].reset();
 		m_phaser[k].reset();
 		m_delay[k].reset();
-		m_comp[k].reset();
+	//	m_comp[k].reset();
 	}
+
+	resetCompressEQPreset();
 
 	m_reverb.setSampleRate(m_srate);
 	m_reverb.reset();
@@ -2292,6 +2304,40 @@ void synthv1_impl::resetTuning (void)
 }
 
 
+void synthv1_impl::setCompressEQPreset ( int index )
+{
+	m_dyn.compress.set_value(float(index));
+
+	resetCompressEQPreset();
+}
+
+
+int synthv1_impl::compressEQPreset (void) const
+{
+	return int(m_dyn.compress.value());
+}
+
+
+void synthv1_impl::resetCompressEQPreset (void)
+{
+	const int i = compressEQPreset() - 2;
+	if (i >= 0 && i < m_config.eq_presets.count()) {
+		const synthv1_eq_preset& slot = m_config.eq_presets.at(i);
+		for (uint16_t k = 0; k < m_nchannels; ++k) {
+			synthv1_fx_comp& comp = m_comp[k];
+			comp.reset_attack(slot.attack);
+			comp.reset_release(slot.release);
+			comp.reset_low_band(slot.low.freq,   slot.low.q,  slot.low.gain);
+			comp.reset_mid_band(slot.mid.freq,   slot.mid.q,  slot.mid.gain);
+			comp.reset_high_band(slot.high.freq, slot.high.q, slot.high.gain);
+		}
+	} else {
+		for (uint16_t k = 0; k < m_nchannels; ++k)
+			m_comp[k].reset_legacy();
+	}
+}
+
+
 // all stabilize
 
 void synthv1_impl::stabilize (void)
@@ -2444,6 +2490,12 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 	if (lfo2_enabled) {
 		lfo2_wave.reset_test(
 			synthv1_wave::Shape(*m_lfo2.shape), *m_lfo2.width);
+	}
+
+	const int dyn_compress = int(*m_dyn.compress);
+	if (dyn_compress > 1 && m_dyn.compress0 != dyn_compress) {
+		m_dyn.compress0 = dyn_compress;
+		resetCompressEQPreset();
 	}
 
 	// per voice
@@ -2732,7 +2784,7 @@ void synthv1_impl::process ( float **ins, float **outs, uint32_t nframes )
 		uint32_t n;
 		float *sfx = m_sfxs[k];
 		// compressor
-		if (int(*m_dyn.compress) > 0)
+		if (dyn_compress > 0)
 			m_comp[k].process(sfx, nframes);
 		// limiter
 		if (int(*m_dyn.limiter) > 0) {
@@ -3008,6 +3060,23 @@ const char *synthv1::tuningKeyMapFile (void) const
 void synthv1::resetTuning (void)
 {
 	m_pImpl->resetTuning();
+}
+
+
+void synthv1::setCompressEQPreset ( int index )
+{
+	m_pImpl->setCompressEQPreset(index);
+}
+
+int synthv1::compressEQPreset (void) const
+{
+	return m_pImpl->compressEQPreset();
+}
+
+
+void synthv1::resetCompressEQPreset (void)
+{
+	m_pImpl->resetCompressEQPreset();
 }
 
 

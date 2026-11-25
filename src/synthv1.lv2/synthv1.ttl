@@ -1440,11 +1440,11 @@
 		a lv2:InputPort, lv2:ControlPort ;
 		lv2:index 147 ;
 		lv2:symbol "DYN1_COMPRESS" ;
-		lv2:name "Dynamic Compressor" ;
-		lv2:portProperty lv2:toggled ;
+		lv2:name "Dynamic Compressor/EQ" ;
+		lv2:portProperty lv2:integer ;
 		lv2:default 0.0 ;
 		lv2:minimum 0.0 ;
-		lv2:maximum 1.0 ;
+		lv2:maximum 128.0 ;
 		lv2pg:group synthv1_lv2:G306_DYN1 ;
 	], [
 		a lv2:InputPort, lv2:ControlPort ;

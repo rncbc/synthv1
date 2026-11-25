@@ -47,6 +47,19 @@ static const char *BankPrefix         = "/Bank_";
 static const char *ControlsGroup      = "/Controllers";
 static const char *ControlPrefix      = "/Control";
 
+static const char *EQPresetsGroup     = "/EQPresets";
+static const char *EQPresetMask       = "/EQ_%1";
+static const char *EQNameKey          = "/Name";
+static const char *EQNameMask         = "EQ %1";
+static const char *EQAttackKey        = "/Attack";
+static const char *EQReleaseKey       = "/Release";
+static const char *EQLowBandGroup     = "/Low";
+static const char *EQMidBandGroup     = "/Mid";
+static const char *EQHighBandGroup    = "/High";
+static const char *EQBandFreqKey      = "/Freq";
+static const char *EQBandQKey         = "/Q";
+static const char *EQBandGainKey      = "/Gain";
+
 
 //-------------------------------------------------------------------------
 // synthv1_config - Prototype settings structure (pseudo-singleton).
@@ -587,6 +600,9 @@ void synthv1_config::load (void)
 	sTuningKeyMapFile = QSettings::value("/KeyMapFile").toString();
 	QSettings::endGroup();
 
+	// EQ preset slots.
+	loadEQPresets();
+
 	// Presets database.
 	loadPresets();
 }
@@ -630,8 +646,88 @@ void synthv1_config::save (void)
 	QSettings::setValue("/KeyMapFile", sTuningKeyMapFile);
 	QSettings::endGroup();
 
+	// EQ preset slots.
+	saveEQPresets();
+
 	// Presets database.
 	savePresets();
+}
+
+
+// EQ3 preset slot load/save.
+void synthv1_config::loadEQPresets (void)
+{
+	eq_presets.clear();
+
+	QSettings::beginGroup(EQPresetsGroup);
+
+	int i = 0;
+	const QStringList& preset_keys
+		= QSettings::childKeys();
+	QStringListIterator preset_key(preset_keys);
+	while (preset_key.hasNext()) {
+		const QString& sPresetKey = preset_key.next();
+		QSettings::beginGroup(sPresetKey);
+		synthv1_eq_preset slot;
+		slot.name = QSettings::value(EQNameKey,
+			QString(EQNameMask).arg(i + 1)).toString();
+		slot.attack    = QSettings::value(EQAttackKey,       3.6).toFloat();
+		slot.release   = QSettings::value(EQReleaseKey,    150.0).toFloat();
+		QSettings::beginGroup(EQLowBandGroup);
+		slot.low.freq  = QSettings::value(EQBandFreqKey,  1000.0).toFloat();
+		slot.low.q     = QSettings::value(EQBandQKey,        1.0).toFloat();
+		slot.low.gain  = QSettings::value(EQBandGainKey,     3.0).toFloat();
+		QSettings::endGroup();
+		QSettings::beginGroup(EQMidBandGroup);
+		slot.mid.freq  = QSettings::value(EQBandFreqKey,   100.0).toFloat();
+		slot.mid.q     = QSettings::value(EQBandQKey,        1.0).toFloat();
+		slot.mid.gain  = QSettings::value(EQBandGainKey,     6.0).toFloat();
+		QSettings::endGroup();
+		QSettings::beginGroup(EQHighBandGroup);
+		slot.high.freq = QSettings::value(EQBandFreqKey, 10000.0).toFloat();
+		slot.high.q    = QSettings::value(EQBandQKey,        1.0).toFloat();
+		slot.high.gain = QSettings::value(EQBandGainKey,     4.0).toFloat();
+		QSettings::endGroup();
+		QSettings::endGroup();
+		eq_presets.append(slot);
+		++i;
+	}
+
+	QSettings::endGroup();
+}
+
+
+void synthv1_config::saveEQPresets (void)
+{
+	QSettings::beginGroup(EQPresetsGroup);
+
+	const int npresets = eq_presets.count();
+	for (int i = 0; i < npresets; ++i) {
+		const synthv1_eq_preset& slot = eq_presets.at(i);
+		const QString& sPresetKey = QString(EQPresetMask).arg(i + 1);
+		QSettings::beginGroup(sPresetKey);
+		QSettings::setValue(EQNameKey,    slot.name);
+		QSettings::setValue(EQAttackKey,  slot.attack);
+		QSettings::setValue(EQReleaseKey, slot.release);
+		QSettings::beginGroup(EQLowBandGroup);
+		QSettings::setValue(EQBandFreqKey,  double(slot.low.freq));
+		QSettings::setValue(EQBandQKey,     double(slot.low.q));
+		QSettings::setValue(EQBandGainKey,  double(slot.low.gain));
+		QSettings::endGroup();
+		QSettings::beginGroup(EQMidBandGroup);
+		QSettings::setValue(EQBandFreqKey,  double(slot.mid.freq));
+		QSettings::setValue(EQBandQKey,     double(slot.mid.q));
+		QSettings::setValue(EQBandGainKey,  double(slot.mid.gain));
+		QSettings::endGroup();
+		QSettings::beginGroup(EQHighBandGroup);
+		QSettings::setValue(EQBandFreqKey,  double(slot.high.freq));
+		QSettings::setValue(EQBandQKey,     double(slot.high.q));
+		QSettings::setValue(EQBandGainKey,  double(slot.high.gain));
+		QSettings::endGroup();
+		QSettings::endGroup();
+	}
+
+	QSettings::endGroup();
 }
 
 

@@ -28,12 +28,43 @@
 
 #include <QSettings>
 #include <QStringList>
+#include <QList>
 
 // forward decls.
 class synthv1_programs;
 class synthv1_controls;
 
 class QDir;
+
+
+//-------------------------------------------------------------------------
+// synthv1_eq_band - parametric EQ band settings.
+// Band types are fixed by position: low=LoShelf, mid=Peak, high=HiShelf.
+//
+
+struct synthv1_eq_band
+{
+	float freq;  // Hz          — band center/shelf frequency
+	float q;     // Q factor    — bandwidth / resonance
+	float gain;  // dB  -70..+6 — band gain (0 = unity/flat)
+};
+
+
+//-------------------------------------------------------------------------
+// synthv1_eq_preset - Named EQ preset slot (index 2+).
+//
+
+struct synthv1_eq_preset
+{
+	QString name;         // user-visible label for the preset slot
+
+	float attack;         // compressor atack time (millseconds)
+	float release;        // compressor release time (ms)
+
+	synthv1_eq_band low;  // LoShelf (low-band EQ)
+	synthv1_eq_band mid;  // Peak    (mid-band EQ)
+	synthv1_eq_band high; // HiShelf (high-band EQ)
+};
 
 
 //-------------------------------------------------------------------------
@@ -113,6 +144,11 @@ public:
 	void loadControls(synthv1_controls *pControls);
 	void saveControls(synthv1_controls *pControls);
 
+	QList<synthv1_eq_preset> eq_presets;
+
+	void loadEQPresets();
+	void saveEQPresets();
+
 protected:
 
 	// Absolute/relative path functors.
@@ -155,4 +191,3 @@ private:
 #endif	// __synthv1_config_h
 
 // end of synthv1_config.h
-
