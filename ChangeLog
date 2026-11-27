@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Fixed again keymap-file setter on micro-tuning loader.
 - LV2 Plug-in: let Qt dispatch host events in modal dialogs.
   (GH PR #28)
 
