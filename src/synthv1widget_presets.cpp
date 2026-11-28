@@ -582,18 +582,6 @@ QString synthv1widget_presets::savePresetFile ( const QString& sPreset )
 {
 	const QFileInfo fi(QDir(m_sPresetDir), sPreset + '.' + m_sPresetExt);
 	QString sPresetFile = fi.absoluteFilePath();
-	if (fi.exists()
-		&& QMessageBox::warning(QWidget::window(),
-			tr("Warning"),
-			tr("About to replace preset:\n\n"
-			"\"%1\"\n\n"
-			"Are you sure?")
-			.arg(sPreset),
-			QMessageBox::Ok | QMessageBox::Cancel)
-			== QMessageBox::Cancel) {
-		sPresetFile.clear();
-		return sPresetFile;
-	}
 
 	const QString& sTitle  = tr("Save Preset");
 	const QString& sFilter = tr("Preset files (*.%1)").arg(m_sPresetExt);

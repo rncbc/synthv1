@@ -6,6 +6,7 @@ ChangeLog
 
 GIT HEAD
 
+- Avoid asking twice to replace already existing preset files.
 - Fixed again keymap-file setter on micro-tuning loader.
 - LV2 Plug-in: let Qt dispatch host events in modal dialogs.
   (GH PR #28)

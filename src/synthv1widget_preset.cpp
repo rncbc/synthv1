@@ -290,19 +290,34 @@ void synthv1widget_preset::savePreset (void)
 
 void synthv1widget_preset::savePreset ( const QString& sPreset )
 {
+	if (sPreset.isEmpty())
+		return;
+
 	synthv1_config *pConfig = synthv1_config::getInstance();
 	if (pConfig == nullptr)
 		return;
 
-	m_pPresetsView->setPresetDir(pConfig->sPresetDir);
-	m_pPresetsView->setPresetExt(PROJECT_NAME);
-	m_pPresetsView->setDontUseNativeDialogs(pConfig->bDontUseNativeDialogs);
-
-	if (sPreset.isEmpty())
+	QString sPresetFile = pConfig->presetFile(sPreset);
+	if (!QFileInfo::exists(sPresetFile))
+		sPresetFile.clear();
+	if (!sPresetFile.isEmpty()
+		&& QMessageBox::warning(QWidget::window(),
+			tr("Warning"),
+			tr("About to replace preset:\n\n"
+			"\"%1\"\n\n"
+			"Are you sure?")
+			.arg(sPreset),
+			QMessageBox::Ok | QMessageBox::Cancel)
+			== QMessageBox::Cancel) {
 		return;
+	}
 
-	const QString& sPresetFile
-		= m_pPresetsView->savePresetFile(sPreset);
+	if (sPresetFile.isEmpty()) {
+		m_pPresetsView->setPresetDir(pConfig->sPresetDir);
+		m_pPresetsView->setPresetExt(PROJECT_NAME);
+		m_pPresetsView->setDontUseNativeDialogs(pConfig->bDontUseNativeDialogs);
+		sPresetFile = m_pPresetsView->savePresetFile(sPreset);
+	}
 
 	int iPreset = 0;
 	if (!sPresetFile.isEmpty()) {
